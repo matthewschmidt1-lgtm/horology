@@ -1,4 +1,4 @@
-/* The Horological Archive: technical illustration engine.
+/* The Shape of Time: technical illustration engine.
    Everything is drawn in millimetres from the plate data; nothing is traced.
    These are modern interpretive drawings, not manufacturer documents. */
 (function () {

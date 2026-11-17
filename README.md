@@ -1,4 +1,4 @@
-# The Horological Archive
+# The Shape of Time
 
 Twenty vintage wristwatches drawn as engineering plates. Every watch keeps the visitor's own system time, and an examination asks them to name each one.
 

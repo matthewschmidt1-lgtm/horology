@@ -1,4 +1,4 @@
-/* The Horological Archive: plate data.
+/* The Shape of Time: plate data.
    Flags on measurements:  'v' = widely documented,  'a' = approximate (shown with ≈),
    'n' = not verified (drawn indicatively, no figure printed). */
 window.WATCHES = [
