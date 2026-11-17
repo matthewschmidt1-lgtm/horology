@@ -6,7 +6,7 @@ const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAl
 const watch = watches[0], comps = watch.components, byId = Object.fromEntries(comps.map(c => [c.id, c]));
 const archive = (window.WATCHES || []).find(w => w.id === watch.archiveId), Draw = window.Draw;
 const ST = { D: 'Documented', E: 'Estimated', I: 'Interpretation' };
-const state = { view: 'front', style: 'tech', level: 'beginner', sel: null, labels: true, loupe: false, run: true, slow: false, explode: 0, open: 0, layers: 0 };
+const state = { view: 'front', style: 'real', level: 'beginner', sel: null, labels: true, loupe: false, run: true, slow: false, explode: 0, open: 0, layers: 0 };
 const cur = { explode: 0, open: 0, layers: 0 };
 
 /* ---------- panels ---------- */
@@ -198,7 +198,7 @@ async function start3D() {
   const size = () => { const w = vp.clientWidth, h = vp.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); const d = baseDist(); controls.minDistance = d * 0.16; controls.maxDistance = d * 2.4; };
   size(); new ResizeObserver(size).observe(vp);
   camera.position.setFromSpherical(new THREE.Spherical(baseDist(), 1.2, 0.5));
-  buildLabels(); setStyle('tech'); setView('front');
+  buildLabels(); setStyle('real'); setView('front');
   let down = null;
   canvas.addEventListener('pointerdown', e => { down = [e.clientX, e.clientY]; });
   canvas.addEventListener('pointerup', e => { if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6) return; const r = vp.getBoundingClientRect(), id = pickAt(e.clientX - r.left, e.clientY - r.top); if (id) select(id, true); });
