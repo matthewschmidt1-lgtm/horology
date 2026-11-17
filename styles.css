@@ -446,3 +446,14 @@ main:has(.home) { padding-bottom: 0; }
 .sf-nav.five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 @media (max-width: 900px) { .h-time { grid-template-columns: 1fr; } .h-time-dial { max-width: 380px; } .sf-nav.five { grid-template-columns: 1fr 1fr; } .sf-nav.five a:last-child { grid-column: 1 / -1; } }
 @media (max-width: 560px) { .nav a { padding: 0 6px; font-size: 10.5px; letter-spacing: .06em; } }
+
+/* ---------- the header returns on scroll up (History carries its own copy) ---------- */
+body:not(.hx) { padding-top: var(--mast-h, 77px); }
+body:not(.hx) > .mast { position: fixed; left: 0; right: 0; top: 0; z-index: 60; background: var(--desk); transition: transform .32s ease; }
+body.mast-away:not(.hx) > .mast { transform: translateY(-105%); }
+body:not(.hx) > .mast:focus-within { transform: none; }
+/* the desktop Workbench fills the window and does not scroll, so its header simply stays */
+@media (min-width: 901px) { body.wb { padding-top: 0; } body.wb > .mast { position: static; transform: none !important; } }
+/* on phones the test's pinned watch drops below the header while the header is showing */
+@media (max-width: 900px) { body:not(.mast-away) { --mast-off: var(--mast-h, 57px); } body.mast-away { --mast-off: 0px; } .exam-plate { top: var(--mast-off, 0px); transition: top .32s ease; } }
+@media (prefers-reduced-motion: reduce) { body:not(.hx) > .mast, .exam-plate { transition: none; } }
