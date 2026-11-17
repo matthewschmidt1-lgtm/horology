@@ -237,7 +237,7 @@ function renderHome() {
 
   <div class="h-close">
     <h2>A closer examination of horology.</h2>
-    <p>An independent exploration of the watches, mechanisms and innovations that have shaped the history of timekeeping.</p>
+    <p>An independent exploration of the timepieces, mechanisms, craftsmanship and innovations that have shaped the art and science of timekeeping.</p>
   </div>
 </section>`;
   refresh();
