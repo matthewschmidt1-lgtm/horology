@@ -3,7 +3,7 @@
 import { watches } from './watches/index.js';
 
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
-const watch = watches[0], comps = watch.components, byId = Object.fromEntries(comps.map(c => [c.id, c]));
+const want = new URLSearchParams(location.search).get('watch'), watch = watches.find(w => w.id === want) || watches[0], comps = watch.components, byId = Object.fromEntries(comps.map(c => [c.id, c]));
 const archive = (window.WATCHES || []).find(w => w.id === watch.archiveId), Draw = window.Draw;
 const ST = { D: 'Documented', E: 'Estimated', I: 'Interpretation' };
 const state = { view: 'front', style: 'real', level: 'beginner', sel: null, labels: true, loupe: false, run: true, slow: false, explode: 0, open: 0, layers: 0 };
@@ -13,6 +13,8 @@ const cur = { explode: 0, open: 0, layers: 0 };
 $('#w-kicker').textContent = `${watch.brand} · Ref. ${watch.reference} · ${watch.year}`;
 $('#w-title').innerHTML = `${watch.model} <em>${watch.reference}</em>`;
 $('#caveat').textContent = watch.asset.note;
+document.title = `${watch.brand} ${watch.model} · The Workbench`;
+$('#picker').innerHTML = watches.length > 1 ? watches.map(w => `<a href="?watch=${w.id}" class="${w === watch ? 'on' : ''}"${w === watch ? ' aria-current="true"' : ''}>${w.short || w.model}</a>`).join('') : '';
 $('#specs').innerHTML = `<table class="wspec">${watch.specs.map(([k, v, s]) => `<tr><th>${k}</th><td>${v}<i class="st ${s}" title="${ST[s]}"></i></td></tr>`).join('')}</table>`;
 $('#history').innerHTML = watch.history.map(h => `<section><h3>${h.h}<i class="st ${h.s}" title="${ST[h.s]}"></i></h3><p>${h.p}</p></section>`).join('');
 const groups = [...new Set(comps.map(c => c.group))];
@@ -42,9 +44,10 @@ $('#level-seg').addEventListener('click', e => { const b = e.target.closest('but
 function showPane(p) { $$('.pane').forEach(x => x.classList.toggle('show', x.dataset.pane === p)); $$('.mtabs button').forEach(x => x.classList.toggle('on', x.dataset.show === p)); }
 $('.mtabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) showPane(b.dataset.show); });
 showPane('parts'); renderDetail();
+{ const on = $('#picker .on'), pk = $('#picker'); if (on) pk.scrollLeft = on.offsetLeft - (pk.clientWidth - on.offsetWidth) / 2; }
 
 /* ---------- blueprint sheet (2D, from the archive plate) ---------- */
-const LEG = { Crystal: 'crystal', Bezel: 'bezel', Hands: 'hands', Dial: 'dial', Movement: 'plate', 'Case middle': 'case', Crown: 'crown', Caseback: 'caseback' };
+const LEG = { crystal: 'crystal', bezel: 'bezel', hands: 'hands', dial: 'dial', movement: 'plate', 'case middle': 'case', crown: 'crown', caseback: 'caseback' };
 function buildBlueprint() {
   if (!archive) { $('#blueprint').innerHTML = '<p class="bp-note">No archive plate is linked to this watch.</p>'; return; }
   const ex = Draw.exploded(archive);
@@ -54,7 +57,7 @@ function buildBlueprint() {
       <figure class="b1">${Draw.front(archive, { dims: true })}<figcaption>Fig. 1 · Front elevation</figcaption></figure>
       <figure class="b2">${Draw.side(archive)}<figcaption>Fig. 2 · Side elevation</figcaption></figure>
       <figure class="b3">${Draw.rear(archive)}<figcaption>Fig. 3 · Rear elevation</figcaption></figure>
-      <figure class="b4">${ex.svg}<figcaption>Fig. 4 · Exploded assembly</figcaption><ol>${ex.parts.map(p => { const k = Object.keys(LEG).find(k => p.startsWith(k)); return `<li>${k ? `<button type="button" data-part="${LEG[k]}">${p}</button>` : p}</li>`; }).join('')}</ol></figure>
+      <figure class="b4">${ex.svg}<figcaption>Fig. 4 · Exploded assembly</figcaption><ol>${ex.parts.map(p => { const k = Object.keys(LEG).find(k => p.toLowerCase().includes(k)); return `<li>${k ? `<button type="button" data-part="${LEG[k]}">${p}</button>` : p}</li>`; }).join('')}</ol></figure>
       <figure class="b5">${Draw.movement(archive)}<figcaption>Fig. 5 · Calibre ${watch.movement.replace(/^.*calibre /, '')}, schematic</figcaption></figure>
     </div>
     <p class="bp-note">A modern interpretive drawing made from published specifications. Not a manufacturer’s document. “≈” marks an approximate figure.</p></div>`;

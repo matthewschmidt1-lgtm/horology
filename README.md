@@ -34,7 +34,8 @@ No scan, factory model or photograph of the Speedmaster is bundled. The 3D model
    - `components` — one entry per part: `id`, `name`, `group`, `status`, `beginner`, `horologist`, `fn`, `material`, `location`, `significance`, `related`, and optionally `anchor: [x, y, z]` (where its label sits, in millimetres) and `face` (1 if only visible from the front, -1 from the back)
    - `asset` — how the 3D model is made (below)
    - `images` — reserved for photographs; empty today
-2. Add the record to the list in `workbench/watches/index.js`. The page shows the first record; a picker is the next step once there are two.
+2. Add the record to the list in `workbench/watches/index.js`. The page opens on the first record and shows a picker when there is more than one; each watch has its own address, `workbench.html?watch=<id>`.
+3. For a coded model, set `asset.params`. Beyond the measurements, the builder understands `chrono: false` (no pushers, registers or chronograph works; the centre hand becomes running seconds), `rotor: true` (automatic), `crownGuards: true`, `dustCover: false`, `hands: 'mercedes'` and `plate: 'steel'` for a silver-coloured movement.
 
 ### Using a real 3D asset (.glb)
 

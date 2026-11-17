@@ -10,6 +10,7 @@ export default {
   id: 'speedmaster-105003',
   brand: 'Omega',
   model: 'Speedmaster',
+  short: 'Omega Speedmaster 105.003',
   reference: '105.003',
   year: '1964',
   era: '1960s',

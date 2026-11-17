@@ -189,3 +189,11 @@ span.st.I::before { border: 1.5px solid var(--gray); box-sizing: border-box; }
 .wb-foot { display: flex; justify-content: center; background: var(--ivory); border-top: 1px solid var(--charcoal); }
 .wb-foot .madeby { min-height: 34px; font-size: 11px; }
 @media (max-width: 900px) { .wb-foot { margin-bottom: calc(52px + env(safe-area-inset-bottom)); } .wb-foot .madeby { min-height: 44px; } .bench { padding-bottom: 0; } }
+
+/* watch picker */
+.picker { display: flex; gap: 0; background: var(--parchment); border-bottom: 1px solid var(--charcoal); overflow-x: auto; scrollbar-width: none; }
+.picker:empty { display: none; }
+.picker::-webkit-scrollbar { display: none; }
+.picker a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; font-family: var(--serif); font-size: 19px; font-style: italic; color: var(--ink-2); text-decoration: none; border-right: 1px solid var(--rule); white-space: nowrap; }
+.picker a.on { background: var(--ivory); color: var(--charcoal); box-shadow: inset 0 -3px 0 var(--brass); }
+@media (hover: hover) { .picker a:hover:not(.on) { color: var(--charcoal); background: #e2d8c5; } }
