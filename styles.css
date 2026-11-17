@@ -399,3 +399,35 @@ main:has(.home) { padding-bottom: 0; }
   .pager .pn { flex: 1 1 0; padding: 0 12px; border: 1px solid var(--ink) !important; grid-column: auto !important; grid-row: auto !important; }
   .pager .nxt { justify-content: flex-end; }
 }
+
+/* ---------- colour on the examination, from the homepage palette ---------- */
+/* the specimen sits on navy, drawn in cream, like the watch on the homepage */
+.exam .frame { background: var(--navy); border-color: var(--navy); outline-color: var(--brass); --paper: #14283f; --ink: #efe6d2; --tint: #1f3a59; --tint-2: #2c4f77; --sienna: #b8975a; }
+.exam .frame .rd { fill: var(--brass); opacity: 1; }
+.exam .cap b { color: var(--oxblood); }
+.prog { background: #cdc2a6; height: 4px; } .prog i { background: var(--oxblood); }
+.exam .eyebrow { color: var(--oxblood); }
+.exam .opts button { border-left: 6px solid var(--navy); }
+@media (hover: hover) { .exam .opts button:hover:not(:disabled) { border-color: var(--oxblood); background: #f6efdf; } }
+.exam .opts button:disabled { border-left-color: var(--rule); }
+.exam .opts button.right { color: var(--green); border-color: var(--green); border-left-color: var(--green); box-shadow: none; background: #e6ecdf; font-weight: 600; }
+.exam .opts button.wrong { color: var(--oxblood); border-color: var(--oxblood); border-left-color: var(--oxblood); background: #f3e3dc; }
+.exam .verdict.ok { color: var(--green); } .exam .verdict.no { color: var(--oxblood); }
+.exam .verdict.no::before { color: var(--oxblood); }
+.exam .marks b { color: var(--oxblood); font-size: 1.25em; }
+.next { background: var(--oxblood); border-color: var(--oxblood); color: var(--cream); }
+.next:hover { background: var(--navy); border-color: var(--navy); }
+.exam .q + .q { border-top-color: var(--brass); }
+.exam-foot { border-top-color: var(--brass); }
+.reveal-rule { color: var(--oxblood); } .reveal-rule::before, .reveal-rule::after { border-top-color: var(--brass); }
+@media (max-width: 900px) { .exam-foot.ready { border-top: 3px solid var(--oxblood); } }
+
+/* the result */
+.result { border: 0; outline: 0; padding: 0; background: var(--paper); box-shadow: 0 0 0 1px var(--navy); }
+.result .eyebrow { margin: 0; padding: 16px 20px; background: var(--navy); color: var(--brass); }
+.result h2 { padding: clamp(26px, 5vw, 44px) 20px 0; color: var(--navy); }
+.result .score { color: var(--oxblood); }
+.result p:not(.eyebrow) { padding-left: 24px; padding-right: 24px; }
+.result .row { padding: 0 20px clamp(26px, 5vw, 44px); }
+.result .ghost { border-color: var(--navy); color: var(--navy); }
+.result .ghost:hover { background: var(--navy); color: var(--cream); }
