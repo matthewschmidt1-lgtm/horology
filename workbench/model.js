@@ -7,6 +7,7 @@ import * as THREE from 'three';
 const INK = 0x242521, BRASS_HI = 0xE2C27A;
 const KIND = {
   steel:    { real: { color: 0xcfcfcb, metalness: 1, roughness: 0.3 }, tech: 0xEDE6D8 },
+  gold:     { real: { color: 0xd9b25c, metalness: 1, roughness: 0.24 }, tech: 0xEDE6D8 },
   steelDark:{ real: { color: 0x9c9c99, metalness: 1, roughness: 0.36 }, tech: 0xE1D8C4 },
   iron:     { real: { color: 0x8e8e8a, metalness: 1, roughness: 0.5 }, tech: 0xE3DAC6 },
   copper:   { real: { color: 0xd39c7a, metalness: 1, roughness: 0.38 }, tech: 0xE8DFCB },
@@ -69,7 +70,8 @@ function hullShape(circles) {
 }
 
 export function buildProcedural(watch, face, tex) {
-  const P = watch.asset.params, R = face.R, ri = face.bezelInner, sub = P.chrono === false ? 8 : face.inR * 0.5;
+  const P = watch.asset.params, R = face.R, ri = face.bezelInner, sub = (P.chrono === false && !P.subSeconds) ? 8 : face.inR * 0.5;
+  const CASE = P.metal === 'gold' ? 'gold' : 'steel', inner = R - (P.wall || 3.25), HAND = P.metal === 'gold' ? 'gold' : 'white';
   const chrono = P.chrono !== false, mvR = (P.movementDiameter || 27) / 2;
   const root = new THREE.Group(), parts = {}, asm = [], layers = [];
   const part = (id, parent = root) => { const g = new THREE.Group(); g.userData.part = id; parent.add(g); parts[id] = g; return g; };
@@ -78,11 +80,13 @@ export function buildProcedural(watch, face, tex) {
 
   /* ----- case, crown, pushers, strap ----- */
   const kase = part('case');
-  kase.add(mk(lathe([[16.6, -4.6], [18.4, -4.6], [R, -3.3], [R, 1.7], [R - 0.7, 2.5], [16.6, 2.5], [16.6, -4.6]]), 'steel'));
-  for (const sx of [-1, 1]) for (const sy of [-1, 1]) { const lug = mk(new THREE.BoxGeometry(2.7, 9.5, 3.4), 'steel'); lug.position.set(sx * (P.lugWidth / 2 + 1.35), sy * (P.lugToLug / 2 - 4.2), -2.0); lug.rotation.x = -sy * 0.28; kase.add(lug); }
-  if (P.crownGuards) for (const sy of [-1, 1]) { const gd = mk(new THREE.BoxGeometry(3.2, 2.4, 3.4), 'steel'); gd.position.set(R + 0.7, sy * 3.9, -0.9); gd.rotation.z = -sy * 0.5; kase.add(gd); }
+  kase.add(mk(lathe([[inner, -4.6], [R - 1.45, -4.6], [R, -3.3], [R, 1.7], [R - 0.7, 2.5], [inner, 2.5], [inner, -4.6]]), CASE));
+  const lugL = Math.max(5, P.lugToLug / 2 - R + 5.5), lugT = P.lugThick || 2.7;
+  for (const sx of [-1, 1]) for (const sy of [-1, 1]) { const lug = mk(new THREE.BoxGeometry(lugT, lugL, 3.4), CASE); lug.position.set(sx * (P.lugWidth / 2 + lugT / 2), sy * (P.lugToLug / 2 - lugL / 2 + 0.55), -2.0); lug.rotation.x = -sy * 0.28; kase.add(lug); }
+  if (P.crownGuards) for (const sy of [-1, 1]) { const gd = mk(new THREE.BoxGeometry(3.2, 2.4, 3.4), CASE); gd.position.set(R + 0.7, sy * 3.9, -0.9); gd.rotation.z = -sy * 0.5; kase.add(gd); }
   const crown = part('crown');
-  crown.add(at(mk(new THREE.CylinderGeometry(2.9, 2.9, 3, 28).rotateZ(Math.PI / 2), 'steel', { edgeAngle: 10 }), R + 2.1, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.2, 1.2, 1.2, 16).rotateZ(Math.PI / 2), 'steel'), R + 0.3, 0, -0.9));
+  const cR = P.crownR || 2.9, cL = cR > 2.4 ? 3 : 2;
+  crown.add(at(mk(new THREE.CylinderGeometry(cR, cR, cL, 28).rotateZ(Math.PI / 2), CASE, { edgeAngle: 10 }), R + 0.6 + cL / 2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.2, 16).rotateZ(Math.PI / 2), CASE), R + 0.3, 0, -0.9));
   const push = chrono ? part('pushers') : null;
   if (push) for (const a of [-1, 1]) { const g = new THREE.Group(); g.rotation.z = a * Math.PI / 6; g.add(at(mk(new THREE.CylinderGeometry(1.9, 1.9, 2, 22).rotateZ(Math.PI / 2), 'steel'), R + 2.2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.6, 16).rotateZ(Math.PI / 2), 'steel'), R + 0.6, 0, -0.9)); push.add(g); }
   const strap = part('strap');
@@ -91,11 +95,11 @@ export function buildProcedural(watch, face, tex) {
 
   /* ----- bezel, crystal, dial, hands ----- */
   const bezel = part('bezel');
-  bezel.add(mk(lathe([[ri, 2.5], [R, 2.5], [R - 0.3, 3.9], [ri, 3.95], [ri, 2.5]]), 'steel'));
-  bezel.add(at(mk(new THREE.RingGeometry(ri + 0.05, R - 0.45, 128), 'face', { noEdges: true, real: { map: tex.real }, tech: { map: tex.tech } }), 0, 0, 3.97));
+  bezel.add(mk(lathe([[ri, 2.5], [R, 2.5], [R - 0.3, 3.9], [ri, 3.95], [ri, 2.5]]), CASE));
+  if (P.bezelInsert !== false) bezel.add(at(mk(new THREE.RingGeometry(ri + 0.05, R - 0.45, 128), 'face', { noEdges: true, real: { map: tex.real }, tech: { map: tex.tech } }), 0, 0, 3.97));
   assembly(bezel, 21);
   const crystal = part('crystal'), dome = [];
-  for (let i = 0; i <= 14; i++) { const a = i / 14 * Math.PI / 2; dome.push([ri * Math.cos(a), 3.95 + 3.3 * Math.sin(a)]); }
+  for (let i = 0; i <= 14; i++) { const a = i / 14 * Math.PI / 2; dome.push([ri * Math.cos(a), 3.95 + (P.dome || 3.3) * Math.sin(a)]); }
   crystal.add(mk(lathe(dome), 'acrylic', { edgeAngle: 80 }));
   assembly(crystal, 29);
   const dial = part('dial'), dg = new THREE.CircleGeometry(ri, 128), uv = dg.attributes.uv;
@@ -103,22 +107,24 @@ export function buildProcedural(watch, face, tex) {
   dial.add(at(mk(dg, 'face', { noEdges: true, real: { map: tex.real }, tech: { map: tex.tech } }), 0, 0, 2.32), at(mk(cyl(ri, 0.3, 64), 'brass'), 0, 0, 2.15));
   assembly(dial, 8);
   const hands = part('hands'), Lm = face.handLen, Lh = Lm * 0.64;
-  const hand = (w, L, z, kind = 'white') => { const p = new THREE.Group(), g = new THREE.BoxGeometry(w, L, 0.14); g.translate(0, L / 2 - 1.3, 0); p.add(mk(g, kind)); p.position.z = z; hands.add(p); return p; };
+  const kite = (w, L) => { const k = new THREE.Shape(); k.moveTo(0, -1.3); k.lineTo(w / 2, L * 0.14); k.lineTo(0, L - 1.3); k.lineTo(-w / 2, L * 0.14); k.closePath(); return extr(k, 0.14).translate(0, 0, -0.07); };
+  const hand = (w, L, z, kind = HAND) => { const p = new THREE.Group(); let g; if (P.hands === 'dauphine' && w > 0.5) g = kite(w * 1.25, L); else { g = new THREE.BoxGeometry(w, L, 0.14); g.translate(0, L / 2 - 1.3, 0); } p.add(mk(g, kind)); p.position.z = z; hands.add(p); return p; };
   const hHour = hand(1.5, Lh, 2.7), hMin = hand(1.15, Lm, 2.95), hChr = hand(0.28, Lm * 1.05, 3.2);
   if (P.hands === 'mercedes') { hHour.add(at(mk(cyl(1.75, 0.14, 28), 'white'), 0, Lh * 0.62, 0)); hChr.add(at(mk(cyl(0.8, 0.1, 18), 'white'), 0, Lm * 0.62, 0)); }
-  hands.add(at(mk(cyl(0.95, 0.9, 20), 'steel'), 0, 0, 3.0));
+  hands.add(at(mk(cyl(0.95, 0.9, 20), CASE), 0, 0, 3.0));
   const subHand = (x, y) => { const p = hand(0.26, 4.2, 2.5); p.position.x = x; p.position.y = y; p.children[0].geometry.translate(0, -0.5, 0); return p; };
-  const hSec = chrono ? subHand(-sub, 0) : hChr; if (chrono) { subHand(sub, 0); subHand(0, -sub); }
+  const hSec = chrono ? subHand(-sub, 0) : P.subSeconds === 6 ? subHand(0, -sub) : hChr; if (chrono) { subHand(sub, 0); subHand(0, -sub); }
+  if (P.subSeconds) hChr.visible = false;
   assembly(hands, 13);
 
   /* ----- spacer ring, dust cover, caseback ----- */
-  const spacer = part('spacer'); spacer.add(mk(lathe([[mvR + 0.05, -3.6], [16.5, -3.6], [16.5, 2.0], [mvR + 0.05, 2.0], [mvR + 0.05, -3.6]]), 'steelDark')); assembly(spacer, -7);
-  const dust = P.dustCover === false ? null : part('dustcover'); if (dust) { dust.add(at(mk(cyl(16.3, 0.25, 64), 'iron'), 0, 0, -4.3)); assembly(dust, -24); }
-  const back = part('caseback'); back.add(mk(lathe([[0, -6.4], [13, -6.4], [17.6, -5.4], [18.4, -4.6], [0, -4.6]]), 'steel')); assembly(back, -31);
+  if (P.spacer !== false) { const spacer = part('spacer'); spacer.add(mk(lathe([[mvR + 0.05, -3.6], [inner - 0.1, -3.6], [inner - 0.1, 2.0], [mvR + 0.05, 2.0], [mvR + 0.05, -3.6]]), 'steelDark')); assembly(spacer, -7); }
+  const dust = P.dustCover === false ? null : part('dustcover'); if (dust) { dust.add(at(mk(cyl(inner - 0.3, 0.25, 64), 'iron'), 0, 0, -4.3)); assembly(dust, -24); }
+  const back = part('caseback'); back.add(mk(lathe([[0, -6.4], [R - 6.85, -6.4], [R - 2.25, -5.4], [R - 1.45, -4.6], [0, -4.6]]), CASE)); assembly(back, -31);
 
   /* ----- movement: local +Z points out of the back of the watch ----- */
-  const mv = new THREE.Group(); mv.position.z = 0.2; mv.rotation.y = Math.PI; root.add(mv); assembly(mv, 0);
-  part('plate', mv).add(at(mk(cyl(mvR, 2, 72), P.plate || 'copper'), 0, 0, -1));
+  const mv = new THREE.Group(); mv.position.z = 0.2; mv.rotation.y = Math.PI; if (P.subSeconds === 6) mv.rotation.z = -Math.PI / 2; /* puts the fourth wheel under the six o'clock register */ root.add(mv); assembly(mv, 0);
+  part('plate', mv).add(at(mk(cyl(mvR, 2, 72), P.plate || 'copper', { real: { color: P.plate === 'steel' ? 0x7f7f7c : 0x9a6649, roughness: 0.72 } }), 0, 0, -1)); /* matte and darker than the bridges, so they read against it */
   const spins = {};
   const mobile = (id, x, y, o, parent) => {
     const g = parent || at(part(id, mv), x, y, 0), sp = new THREE.Group(); if (parent) sp.position.set(x, y, 0); g.add(sp);
@@ -136,8 +142,9 @@ export function buildProcedural(watch, face, tex) {
   spins.centre = mobile('centre', 0, 0, { R: 4.0, n: 64, z: 1.4, pin: 0.6, pinZ: 0.45 });
   const tx = (4.5 * 4.5 - 4.25 * 4.25 + sub * sub) / (2 * sub), ty = Math.sqrt(4.5 * 4.5 - tx * tx);
   spins.third = mobile('third', tx, ty, { R: 3.75, n: 60, z: 0.8, pin: 0.5, pinZ: 1.4 });
-  spins.fourth = mobile('fourth', sub, 0, { R: 3.2, n: 56, z: 1.4, pin: 0.5, pinZ: 0.8, arbor: 3.2 });
-  const eX = sub + 1.2, eY = -3.31;
+  const fR = Math.min(3.2, sub - 4.1);
+  spins.fourth = mobile('fourth', sub, 0, { R: fR, n: Math.round(fR * 17.5), z: 1.4, pin: 0.5, pinZ: 0.8, arbor: 3.2 });
+  const eD = (fR + 0.32) / 3.52, eX = sub + 1.2 * eD, eY = -3.31 * eD;
   spins.escape = mobile('escape', eX, eY, { shape: escapeShape(1.6), z: 0.8, pin: 0.32, pinZ: 1.4, kind: 'steelDark' });
   const BX = 5.6, BY = -8.4, bal = at(part('balance', mv), BX, BY, 0), balSpin = new THREE.Group(); bal.add(balSpin);
   balSpin.add(at(mk(new THREE.TorusGeometry(3.0, 0.26, 10, 56), 'brass', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(5.6, 0.36, 0.2), 'brass'), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(0.36, 5.6, 0.2), 'brass'), 0, 0, 2.3), at(mk(cyl(0.45, 0.3, 14), 'steelDark'), 0, 0, 1.9));
@@ -205,6 +212,8 @@ export function buildProcedural(watch, face, tex) {
     if (dust) { dust.position.z += -4 * u; dust.position.x += 47 * s; }
   }
   const setLayers = v => layers.forEach(l => { l.o.position.z = l.z0 + l.dz * v; });
+  root.scale.z = (P.thickness || 14) / 14; // the stack is modelled 14 mm tall and scaled to the stated thickness
+  crown.scale.z = 1 / root.scale.z; if (push) push.scale.z = 1 / root.scale.z; // keep the crown and pushers round
   return finish({ root, parts, animate, setExplode, setOpen, setLayers, fit: { h: P.lugToLug / 2 + 10, w: R + 7, d: 62 } });
 }
 

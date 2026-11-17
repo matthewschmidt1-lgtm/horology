@@ -496,10 +496,11 @@ function movement(w) {
 
 /* ---------- face texture for the 3D workbench (bezel + dial, no hands) ---------- */
 const REAL = ".l{fill:none;stroke:#8d8d88;stroke-width:.14}.p{fill:#ebe5cf;stroke:#0d0d0d;stroke-width:.06}.t{fill:none;stroke:#e9e6da;stroke-width:.13}.hair{fill:none;stroke:#e9e6da;stroke-width:.05}.k{fill:#e9e6da}.tn,.tn2{fill:#121212;stroke:#2b2b2b;stroke-width:.12}.bar{fill:none;stroke:#e9e6da;stroke-width:.5}text{fill:#f0ede2;font-family:Georgia,'Times New Roman',serif}.bz{font-family:Helvetica,Arial,sans-serif;font-weight:bold}";
+const REAL_LIGHT = ".l{fill:none;stroke:#6d6657;stroke-width:.14}.p{fill:#ece6d4;stroke:#3a3428;stroke-width:.1}.t{fill:none;stroke:#3a3428;stroke-width:.11}.hair{fill:none;stroke:#3a3428;stroke-width:.05}.k{fill:#3a3428}.tn,.tn2{fill:#cfc6ae;stroke:#3a3428;stroke-width:.12}.bar{fill:none;stroke:#3a3428;stroke-width:.5}text{fill:#2b271f;font-family:Georgia,'Times New Roman',serif}.bz{font-family:Helvetica,Arial,sans-serif;font-weight:bold}";
 const TECH = ".l{fill:none;stroke:#242521;stroke-width:.2}.p{fill:#EDE6D8;stroke:#242521;stroke-width:.2}.t{fill:none;stroke:#242521;stroke-width:.1}.hair{fill:none;stroke:#242521;stroke-width:.05}.k{fill:#242521}.tn,.tn2{fill:#D9CEB9;stroke:#242521;stroke-width:.2}.bar{fill:none;stroke:#242521;stroke-width:.5}text{fill:#242521;font-family:Georgia,'Times New Roman',serif}.bz{font-family:Helvetica,Arial,sans-serif;font-weight:bold}";
 function face(w, real) {
   const g = geo(w), R = g.bezR || g.hw;
-  const s = `<style>${real ? REAL : TECH}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/>` + bezel(w, g) + dial(w, g, { noHands: true });
+  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/>` + bezel(w, g) + dial(w, g, { noHands: true });
   return { svg: `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="${-R} ${-R} ${2 * R} ${2 * R}">${s}</svg>`, R, dialR: g.dialR, inR: g.inR, bezelInner: R - (w.bezel ? w.bezel.w : 0), handLen: g.hl };
 }
 
