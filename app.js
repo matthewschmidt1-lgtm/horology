@@ -55,7 +55,7 @@ function sheet(w) {
   const idx = W.indexOf(w), ex = D.exploded(w);
   const rows = specRows(w).map(([a, b]) => `<tr><th>${a}</th><td>${b}</td></tr>`).join('');
   return `
-<article class="sheet">
+<article class="sheet t-${tone(w)}">
   <header class="sheet-head">
     <p class="plate-no">Plate ${ROM[idx]}</p>
     <h2>${w.brand} <em>${w.model}</em></h2>
@@ -169,11 +169,14 @@ function renderResult() {
 }
 
 /* ---------- archive ---------- */
+const tone = w => /Dive/.test(w.kind) ? 'navy' : /hronograph/.test(w.kind) ? 'oxblood' : /Dress|Chronometer/.test(w.kind) ? 'green' : 'brass';
+
 function renderArchive() {
   view.innerHTML = `
 <section class="archive">
-  <header class="intro"><p class="eyebrow">The collection</p><h2>Twenty plates</h2><p>Dress watches, chronographs, divers and a few machines that fit no category. Every one is keeping your time.</p></header>
-  <div class="grid">${W.map((w, i) => `<a class="card" href="#/plate/${w.id}"><div class="thumb">${D.front(w, {})}</div><p class="no">${ROM[i]}</p><h3>${w.brand}</h3><p class="m">${w.model}</p><p class="y">${w.year}</p></a>`).join('')}</div>
+  <header class="intro"><p class="eyebrow">The collection</p><h2>Twenty plates</h2><p>Dress watches, chronographs, divers and a few machines that fit no category. Every one is keeping your time.</p>
+    <p class="tones" aria-label="Colour key"><span class="t-navy">Divers</span><span class="t-oxblood">Chronographs</span><span class="t-green">Dress watches</span><span class="t-brass">Everything else</span></p></header>
+  <div class="grid">${W.map((w, i) => `<a class="card t-${tone(w)}" href="#/plate/${w.id}"><div class="thumb">${D.front(w, {})}</div><p class="no">${ROM[i]}</p><p class="k">${w.kind}</p><h3>${w.brand}</h3><p class="m">${w.model}</p><p class="y">${w.year}</p></a>`).join('')}</div>
 </section>`;
   refresh();
 }
@@ -181,7 +184,8 @@ function renderArchive() {
 function renderPlate(id) {
   const i = W.findIndex(w => w.id === id); if (i < 0) return renderArchive();
   const prev = W[(i + W.length - 1) % W.length], next = W[(i + 1) % W.length];
-  view.innerHTML = `<nav class="pager"><a href="#/plate/${prev.id}">← ${prev.brand} ${prev.model}</a><a href="#/archive">All plates</a><a href="#/plate/${next.id}">${next.brand} ${next.model} →</a></nav>` + sheet(W[i]);
+  const pager = `<nav class="pager" aria-label="Plates"><a class="back" href="#/archive" aria-label="Back to all plates">Back</a><a class="pn prev" href="#/plate/${prev.id}" aria-label="Previous plate: ${prev.brand} ${prev.model}"><span>${prev.brand} ${prev.model}</span></a><a class="pn nxt" href="#/plate/${next.id}" aria-label="Next plate: ${next.brand} ${next.model}"><span>${next.brand} ${next.model}</span></a></nav>`;
+  view.innerHTML = pager + sheet(W[i]) + pager.replace('class="pager"', 'class="pager foot"');
   refresh();
 }
 

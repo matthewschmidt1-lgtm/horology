@@ -355,3 +355,47 @@ main:has(.home) { padding-bottom: 0; }
 }
 .h-art { text-decoration: none; }
 .h-txt > p:not(.h-links) + p:not(.h-links) { margin-top: 12px; }
+
+/* ---------- colour on the archive, from the homepage palette ---------- */
+:root { --navy: #14283f; --brass: #b8975a; --oxblood: #6e2420; --green: #2f4a3c; --cream: #efe6d2; }
+.t-navy { --c: var(--navy); } .t-oxblood { --c: var(--oxblood); } .t-green { --c: var(--green); } .t-brass { --c: #7d5f24; }
+
+.archive .intro { max-width: none; margin: calc(-1 * clamp(20px, 4vw, 44px)) 0 clamp(22px, 3vw, 36px); padding: clamp(36px, 5vw, 64px) 0 clamp(28px, 4vw, 44px); background: var(--green); color: var(--cream); box-shadow: 0 0 0 100vmax var(--green); clip-path: inset(0 -100vmax); }
+.archive .intro .eyebrow { color: var(--brass); }
+.archive .intro h2 { font-size: clamp(44px, 6.4vw, 84px); }
+.archive .intro p:not(.eyebrow):not(.tones) { color: #cfd6c8; max-width: 40em; font-size: clamp(19px, 1.6vw, 23px); }
+.tones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.tones span { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 12px 0 10px; background: var(--cream); color: #1d1a16; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+.tones span::before { content: ""; width: 12px; height: 12px; background: var(--c); }
+.card { border-top: 6px solid var(--c, var(--ink)); }
+.card .no { top: 12px; color: var(--c, var(--sienna)); font-weight: 500; }
+.card .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--c, var(--ink-2)); margin-bottom: 3px; }
+@media (hover: hover) { .card:hover { box-shadow: 0 8px 0 -4px var(--c, var(--rule)); } .card:hover h3 { color: var(--c); } }
+
+/* the plate: a coloured head, and its drawing notes in the same colour */
+.sheet { --sp: clamp(16px, 3vw, 40px); padding: var(--sp); --sienna: var(--c, #8a3a26); }
+.sheet-head { background: var(--c, var(--ink)); color: var(--cream); margin: calc(-1 * var(--sp)) calc(-1 * var(--sp)) 26px; padding: clamp(26px, 4vw, 44px) var(--sp) clamp(22px, 3vw, 34px); border-bottom: 0; }
+.sheet-head .plate-no { color: var(--cream); opacity: .78; }
+.sheet-head .sub { color: var(--cream); opacity: .78; }
+.sheet figcaption b, .spec caption, .notes h3, .parts li::before, .title-block span { color: var(--c, var(--sienna)); }
+.spec caption span { color: var(--ink-2); }
+.title-block { border-color: var(--c, var(--ink)); border-width: 2px; }
+.reveal-rule { color: var(--ink-2); }
+
+/* back, previous, next */
+.pager { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 10px; margin-bottom: 18px; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; }
+.pager.foot { margin: 26px 0 0; }
+.pager a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 16px; text-decoration: none; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); min-width: 0; transition: background .2s, color .2s, transform .2s; }
+.pager .back { margin-right: auto; background: var(--navy); border-color: var(--navy); color: var(--cream); font-size: 13px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; padding: 0 24px 0 18px; }
+.pager .back::before { content: "←"; margin-right: 12px; font-size: 17px; letter-spacing: 0; }
+.pager .pn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pager .prev::before { content: "←"; margin-right: 9px; color: var(--oxblood); } .pager .nxt::after { content: "→"; margin-left: 9px; color: var(--oxblood); }
+@media (hover: hover) { .pager .back:hover { background: var(--oxblood); border-color: var(--oxblood); color: var(--cream); transform: translateX(-3px); } .pager .pn:hover { background: var(--ink); color: var(--paper); } .pager .pn:hover::before, .pager .pn:hover::after { color: var(--brass); } }
+.pager a:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+@media (max-width: 560px) {
+  .sheet { --sp: 14px; }
+  .pager { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pager .back { flex: 1 0 100%; justify-content: center; margin-right: 0; }
+  .pager .pn { flex: 1 1 0; padding: 0 12px; border: 1px solid var(--ink) !important; grid-column: auto !important; grid-row: auto !important; }
+  .pager .nxt { justify-content: flex-end; }
+}
