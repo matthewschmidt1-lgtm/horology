@@ -96,14 +96,14 @@ function renderExam() {
   if (exam.i >= exam.order.length) return renderResult();
   const w = exam.order[exam.i], n = exam.i + 1;
   view.innerHTML = `
-<div class="prog" role="progressbar" aria-label="Examination progress" aria-valuemin="0" aria-valuemax="${exam.order.length}" aria-valuenow="${exam.i}"><i style="width:${exam.i / exam.order.length * 100}%"></i></div>
+<div class="prog" role="progressbar" aria-label="Exam progress" aria-valuemin="0" aria-valuemax="${exam.order.length}" aria-valuenow="${exam.i}"><i style="width:${exam.i / exam.order.length * 100}%"></i></div>
 <section class="exam">
   <div class="exam-plate">
     <div class="frame" id="specimen">${D.front(w, { redact: true })}</div>
     <p class="cap">Your time, <span data-clock></span></p>
   </div>
   <div class="exam-panel">
-    <p class="eyebrow">Examination · ${n} of ${exam.order.length}</p>
+    <p class="eyebrow">Exam · ${n} of ${exam.order.length}</p>
     <div class="q" id="q1">
       <h2>Which watch is on the bench?</h2>
       <p class="hint">Signature masked. Read the case, dial and hands.</p>
@@ -159,7 +159,7 @@ function renderResult() {
   let best = m; try { best = Math.max(m, +localStorage.getItem('archive-best') || 0); localStorage.setItem('archive-best', best); } catch (e) {}
   view.innerHTML = `
 <section class="result">
-  <p class="eyebrow">Examination complete</p>
+  <p class="eyebrow">Exam complete</p>
   <h2>${rank}</h2>
   <p class="score">${m} <span>of ${total} marks</span></p>
   <p>${line}</p>
@@ -216,7 +216,7 @@ function renderHome() {
     <article class="h-card c1">
       <a class="h-art mv" href="workbench.html" aria-label="Explore the workbench">${D.movement(omega)}</a>
       <div class="h-txt"><h3>Examine the details.</h3><p>Take a movement apart, part by part.</p>
-        <p class="h-links"><a class="h-go" href="workbench.html">Explore the workbench</a><a class="h-go" href="#/exam">Begin an examination</a></p></div>
+        <p class="h-links"><a class="h-go" href="workbench.html">Explore the workbench</a><a class="h-go" href="#/exam">Begin an exam</a></p></div>
     </article>
     <article class="h-card c2">
       <a class="h-art four" href="#/archive" aria-label="Browse the plates">${['tanklc', 'royaloak', 'ventura', 'spaceview'].map(id => D.front(by(id), {})).join('')}</a>
