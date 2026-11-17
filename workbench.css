@@ -304,4 +304,14 @@ span.st.I::before { border: 1.5px solid var(--gray); box-sizing: border-box; }
   .hud { gap: 5px; right: 8px; top: 8px; } .hud button { padding: 0 10px; }
 }
 
-@media (max-width: 560px) { .wb .nav a { padding: 0 6px; font-size: 10.5px; letter-spacing: .06em; } }
+@media (max-width: 560px) { .wb .nav a { padding: 0 5px; font-size: 12px; letter-spacing: .03em; } }
+
+/* ---------- legibility: minimum type sizes ---------- */
+span.st { font-size: 11.5px; }
+.wb .kicker, #parts h3, .wspec th, .hint3d, .lab span, .bp-sheet figcaption, .wb-foot .madeby { font-size: 12px; }
+.caveat { font-size: 12.5px; }
+.lcap, #detail dt, .rel span, .pk-label, .sl em { font-size: 11.5px; }
+.bp-sheet ol, .bp-sheet ol button, .wspec td { font-size: 14px; }
+.bp-note, .rel button, .asset-note { font-size: 13px; }
+#detail dd { font-size: 17px; }
+@media (max-width: 900px) { .caveat { font-size: 12px; } .sl em { font-size: 11.5px; } .toolbar button { font-size: 12px; } }

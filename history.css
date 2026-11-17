@@ -298,4 +298,18 @@ body[data-era="e5"] { --hxbg: #383e2e; } body[data-era="e6"] { --hxbg: #050507; 
 
 @media (min-width: 761px) { .hx-foot-nav { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 @media (max-width: 760px) { .hx-foot-nav a:last-child { grid-column: 1 / -1; border-left: 0 !important; } }
-@media (max-width: 560px) { .hx .nav a { padding: 0 6px; font-size: 10.5px; letter-spacing: .06em; } }
+@media (max-width: 560px) { .hx .nav a { padding: 0 5px; font-size: 12px; letter-spacing: .03em; } }
+
+/* ---------- legibility: minimum type sizes ---------- */
+.hx figcaption { font-size: 16px; }
+.recon { font-size: 11.5px; }
+.cite { font-size: 11px; min-width: 18px; height: 18px; }
+.scale, .cmp-row figcaption span, .cmp-row figcaption a, .cmp-row figcaption i, .hero-cue, .hx-foot-nav span { font-size: 12px; }
+.rail a span, .yr small { font-size: 11.5px; }
+@media (max-width: 900px) {
+  .scale, .cmp-row figcaption span { font-size: 11px; }
+  .hx figcaption { font-size: 14px; }
+  .layer .go a { font-size: 11px; } .layer .recon { font-size: 10.5px; }
+  .evo-step dl div { font-size: 12px; }
+}
+@media (max-width: 560px) { .cmp-row.n3 figcaption a, .cmp-row.n3 figcaption i { font-size: 10.5px; } }

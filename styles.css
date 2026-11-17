@@ -445,7 +445,7 @@ main:has(.home) { padding-bottom: 0; }
 .h-time .h-btn { background: var(--brass); color: #0f1826; }
 .sf-nav.five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 @media (max-width: 900px) { .h-time { grid-template-columns: 1fr; } .h-time-dial { max-width: 380px; } .sf-nav.five { grid-template-columns: 1fr 1fr; } .sf-nav.five a:last-child { grid-column: 1 / -1; } }
-@media (max-width: 560px) { .nav a { padding: 0 6px; font-size: 10.5px; letter-spacing: .06em; } }
+@media (max-width: 560px) { .nav a { padding: 0 5px; font-size: 12px; letter-spacing: .03em; } }
 
 /* ---------- the header returns on scroll up (History carries its own copy) ---------- */
 body:not(.hx) { padding-top: var(--mast-h, 77px); }
@@ -457,3 +457,17 @@ body:not(.hx) > .mast:focus-within { transform: none; }
 /* on phones the test's pinned watch drops below the header while the header is showing */
 @media (max-width: 900px) { body:not(.mast-away) { --mast-off: var(--mast-h, 57px); } body.mast-away { --mast-off: 0px; } .exam-plate { top: var(--mast-off, 0px); transition: top .32s ease; } }
 @media (prefers-reduced-motion: reduce) { body:not(.hx) > .mast, .exam-plate { transition: none; } }
+
+/* ---------- legibility: minimum type sizes ---------- */
+figcaption { font-size: 17px; } figcaption b { font-size: 12px; }
+.parts { font-size: 17px; } .parts li::before { font-size: 12px; padding-top: 4px; }
+.title-block span { font-size: 11.5px; } .title-block p { font-size: 16.5px; }
+.colophon { font-size: 16px; }
+.zbtn { font-size: 11.5px; letter-spacing: .1em; }
+.card .no, .card .y { font-size: 12px; } .card .k { font-size: 11.5px; }
+.tones span { font-size: 12px; }
+.h-watch figcaption { font-size: 16.5px; }
+.h-now span, .h-go, .h-time-live { font-size: 12px; }
+.h-art.eras b { font-size: clamp(15px, 1.3vw, 18px); }
+.sf-nav span { font-size: 12px; } .sf-note { font-size: 16.5px; }
+@media (max-width: 560px) { .cap { font-size: 11.5px; } }

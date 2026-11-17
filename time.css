@@ -32,17 +32,17 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 .sg { fill: none; stroke-width: 15; }
 .sg-day { stroke: #ead9a4; } .sg-civ { stroke: #c08a55; } .sg-nau { stroke: #6f5f7c; } .sg-ast { stroke: #36406a; } .sg-night { stroke: #141d33; }
 .sol-line { fill: none; stroke: var(--brass); stroke-width: .35; } .sol-tick { stroke: var(--cream); stroke-width: .3; opacity: .7; }
-.sol-num { font-family: var(--mono); font-size: 4.6px; fill: #b9b09b; text-anchor: middle; }
+.sol-num { font-family: var(--mono); font-size: 5.2px; fill: #b9b09b; text-anchor: middle; }
 .sol-ev { stroke: var(--cream); stroke-width: .5; } .sol-ev.n { stroke: var(--brass); stroke-width: .7; }
-.sol-evt { font-family: var(--mono); font-size: 3.4px; letter-spacing: .22em; fill: var(--brass); text-anchor: middle; }
+.sol-evt { font-family: var(--mono); font-size: 5px; letter-spacing: .18em; fill: var(--brass); text-anchor: middle; }
 .sol-ground { fill: #0a101c; } .sol-hz { stroke: var(--cream); stroke-width: .3; opacity: .65; }
 .sol-path { fill: none; stroke-width: .7; stroke-linejoin: round; } .sol-path.up { stroke: #ead9a4; } .sol-path.down { stroke: #56607c; stroke-dasharray: 1.4 1.6; }
-.sol-card { font-family: var(--mono); font-size: 3.6px; letter-spacing: .1em; fill: #8d93a6; text-anchor: middle; }
+.sol-card { font-family: var(--mono); font-size: 5.2px; letter-spacing: .1em; fill: #8d93a6; text-anchor: middle; }
 .sol-hand { stroke: var(--cream); stroke-width: .45; }
 .sol-sun-ring { fill: none; stroke: var(--cream); stroke-width: .9; } .sol-sun-ring.down { stroke-dasharray: 1.5 1.5; opacity: .7; }
 .sol-sun.up { fill: #f1dc92; stroke: #0b1220; stroke-width: .5; filter: drop-shadow(0 0 2px rgba(241, 220, 146, .9)); } .sol-sun.down { fill: #0b1220; stroke: #8d93a6; stroke-width: .6; }
 .sol-time { font-family: var(--serif); font-size: 15px; font-weight: 500; fill: var(--cream); text-anchor: middle; font-variant-numeric: lining-nums tabular-nums; font-feature-settings: "lnum" 1, "tnum" 1; }
-.sol-phase { font-family: var(--mono); font-size: 3.3px; letter-spacing: .24em; fill: var(--brass); text-anchor: middle; }
+.sol-phase { font-family: var(--mono); font-size: 5px; letter-spacing: .12em; fill: var(--brass); text-anchor: middle; }
 .dial-key { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; margin: 14px 0 0; padding: 0; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: #a9a08b; }
 .dial-key li { display: flex; align-items: center; gap: 7px; } .dial-key li::before { content: ""; width: 14px; height: 8px; border: 1px solid #56607c; }
 .k-day::before { background: #ead9a4; } .k-civ::before { background: #c08a55; } .k-nau::before { background: #6f5f7c; } .k-ast::before { background: #36406a; } .k-night::before { background: #141d33; }
@@ -93,7 +93,7 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 .inst { display: block; width: 100%; height: auto; overflow: visible; }
 .i-body { fill: var(--paper); stroke: var(--ink); stroke-width: .6; } .i-line { fill: none; stroke: var(--ink); stroke-width: .35; } .i-line.faint { opacity: .3; }
 .i-foot, .i-weight { fill: var(--acc, var(--ink)); } .i-rod { stroke: var(--ink); stroke-width: .9; stroke-linecap: round; } .i-pivot, .i-dot { fill: var(--ink); }
-.i-scale line { stroke: var(--ink); stroke-width: .3; } .i-scale text { font-family: var(--mono); font-size: 3.6px; fill: var(--ink-2); }
+.i-scale line { stroke: var(--ink); stroke-width: .3; } .i-scale text { font-family: var(--mono); font-size: 4.4px; fill: var(--ink-2); }
 .i-lab { font-family: var(--mono); font-size: 4.2px; letter-spacing: .16em; fill: var(--ink-2); text-anchor: middle; } .i-lab.left { text-anchor: start; } .i-lab.end { text-anchor: end; }
 .i-esc { fill: var(--paper); stroke: var(--ink); stroke-width: .5; stroke-linejoin: round; } .i-cog line { stroke: var(--ink); stroke-width: .5; }
 .i-fork { fill: none; stroke: var(--acc); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; } .i-bal { fill: none; stroke: var(--ink); stroke-width: 2; } .i-pin { fill: var(--oxblood); }
@@ -159,11 +159,11 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
   .two .prose { order: 2; }
 }
 @media (max-width: 560px) {
-  .nt .mast .brand span { display: none; } .nt .nav a { padding: 0 6px; font-size: 10.5px; letter-spacing: .06em; }
+  .nt .mast .brand span { display: none; } .nt .nav a { padding: 0 5px; font-size: 12px; letter-spacing: .03em; }
   .reads dd { font-size: 20px; } .measures, .sounds, .cyc, .nexts { grid-template-columns: 1fr; } .measures li:nth-child(even) { border-left: 0; }
   .three-times dl { grid-template-columns: 1fr; } .mini { grid-template-columns: 1fr; gap: 10px; } .ladder li { grid-template-columns: 1fr; gap: 0; } .ladder b { text-align: left; }
   .prose p { font-size: 19px; } .jump span { width: 100%; margin: 0; } .jump a { padding: 0 11px; }
-  .sol-num { font-size: 5.4px; } .sol-evt { font-size: 4px; } .sol-phase { font-size: 4px; }
+  .sol-num { font-size: 7.2px; } .sol-card { font-size: 6.8px; } .sol-evt { font-size: 5.2px; } .sol-phase { font-size: 5px; letter-spacing: .12em; }
 }
 @media (prefers-reduced-motion: reduce) { .nt * { transition: none !important; } }
 
@@ -181,3 +181,10 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 .leap p + p { margin-top: 10px; }
 @media (max-width: 1000px) { .measures { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 640px) { .measures { grid-template-columns: 1fr; } }
+
+/* ---------- legibility: minimum type sizes ---------- */
+.dial-key, .mini dt, .m-when, .m-live span, .year p { font-size: 11.5px; }
+.place-now span, .reads dt, .travel label span, .three-times dt, .presets button, .nt-go a, .jump, .wide span, .nexts em { font-size: 12px; }
+.sounds span { font-size: 12.5px; }
+.place-note, .three-times dl p, .nexts span, .method ol { font-size: 16.5px; }
+@media (max-width: 560px) { #anat .i-lab { font-size: 5.4px; letter-spacing: .1em; } }
