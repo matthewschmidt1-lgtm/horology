@@ -195,8 +195,8 @@ function renderHome() {
     <div class="h-words">
       <p class="h-eyebrow">The Horological Archive</p>
       <h1>The art, engineering and history of timekeeping.</h1>
-      <p>Explore the remarkable world of mechanical watchmaking through interactive examinations, detailed technical illustrations and historical research.</p>
-      <p>From the architecture of a movement to the smallest details of a case, dial and complication, discover what makes each timepiece extraordinary.</p>
+      <p>Discover the world of mechanical watchmaking through in-depth examinations, detailed technical illustrations and carefully researched horological history.</p>
+      <p>From the intricate architecture of a movement to the finest details of a case, dial and complication, explore the ingenuity, craftsmanship and design that define each timepiece.</p>
       <p class="h-motto">Look closer. Understand more.</p>
       <a class="h-btn" href="#/archive">Explore the archive</a>
     </div>
