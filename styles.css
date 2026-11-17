@@ -262,3 +262,8 @@ a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation
   .frame .fig { max-height: calc(100svh - 150px); }
   .q { scroll-margin-top: 16px; }
 }
+
+/* ---------- credit ---------- */
+.colophon .by { border-top: 0; padding-top: 6px; }
+.madeby { display: inline-flex; align-items: center; min-height: 44px; font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); text-decoration: none; border-bottom: 1px solid transparent; }
+.madeby:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }

@@ -184,3 +184,8 @@ span.st.I::before { border: 1.5px solid var(--gray); box-sizing: border-box; }
   .lab { padding: 8px; margin: -8px; }
   .viewport { height: 50svh; }
 }
+
+/* credit */
+.wb-foot { display: flex; justify-content: center; background: var(--ivory); border-top: 1px solid var(--charcoal); }
+.wb-foot .madeby { min-height: 34px; font-size: 11px; }
+@media (max-width: 900px) { .wb-foot { margin-bottom: calc(52px + env(safe-area-inset-bottom)); } .wb-foot .madeby { min-height: 44px; } .bench { padding-bottom: 0; } }
