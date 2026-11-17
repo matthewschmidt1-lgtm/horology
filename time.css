@@ -171,3 +171,13 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 .sec-head p:not(.nt-eyebrow) + p { margin-top: 12px; }
 .sec-head .sec-lead { font-family: var(--serif); font-size: clamp(25px, 2.6vw, 36px) !important; line-height: 1.15 !important; font-style: italic; color: var(--cream) !important; }
 .sec-head .sec-tag { margin-top: 22px !important; font-family: var(--serif); font-size: clamp(25px, 2.6vw, 36px) !important; line-height: 1.15 !important; font-style: italic; color: var(--brass) !important; }
+
+/* six measures of the second: hairline grid that works at any column count */
+.measures { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--rule); }
+.measures li { border: 0 !important; background: var(--paper); padding: 24px 22px 24px; }
+.measures li.m-si { background: var(--green); grid-column: auto !important; }
+.measures li > p:not(.m-when):not(.m-live) + p:not(.m-live) { margin-top: 10px; }
+.leap h3 { font-family: var(--serif); font-size: 27px; font-weight: 600; line-height: 1.1; margin: 0 0 10px; }
+.leap p + p { margin-top: 10px; }
+@media (max-width: 1000px) { .measures { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .measures { grid-template-columns: 1fr; } }
