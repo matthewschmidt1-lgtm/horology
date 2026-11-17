@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e4d9bf">
+<title>The Horological Archive</title>
+<meta name="description" content="Twenty vintage wristwatches drawn as engineering plates, each keeping your time. Sit the examination or browse the archive.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="mast">
+  <a class="brand" href="#/exam">
+    <svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="10.5"/><circle r="8.6"/><path d="M0,-8.6V-6.6M8.6,0H6.6M0,8.6V6.6M-8.6,0H-6.6M0,0L0,-5.4M0,0L3.9,2.2"/></svg>
+    <span><i class="the">The </i>Horological Archive</span>
+  </a>
+  <nav class="nav" aria-label="Sections">
+    <a href="#/exam" data-r="exam"><span class="long">Examination</span><span class="short">Exam</span></a>
+    <a href="#/archive" data-r="archive">Archive</a>
+  </nav>
+</header>
+<main id="view"></main>
+<dialog id="zoom" aria-label="Enlarged figure">
+  <div class="zbar"><span class="ztitle"></span><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="close">Close</button></div>
+  <div class="zwrap"></div>
+</dialog>
+<footer class="colophon">
+  <p>Modern interpretive drawings made from published specifications. They are not manufacturer documents, and no affiliation with any maker is implied. Names and references are used to identify historical objects.</p>
+</footer>
+<script src="data.js"></script>
+<script src="draw.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
