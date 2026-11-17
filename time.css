@@ -17,7 +17,8 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 .nt-lede { font-size: clamp(20px, 1.8vw, 25px); line-height: 1.46; color: #cfc6b1; }
 .nt-hero .nt-lede { max-width: 1180px; } .nt-lede { text-wrap: pretty; }
 .nt-hero .nt-lede, .nt-hero .nt-quote { padding-right: min(34vw, 420px); }
-.nt-quote { margin-top: 30px !important; font-size: clamp(24px, 2.6vw, 36px); line-height: 1.18; font-style: italic; color: var(--brass); text-wrap: balance; }
+.nt-quote { margin-top: 30px !important; font-size: clamp(22px, 2.2vw, 30px); line-height: 1.22; font-style: italic; color: var(--brass); text-wrap: balance; }
+.nt-ask { margin-top: 14px !important; font-family: var(--serif); font-size: clamp(34px, 4.6vw, 64px); line-height: 1.04; font-weight: 500; font-style: italic; color: var(--cream); }
 .sec-head h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(34px, 4.6vw, 64px); line-height: 1.03; margin: 12px 0 16px; text-wrap: balance; }
 .sec-head p:not(.nt-eyebrow) { font-size: clamp(19px, 1.6vw, 23px); line-height: 1.46; max-width: 46em; }
 
