@@ -92,7 +92,7 @@ function links(k) {
   const w = aw(k), b = HX.bench[w.id];
   return `<p class="go"><a href="${plate(w.id)}">Plate, blueprint and movement</a>${b ? `<a href="workbench.html#watch=${b}">Take it apart on the Workbench</a>` : ''}</p>`;
 }
-const capOf = fg => fg.cap || (w => `${w.brand} ${w.model}${w.ref !== '—' ? ', ref. ' + w.ref : ''}, ${w.year}. From the archive.`)(aw(fg.k));
+const capOf = fg => fg.cap || (w => `${w.brand} ${w.model}${w.ref !== '-' ? ', ref. ' + w.ref : ''}, ${w.year}. From the archive.`)(aw(fg.k));
 const cites = c => c ? c.map(n => `<a class="cite" href="#src-${n}" aria-label="Source ${n}">${n}</a>`).join('') : '';
 
 /* ----- build the page ----- */

@@ -4,7 +4,7 @@ const W = window.WATCHES, D = window.Draw, view = document.getElementById('view'
 const ROM = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX'];
 const DAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-const name = w => `${w.brand} ${w.model}` + (w.ref !== '—' ? `, ref. ${w.ref}` : '');
+const name = w => `${w.brand} ${w.model}` + (w.ref !== '-' ? `, ref. ${w.ref}` : '');
 const pad = n => String(n).padStart(2, '0');
 
 /* ---------- the clock: every hand on the page follows the visitor's system time ---------- */
@@ -25,6 +25,7 @@ function tick() {
     document.querySelectorAll('[data-clock]').forEach(el => { el.textContent = txt; });
     document.querySelectorAll('[data-date]').forEach(el => { el.textContent = now.getDate(); });
     document.querySelectorAll('[data-daydate]').forEach(el => { el.textContent = `${DAYS[now.getDay()]} ${now.getDate()}`; });
+    homeSun(now);
     const gone = h * 3600 + m * 60 + s, bar = document.querySelector('[data-day-bar]');
     if (bar) { bar.style.width = (gone / 864).toFixed(2) + '%'; document.querySelector('[data-day-gone]').textContent = gone.toLocaleString('en-US'); document.querySelector('[data-day-left]').textContent = (86400 - gone).toLocaleString('en-US'); }
   }
@@ -37,7 +38,7 @@ const refresh = () => { lastSec = -1; };
 /* ---------- the plate ---------- */
 function specRows(w) {
   const c = w.c, mv = w.mv, r = [];
-  r.push(['Reference', w.ref === '—' ? 'Various' : w.ref], ['Introduced', w.year], ['Production', w.span], ['Type', w.kind]);
+  r.push(['Reference', w.ref === '-' ? 'Various' : w.ref], ['Introduced', w.year], ['Production', w.span], ['Type', w.kind]);
   const ap = c.da ? '≈ ' : '';
   r.push(['Case', c.d ? `${ap}${c.d} mm` : `${ap}${c.w} × ${c.h} mm`]);
   r.push(['Thickness', c.t[1] === 'v' ? `${c.t[0]} mm` : c.t[1] === 'a' ? `≈ ${c.t[0]} mm` : 'Not verified; profile drawn indicatively']);
@@ -59,7 +60,7 @@ function sheet(w) {
   <header class="sheet-head">
     <p class="plate-no">Plate ${ROM[idx]}</p>
     <h2>${w.brand} <em>${w.model}</em></h2>
-    <p class="sub">${w.ref !== '—' ? `Ref. ${w.ref} · ` : ''}${w.year} · ${w.kind}</p>
+    <p class="sub">${w.ref !== '-' ? `Ref. ${w.ref} · ` : ''}${w.year} · ${w.kind}</p>
   </header>
   <div class="figs">
     <figure class="f1">${box(D.front(w, { dims: true }))}<figcaption><b>Fig. 1</b> Front elevation. Hands set to your local time, <span data-clock></span>.</figcaption></figure>
@@ -106,7 +107,7 @@ function renderExam() {
     <div class="q" id="q1">
       <h2>Which watch is on the bench?</h2>
       <p class="hint">The signature has been masked. Read the case, the dial and the way the hands move.</p>
-      <div class="opts">${identOptions(w).map(o => `<button type="button" data-id="${o.id}">${o.brand} <em>${o.model}</em>${o.ref !== '—' ? ` <small>${o.ref}</small>` : ''}</button>`).join('')}</div>
+      <div class="opts">${identOptions(w).map(o => `<button type="button" data-id="${o.id}">${o.brand} <em>${o.model}</em>${o.ref !== '-' ? ` <small>${o.ref}</small>` : ''}</button>`).join('')}</div>
       <p class="verdict" aria-live="polite"></p>
     </div>
     <div class="q" id="q2" hidden>
@@ -216,7 +217,7 @@ function renderHome() {
   <div class="h-beyond">
     <h2>Beyond the dial.</h2>
     <div>
-      <p>A watch is more than an instrument for measuring time. It is a meeting of engineering, craftsmanship, design and human ingenuity — an intricate expression of centuries of horological innovation.</p>
+      <p>A watch is more than an instrument for measuring time. It is a meeting of engineering, craftsmanship, design and human ingenuity, an intricate expression of centuries of horological innovation.</p>
       <p>The Horological Archive brings these disciplines together through an evolving collection of interactive examinations, technical explorations and historical research.</p>
     </div>
   </div>
@@ -239,12 +240,31 @@ function renderHome() {
     </article>
   </div>
 
+  <div class="h-time">
+    <a class="h-time-dial" id="home-dial" href="time.html" aria-label="Open the living solar clock"></a>
+    <div class="h-time-txt">
+      <p class="h-eyebrow">The Nature of Time</p>
+      <h2>Beyond the measurement of time.</h2>
+      <p>From the daily passage of the sun to the oscillations of a mechanical balance, explore the rhythms, cycles and scientific principles that shape our understanding of time.</p>
+      <p class="h-time-live" id="home-sun"></p>
+      <a class="h-btn" href="time.html">Explore the nature of time</a>
+    </div>
+  </div>
+
   <div class="h-close">
     <h2>A closer examination of horology.</h2>
     <p>An independent exploration of the timepieces, mechanisms, craftsmanship and innovations that have shaped the art and science of timekeeping.</p>
   </div>
 </section>`;
+  if (window.Sol) { homeLoc = Sol.guess(); homeDial = Sol.mount(document.getElementById('home-dial')); homeSun(new Date()); }
   refresh();
+}
+// The solar clock on the homepage: placed from the visitor's time zone, never asking for a location.
+let homeDial = null, homeLoc = null;
+function homeSun(now) {
+  if (!homeDial || !document.getElementById('home-sun')) return;
+  const r = homeDial.set(homeLoc, now), c = d => Sol.clock(d, homeLoc.tz);
+  document.getElementById('home-sun').innerHTML = `<span>${homeLoc.name}</span><span>Sunrise <b>${c(r.ev.rise)}</b></span><span>Solar noon <b>${c(r.ev.noon)}</b></span><span>Sunset <b>${c(r.ev.set)}</b></span>`;
 }
 
 function route() {

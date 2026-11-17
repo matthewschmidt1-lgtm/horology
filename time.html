@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1826">
+<title>The Nature of Time · The Horological Archive</title>
+<meta name="description" content="Beyond the measurement of time: a living solar clock, the rhythm of a pendulum, the anatomy of a second, and the cycles of sun, moon and seasons.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Horological Archive">
+<meta property="og:title" content="The Nature of Time">
+<meta property="og:description" content="Beyond the measurement of time: a living solar clock, the rhythm of a pendulum, the anatomy of a second, and the cycles of sun, moon and seasons.">
+<meta property="og:image" content="https://horology-production.up.railway.app/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="sol.css">
+<link rel="stylesheet" href="time.css">
+</head>
+<body class="nt">
+<header class="mast">
+  <a class="brand" href="index.html" aria-label="The Horological Archive, home">
+    <svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="10.5"/><circle r="8.6"/><path d="M0,-8.6V-6.6M8.6,0H6.6M0,8.6V6.6M-8.6,0H-6.6M0,0L0,-5.4M0,0L3.9,2.2"/></svg>
+    <span><i class="the">The </i>Horological Archive</span>
+  </a>
+  <nav class="nav" aria-label="Sections">
+    <a href="workbench.html"><span class="long">Workbench</span><span class="short">Bench</span></a>
+    <a href="index.html#/archive">Archive</a>
+    <a href="index.html#/exam"><span class="long">Examination</span><span class="short">Exam</span></a>
+    <a href="history.html">History</a>
+    <a href="time.html" class="on" aria-current="page"><span class="long">Nature of Time</span><span class="short">Time</span></a>
+  </nav>
+</header>
+
+<main id="nt">
+  <section class="nt-hero">
+    <p class="nt-eyebrow">The Nature of Time</p>
+    <h1>Beyond the measurement of time.</h1>
+    <p class="nt-lede">Explore the rhythms, cycles and principles that define our understanding of time. From the daily passage of the sun to the oscillations of a mechanical pendulum, discover the natural phenomena and scientific principles that underpin the art of timekeeping.</p>
+    <p class="nt-quote">We measure time. We study its mechanisms. We explore its history. But what is time itself?</p>
+  </section>
+
+  <!-- ============ the living solar clock ============ -->
+  <section class="solar" id="solar" aria-labelledby="solar-h">
+    <header class="sec-head"><p class="nt-eyebrow">The signature instrument</p><h2 id="solar-h">The living solar clock</h2>
+      <p>The first clock was the sky. This dial shows one whole day at a place: the outer ring is twenty-four hours of clock time, shaded by daylight, twilight and night. Inside it is the sky as you would face it, with the sun on its path.</p></header>
+    <div class="solar-grid">
+      <div class="dial-wrap">
+        <div id="dial"></div>
+        <ul class="dial-key" aria-label="Key to the ring"><li class="k-day">Daylight</li><li class="k-civ">Civil twilight</li><li class="k-nau">Nautical</li><li class="k-ast">Astronomical</li><li class="k-night">Night</li></ul>
+      </div>
+      <div class="solar-panel">
+        <div class="place">
+          <p class="place-now"><span>Showing</span><b id="place-name">-</b><small id="place-coord"></small></p>
+          <div class="place-ctl">
+            <label class="sel"><span class="vh">Choose a place</span><select id="city" aria-label="Choose a place"></select></label>
+            <button type="button" id="geo">Use my location</button>
+          </div>
+          <p class="place-note" id="place-note">Chosen from your time zone. Nothing about your position leaves this page.</p>
+        </div>
+        <dl class="reads">
+          <div><dt>Local time</dt><dd id="r-time">-</dd></div>
+          <div><dt>Sunrise</dt><dd id="r-rise">-</dd></div>
+          <div><dt>Solar noon</dt><dd id="r-noon">-</dd></div>
+          <div><dt>Sunset</dt><dd id="r-set">-</dd></div>
+          <div><dt>Daylight</dt><dd id="r-len">-</dd></div>
+          <div><dt>Solar phase</dt><dd id="r-phase">-</dd></div>
+          <div><dt>Sun’s altitude</dt><dd id="r-alt">-</dd></div>
+          <div><dt>Sun’s bearing</dt><dd id="r-az">-</dd></div>
+        </dl>
+        <div class="travel">
+          <label><span>Hour of the day <b id="t-lab"></b></span><input type="range" id="s-time" min="0" max="1439" step="1" aria-label="Move through the hours of the day"></label>
+          <label><span>Day of the year <b id="d-lab"></b></span><input type="range" id="s-date" min="1" max="365" step="1" aria-label="Move through the days of the year"></label>
+          <div class="year" id="year" role="img" aria-label="Hours of daylight through the year at this place"></div>
+          <button type="button" id="now" disabled>Return to now</button>
+        </div>
+      </div>
+    </div>
+    <div class="three-times">
+      <h3>Three kinds of time, one moment</h3>
+      <p>Your clock, the average sun and the real sun rarely agree. Solar noon, when the sun is highest, is almost never at twelve.</p>
+      <dl>
+        <div><dt>Civil time</dt><dd id="c-civil">-</dd><p>What clocks show: mean time at your zone’s reference meridian, plus any daylight-saving hour.</p></div>
+        <div><dt>Mean solar time</dt><dd id="c-mean">-</dd><p>Time by an imaginary sun moving at an even rate, at your own longitude.</p></div>
+        <div><dt>Apparent solar time</dt><dd id="c-app">-</dd><p>Time by the real sun: what a sundial here would read.</p></div>
+        <div><dt>Equation of time</dt><dd id="c-eot">-</dd><p>The gap between the last two. It swings between about 16 minutes ahead and 14 behind over a year.</p></div>
+      </dl>
+      <p class="nt-go"><a href="history.html#e1">How portable timekeeping began, on the History page</a></p>
+    </div>
+  </section>
+
+  <nav class="jump" aria-label="Explorations"><span>Five smaller studies</span><a href="#rhythm">Rhythm</a><a href="#second">A second</a><a href="#measure">Measure</a><a href="#sound">Sound</a><a href="#cycles">Cycles</a></nav>
+
+  <!-- ============ rhythm ============ -->
+  <section class="study s-rhythm" id="rhythm" aria-labelledby="rhythm-h">
+    <header class="sec-head"><p class="nt-eyebrow">I · The rhythm of time</p><h2 id="rhythm-h">Anything that repeats can be a clock.</h2></header>
+    <div class="two">
+      <div class="metro-wrap">
+        <div id="metro" aria-hidden="true"></div>
+        <div class="metro-ctl">
+          <button type="button" id="m-go" aria-pressed="false">Start</button>
+          <label class="chk"><input type="checkbox" id="m-snd"><span>Sound</span></label>
+        </div>
+        <label class="wide"><span>Tempo <b id="m-bpm">60</b> beats a minute</span><input type="range" id="m-tempo" min="40" max="300" step="1" value="60" aria-label="Metronome tempo in beats a minute"></label>
+        <p class="presets"><button type="button" data-bpm="60">Seconds pendulum · 60</button><button type="button" data-bpm="120">March · 120</button><button type="button" data-bpm="300">A watch · 300</button></p>
+      </div>
+      <div class="prose">
+        <p>Around 1600 Galileo noticed that a pendulum takes almost the same time for a wide swing as for a narrow one. Its period depends on its length and on little else. In 1656 Christiaan Huygens hung one in a clock, and the best timekeepers went from losing minutes a day to losing seconds.</p>
+        <p>A metronome is a pendulum turned upside down, with a sliding weight to change its effective length. Slide the weight up and it slows; that is all the tempo control does.</p>
+        <dl class="mini" id="m-facts"></dl>
+        <p>A pendulum needs to hang still, so it cannot go in a pocket. A watch replaces gravity with a spring: a balance wheel turned back and forth by a hairspring is a pendulum that works in any position.</p>
+        <h3>The same idea, faster and faster</h3>
+        <ol class="ladder">
+          <li><b>1 Hz</b><span>Seconds pendulum, about 99.4 cm long</span></li>
+          <li><b>2.5 Hz</b><span>Balance of a vintage watch, 18,000 beats an hour</span></li>
+          <li><b>5 Hz</b><span>Zenith El Primero, 36,000 beats an hour</span></li>
+          <li><b>360 Hz</b><span>Tuning fork of the Bulova Accutron</span></li>
+          <li><b>32,768 Hz</b><span>Quartz crystal of an ordinary watch</span></li>
+          <li><b>9,192,631,770 Hz</b><span>Caesium atom: the definition of the second</span></li>
+        </ol>
+        <p class="nt-go"><a href="index.html#/plate/spaceview">The Accutron’s tuning fork</a><a href="index.html#/plate/a386">The El Primero</a><a href="history.html#e6">The quartz revolution</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ anatomy of a second ============ -->
+  <section class="study s-second" id="second" aria-labelledby="second-h">
+    <header class="sec-head"><p class="nt-eyebrow">II · The anatomy of a second</p><h2 id="second-h">One second, inside a watch.</h2>
+      <p>A watch beating 18,000 times an hour divides each second into five. Drag through one second, or play it slowly, and follow the energy from the spring to the hand.</p></header>
+    <div class="two rev">
+      <div class="anat-wrap">
+        <div id="anat" aria-hidden="true"></div>
+        <label class="wide"><span>Within the second <b id="a-ms">0</b> ms</span><input type="range" id="a-t" min="0" max="1000" step="1" value="0" aria-label="Position within one second, in milliseconds"></label>
+        <div class="metro-ctl"><button type="button" id="a-go" aria-pressed="false">Play slowly</button><span class="hint" id="a-beat">Beat 1 of 5</span></div>
+      </div>
+      <ol class="chain" id="a-chain">
+        <li><b>Energy</b><span>The mainspring pushes constantly on the gear train. Nothing moves, because the last wheel is locked.</span><em id="a-energy"></em></li>
+        <li><b>Balance wheel</b><span>Swings one way, then back: five swings a second. Each swing takes the same time, and that is the watch’s clock.</span><em id="a-balt"></em></li>
+        <li><b>Escapement</b><span>As the balance passes its centre it flips the pallet fork. One tooth of the escape wheel escapes, and gives the balance a push on its way.</span><em id="a-esc"></em></li>
+        <li><b>Gear train</b><span>Every wheel behind the escape wheel jumps forward with it, then stops again.</span><em id="a-train"></em></li>
+        <li><b>The hands</b><span>The seconds hand, fixed to the fourth wheel, advances six degrees in five small steps.</span><em id="a-hand"></em></li>
+      </ol>
+    </div>
+    <p class="nt-go"><a href="workbench.html#watch=speedmaster-105003">See it running in three dimensions on the Workbench</a><a href="index.html#/exam">Read a watch by the way its hand moves: the Examination</a></p>
+  </section>
+
+  <!-- ============ the measure of time ============ -->
+  <section class="study s-measure" id="measure" aria-labelledby="measure-h">
+    <header class="sec-head"><p class="nt-eyebrow">III · The measure of time</p><h2 id="measure-h">What, exactly, is a second?</h2>
+      <p>The answer has changed four times. Each change moved the definition to something steadier than the last.</p></header>
+    <ol class="measures">
+      <li><p class="m-when">Antiquity</p><h3>Solar time</h3><p>Noon is when the sun is highest. A day is noon to noon. But those days are not equal: the Earth’s tilted axis and oval orbit make the real sun run fast and slow through the year.</p><p class="m-live"><span>Sundial time here</span><b id="ms-app">-</b></p></li>
+      <li><p class="m-when">1700s onward</p><h3>Mean solar time</h3><p>Clocks cannot follow an uneven sun, so astronomers averaged it. A second became 1/86,400 of the mean solar day. Railways then merged local mean times into time zones, agreed internationally in 1884.</p><p class="m-live"><span>Mean time at this longitude</span><b id="ms-mean">-</b></p></li>
+      <li><p class="m-when">The astronomer’s clock</p><h3>Sidereal time</h3><p>Measured against the stars, the Earth turns once in 23 hours, 56 minutes and 4 seconds. The other four minutes of a solar day are the Earth catching up with its own movement around the sun.</p><p class="m-live"><span>Local sidereal time</span><b id="ms-sid">-</b></p></li>
+      <li><p class="m-when">1955 – 1967</p><h3>Atomic time</h3><p>The Earth’s rotation itself turned out to be unsteady. In 1955 Louis Essen and Jack Parry ran the first accurate caesium clock at Britain’s National Physical Laboratory. Atoms kept better time than the planet.</p><p class="m-live"><span>International Atomic Time</span><b id="ms-tai">-</b></p></li>
+      <li class="m-si"><p class="m-when">Since 1967</p><h3>The SI second</h3><p>The second is defined by fixing the frequency of one transition of the caesium-133 atom at exactly <b>9,192,631,770</b> hertz. Counting that many oscillations is one second. The wording was revised in 2019; the number has not changed.</p><p class="m-live"><span>Caesium oscillations since you opened this page</span><b id="ms-cs">0</b></p></li>
+    </ol>
+    <p class="aside">Atomic time and the turning Earth drift apart, so Coordinated Universal Time (UTC) has been nudged with leap seconds since 1972. Atomic time is now 37 seconds ahead of UTC, unchanged since 2017. In 2022 the world’s metrology body resolved to stop adding leap seconds by 2035.</p>
+    <p class="nt-go"><a href="history.html#e6">When quartz overtook the balance wheel</a><a href="index.html#/archive">Twenty mechanical answers to the same question</a></p>
+  </section>
+
+  <!-- ============ the sound of time ============ -->
+  <section class="study s-sound" id="sound" aria-labelledby="sound-h">
+    <header class="sec-head"><p class="nt-eyebrow">IV · The sound of time</p><h2 id="sound-h">Time has always been something you could hear.</h2>
+      <p>Nothing plays until you press a button. These are synthesised illustrations of each rhythm, made in your browser. They are not recordings of real instruments.</p></header>
+    <div class="sounds" id="sounds">
+      <button type="button" data-snd="watch5"><b>A vintage watch</b><span>Five beats a second, 18,000 an hour</span></button>
+      <button type="button" data-snd="watch10"><b>A high-beat watch</b><span>Ten beats a second: the tick becomes a purr</span></button>
+      <button type="button" data-snd="pendulum"><b>A pendulum clock</b><span>Tick and tock, one second apart</span></button>
+      <button type="button" data-snd="metro"><b>A metronome</b><span>At the tempo set above</span></button>
+      <button type="button" data-snd="repeater"><b>A minute repeater</b><span>Strikes your time: hours low, quarters in pairs, minutes high</span></button>
+      <button type="button" data-snd="alarm"><b>A mechanical alarm</b><span>A hammer trembling against a bell</span></button>
+    </div>
+    <p class="snd-status" id="snd-status" aria-live="polite">Silent.</p>
+    <button type="button" id="snd-stop" disabled>Stop</button>
+    <p class="aside">A repeater was built for the dark. Before electric light, pressing a slide on your watch made it chime the hour, then the quarters, then the minutes past the quarter, so you could tell the time without seeing the dial.</p>
+  </section>
+
+  <!-- ============ the cycles of time ============ -->
+  <section class="study s-cycles" id="cycles" aria-labelledby="cycles-h">
+    <header class="sec-head"><p class="nt-eyebrow">V · The cycles of time</p><h2 id="cycles-h">Day, month and year are things that happen in the sky.</h2>
+      <p>Every unit on a calendar began as a cycle somebody could watch. None of them divides evenly into the others, which is why calendars are complicated.</p></header>
+    <div class="cyc">
+      <article><h3>The day</h3><div class="cyc-fig" id="c-day"></div><p id="c-day-t"></p><p class="nt-go"><a href="#solar">The solar clock, above</a></p></article>
+      <article><h3>The month</h3><div class="cyc-fig" id="c-moon"></div><p id="c-moon-t"></p></article>
+      <article class="wide2"><h3>The year and its seasons</h3><div class="cyc-fig" id="c-orbit"></div><p id="c-orbit-t"></p><ul class="nexts" id="c-next"></ul></article>
+    </div>
+  </section>
+
+  <section class="method" id="method">
+    <h2>Method and sources</h2>
+    <p>The solar clock uses the NOAA Global Monitoring Laboratory method, which follows Jean Meeus’s <i>Astronomical Algorithms</i>. NOAA describes that method as good to about a minute between 72° north and south, and less exact nearer the poles. Sunrise and sunset allow the standard 0.833° for refraction and the sun’s disc. The ring is drawn in five-minute steps and assumes one clock offset for the day, so on the two days a year the clocks change it is up to an hour out for part of the day.</p>
+    <p>Without your permission the page places you in a large city in your time zone. The moon’s phase uses the average length of a lunation, so it can be about a day out. The orbit is drawn as a circle. The sounds are synthesised. The mechanical watch in “One second” is a schematic, as on the Workbench.</p>
+    <ol>
+      <li><a href="https://gml.noaa.gov/grad/solcalc/glossary.html" target="_blank" rel="noopener">NOAA Global Monitoring Laboratory, Solar Calculator glossary</a> and <a href="https://gml.noaa.gov/grad/solcalc/solareqns.PDF" target="_blank" rel="noopener">general solar position calculations</a></li>
+      <li><a href="https://www.bipm.org/en/si-base-units/second" target="_blank" rel="noopener">Bureau International des Poids et Mesures, “SI base unit: second”</a></li>
+      <li><a href="https://www.npl.co.uk/si-units/second" target="_blank" rel="noopener">National Physical Laboratory, “The second”</a></li>
+      <li><a href="https://www.britannica.com/science/time/Lengths-of-years-and-months" target="_blank" rel="noopener">Encyclopaedia Britannica, “Lengths of years and months”</a></li>
+      <li><a href="https://www.scientificamerican.com/article/the-leap-seconds-time-is-up-world-votes-to-stop-pausing-clocks/" target="_blank" rel="noopener">Scientific American, “The Leap Second’s Time Is Up”</a></li>
+    </ol>
+    <p>The historical statements about Galileo, Huygens, Essen and Parry, and the repeater are the commonly given accounts and were not individually checked for this page.</p>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <a class="sf-brand" href="index.html">
+    <svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="10.5"/><circle r="8.6"/><path d="M0,-8.6V-6.6M8.6,0H6.6M0,8.6V6.6M-8.6,0H-6.6M0,0L0,-5.4M0,0L3.9,2.2"/></svg>
+    <span>The Horological Archive</span>
+  </a>
+  <nav class="sf-nav five" aria-label="Footer">
+    <a href="workbench.html"><b>Workbench</b><span>Take a watch apart</span></a>
+    <a href="index.html#/archive"><b>Archive</b><span>The twenty plates</span></a>
+    <a href="index.html#/exam"><b>Examination</b><span>Name twenty watches</span></a>
+    <a href="history.html"><b>History</b><span>Five centuries in one scroll</span></a>
+    <a href="time.html"><b>Nature of Time</b><span>Beyond the dial</span></a>
+  </nav>
+  <p class="sf-by"><a class="madeby" href="https://matthew-schmidt-production.up.railway.app/" target="_blank" rel="noopener">Made by Matty</a></p>
+</footer>
+
+<script src="data.js"></script>
+<script src="draw.js"></script>
+<script src="time-core.js"></script>
+<script src="time.js"></script>
+</body>
+</html>

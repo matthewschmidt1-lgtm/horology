@@ -1,4 +1,4 @@
-/* The Horological Archive — plate data.
+/* The Horological Archive: plate data.
    Flags on measurements:  'v' = widely documented,  'a' = approximate (shown with ≈),
    'n' = not verified (drawn indicatively, no figure printed). */
 window.WATCHES = [
@@ -69,7 +69,7 @@ window.WATCHES = [
   q:{t:'What is pictured on the Constellation’s caseback medallion?', a:'An observatory beneath eight stars', w:['A seahorse','A trident and waves','A five-pointed crown']}
 },
 {
-  id:'tanklc', brand:'Cartier', model:'Tank Louis Cartier', ref:'—', year:'1922', span:'1922 onward', kind:'Dress watch',
+  id:'tanklc', brand:'Cartier', model:'Tank Louis Cartier', ref:'-', year:'1922', span:'1922 onward', kind:'Dress watch',
   c:{shape:'tank', w:23, h:30, da:'a', t:[6.5,'n'], lug:null},
   dial:{dark:false, markers:'roman', text:['CARTIER']},
   hands:'epee', sec:'none', crown:{pos:3, cabochon:true}, strap:'leather',
@@ -80,7 +80,7 @@ window.WATCHES = [
   q:{t:'What, by tradition, inspired the Tank’s form?', a:'A First World War tank seen from above', w:['A railway carriage window','A cigarette case','A Roman tablet']}
 },
 {
-  id:'reverso', brand:'Jaeger-LeCoultre', model:'Reverso', ref:'—', year:'1931', span:'1931 onward', kind:'Sports watch',
+  id:'reverso', brand:'Jaeger-LeCoultre', model:'Reverso', ref:'-', year:'1931', span:'1931 onward', kind:'Sports watch',
   c:{shape:'reverso', w:24, h:38, da:'a', t:[8,'n'], lug:null},
   dial:{dark:true, markers:'rectbaton', text:['REVERSO']},
   hands:'baton', sec:'none', crown:{pos:3, small:true}, strap:'leather',
@@ -135,7 +135,7 @@ window.WATCHES = [
   q:{t:'How fast does the El Primero beat?', a:'36,000 vibrations per hour', w:['18,000 vibrations per hour','21,600 vibrations per hour','28,800 vibrations per hour']}
 },
 {
-  id:'polerouter', brand:'Universal Genève', model:'Polerouter', ref:'—', year:'1954', span:'1954 – 1969', kind:'Dress / travel watch',
+  id:'polerouter', brand:'Universal Genève', model:'Polerouter', ref:'-', year:'1954', span:'1954 – 1969', kind:'Dress / travel watch',
   c:{shape:'round', d:35, da:'a', t:[10,'n'], lug:[18,'n'], lyre:true},
   bezel:{type:'plain', w:1.3}, dial:{dark:true, markers:'polerouter', text:['UNIVERSAL GENÈVE','POLEROUTER']},
   hands:'dauphine', sec:'center', crown:{pos:3, small:true}, strap:'leather',
@@ -201,7 +201,7 @@ window.WATCHES = [
   q:{t:'What made one Challenge Diver famous in 1983?', a:'It washed up covered in barnacles, still running', w:['It reached the bottom of the Mariana Trench','It was worn on the Space Shuttle','It survived an Everest ascent']}
 },
 {
-  id:'ventura', brand:'Hamilton', model:'Ventura', ref:'—', year:'1957', span:'1957 – 1963', kind:'Electric watch',
+  id:'ventura', brand:'Hamilton', model:'Ventura', ref:'-', year:'1957', span:'1957 – 1963', kind:'Electric watch',
   c:{shape:'shield', w:32, h:50, da:'a', t:[11,'n'], lug:null},
   dial:{dark:true, markers:'ventura', text:['HAMILTON','ELECTRIC']},
   hands:'dauphine', sec:'center', crown:{pos:3, small:true}, strap:'leather',

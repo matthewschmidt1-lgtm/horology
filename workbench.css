@@ -303,3 +303,5 @@ span.st.I::before { border: 1.5px solid var(--gray); box-sizing: border-box; }
   .toolbar button:last-child { grid-column: auto; }
   .hud { gap: 5px; right: 8px; top: 8px; } .hud button { padding: 0 10px; }
 }
+
+@media (max-width: 560px) { .wb .nav a { padding: 0 6px; font-size: 10.5px; letter-spacing: .06em; } }
