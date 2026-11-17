@@ -179,6 +179,20 @@ function onScroll() {
   const first = eras[0].getBoundingClientRect(), last = eras[eras.length - 1].getBoundingClientRect();
   $('#bar i').style.width = (Math.min(1, Math.max(0, (c - first.top) / (last.bottom - first.top))) * 100).toFixed(2) + '%';
 }
+// Header: out of the way while reading down, back as soon as the visitor scrolls up.
+const mast = $('.mast'); let lastY = scrollY, turn = scrollY, dir = 0;
+const mastH = () => document.documentElement.style.setProperty('--mast-h', mast.offsetHeight + 'px');
+mastH(); addEventListener('resize', mastH); addEventListener('load', mastH);
+function headerOnScroll() {
+  const y = scrollY, nd = Math.sign(y - lastY);
+  if (nd && nd !== dir) { dir = nd; turn = lastY; }          // direction changed: measure the new run from here
+  if (y < 120) document.body.classList.remove('mast-away');
+  else if (dir > 0 && y - turn > 24) document.body.classList.add('mast-away');
+  else if (dir < 0 && turn - y > 10) document.body.classList.remove('mast-away');
+  lastY = y;
+}
+addEventListener('scroll', headerOnScroll, { passive: true });
+$('#to-top').addEventListener('click', e => { e.preventDefault(); scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
 addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
 // the 10 mm bar under the opening sequence is measured from the drawings, which are 80 mm tall
 const setScale = () => { const g = $('.evo-layer .fig'); if (g) $('.scale i').style.width = (g.getBoundingClientRect().height / 80 * 10).toFixed(1) + 'px'; };
