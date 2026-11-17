@@ -163,7 +163,7 @@ function renderResult() {
   <p class="score">${m} <span>of ${total} marks</span></p>
   <p>${line}</p>
   <p class="best">Best sitting on this device: ${best} of ${total}.</p>
-  <div class="row"><button type="button" class="next" id="again">Sit it again</button><a class="ghost" href="#/archive">Browse the archive</a></div>
+  <div class="row"><button type="button" class="next" id="again">Take it again</button><a class="ghost" href="#/archive">Browse the archive</a></div>
 </section>`;
   view.querySelector('#again').addEventListener('click', () => { startExam(); renderExam(); });
 }
@@ -221,7 +221,7 @@ function renderHome() {
     <article class="h-card c1">
       <a class="h-art mv" href="workbench.html" aria-label="Open the workbench">${D.movement(omega)}</a>
       <div class="h-txt"><h3>Examine the details.</h3><p>Explore individual components, understand how mechanisms work and discover the engineering behind iconic timepieces.</p>
-        <p class="h-links"><a class="h-go" href="workbench.html">Open the workbench</a><a class="h-go" href="#/exam">Sit the examination</a></p></div>
+        <p class="h-links"><a class="h-go" href="workbench.html">Open the workbench</a><a class="h-go" href="#/exam">Take the test</a></p></div>
     </article>
     <article class="h-card c2">
       <a class="h-art four" href="#/archive" aria-label="Browse the archive">${['tanklc', 'royaloak', 'ventura', 'spaceview'].map(id => D.front(by(id), {})).join('')}</a>
