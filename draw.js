@@ -261,7 +261,7 @@ function subs(w, g, o = {}) {
 function dateWin(w, g) {
   const d = w.dial; if (!d.date) return '';
   const [cx, cy] = P(d.date * 30, g.edge(d.date * 30) * 0.74), ww = d.daydate ? 6.2 : 2.7, x = d.daydate ? cx - ww + 1.35 : cx - ww / 2;
-  return RC(x, cy - 0.95, ww, 1.9, 'p', 0.15) + `<text class="tx dt" ${d.daydate ? 'data-daydate' : 'data-date'} x="${f(x + ww / 2)}" y="${f(cy + 0.52)}" font-size="1.45" text-anchor="middle"></text>`;
+  return RC(x, cy - 0.95, ww, 1.9, 'p', 0.15) + `<text class="tx dt" ${d.daydate ? 'data-daydate=""' : 'data-date=""'} x="${f(x + ww / 2)}" y="${f(cy + 0.52)}" font-size="1.45" text-anchor="middle"></text>`;
 }
 
 function dtext(w, g, o) {

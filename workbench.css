@@ -262,3 +262,8 @@ span.st.I::before { border: 1.5px solid var(--gray); box-sizing: border-box; }
   .sl { min-height: 56px; }
 }
 .sl, .tog, .toolbar, .picker, .mtabs, .seg, .hud { -webkit-user-select: none; user-select: none; }
+
+@media (max-width: 560px) {
+  /* four or more watches: tabs keep their natural width and the bar scrolls, with the current one centred */
+  .picker a { flex: 1 0 auto; padding: 0 14px; font-size: 17px; }
+}

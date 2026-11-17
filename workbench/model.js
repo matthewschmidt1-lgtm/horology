@@ -12,6 +12,7 @@ const KIND = {
   iron:     { real: { color: 0x8e8e8a, metalness: 1, roughness: 0.5 }, tech: 0xE3DAC6 },
   copper:   { real: { color: 0xd39c7a, metalness: 1, roughness: 0.38 }, tech: 0xE8DFCB },
   brass:    { real: { color: 0xd2aa52, metalness: 1, roughness: 0.3 }, tech: 0xEDE6D8 },
+  red:      { real: { color: 0xc0282d, metalness: 0, roughness: 0.5 }, tech: 0xC98A7A },
   ruby:     { real: { color: 0xb3122e, metalness: 0, roughness: 0.15 }, tech: 0xC98A7A },
   white:    { real: { color: 0xf3f1e8, metalness: 0, roughness: 0.6 }, tech: 0xFFFFFF },
   leather:  { real: { color: 0x2a2320, metalness: 0, roughness: 0.9 }, tech: 0xD9CEB9 },
@@ -70,8 +71,8 @@ function hullShape(circles) {
 }
 
 export function buildProcedural(watch, face, tex) {
-  const P = watch.asset.params, R = face.R, ri = face.bezelInner, sub = (P.chrono === false && !P.subSeconds) ? 8 : face.inR * 0.5;
-  const CASE = P.metal === 'gold' ? 'gold' : 'steel', inner = R - (P.wall || 3.25), HAND = P.metal === 'gold' ? 'gold' : 'white';
+  const P = watch.asset.params, R = face.R, ri = face.bezelInner, sub = (P.chrono === false && !P.subSeconds) ? 8 : face.inR * (P.subOffset || 0.5);
+  const CASE = P.metal === 'gold' ? 'gold' : 'steel', inner = R - (P.wall || 3.25), HAND = P.handKind || (P.metal === 'gold' ? 'gold' : 'white');
   const chrono = P.chrono !== false, mvR = (P.movementDiameter || 27) / 2;
   const root = new THREE.Group(), parts = {}, asm = [], layers = [];
   const part = (id, parent = root) => { const g = new THREE.Group(); g.userData.part = id; parent.add(g); parts[id] = g; return g; };
@@ -109,7 +110,7 @@ export function buildProcedural(watch, face, tex) {
   const hands = part('hands'), Lm = face.handLen, Lh = Lm * 0.64;
   const kite = (w, L) => { const k = new THREE.Shape(); k.moveTo(0, -1.3); k.lineTo(w / 2, L * 0.14); k.lineTo(0, L - 1.3); k.lineTo(-w / 2, L * 0.14); k.closePath(); return extr(k, 0.14).translate(0, 0, -0.07); };
   const hand = (w, L, z, kind = HAND) => { const p = new THREE.Group(); let g; if (P.hands === 'dauphine' && w > 0.5) g = kite(w * 1.25, L); else { g = new THREE.BoxGeometry(w, L, 0.14); g.translate(0, L / 2 - 1.3, 0); } p.add(mk(g, kind)); p.position.z = z; hands.add(p); return p; };
-  const hHour = hand(1.5, Lh, 2.7), hMin = hand(1.15, Lm, 2.95), hChr = hand(0.28, Lm * 1.05, 3.2);
+  const hHour = hand(1.5, Lh, 2.7), hMin = hand(1.15, Lm, 2.95), hChr = hand(0.28, Lm * 1.05, 3.2, P.chronoHand || HAND);
   if (P.hands === 'mercedes') { hHour.add(at(mk(cyl(1.75, 0.14, 28), 'white'), 0, Lh * 0.62, 0)); hChr.add(at(mk(cyl(0.8, 0.1, 18), 'white'), 0, Lm * 0.62, 0)); }
   hands.add(at(mk(cyl(0.95, 0.9, 20), CASE), 0, 0, 3.0));
   const subHand = (x, y) => { const p = hand(0.26, 4.2, 2.5); p.position.x = x; p.position.y = y; p.children[0].geometry.translate(0, -0.5, 0); return p; };
@@ -145,7 +146,7 @@ export function buildProcedural(watch, face, tex) {
   const fR = Math.min(3.2, sub - 4.1);
   spins.fourth = mobile('fourth', sub, 0, { R: fR, n: Math.round(fR * 17.5), z: 1.4, pin: 0.5, pinZ: 0.8, arbor: 3.2 });
   const eD = (fR + 0.32) / 3.52, eX = sub + 1.2 * eD, eY = -3.31 * eD;
-  spins.escape = mobile('escape', eX, eY, { shape: escapeShape(1.6), z: 0.8, pin: 0.32, pinZ: 1.4, kind: 'steelDark' });
+  spins.escape = mobile('escape', eX, eY, { shape: escapeShape(1.6, P.escapeTeeth || 15), z: 0.8, pin: 0.32, pinZ: 1.4, kind: 'steelDark' });
   const BX = 5.6, BY = -8.4, bal = at(part('balance', mv), BX, BY, 0), balSpin = new THREE.Group(); bal.add(balSpin);
   balSpin.add(at(mk(new THREE.TorusGeometry(3.0, 0.26, 10, 56), 'brass', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(5.6, 0.36, 0.2), 'brass'), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(0.36, 5.6, 0.2), 'brass'), 0, 0, 2.3), at(mk(cyl(0.45, 0.3, 14), 'steelDark'), 0, 0, 1.9));
   bal.add(at(mk(cyl(0.2, 3, 10), 'steelDark', { noEdges: true }), 0, 0, 1.6));
@@ -186,15 +187,16 @@ export function buildProcedural(watch, face, tex) {
     const rot = part('rotor', mv), w = new THREE.Shape(), web = new THREE.Shape(), ro = mvR - 0.5;
     w.absarc(0, 0, ro, Math.PI, Math.PI * 2, false); w.absarc(0, 0, ro - 3.2, Math.PI * 2, Math.PI, true); w.closePath();
     web.absarc(0, 0, ro - 3.2, Math.PI, Math.PI * 2, false); web.lineTo(1.6, 0); web.absarc(0, 0, 1.6, 0, Math.PI, false); web.closePath();
-    rot.add(at(mk(extr(w, 0.9), 'steelDark', { edgeAngle: 40 }), 0, 0, 3.45), at(mk(extr(web, 0.16), 'steel', { edgeAngle: 40 }), 0, 0, 3.45), at(mk(cyl(1.1, 0.5, 20), 'steelDark'), 0, 0, 3.75));
-    rot.userData.anchor = [0, -(ro - 1.6), 4.3]; layer(rot, 12);
+    const rz = chrono ? 4.05 : 3.45; // an automatic chronograph carries its rotor above the chronograph works
+    rot.add(at(mk(extr(w, 0.9), 'steelDark', { edgeAngle: 40 }), 0, 0, rz), at(mk(extr(web, 0.16), 'steel', { edgeAngle: 40 }), 0, 0, rz), at(mk(cyl(1.1, 0.5, 20), 'steelDark'), 0, 0, rz + 0.3));
+    rot.userData.anchor = [0, -(ro - 1.6), rz + 0.85]; layer(rot, chrono ? 16 : 12);
   }
 
   /* ----- behaviour ----- */
   const beatHz = P.beatsPerHour / 3600, TAU = Math.PI * 2, AMP = 2.36; // 2.36 rad = about 270 degrees peak to peak
   function animate(tv, now) {
-    const b = tv * beatHz, beats = Math.floor(b), e = Math.min(1, (b - beats) / 0.14), esc = (beats + e) * (TAU / 30);
-    const f4 = esc / (beatHz * 2);
+    const b = tv * beatHz, beats = Math.floor(b), e = Math.min(1, (b - beats) / 0.14), esc = (beats + e) * (TAU / (2 * (P.escapeTeeth || 15)));
+    const f4 = (beats + e) * TAU / (60 * beatHz); // the fourth wheel turns once a minute whatever the beat rate
     spins.escape.rotation.z = -esc; spins.fourth.rotation.z = f4; spins.third.rotation.z = -f4 / 7.5; spins.centre.rotation.z = f4 / 60;
     if (spins.drive) { spins.drive.rotation.z = f4; spins.inter.rotation.z = -f4 * (1.7 / 1.25); }
     const ph = Math.sin(Math.PI * b), th = AMP * ph;
