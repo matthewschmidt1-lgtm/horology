@@ -6,19 +6,20 @@ const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAl
 const want = new URLSearchParams(location.search).get('watch') || new URLSearchParams(location.hash.slice(1)).get('watch'), watch = watches.find(w => w.id === want) || watches[0], comps = watch.components, byId = Object.fromEntries(comps.map(c => [c.id, c]));
 const archive = (window.WATCHES || []).find(w => w.id === watch.archiveId), Draw = window.Draw;
 const ST = { D: 'Documented', E: 'Estimated', I: 'Interpretation' };
-const state = { view: 'front', style: 'real', level: 'beginner', sel: null, labels: true, loupe: false, run: true, slow: false, explode: 0, open: 0, layers: 0 };
+const state = { view: 'front', style: 'real', level: 'beginner', sel: null, labels: false, loupe: false, run: true, slow: false, explode: 0, open: 0, layers: 0 };
 const cur = { explode: 0, open: 0, layers: 0 };
 
 /* ---------- panels ---------- */
 $('#w-kicker').textContent = `${watch.brand} · Ref. ${watch.reference} · ${watch.year}`;
 $('#w-title').innerHTML = `${watch.model} <em>${watch.reference}</em>`;
-$('#caveat').textContent = watch.asset.note;
+$('#caveat').textContent = 'Approximate model, built from published dimensions.';
+$('#asset-note').textContent = watch.asset.note;
 document.title = `${watch.brand} ${watch.model} · The Workbench`;
 $('#picker').innerHTML = watches.length > 1 ? '<span class="pk-label">On the bench</span>' + watches.map(w => `<a href="?watch=${w.id}" class="${w === watch ? 'on' : ''}"${w === watch ? ' aria-current="true"' : ''}><span class="long">${w.short || w.model}</span><span class="short">${w.model}</span></a>`).join('') : '';
 $('#specs').innerHTML = `<table class="wspec">${watch.specs.map(([k, v, s]) => `<tr><th>${k}</th><td>${v}<i class="st ${s}" title="${ST[s]}"></i></td></tr>`).join('')}</table>`;
 $('#history').innerHTML = watch.history.map(h => `<section><h3>${h.h}<i class="st ${h.s}" title="${ST[h.s]}"></i></h3><p>${h.p}</p></section>`).join('');
 const groups = [...new Set(comps.map(c => c.group))];
-$('#parts').innerHTML = groups.map(g => `<h3>${g}</h3><ul>${comps.filter(c => c.group === g).map(c => `<li><button type="button" data-part="${c.id}">${c.name}<i class="st ${c.status}" title="${ST[c.status]}"></i></button></li>`).join('')}</ul>`).join('');
+$('#parts').innerHTML = groups.map(g => `<h3>${g}</h3><ul>${comps.filter(c => c.group === g).map(c => `<li><button type="button" data-part="${c.id}">${c.name}</button></li>`).join('')}</ul>`).join('');
 
 function renderDetail() {
   const c = byId[state.sel];
@@ -26,7 +27,8 @@ function renderDetail() {
   const row = (k, v) => v ? `<div><dt>${k}</dt><dd>${v}</dd></div>` : '';
   $('#detail').innerHTML = `<p class="kicker">${c.group}<span class="st ${c.status}">${ST[c.status]}</span></p><h2>${c.name}</h2>
     <p class="lead">${c[state.level]}</p>
-    <dl>${row('Function', c.fn)}${row('Material', c.material)}${row('Location', c.location)}${row('Significance', c.significance)}</dl>
+    <dl>${row('What it does', c.fn)}</dl>
+    <details><summary>More about this part</summary><dl>${row('Material', c.material)}${row('Where it is', c.location)}${row('Why it matters', c.significance)}</dl></details>
     ${c.related && c.related.length ? `<p class="rel"><span>Related</span>${c.related.filter(r => byId[r]).map(r => `<button type="button" data-part="${r}">${byId[r].name}</button>`).join('')}</p>` : ''}`;
 }
 function select(id, fromScene) {
@@ -36,7 +38,7 @@ function select(id, fromScene) {
   if (model) model.highlight(id);
   const c = byId[id];
   if (c && !fromScene && c.group !== 'Exterior' && state.view !== 'movement' && state.view !== 'exploded' && state.view !== 'blueprint') setView('movement');
-  if (c && matchMedia('(max-width: 900px)').matches) { showPane('parts'); if (!fromScene) $('#viewport').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  if (c) { showPane('parts'); $('#pane-parts').scrollTop = 0; if (!fromScene && matchMedia('(max-width: 900px)').matches) $('#viewport').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 }
 document.addEventListener('click', e => { const b = e.target.closest('[data-part]'); if (b && !b.classList.contains('lab')) select(b.dataset.part, !!b.closest('#blueprint')); });
 $('#pane-info .seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#pane-info .seg button').forEach(x => x.classList.toggle('on', x === b)); $('#specs').hidden = b.dataset.tab !== 'specs'; $('#history').hidden = b.dataset.tab !== 'history'; });
@@ -110,8 +112,9 @@ $('#style-seg').addEventListener('click', e => { const b = e.target.closest('but
 $('#reset').addEventListener('click', () => setView(state.view === 'blueprint' ? 'front' : state.view));
 const dolly = k => { if (!camera) return; const s = new THREE.Spherical().setFromVector3(camera.position); s.radius = Math.min(controls.maxDistance, Math.max(controls.minDistance, s.radius * k)); camera.position.setFromSpherical(s); };
 $('#zoom-in').addEventListener('click', () => dolly(0.8)); $('#zoom-out').addEventListener('click', () => dolly(1.25));
-$('#t-labels').addEventListener('change', e => { state.labels = e.target.checked; $('#labels').hidden = !state.labels; });
-$('#t-run').addEventListener('change', e => { state.run = e.target.checked; });
+// Labels start off so the watch is seen clean; the switch sits on the picture itself.
+$('#labels').hidden = true;
+$('#t-labels').addEventListener('click', e => { state.labels = !state.labels; $('#labels').hidden = !state.labels; e.currentTarget.setAttribute('aria-pressed', state.labels); });
 $('#t-slow').addEventListener('change', e => { state.slow = e.target.checked; });
 $('#s-explode').addEventListener('input', e => {
   const v = +e.target.value, was = state.explode;

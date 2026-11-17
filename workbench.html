@@ -39,11 +39,13 @@
 <nav class="picker" id="picker" aria-label="Choose a watch"></nav>
 
 <main class="bench">
+  <nav class="mtabs" aria-label="Panels"><button type="button" data-show="parts" class="on">Parts</button><button type="button" data-show="info">About this watch</button></nav>
   <aside class="pane" id="pane-info" data-pane="info" aria-label="Specifications and history">
     <div class="seg" role="tablist"><button type="button" class="on" data-tab="specs">Specifications</button><button type="button" data-tab="history">History</button></div>
     <div id="specs"></div>
     <div id="history" hidden></div>
     <div class="legend"><span class="st D">Documented</span><span class="st E">Estimated</span><span class="st I">Interpretation</span></div>
+    <p class="asset-note" id="asset-note"></p>
   </aside>
 
   <section class="stage" aria-label="Watch viewport">
@@ -61,6 +63,7 @@
       <div id="blueprint" hidden></div>
       <div id="loupe" hidden><canvas></canvas><div class="lclone"></div><span class="lcap"></span></div>
       <div class="hud">
+        <button type="button" id="t-labels" class="hud-tog" aria-pressed="false">Labels</button>
         <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
         <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
         <button type="button" id="reset" aria-label="Reset camera">Reset</button>
@@ -76,9 +79,7 @@
         <label class="sl" id="l-layers"><span><b class="long">Separate layers</b><b class="short">Layers</b></span><input type="range" id="s-layers" min="0" max="1" step="0.01" value="0" aria-label="Separate the movement layers"><em>Apart</em></label>
       </div>
       <div class="togs">
-        <label class="tog"><input type="checkbox" id="t-labels" checked><span>Labels</span></label>
         <label class="tog"><input type="checkbox" id="t-loupe"><span>Loupe</span></label>
-        <label class="tog"><input type="checkbox" id="t-run" checked><span><b class="long">Run movement</b><b class="short">Run</b></span></label>
         <label class="tog"><input type="checkbox" id="t-slow"><span><b class="long">Slow motion</b><b class="short">Slow</b></span></label>
       </div>
     </div>
@@ -90,7 +91,6 @@
       <button type="button" data-view="movement">Movement</button>
       <button type="button" data-view="exploded">Exploded</button>
       <button type="button" data-view="blueprint">Blueprint</button>
-      <button type="button" data-view="studio" title="A studio render of the model. No photographs of the watch are included.">Studio view</button>
     </nav>
   </section>
 
@@ -103,7 +103,6 @@
 
 <footer class="wb-foot"><a class="madeby" href="https://matthew-schmidt-production.up.railway.app/" target="_blank" rel="noopener">Made by Matty</a></footer>
 
-<nav class="mtabs" aria-label="Panels"><button type="button" data-show="parts" class="on">Parts</button><button type="button" data-show="info">Watch</button></nav>
 
 <script src="data.js"></script>
 <script src="draw.js"></script>
