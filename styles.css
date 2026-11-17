@@ -354,3 +354,4 @@ main:has(.home) { padding-bottom: 0; }
   .sf-nav b { font-size: 22px; }
 }
 .h-art { text-decoration: none; }
+.h-txt > p:not(.h-links) + p:not(.h-links) { margin-top: 12px; }

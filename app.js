@@ -212,26 +212,26 @@ function renderHome() {
   <div class="h-beyond">
     <h2>Beyond the dial.</h2>
     <div>
-      <p>A watch is more than an instrument for measuring time. It is an expression of engineering, craftsmanship, design and human ingenuity.</p>
-      <p>The Horological Archive brings these elements together in an evolving collection of interactive watch examinations and historical documentation.</p>
+      <p>A watch is more than an instrument for measuring time. It is a meeting of engineering, craftsmanship, design and human ingenuity — an intricate expression of centuries of horological innovation.</p>
+      <p>The Horological Archive brings these disciplines together through an evolving collection of interactive examinations, technical explorations and historical research.</p>
     </div>
   </div>
 
   <div class="h-previews">
     <article class="h-card c1">
-      <a class="h-art mv" href="workbench.html" aria-label="Open the workbench">${D.movement(omega)}</a>
-      <div class="h-txt"><h3>Examine the details.</h3><p>Explore individual components, understand how mechanisms work and discover the engineering behind iconic timepieces.</p>
-        <p class="h-links"><a class="h-go" href="workbench.html">Open the workbench</a><a class="h-go" href="#/exam">Take the test</a></p></div>
+      <a class="h-art mv" href="workbench.html" aria-label="Explore the workbench">${D.movement(omega)}</a>
+      <div class="h-txt"><h3>Examine the details.</h3><p>Go beyond the finished timepiece. Explore individual components, uncover the mechanics behind complex movements and examine the engineering and craftsmanship that bring iconic watches to life.</p>
+        <p class="h-links"><a class="h-go" href="workbench.html">Explore the workbench</a><a class="h-go" href="#/exam">Begin an examination</a></p></div>
     </article>
     <article class="h-card c2">
-      <a class="h-art four" href="#/archive" aria-label="Browse the archive">${['tanklc', 'royaloak', 'ventura', 'spaceview'].map(id => D.front(by(id), {})).join('')}</a>
-      <div class="h-txt"><h3>Explore the archive.</h3><p>Discover watches through their specifications, technical characteristics and historical significance.</p>
+      <a class="h-art four" href="#/archive" aria-label="Browse the plates">${['tanklc', 'royaloak', 'ventura', 'spaceview'].map(id => D.front(by(id), {})).join('')}</a>
+      <div class="h-txt"><h3>Explore the archive.</h3><p>Discover the watches that have shaped horology. Examine their specifications, technical characteristics, distinctive features and historical significance.</p><p>From pioneering innovations to enduring designs, each timepiece tells a story of precision, ingenuity and progress.</p>
         <p class="h-links"><a class="h-go" href="#/archive">Browse the plates</a></p></div>
     </article>
     <article class="h-card c3">
-      <a class="h-art eras" href="history.html" aria-label="Read the history">${ERAS.map(e => `<i style="background:${e[1]};color:${e[2]}"><b>${e[0]}</b></i>`).join('')}</a>
-      <div class="h-txt"><h3>Understand the history.</h3><p>Follow the evolution of watchmaking, its innovations, its influential designs and the people behind them.</p>
-        <p class="h-links"><a class="h-go" href="history.html">Read the history</a></p></div>
+      <a class="h-art eras" href="history.html" aria-label="Explore the history">${ERAS.map(e => `<i style="background:${e[1]};color:${e[2]}"><b>${e[0]}</b></i>`).join('')}</a>
+      <div class="h-txt"><h3>Understand the history.</h3><p>Trace the evolution of timekeeping across centuries. Discover the inventions, influential designs, technological breakthroughs and pioneering individuals that have shaped the art of watchmaking.</p><p>From the earliest mechanical clocks to the complexities of modern horology, explore the milestones that define its history.</p>
+        <p class="h-links"><a class="h-go" href="history.html">Explore the history</a></p></div>
     </article>
   </div>
 
