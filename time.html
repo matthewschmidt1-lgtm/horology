@@ -46,12 +46,31 @@
   <section class="solar" id="solar" aria-labelledby="solar-h">
     <header class="sec-head"><h2 id="solar-h">The Living Solar Clock</h2>
       <p class="sec-lead">The first clock was the sky.</p></header>
-    <div class="solar-grid">
+    <div class="solar-stage">
       <div class="dial-wrap">
         <div id="dial"></div>
         <ul class="dial-key" aria-label="Key to the ring"><li class="k-day">Daylight</li><li class="k-civ">Civil twilight</li><li class="k-nau">Nautical</li><li class="k-ast">Astronomical</li><li class="k-night">Night</li></ul>
       </div>
-      <div class="solar-panel">
+      <dl class="sun-trio">
+        <div><dt>Sunrise</dt><dd id="r-rise">-</dd></div>
+        <div><dt>Solar noon</dt><dd id="r-noon">-</dd></div>
+        <div><dt>Sunset</dt><dd id="r-set">-</dd></div>
+      </dl>
+    </div>
+    <div class="solar-panel">
+      <div class="travel">
+        <label><span>Hour of the day <b id="t-lab"></b></span><input type="range" id="s-time" min="0" max="1439" step="1" aria-label="Move through the hours of the day"></label>
+        <label><span>Day of the year <b id="d-lab"></b></span><input type="range" id="s-date" min="1" max="365" step="1" aria-label="Move through the days of the year"></label>
+        <div class="year" id="year" role="img" aria-label="Hours of daylight through the year at this place"></div>
+        <button type="button" id="now" disabled>Return to now</button>
+      </div>
+      <div class="solar-side">
+        <dl class="reads">
+          <div><dt>Daylight</dt><dd id="r-len">-</dd></div>
+          <div><dt>Solar phase</dt><dd id="r-phase">-</dd></div>
+          <div><dt>Sun’s altitude</dt><dd id="r-alt">-</dd></div>
+          <div><dt>Sun’s bearing</dt><dd id="r-az">-</dd></div>
+        </dl>
         <div class="place">
           <p class="place-now"><span>Showing</span><b id="place-name">-</b><small id="place-coord"></small></p>
           <div class="place-ctl">
@@ -60,32 +79,27 @@
           </div>
           <p class="place-note" id="place-note">Chosen from your time zone. Nothing about your position leaves this page.</p>
         </div>
-        <dl class="reads">
-          <div><dt>Sunrise</dt><dd id="r-rise">-</dd></div>
-          <div><dt>Solar noon</dt><dd id="r-noon">-</dd></div>
-          <div><dt>Sunset</dt><dd id="r-set">-</dd></div>
-          <div><dt>Daylight</dt><dd id="r-len">-</dd></div>
-          <div><dt>Solar phase</dt><dd id="r-phase">-</dd></div>
-          <div><dt>Sun’s altitude</dt><dd id="r-alt">-</dd></div>
-          <div><dt>Sun’s bearing</dt><dd id="r-az">-</dd></div>
-        </dl>
-        <div class="travel">
-          <label><span>Hour of the day <b id="t-lab"></b></span><input type="range" id="s-time" min="0" max="1439" step="1" aria-label="Move through the hours of the day"></label>
-          <label><span>Day of the year <b id="d-lab"></b></span><input type="range" id="s-date" min="1" max="365" step="1" aria-label="Move through the days of the year"></label>
-          <div class="year" id="year" role="img" aria-label="Hours of daylight through the year at this place"></div>
-          <button type="button" id="now" disabled>Return to now</button>
-        </div>
       </div>
     </div>
     <div class="three-times">
       <h3>Three kinds of time, one moment</h3>
-      <p>Your clock, the average sun and the real sun rarely agree. Solar noon, when the sun is highest, is almost never at twelve.</p>
+      <p>Your clock, the average sun and the real sun rarely agree.</p>
       <dl>
-        <div><dt>Civil time</dt><dd id="c-civil">-</dd><p>What clocks show: mean time at your zone’s reference meridian, plus any daylight-saving hour.</p></div>
-        <div><dt>Mean solar time</dt><dd id="c-mean">-</dd><p>An even, imaginary sun, at your longitude.</p></div>
-        <div><dt>Apparent solar time</dt><dd id="c-app">-</dd><p>The real sun: a sundial here.</p></div>
-        <div><dt>Equation of time</dt><dd id="c-eot">-</dd><p>The gap between the last two. It swings between about 16 minutes ahead and 14 behind over a year.</p></div>
+        <div><dt>Civil time</dt><dd id="c-civil">-</dd></div>
+        <div><dt>Mean solar time</dt><dd id="c-mean">-</dd></div>
+        <div><dt>Apparent solar time</dt><dd id="c-app">-</dd></div>
+        <div><dt>Equation of time</dt><dd id="c-eot">-</dd></div>
       </dl>
+      <details class="more">
+        <summary>What these mean</summary>
+        <ul>
+          <li><b>Civil time</b> is what clocks show: mean time at your zone’s reference meridian, plus any daylight-saving hour.</li>
+          <li><b>Mean solar time</b> follows an even, imaginary sun, at your own longitude.</li>
+          <li><b>Apparent solar time</b> follows the real sun: what a sundial here would read. Solar noon, when the sun is highest, is almost never at twelve on the clock.</li>
+          <li><b>The equation of time</b> is the gap between the last two. It swings between about 16 minutes ahead and 14 behind over a year.</li>
+          <li>These are calculated, not observed, and are good to about a minute. The method is at the foot of the page.</li>
+        </ul>
+      </details>
       <p class="nt-go"><a href="history.html#e1">How portable timekeeping began, on the History page</a></p>
     </div>
   </section>
@@ -94,8 +108,8 @@
 
   <!-- ============ rhythm ============ -->
   <section class="study s-rhythm" id="rhythm" aria-labelledby="rhythm-h">
-    <header class="sec-head"><p class="nt-eyebrow">I · The rhythm of time</p><h2 id="rhythm-h">Anything that repeats can be a clock.</h2></header>
-    <div class="two">
+    <header class="sec-head"><p class="nt-eyebrow">I · The Rhythm of Time</p><h2 id="rhythm-h">Anything that repeats can be a clock.</h2></header>
+    <div class="two even">
       <div class="metro-wrap">
         <div id="metro" aria-hidden="true"></div>
         <div class="metro-ctl">
@@ -104,15 +118,14 @@
         </div>
         <label class="wide"><span>Tempo <b id="m-bpm">60</b> beats a minute</span><input type="range" id="m-tempo" min="40" max="300" step="1" value="60" aria-label="Metronome tempo in beats a minute"></label>
         <p class="presets"><button type="button" data-bpm="60">Seconds pendulum · 60</button><button type="button" data-bpm="120">March · 120</button><button type="button" data-bpm="300">A watch · 300</button></p>
+        <dl class="mini" id="m-facts"></dl>
       </div>
       <div class="prose">
-        <p>Around 1600, Galileo observed that a pendulum swings at nearly the same rate whether its arc is wide or narrow. Its period is governed primarily by its length. In 1656, Christiaan Huygens applied this principle to clockmaking, dramatically improving timekeeping accuracy, from minutes lost each day to mere seconds.</p>
-        <p>A metronome uses the same principle in reverse. Its pendulum carries a sliding weight that changes its effective length. Move the weight up and the pendulum slows; move it down and it speeds up.</p>
-        <dl class="mini" id="m-facts"></dl>
-        <p>A pendulum relies on gravity and must hang vertically, making it impractical for portable timekeeping. A watch solves this with a spring-driven balance wheel and hairspring, creating a compact oscillator that keeps time in any position.</p>
+        <p>Around 1600, Galileo noticed that a pendulum takes almost the same time over a wide swing as a narrow one, so long as the swing is small. Its period depends on its length. In 1656, Christiaan Huygens built that into a clock, and the best timekeepers went from losing minutes a day to losing seconds.</p>
+        <p>A metronome is a pendulum turned upside down, its weight above the pivot. Slide the weight up and the beat slows; slide it down and it quickens. A watch swaps gravity for a hairspring, so its balance wheel keeps time in any position.</p>
         <h3>The same idea, faster and faster</h3>
         <ol class="ladder">
-          <li><b>1 Hz</b><span>Seconds pendulum, about 99.4 cm long</span></li>
+          <li><b>0.5 Hz</b><span>Seconds pendulum, about 99.4 cm long: one swing a second</span></li>
           <li><b>2.5 Hz</b><span>Balance of a vintage watch, 18,000 beats an hour</span></li>
           <li><b>5 Hz</b><span>Zenith El Primero, 36,000 beats an hour</span></li>
           <li><b>360 Hz</b><span>Tuning fork of the Bulova Accutron</span></li>
@@ -127,44 +140,53 @@
   <!-- ============ anatomy of a second ============ -->
   <section class="study s-second" id="second" aria-labelledby="second-h">
     <header class="sec-head"><p class="nt-eyebrow">II · The Anatomy of a Second</p><h2 id="second-h">One second, inside a watch.</h2>
-      <p>At 18,000 beats an hour, a watch divides each second into five.</p></header>
-    <div class="two rev">
+      <p>At 18,000 beats an hour, a watch ticks five times a second. Two beats, there and back, make one full oscillation of the balance: 2.5 a second.</p></header>
+    <div class="anat-stage">
       <div class="anat-wrap">
         <div id="anat" aria-hidden="true"></div>
         <label class="wide"><span>Within the second <b id="a-ms">0</b> ms</span><input type="range" id="a-t" min="0" max="1000" step="1" value="0" aria-label="Position within one second, in milliseconds"></label>
         <div class="metro-ctl"><button type="button" id="a-go" aria-pressed="false">Play slowly</button><span class="hint" id="a-beat">Beat 1 of 5</span></div>
       </div>
       <ol class="chain" id="a-chain">
-        <li><b>Energy</b><span>The mainspring pushes constantly on the gear train. Nothing moves, because the last wheel is locked.</span><em id="a-energy"></em></li>
-        <li><b>Balance wheel</b><span>Swings one way, then back: five swings a second. Each swing takes the same time, and that is the watch’s clock.</span><em id="a-balt"></em></li>
-        <li><b>Escapement</b><span>As the balance passes its centre it flips the pallet fork. One tooth of the escape wheel escapes, and gives the balance a push on its way.</span><em id="a-esc"></em></li>
-        <li><b>Gear train</b><span>Every wheel behind the escape wheel jumps forward with it, then stops again.</span><em id="a-train"></em></li>
-        <li><b>The hands</b><span>The seconds hand, on the fourth wheel, advances six degrees a second.</span><em id="a-hand"></em></li>
+        <li><b>Energy</b><span>The mainspring pushes all the time. The escapement holds it back.</span><em id="a-energy"></em></li>
+        <li><b>Balance wheel</b><span>Swings one way, then back. Each swing is one beat.</span><em id="a-balt"></em></li>
+        <li><b>Escapement</b><span>At centre, the balance flips the pallet fork. One tooth escapes and gives the balance a push.</span><em id="a-esc"></em></li>
+        <li><b>Gear train</b><span>Every wheel jumps forward one step, then stops.</span><em id="a-train"></em></li>
+        <li><b>The hands</b><span>The seconds hand moves six degrees a second, in five steps.</span><em id="a-hand"></em></li>
       </ol>
     </div>
-    <p class="nt-go"><a href="workbench.html#watch=speedmaster-105003">See it running in three dimensions on the Workbench</a></p>
+    <p class="nt-go"><a href="workbench.html#watch=speedmaster-105003">See it running in three dimensions on the Workbench</a><a href="index.html#/exam">Name a watch by the way its hand moves</a></p>
   </section>
 
   <!-- ============ the measure of time ============ -->
   <section class="study s-measure" id="measure" aria-labelledby="measure-h">
     <header class="sec-head"><p class="nt-eyebrow">III · The Measure of Time</p><h2 id="measure-h">What, exactly, is a second?</h2>
-      <p>Our understanding of a second has evolved alongside our ability to measure it. From the movement of the sun to the vibrations of an atom, each new definition has brought us closer to a more precise measure of time.</p></header>
-    <ol class="measures">
-      <li><p class="m-when">Antiquity</p><h3>Solar Time</h3><p>Long before mechanical clocks, time was measured by the sun. Noon marked its highest point in the sky, and a day ran from one noon to the next. But solar days are not equal. Earth's tilted axis and elliptical orbit cause the apparent sun to move unevenly throughout the year.</p></li>
-      <li><p class="m-when">1700s onward</p><h3>Mean Solar Time</h3><p>The sun's uneven motion made accurate timekeeping difficult. Astronomers solved this by calculating an imaginary sun that moved at a constant rate. A second became 1/86,400 of the mean solar day.</p><p>As railways connected distant cities, standardized time became essential. Time zones followed, with international agreement reached in 1884.</p></li>
-      <li><p class="m-when">The Astronomer's Clock</p><h3>Sidereal Time</h3><p>There is another way to measure a day: by the stars rather than the sun. Earth completes one rotation relative to the distant stars in approximately 23 hours, 56 minutes and 4 seconds.</p><p>The difference comes from Earth's orbit around the sun. Each day, our planet must turn a little further to bring the sun back to the same position in the sky.</p><p class="m-live"><span>Local sidereal time</span><b id="ms-sid">-</b></p></li>
-      <li><p class="m-when">1956 – 1967</p><h3>Ephemeris Time</h3><p>Even the mean solar day proved too irregular for increasingly precise science. Astronomers turned to Earth's orbit around the sun, defining the second using a fixed fraction of the tropical year of 1900.</p><p>It was a more stable astronomical reference, but difficult to reproduce in practice. Atomic clocks were already pointing towards something better.</p></li>
-      <li><p class="m-when">1955 – 1967</p><h3>Atomic Time</h3><p>Earth's rotation was no longer the most reliable clock available. In 1955, Louis Essen and Jack Parry developed a practical caesium atomic clock at Britain's National Physical Laboratory.</p><p>Atoms offered something the planet could not: an extraordinarily consistent rhythm.</p><p class="m-live"><span>International Atomic Time</span><b id="ms-tai">-</b></p></li>
-      <li class="m-si"><p class="m-when">Since 1967</p><h3>The SI Second</h3><p>Today, the second is defined by fixing the frequency of a particular transition in the caesium-133 atom at exactly <b>9,192,631,770</b> hertz.</p><p>Count that many periods of the corresponding radiation, and one second has passed.</p><p>Our most fundamental unit of time is now defined not by the movement of the heavens, but by the behaviour of an atom.</p><p class="m-live"><span>Caesium oscillations since you opened this page</span><b id="ms-cs">0</b></p></li>
+      <p>The answer has moved from the sky to the atom, in four steps.</p></header>
+    <ol class="measures four">
+      <li><p class="m-when">Antiquity</p><h3>The Sun</h3><p>Our earliest clock. Noon is the sun at its highest, and a day runs from one noon to the next. But those days are not equal: Earth’s tilted axis and oval orbit make the sun run fast and slow through the year.</p><p class="m-link"><a href="#solar">See it on the solar clock</a></p></li>
+      <li><p class="m-when">1700s onward</p><h3>The Clock</h3><p>Clocks cannot follow an uneven sun, so astronomers averaged it into an even, imaginary one. A second became 1/86,400 of that mean solar day. Railways then needed one time for many towns, and time zones followed, agreed internationally in 1884.</p></li>
+      <li><p class="m-when">1955</p><h3>The Atom</h3><p>Earth’s rotation turned out to be unsteady too. In 1955, Louis Essen and Jack Parry ran a caesium clock at Britain’s National Physical Laboratory that kept better time than the planet.</p><p class="m-live"><span>International Atomic Time</span><b id="ms-tai">-</b></p></li>
+      <li class="m-si"><p class="m-when">Since 1967</p><h3>The Second</h3><p>The second is now defined by an atom. The frequency of one transition of caesium-133 is fixed at exactly <b>9,192,631,770</b> hertz. Count that many cycles, and one second has passed.</p></li>
     </ol>
-    <div class="aside leap"><h3>Keeping Atomic Time in Step with Earth</h3>
-      <p>Atomic clocks keep remarkably steady time, but Earth does not rotate at a constant rate. Since 1972, leap seconds have occasionally been added to Coordinated Universal Time (UTC) to keep civil time aligned with the planet's rotation.</p>
-      <p>International Atomic Time (TAI) is currently 37 seconds ahead of UTC.</p></div>
+    <div class="cs-band"><p class="cs-label">Caesium cycles since you opened this page</p><p class="cs-num" id="ms-cs">0</p></div>
+    <div class="deeper">
+      <details class="more">
+        <summary>Deeper: sidereal time, the astronomer’s clock</summary>
+        <p>Measured against the stars, not the sun, Earth turns once in about 23 hours, 56 minutes and 4 seconds. The missing four minutes are Earth catching up with its own movement around the sun.</p>
+        <p class="m-live"><span>Local sidereal time</span><b id="ms-sid">-</b></p>
+      </details>
+      <details class="more">
+        <summary>Deeper: ephemeris time, the second from Earth’s orbit</summary>
+        <p>Between the mean solar second and the atomic one came a short-lived third. In 1956 the second was redefined as a fixed fraction of the tropical year 1900, taken from Earth’s orbit, not its spin. It was steadier, but slow and awkward to measure, and the atomic second replaced it in 1967.</p>
+      </details>
+    </div>
+    <div class="aside leap"><h3>Leap seconds</h3>
+      <p>Atomic clocks are steadier than the turning Earth, so since 1972 leap seconds have kept clock time (UTC) in step with the planet. Atomic time now runs 37 seconds ahead of UTC. In 2022 the world’s metrology body resolved to stop adding leap seconds by 2035.</p></div>
   </section>
 
   <!-- ============ the sound of time ============ -->
   <section class="study s-sound" id="sound" aria-labelledby="sound-h">
-    <header class="sec-head"><p class="nt-eyebrow">IV · The sound of time</p><h2 id="sound-h">Time has always been something you could hear.</h2>
+    <header class="sec-head"><p class="nt-eyebrow">IV · The Sound of Time</p><h2 id="sound-h">Time has always been something you could hear.</h2>
       <p>Synthesised in your browser, not recorded. Nothing plays until you press.</p></header>
     <div class="sounds" id="sounds">
       <button type="button" data-snd="watch5"><b>A vintage watch</b><span>Five beats a second, 18,000 an hour</span></button>
@@ -174,26 +196,46 @@
       <button type="button" data-snd="repeater"><b>A minute repeater</b><span>Strikes your time: hours low, quarters in pairs, minutes high</span></button>
       <button type="button" data-snd="alarm"><b>A mechanical alarm</b><span>A hammer trembling against a bell</span></button>
     </div>
-    <p class="snd-status" id="snd-status" aria-live="polite">Silent.</p>
-    <button type="button" id="snd-stop" disabled>Stop</button>
+    <div class="snd-panel">
+      <p class="snd-note" id="snd-note">Choose an instrument to hear it and to see what makes the sound.</p>
+      <p class="snd-status" id="snd-status" aria-live="polite">Silent.</p>
+      <button type="button" id="snd-stop" disabled>Stop</button>
+    </div>
     <p class="aside">Before electric light, a repeater let you hear the time in the dark.</p>
   </section>
 
   <!-- ============ the cycles of time ============ -->
   <section class="study s-cycles" id="cycles" aria-labelledby="cycles-h">
-    <header class="sec-head"><p class="nt-eyebrow">V · The cycles of time</p><h2 id="cycles-h">Day, month and year are things that happen in the sky.</h2>
+    <header class="sec-head"><p class="nt-eyebrow">V · The Cycles of Time</p><h2 id="cycles-h">Day, month and year are things that happen in the sky.</h2>
       <p>Every unit on a calendar began as a cycle somebody could watch.</p></header>
     <div class="cyc">
-      <article><h3>The day</h3><div class="cyc-fig" id="c-day"></div><p id="c-day-t"></p></article>
-      <article><h3>The month</h3><div class="cyc-fig" id="c-moon"></div><p id="c-moon-t"></p></article>
-      <article class="wide2"><h3>The year and its seasons</h3><div class="cyc-fig" id="c-orbit"></div><p id="c-orbit-t"></p><ul class="nexts" id="c-next"></ul></article>
+      <article><h3>The day</h3><div class="cyc-fig" id="c-day" role="img" aria-label="The Earth seen from above its pole, half in sunlight"></div>
+        <label class="wide"><span>Hour of the day <b id="cd-lab"></b></span><input type="range" id="cd-t" min="0" max="1439" step="1" aria-label="Turn the Earth through the hours of the day"></label>
+        <div class="cyc-ctl"><button type="button" id="cd-go" aria-pressed="false">Turn the Earth</button><button type="button" id="cd-now" disabled>Now</button></div>
+        <p id="c-day-t"></p></article>
+      <article><h3>The month</h3><div class="cyc-fig" id="c-moon" role="img" aria-label="The moon’s phase"></div>
+        <label class="wide"><span>Day of the lunar cycle <b id="cm-lab"></b></span><input type="range" id="cm-t" min="0" max="29.5" step="0.1" aria-label="Move through the lunar cycle"></label>
+        <div class="cyc-ctl"><button type="button" id="cm-now" disabled>Today</button></div>
+        <p id="c-moon-t"></p></article>
+      <article class="wide2"><h3>The year</h3><div class="cyc-fig" id="c-orbit" role="img" aria-label="The Earth on its orbit around the sun"></div>
+        <label class="wide"><span>Day of the year <b id="cy-lab"></b></span><input type="range" id="cy-t" min="1" max="365" step="1" aria-label="Move the Earth around its orbit"></label>
+        <div class="cyc-ctl"><button type="button" id="cy-go" aria-pressed="false">Travel a year</button><button type="button" id="cy-now" disabled>Today</button></div>
+        <p id="c-orbit-t"></p><ul class="nexts" id="c-next"></ul></article>
     </div>
   </section>
 
+  <!-- ============ the present moment ============ -->
+  <section class="present" id="present" aria-labelledby="present-h">
+    <h2 class="nt-eyebrow" id="present-h">The Present Moment</h2>
+    <p class="pm-clock" id="pm-clock" aria-hidden="true">--:--:--</p>
+    <p class="pm-line">Time is something we measure, but also something we experience. Every moment passes only once.</p>
+  </section>
+
   <section class="method" id="method">
-    <h2>Method and sources</h2>
+    <details>
+    <summary>Method and sources</summary>
     <p>The solar clock uses the NOAA Global Monitoring Laboratory method, which follows Jean Meeus’s <i>Astronomical Algorithms</i>. NOAA describes that method as good to about a minute between 72° north and south, and less exact nearer the poles. Sunrise and sunset allow the standard 0.833° for refraction and the sun’s disc. The ring is drawn in five-minute steps and assumes one clock offset for the day, so on the two days a year the clocks change it is up to an hour out for part of the day.</p>
-    <p>The moon’s phase uses the average length of a lunation, so it can be about a day out. The orbit is drawn as a circle. The mechanical watch in “One second” is a schematic, as on the Workbench.</p>
+    <p>The moon’s phase uses the average length of a lunation, so it can be about a day out. The orbit is drawn as a circle and the Earth’s day and night side as plain geometry, without twilight. The mechanical watch in “One second” is a schematic, as on the Workbench. The small drawings beside the sounds are illustrations, not working mechanisms.</p>
     <ol>
       <li><a href="https://gml.noaa.gov/grad/solcalc/glossary.html" target="_blank" rel="noopener">NOAA Global Monitoring Laboratory, Solar Calculator glossary</a> and <a href="https://gml.noaa.gov/grad/solcalc/solareqns.PDF" target="_blank" rel="noopener">general solar position calculations</a></li>
       <li><a href="https://www.bipm.org/en/si-base-units/second" target="_blank" rel="noopener">Bureau International des Poids et Mesures, “SI base unit: second”</a></li>
@@ -201,7 +243,8 @@
       <li><a href="https://www.britannica.com/science/time/Lengths-of-years-and-months" target="_blank" rel="noopener">Encyclopaedia Britannica, “Lengths of years and months”</a></li>
       <li><a href="https://www.scientificamerican.com/article/the-leap-seconds-time-is-up-world-votes-to-stop-pausing-clocks/" target="_blank" rel="noopener">Scientific American, “The Leap Second’s Time Is Up”</a></li>
     </ol>
-    <p>The historical statements about Galileo, Huygens, Essen and Parry, and the repeater are the commonly given accounts and were not individually checked for this page.</p>
+    <p>The historical statements about Galileo, Huygens, Essen and Parry, ephemeris time and the repeater are the commonly given accounts and were not individually checked for this page.</p>
+    </details>
   </section>
 </main>
 

@@ -196,3 +196,82 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 /* orbit: the side labels break onto two lines, which leaves room for larger lettering */
 #c-orbit .i-lab { font-size: 5.6px; letter-spacing: .1em; }
 @media (max-width: 560px) { #c-orbit .i-lab { font-size: 7.2px; letter-spacing: .06em; } }
+
+/* ================= refinement: show first, explain second ================= */
+/* solar clock: the dial is the page's centrepiece, with rise, noon and set directly beneath it */
+.solar-stage { margin-top: clamp(20px, 3vw, 36px); }
+#dial { max-width: min(700px, 82vh); }
+.sun-trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 700px; margin: clamp(18px, 3vw, 30px) auto 0; text-align: center; border-top: 1px solid var(--brass); border-bottom: 1px solid var(--brass); }
+.sun-trio div { padding: 14px 6px 16px; } .sun-trio div + div { border-left: 1px solid #2b3852; }
+.sun-trio dt { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #a9a08b; }
+.sun-trio dd { margin: 4px 0 0; font-family: var(--serif); font-size: clamp(24px, 3.4vw, 42px); line-height: 1.05; font-variant-numeric: lining-nums tabular-nums; font-feature-settings: "lnum" 1, "tnum" 1; }
+.solar-panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 70px); align-items: start; max-width: 1040px !important; margin-top: clamp(30px, 5vw, 56px) !important; }
+.solar-panel .travel { margin-top: 0; padding-top: 0; border-top: 0; }
+.solar-side .reads { margin-top: 0; } .solar-side .reads div:nth-child(-n+2) { border-top: 0; padding-top: 0; }
+.solar-side .place { margin-top: 18px; padding-top: 16px; border-top: 1px solid #2b3852; }
+.solar-side .place-now b { font-size: clamp(22px, 2.2vw, 28px); }
+.three-times dd { margin-bottom: 0; }
+/* optional depth, closed until asked for */
+.more { margin-top: 20px; }
+.more summary { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 1px solid var(--acc, var(--brass)); font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; list-style: none; }
+.more summary::-webkit-details-marker { display: none; } .more summary::after { content: "+"; margin-left: 12px; font-size: 15px; } .more[open] summary::after { content: "\2212"; }
+.more ul { list-style: none; margin: 14px 0 0; padding: 0; max-width: 46em; } .more li { padding: 9px 0; border-top: 1px solid #2b3852; font-size: 17px; line-height: 1.45; color: #cfc6b1; } .more li b { color: var(--cream); font-weight: 600; }
+.more > p { margin-top: 14px; font-size: 18px; line-height: 1.48; max-width: 46em; }
+.more :focus-visible, .more summary:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+/* rhythm: the instrument and its read-outs lead */
+.two.even { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } #metro { max-width: 340px; }
+.metro-wrap .mini { margin: 18px 0 0; border-bottom: 0; padding-bottom: 0; } .metro-wrap .mini dd { font-size: 22px; }
+/* anatomy: the mechanism across the full width, the chain of events beneath it */
+.anat-stage { margin-top: clamp(24px, 4vw, 44px) !important; } .anat-wrap { max-width: 900px; margin: 0 auto; }
+.anat-stage .chain { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; margin-top: 18px; }
+.anat-stage .chain li { grid-template-columns: 1fr; border-top: 3px solid var(--rule); border-left: 0; padding: 12px 12px 14px; align-content: start; }
+.anat-stage .chain li::before { grid-row: auto; padding: 0; } .anat-stage .chain b { font-size: 22px; } .anat-stage .chain span { font-size: 16.5px; }
+.anat-stage .chain li.hot { border-top-color: var(--acc); }
+/* measure: four stages, one counter, the rest on request */
+.measures.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.m-link { margin-top: auto !important; padding-top: 14px; } .m-link a { font-family: var(--mono); font-size: 12px !important; letter-spacing: .08em; text-transform: uppercase; color: var(--green); text-underline-offset: 4px; }
+.cs-band { margin-top: 1px !important; padding: clamp(22px, 4vw, 40px) 22px; background: var(--green); color: var(--cream); text-align: center; border: 1px solid var(--green); }
+.cs-label { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #cfd6c8; }
+.cs-num { margin-top: 8px; font-family: var(--serif); font-weight: 600; font-size: clamp(27px, 6.2vw, 78px); line-height: 1; font-variant-numeric: lining-nums tabular-nums; font-feature-settings: "lnum" 1, "tnum" 1; overflow-wrap: anywhere; }
+.deeper { display: grid; grid-template-columns: 1fr 1fr; gap: 0 clamp(20px, 4vw, 50px); align-items: start; } .deeper .more > p { color: var(--ink-2); } .deeper .m-live { margin-top: 12px; padding-top: 0; }
+/* sound: a small drawing for each instrument, and what makes the noise */
+.sounds button { display: grid; grid-template-columns: 52px minmax(0, 1fr); column-gap: 14px; align-items: center; justify-content: stretch; padding: 14px 16px; }
+.sounds button::before { content: none !important; }
+.snd-ico { grid-row: 1 / span 2; width: 52px; height: 52px; fill: none; stroke: currentColor; stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.snd-ico .f { fill: currentColor; stroke: none; } .snd-ico .k { opacity: .35; }
+.sounds b { align-self: end; } .sounds span { align-self: start; }
+.snd-ico .mv { transform-origin: 0 0; } .ico-pendulum .mv { transform-origin: 0 -16px; } .ico-metro .mv { transform-origin: 0 10px; }
+@keyframes snd-swing { from { transform: rotate(calc(var(--a) * -1)); } to { transform: rotate(var(--a)); } }
+@keyframes snd-strike { 0%, 60% { transform: rotate(-22deg); } 80% { transform: rotate(4deg); } 100% { transform: rotate(-22deg); } }
+@media (prefers-reduced-motion: no-preference) {
+  .sounds button[aria-pressed="true"] .mv { animation: snd-swing .2s ease-in-out infinite alternate; --a: 46deg; }
+  .sounds button[aria-pressed="true"] .ico-watch10 .mv { animation-duration: .1s; }
+  .sounds button[aria-pressed="true"] .ico-pendulum .mv { animation-duration: 1s; --a: 15deg; }
+  .sounds button[aria-pressed="true"] .ico-metro .mv { animation-duration: .5s; --a: 17deg; }
+  .sounds button[aria-pressed="true"] .ico-alarm .mv { animation-duration: .045s; --a: 5deg; }
+  .sounds button[aria-pressed="true"] .ico-repeater .mv { animation: snd-strike .55s ease-in infinite; }
+}
+.snd-panel { margin-top: 18px !important; padding: 16px 18px; border: 1px solid var(--acc); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 20px; align-items: center; }
+.snd-note { font-size: 19px; line-height: 1.42; } .snd-panel .snd-status { margin-top: 0 !important; grid-column: 1; } .snd-panel #snd-stop { margin: 0; grid-column: 2; grid-row: 1 / span 2; }
+/* cycles: three instruments */
+.cyc { grid-template-columns: 1fr 1fr 1.5fr; } .cyc-fig { max-width: 300px; margin: 0 auto; } #c-day.cyc-fig { max-width: 360px; } .wide2 .cyc-fig { max-width: 540px; }
+.s-cycles .wide { --trk: #56607c; --thumb: var(--brass); --thumb-b: var(--night); } .s-cycles .wide span { color: #a9a08b; display: flex; justify-content: space-between; align-items: baseline; } .s-cycles .wide b { color: var(--cream); font-weight: 400; font-size: 13px; }
+.cyc-ctl { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; } .cyc-ctl button:nth-child(2), #cm-now { background: transparent; color: var(--cream); }
+.ea-day { fill: #3f6d92; } .ea-night { fill: #0c1a2c; opacity: .93; } .ea-limb { fill: none; stroke: var(--cream); stroke-width: .6; }
+.ea-mer { stroke: #cfe0ee; stroke-width: .3; opacity: .45; } .ea-lat { fill: none; stroke: #efe6d2; stroke-width: .35; stroke-dasharray: 1.4 1.6; opacity: .8; } .ea-pole { fill: var(--cream); }
+.ea-you { stroke: #0b1220; stroke-width: .8; } .ea-you.up { fill: #f1dc92; } .ea-you.down { fill: #b8975a; }
+.or-night { fill: #0c1a2c; opacity: .93; } .or-rim { fill: none; stroke: var(--cream); stroke-width: .5; } .or-earth { stroke: none; }
+.or-axis { stroke: var(--cream); stroke-width: .7; stroke-linecap: round; } .or-np { fill: var(--cream); }
+/* the present moment */
+.present { background: var(--night); color: var(--cream); text-align: center; padding-top: clamp(70px, 12vw, 150px); padding-bottom: clamp(70px, 12vw, 150px); border-top: 1px solid #2b3852; }
+.present .nt-eyebrow { font-weight: 400; }
+.pm-clock { margin-top: 22px !important; font-family: var(--serif); font-weight: 500; font-size: clamp(56px, 12vw, 150px); line-height: 1; font-variant-numeric: lining-nums tabular-nums; font-feature-settings: "lnum" 1, "tnum" 1; }
+.pm-line { margin-top: 26px !important; max-width: 30em !important; font-size: clamp(20px, 2vw, 26px); line-height: 1.4; font-style: italic; color: #cfc6b1; text-wrap: balance; }
+/* method and sources, closed until asked for */
+.method { padding-top: 34px; padding-bottom: 34px; } .method summary { font-family: var(--serif); font-size: 26px; font-weight: 500; cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 12px; list-style: none; }
+.method summary::-webkit-details-marker { display: none; } .method summary::after { content: "+"; font-family: var(--mono); font-size: 18px; } .method details[open] summary::after { content: "\2212"; } .method details[open] summary { margin-bottom: 12px; }
+.method summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+@media (max-width: 1000px) { .measures.four { grid-template-columns: 1fr 1fr; } .anat-stage .chain { grid-template-columns: 1fr; } .anat-stage .chain li { grid-template-columns: 2.2em 1fr; border-top: 1px solid var(--rule); border-left: 4px solid transparent; } .anat-stage .chain li::before { grid-row: 1 / span 3; } .anat-stage .chain li.hot { border-left-color: var(--acc); border-top-color: var(--rule); } }
+@media (max-width: 900px) { .solar-panel, .two.even, .deeper { grid-template-columns: 1fr; } .cyc { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .measures.four { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .cyc { grid-template-columns: 1fr; } .snd-panel { grid-template-columns: 1fr; } .snd-panel #snd-stop { grid-column: 1; grid-row: auto; justify-self: start; } .sun-trio dt { font-size: 11.5px; letter-spacing: .08em; } }

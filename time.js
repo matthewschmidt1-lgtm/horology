@@ -67,7 +67,7 @@ $('#now').addEventListener('click', () => { live = true; render(); });
 /* =================== 2. the rhythm of time: a metronome =================== */
 const M = { bpm: 60, on: false, t0: 0, beat: -1 };
 $('#metro').innerHTML = `<svg viewBox="-60 -122 120 160" class="inst"><path class="i-body" d="M-36,30H36L17,-106H-17Z"/><path class="i-line" d="M-27,30L-12,-98M27,30L12,-98"/>
-  <g class="i-scale">${[40, 60, 80, 100, 120, 160, 208, 300].map(b => { const y = f(-92 + (b - 40) / 260 * 78); return `<line x1="-5" y1="${y}" x2="5" y2="${y}"/><text x="9" y="${f(y + 1.4)}">${b}</text>`; }).join('')}</g>
+  <g class="i-scale">${[40, 60, 80, 100, 120, 160, 208, 300].map(b => { const y = f(-92 + (b - 40) / 260 * 78); return `<line x1="-5" y1="${y}" x2="5" y2="${y}"/>` + (b === 60 || b === 100 ? '' : `<text x="9" y="${f(y + 1.4)}">${b}</text>`); }).join('')}</g>
   <g id="m-rod"><line class="i-rod" x1="0" y1="14" x2="0" y2="-104"/><rect class="i-weight" id="m-w" x="-7" y="-58" width="14" height="9" rx="1.5"/></g>
   <circle class="i-pivot" cx="0" cy="14" r="2.4"/><path class="i-foot" d="M-40,30H40V36H-40Z"/></svg>`;
 function metroFacts() {
@@ -126,7 +126,8 @@ function measure() {
   $('#ms-sid').textContent = hms(S.sidereal(now, loc.lon));
   $('#ms-tai').textContent = `${pad(tai.getUTCHours())}:${pad(tai.getUTCMinutes())}:${pad(tai.getUTCSeconds())}`;
 }
-setInterval(() => { $('#ms-cs').textContent = Math.floor((performance.now() - T0) / 1000 * 9192631770).toLocaleString('en-US'); }, 90);
+const caesium = () => { $('#ms-cs').textContent = Math.floor((performance.now() - T0) / 1000 * 9192631770).toLocaleString('en-US'); };
+caesium(); setInterval(caesium, 90);
 
 /* =================== 5. the sound of time: opt-in, synthesised =================== */
 let ctx = null, master = null, stopT = null, noise = null;
@@ -150,39 +151,114 @@ const SOUNDS = {
   },
   alarm(b) { const t = begin(b, 'A mechanical alarm.', 3); for (let i = 0; i < 66; i++) { bell(t + i / 22, 1320, 0.09, 0.3); burst(t + i / 22, 5200, 0.012, 0.22); } }
 };
-$('#sounds').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.getAttribute('aria-pressed') === 'true') return stopAll(); try { SOUNDS[b.dataset.snd](b); } catch (err) { $('#snd-status').textContent = 'This browser could not start audio.'; } });
+/* a small drawing beside each sound, and a line on what makes it; the drawings move only while their sound plays */
+const ICON = {
+  watch5: '<circle class="k" r="15"/><g class="mv"><circle r="11"/><line x1="-11" y1="0" x2="11" y2="0"/><line x1="0" y1="-11" x2="0" y2="11"/><circle class="f" cx="-7.5" cy="3" r="1.5"/></g><circle class="f" r="1.6"/>',
+  pendulum: '<path d="M-9,-16H9"/><g class="mv"><line x1="0" y1="-16" x2="0" y2="8"/><circle class="f" cx="0" cy="11" r="4.5"/></g>',
+  metro: '<path d="M-10,15H10L5,-15H-5Z"/><g class="mv"><line x1="0" y1="10" x2="0" y2="-17"/><rect class="f" x="-3" y="-9" width="6" height="4"/></g>',
+  repeater: '<path d="M13,4A13.5,13.5 0 1 0 4,13"/><g class="mv"><line x1="0" y1="0" x2="9" y2="9"/><circle class="f" cx="10.5" cy="10.5" r="2.6"/></g><circle class="f" r="1.6"/>',
+  alarm: '<g class="mv"><path d="M-12,6A12,13 0 0 1 12,6Z"/><line x1="-14" y1="6" x2="14" y2="6"/></g><line x1="0" y1="-7" x2="0" y2="-12"/><circle class="f" cx="0" cy="-13.5" r="1.8"/><path d="M-9,10L-12,15M9,10L12,15"/>'
+};
+ICON.watch10 = ICON.watch5;
+$$('#sounds button').forEach(b => b.insertAdjacentHTML('afterbegin', `<svg class="snd-ico ico-${b.dataset.snd}" viewBox="-20 -20 40 40" aria-hidden="true">${ICON[b.dataset.snd]}</svg>`));
+const NOTES = {
+  watch5: 'The tick is the escapement: a pallet jewel catching a tooth of the escape wheel, five times a second.',
+  watch10: 'The same escapement at twice the rate. Ten ticks a second run together into a purr.',
+  pendulum: 'An anchor rocks with the pendulum and lets one tooth of the escape wheel drop at each swing. One drop is the tick, the next the tock.',
+  metro: 'A wound spring drives a small escapement, which knocks once at each end of the rod’s swing.',
+  repeater: 'Two small hammers strike wire gongs coiled around the movement: a low note for each hour, a pair for each quarter, a high note for each minute.',
+  alarm: 'A released spring drives a hammer rapidly back and forth against a bell until it runs down.'
+};
+$('#sounds').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; if (b.getAttribute('aria-pressed') === 'true') return stopAll(); $('#snd-note').textContent = NOTES[b.dataset.snd]; try { SOUNDS[b.dataset.snd](b); } catch (err) { $('#snd-status').textContent = 'This browser could not start audio.'; } });
 $('#snd-stop').addEventListener('click', stopAll);
 
-/* =================== 6. the cycles of time =================== */
-const dayDial = S.mount($('#c-day'), { mini: true });
+/* =================== 6. the cycles of time: three small instruments =================== */
+/* Each keeps its own state: null means "follow the present". */
+const C = { day: null, moon: null, year: null, dayOn: false, yearOn: false, last: 0 };
+const placeName = () => loc.name === 'Your location' ? 'your location' : loc.name;
 function nextCross(target, from) { // when the sun next reaches this longitude on the ecliptic
   const dv = t => mod(S.sun(new Date(t)).lam - target + 180, 360) - 180; let a = from, b;
   for (let i = 0; i < 380; i++) { b = a + 86400000; if (dv(a) < 0 && dv(b) >= 0) break; a = b; }
   for (let i = 0; i < 24; i++) { const mid = (a + b) / 2; if (dv(mid) < 0) a = mid; else b = mid; } return new Date(b);
 }
-function cycles() {
-  const now = new Date(), p = S.parts(now, loc.tz), ev = S.day(p.y, p.m, p.d, loc), ps = S.position(now, loc.lat, loc.lon), north = loc.lat >= 0;
-  dayDial.set(loc, now);
-  $('#c-day-t').textContent = `Today at ${loc.name === 'Your location' ? 'your location' : loc.name} the sun is above the horizon for ${Math.floor(ev.length / 60)} h ${pad(Math.round(ev.length) % 60)} min. Noon to noon averages 24 hours. Measured against the stars, the Earth’s turn takes 3 minutes 56 seconds less.`;
-  // the moon, drawn as it faces this hemisphere
-  const mn = S.moon(now), fr = mn.fraction, wax = fr < 0.5, k = wax ? fr : 1 - fr, rx = f(34 * Math.abs(Math.cos(k * 2 * Math.PI))), flip = (wax ? 1 : -1) * (north ? 1 : -1);
-  $('#c-moon').innerHTML = `<svg viewBox="-50 -50 100 100" class="inst"><circle class="mo-dark" r="34"/><path class="mo-lit" transform="scale(${flip},1)" d="M0,-34A34,34 0 0 1 0,34A${rx},34 0 0 ${k < 0.25 ? 0 : 1} 0,-34Z"/><circle class="i-line" r="34"/><circle class="i-line faint" r="42"/></svg>`;
-  $('#c-moon-t').textContent = `${mn.name}: about ${Math.round(mn.lit * 100)}% lit, ${mn.age.toFixed(1)} days into a cycle of 29.53. Next full moon around ${dayMonth(mn.nextFull, loc.tz)}; next new moon around ${dayMonth(mn.nextNew, loc.tz)}. Twelve lunations make 354 days, eleven short of a year, so months and years never line up.`;
-  // the Earth on its orbit, seen from above the north pole: it travels anticlockwise
-  const th = (ps.lam + 180) * R, ex = f(36 * Math.cos(th)), ey = f(-36 * Math.sin(th));
-  const pts = [['March equinox', 180], ['June solstice', 270], ['September equinox', 0], ['December solstice', 90]];
-  $('#c-orbit').innerHTML = `<svg viewBox="-100 -58 200 116" class="inst"><circle class="i-line" r="36"/>${pts.map(([n, a]) => { const x = 36 * Math.cos(a * R), y = -36 * Math.sin(a * R), lx = 50 * Math.cos(a * R), ly = -47 * Math.sin(a * R); return `<circle class="i-dot" cx="${f(x)}" cy="${f(y)}" r="1.5"/><text class="i-lab ${a === 180 ? 'end' : a === 0 ? 'left' : ''}" x="${f(lx)}" y="${f(a % 180 ? ly + (a === 90 ? 0 : 3) : -1.5)}">${a % 180 ? n.toUpperCase() : n.toUpperCase().split(' ').map((w, i) => `<tspan x="${f(lx)}" dy="${i ? '1.1em' : 0}">${w}</tspan>`).join('')}</text>`; }).join('')}
-    <circle class="or-sun" r="6"/>${[0, 45, 90, 135, 180, 225, 270, 315].map(a => `<line class="or-ray" x1="${f(8 * Math.cos(a * R))}" y1="${f(8 * Math.sin(a * R))}" x2="${f(11 * Math.cos(a * R))}" y2="${f(11 * Math.sin(a * R))}"/>`).join('')}
-    <line class="or-spoke" x1="0" y1="0" x2="${ex}" y2="${ey}"/><circle class="or-earth" cx="${ex}" cy="${ey}" r="4.2"/><path class="or-arrow" d="M-26,-30A40,40 0 0 0 -39,-9" marker-end=""/></svg>`;
-  const q = Math.floor(ps.lam / 90), season = (north ? ['spring', 'summer', 'autumn', 'winter'] : ['autumn', 'winter', 'spring', 'summer'])[q], doy = doyOf(p);
-  $('#c-orbit-t').textContent = `Day ${doy} of ${daysIn(p.y)}. The sun stands overhead at latitude ${Math.abs(ps.decl).toFixed(1)}° ${ps.decl >= 0 ? 'north' : 'south'}, so it is ${season} at ${loc.name === 'Your location' ? 'your location' : loc.name}. The seasons come from the 23.4° tilt of the Earth’s axis, not from its distance to the sun: the Earth is closest in early January. The year of the seasons is 365.2422 days long, which is why calendars need leap years.`;
-  const mean = [north ? 'spring begins' : 'autumn begins', north ? 'the longest day' : 'the shortest day', north ? 'autumn begins' : 'spring begins', north ? 'the shortest day' : 'the longest day'];
-  $('#c-next').innerHTML = [0, 90, 180, 270].map((t, i) => ({ d: nextCross(t, now.getTime()), n: pts[i][0], m: mean[i] })).sort((a, b) => a.d - b.d).map(x => `<li><b>${dayMonth(x.d, loc.tz)}</b><span>${x.n}: ${x.m}</span><em>about ${S.clock(x.d, loc.tz)}</em></li>`).join('');
+const RAYS = (cx, cy, r0, r1) => [0, 45, 90, 135, 180, 225, 270, 315].map(a => `<line class="or-ray" x1="${f(cx + r0 * Math.cos(a * R))}" y1="${f(cy + r0 * Math.sin(a * R))}" x2="${f(cx + r1 * Math.cos(a * R))}" y2="${f(cy + r1 * Math.sin(a * R))}"/>`).join('');
+
+/* The day: the Earth from above the visitor's own pole, the sun off to the right.
+   Plain geometry: the shadow edge is where the sun is on the horizon, with no allowance for twilight or refraction. */
+function drawDay() {
+  const now = new Date(), p0 = S.parts(now, loc.tz), date = C.day == null ? now : S.instant(p0.y, p0.m, p0.d, C.day, loc.tz);
+  const ps = S.position(date, loc.lat, loc.lon), ev = S.day(p0.y, p0.m, p0.d, loc), sg = loc.lat >= 0 ? 1 : -1, E = 40;
+  const dec = sg * ps.decl * R, rx = f(E * Math.abs(Math.sin(dec))), r = E * Math.cos(Math.abs(loc.lat) * R);
+  const at = a => [f(Math.cos(a * R)), f(-sg * Math.sin(a * R))]; // the Earth turns anticlockwise seen from the north, clockwise from the south
+  let spokes = ''; for (let i = 0; i < 12; i++) { const [cx, cy] = at(ps.ha + i * 30); spokes += `<line class="ea-mer" x1="0" y1="0" x2="${f(cx * E)}" y2="${f(cy * E)}"/>`; }
+  const [mx, my] = at(ps.ha), up = ps.alt > 0;
+  $('#c-day').innerHTML = `<svg viewBox="-48 -48 136 96" class="inst"><defs><clipPath id="ea-clip"><circle r="${E}"/></clipPath></defs>
+    <circle class="or-sun" cx="74" cy="0" r="7"/>${RAYS(74, 0, 9.5, 12.5)}
+    <circle class="ea-day" r="${E}"/><g clip-path="url(#ea-clip)">${spokes}<circle class="ea-lat" r="${f(r)}"/>
+    <path class="ea-night" d="M0,${-E}A${E},${E} 0 0 0 0,${E}A${rx},${E} 0 0 ${dec >= 0 ? 1 : 0} 0,${-E}Z"/></g>
+    <circle class="ea-limb" r="${E}"/><circle class="ea-pole" r="1.3"/>
+    <circle class="ea-you ${up ? 'up' : 'down'}" cx="${f(mx * r)}" cy="${f(my * r)}" r="3"/></svg>`;
+  const mins = Math.round(mod(S.parts(date, loc.tz).h * 60 + S.parts(date, loc.tz).mi, 1440));
+  if (document.activeElement !== $('#cd-t') || C.day == null) $('#cd-t').value = mins;
+  $('#cd-lab').textContent = S.clock(date, loc.tz); $('#cd-now').disabled = C.day == null && !C.dayOn;
+  $('#c-day-t').textContent = `${S.clock(date, loc.tz)} at ${placeName()}: ${S.phase(ps.alt, ps.ha).toLowerCase()}. The dot is you, seen from above the ${sg > 0 ? 'North' : 'South'} Pole as the Earth turns ${sg > 0 ? 'anticlockwise' : 'clockwise'}. Today it spends ${Math.floor(ev.length / 60)} h ${pad(Math.round(ev.length) % 60)} min in the light.`;
 }
+
+/* The month: the moon as it faces this hemisphere, at any day of its cycle. */
+function drawMoon() {
+  const now = new Date(), cur = S.moon(now), age = C.moon == null ? cur.age : C.moon, mn = C.moon == null ? cur : S.moon(new Date(now.getTime() + (age - cur.age) * 86400000));
+  const fr = age / S.SYNODIC, wax = fr < 0.5, k = wax ? fr : 1 - fr, rx = f(34 * Math.abs(Math.cos(k * 2 * Math.PI))), flip = (wax ? 1 : -1) * (loc.lat >= 0 ? 1 : -1);
+  $('#c-moon').innerHTML = `<svg viewBox="-50 -50 100 100" class="inst"><circle class="mo-dark" r="34"/><path class="mo-lit" transform="scale(${flip},1)" d="M0,-34A34,34 0 0 1 0,34A${rx},34 0 0 ${k < 0.25 ? 0 : 1} 0,-34Z"/><circle class="i-line" r="34"/><circle class="i-line faint" r="42"/></svg>`;
+  if (document.activeElement !== $('#cm-t') || C.moon == null) $('#cm-t').value = age.toFixed(1);
+  $('#cm-lab').textContent = `${age.toFixed(1)} of 29.5`; $('#cm-now').disabled = C.moon == null;
+  $('#c-moon-t').textContent = `${mn.name}: about ${Math.round(mn.lit * 100)}% lit.` + (C.moon == null ? ` Next full moon around ${dayMonth(cur.nextFull, loc.tz)}; next new moon around ${dayMonth(cur.nextNew, loc.tz)}.` : '') + ' Twelve lunations make 354 days, eleven short of a year, so months and years never line up.';
+}
+
+/* The year: the Earth on its orbit, seen from above the north pole, travelling anticlockwise.
+   The short line is the axis: it leans the same way all year, which is what makes the seasons. */
+function drawYear() {
+  const now = new Date(), p = S.parts(now, loc.tz), n = daysIn(p.y), doy = C.year == null ? doyOf(p) : C.year, date = C.year == null ? now : new Date(Date.UTC(p.y, 0, Math.round(doy), 12));
+  const ps = S.position(date, loc.lat, loc.lon), north = loc.lat >= 0, th = (ps.lam + 180) * R, ex = 36 * Math.cos(th), ey = -36 * Math.sin(th), a = Math.atan2(ey, ex), er = 5.2;
+  const h1 = [f(ex + er * Math.cos(a - Math.PI / 2)), f(ey + er * Math.sin(a - Math.PI / 2))], h2 = [f(ex + er * Math.cos(a + Math.PI / 2)), f(ey + er * Math.sin(a + Math.PI / 2))];
+  const pts = [['March equinox', 180], ['June solstice', 270], ['September equinox', 0], ['December solstice', 90]];
+  $('#c-orbit').innerHTML = `<svg viewBox="-100 -58 200 116" class="inst"><circle class="i-line" r="36"/>${pts.map(([nm, an]) => { const x = 36 * Math.cos(an * R), y = -36 * Math.sin(an * R), lx = 50 * Math.cos(an * R), ly = -47 * Math.sin(an * R); return `<circle class="i-dot" cx="${f(x)}" cy="${f(y)}" r="1.5"/><text class="i-lab ${an === 180 ? 'end' : an === 0 ? 'left' : ''}" x="${f(lx)}" y="${f(an % 180 ? ly + (an === 90 ? 0 : 3) : -1.5)}">${an % 180 ? nm.toUpperCase() : nm.toUpperCase().split(' ').map((w, i) => `<tspan x="${f(lx)}" dy="${i ? '1.1em' : 0}">${w}</tspan>`).join('')}</text>`; }).join('')}
+    <circle class="or-sun" r="6"/>${RAYS(0, 0, 8, 11)}
+    <line class="or-spoke" x1="0" y1="0" x2="${f(ex)}" y2="${f(ey)}"/><circle class="or-earth" cx="${f(ex)}" cy="${f(ey)}" r="${er}"/>
+    <path class="or-night" d="M${h1}A${er},${er} 0 0 1 ${h2}Z"/><circle class="or-rim" cx="${f(ex)}" cy="${f(ey)}" r="${er}"/>
+    <line class="or-axis" x1="${f(ex)}" y1="${f(ey + 2)}" x2="${f(ex)}" y2="${f(ey - 9)}"/><circle class="or-np" cx="${f(ex)}" cy="${f(ey - 9)}" r="1"/>
+    <path class="or-arrow" d="M-26,-30A40,40 0 0 0 -39,-9"/></svg>`;
+  if (document.activeElement !== $('#cy-t') || C.year == null) $('#cy-t').value = Math.round(doy);
+  $('#cy-t').max = n; $('#cy-lab').textContent = dayMonth(date, 'UTC'); $('#cy-now').disabled = C.year == null && !C.yearOn;
+  const season = (north ? ['spring', 'summer', 'autumn', 'winter'] : ['autumn', 'winter', 'spring', 'summer'])[Math.floor(mod(ps.lam, 360) / 90)];
+  $('#c-orbit-t').textContent = `${dayMonth(date, 'UTC')}: the sun stands overhead at latitude ${Math.abs(ps.decl).toFixed(1)}° ${ps.decl >= 0 ? 'north' : 'south'}, so it is ${season} at ${placeName()}. The short line is the Earth’s axis, tilted 23.4° and leaning the same way all year. That tilt makes the seasons, not distance: the Earth is closest to the sun in early January.`;
+}
+function cycles() {
+  drawDay(); drawMoon(); drawYear();
+  const now = new Date(), north = loc.lat >= 0, names = ['March equinox', 'June solstice', 'September equinox', 'December solstice'];
+  const mean = [north ? 'spring begins' : 'autumn begins', north ? 'the longest day' : 'the shortest day', north ? 'autumn begins' : 'spring begins', north ? 'the shortest day' : 'the longest day'];
+  $('#c-next').innerHTML = [0, 90, 180, 270].map((t, i) => ({ d: nextCross(t, now.getTime()), n: names[i], m: mean[i] })).sort((a, b) => a.d - b.d).map(x => `<li><b>${dayMonth(x.d, loc.tz)}</b><span>${x.n}: ${x.m}</span><em>about ${S.clock(x.d, loc.tz)}</em></li>`).join('');
+}
+function cycFrame(ms) { // a day turns in about twelve seconds, a year in about eighteen
+  if (!C.dayOn && !C.yearOn) return; const dt = Math.min(100, ms - C.last); C.last = ms;
+  if (C.dayOn) { C.day = mod((C.day == null ? +$('#cd-t').value : C.day) + dt * 0.12, 1440); drawDay(); }
+  if (C.yearOn) { const n = +$('#cy-t').max; C.year = (C.year == null ? +$('#cy-t').value : C.year) + dt * 0.02; if (C.year > n) C.year -= n - 1; drawYear(); }
+  requestAnimationFrame(cycFrame);
+}
+function cycToggle(key, btn, idle, busy) { const was = C.dayOn || C.yearOn; C[key] = !C[key]; btn.textContent = C[key] ? busy : idle; btn.setAttribute('aria-pressed', C[key]); if (C[key] && !was) { C.last = performance.now(); requestAnimationFrame(cycFrame); } drawDay(); drawYear(); }
+$('#cd-t').addEventListener('input', e => { C.day = +e.target.value; drawDay(); });
+$('#cd-go').addEventListener('click', e => cycToggle('dayOn', e.currentTarget, 'Turn the Earth', 'Pause'));
+$('#cd-now').addEventListener('click', () => { if (C.dayOn) cycToggle('dayOn', $('#cd-go'), 'Turn the Earth', 'Pause'); C.day = null; drawDay(); });
+$('#cm-t').addEventListener('input', e => { C.moon = +e.target.value; drawMoon(); });
+$('#cm-now').addEventListener('click', () => { C.moon = null; drawMoon(); });
+$('#cy-t').addEventListener('input', e => { C.year = +e.target.value; drawYear(); });
+$('#cy-go').addEventListener('click', e => cycToggle('yearOn', e.currentTarget, 'Travel a year', 'Pause'));
+$('#cy-now').addEventListener('click', () => { if (C.yearOn) cycToggle('yearOn', $('#cy-go'), 'Travel a year', 'Pause'); C.year = null; drawYear(); });
 
 /* =================== start =================== */
 setLoc(loc, loc.rough ? 'Placed on the meridian your time zone implies. Choose a place or share your location for a true reading.' : 'Chosen from your time zone. Nothing about your position leaves this page.');
-setInterval(() => { if (live) render(); measure(); }, 1000);
+const present = () => { const n = new Date(); $('#pm-clock').textContent = `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`; };
+present();
+setInterval(() => { if (live) render(); measure(); present(); }, 1000);
 setInterval(cycles, 60000);
 window.__time = { get loc() { return loc; }, get last() { return last; }, render, setLoc };
 })();
