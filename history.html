@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#15100b">
+<title>A History of the Watch · The Horological Archive</title>
+<meta name="description" content="Scroll through five centuries of watchmaking, from a gilt sphere of 1530 to the mechanical revival. Seven eras, one continuous journey.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="The Horological Archive">
+<meta property="og:title" content="A History of the Watch">
+<meta property="og:description" content="Scroll through five centuries of watchmaking, from a gilt sphere of 1530 to the mechanical revival.">
+<meta property="og:image" content="https://horology-production.up.railway.app/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Orbitron:wght@500;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Poiret+One&family=Special+Elite&family=Stardos+Stencil:wght@700&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="history.css">
+</head>
+<body class="hx" data-era="top">
+<a class="skip" href="#e1">Skip to chapter one</a>
+<header class="mast">
+  <a class="brand" href="index.html#/exam">
+    <svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="10.5"/><circle r="8.6"/><path d="M0,-8.6V-6.6M8.6,0H6.6M0,8.6V6.6M-8.6,0H-6.6M0,0L0,-5.4M0,0L3.9,2.2"/></svg>
+    <span><i class="the">The </i>Horological Archive</span>
+  </a>
+  <nav class="nav" aria-label="Sections">
+    <a href="index.html#/exam"><span class="long">Examination</span><span class="short">Exam</span></a>
+    <a href="index.html#/archive">Archive</a>
+    <a href="workbench.html"><span class="long">Workbench</span><span class="short">Bench</span></a>
+    <a href="history.html" class="on" aria-current="page">History</a>
+  </nav>
+</header>
+
+<main id="hx">
+  <section class="hero">
+    <div class="hero-in">
+      <p class="bk">The Horological Archive</p>
+      <h1>A History <em>of the</em> Watch</h1>
+      <p class="hero-dek">Five centuries, seven eras, one long page. Scroll down to travel forward in time.</p>
+      <p class="hero-range"><span>1500</span><i></i><span>Today</span></p>
+      <p class="hero-cue" aria-hidden="true">Scroll</p>
+    </div>
+  </section>
+
+  <section class="evo" id="evo" aria-label="The watch across five centuries"></section>
+
+  <div id="eras"></div>
+
+  <section class="finale">
+    <p class="bk">Five hundred years later</p>
+    <h2>A spring, some wheels, and something that swings.</h2>
+    <p>Every watch on this page, from the gilt drum to the one with the glass back, runs on the same idea. The fastest way to understand it is to take one apart.</p>
+    <p class="finale-go"><a href="workbench.html">Open the Workbench</a><a href="index.html#/archive">Browse the twenty plates</a><a href="index.html#/exam">Sit the examination</a></p>
+  </section>
+
+  <section class="sources" id="sources">
+    <h2>Sources and method</h2>
+    <p>Numbered passages were checked against the sources below. Unnumbered passages repeat what the general literature says and were not individually verified, so treat their dates as the commonly given ones. Dates of invention, first use and commercial sale are kept apart wherever they differ.</p>
+    <p>No photographs or archival documents are reproduced. Watches marked “illustrative reconstruction” are drawings of a type, made for this page, and do not depict a specific surviving object. Watches from the archive are modern interpretive drawings made from published specifications.</p>
+    <ol></ol>
+    <p class="by-line"><a class="madeby" href="https://matthew-schmidt-production.up.railway.app/" target="_blank" rel="noopener">Made by Matty</a></p>
+  </section>
+</main>
+
+<div class="yr" aria-hidden="true"><small>Year</small><span id="yr">1500</span></div>
+<div class="bar" id="bar" aria-hidden="true"><i></i></div>
+<nav class="rail" id="rail" aria-label="Chapters"></nav>
+
+<script src="data.js"></script>
+<script src="draw.js"></script>
+<script src="history-data.js"></script>
+<script src="history.js"></script>
+</body>
+</html>

@@ -49,6 +49,16 @@ Then give each component the name of its node in the file and how far it moves w
 
 Model in millimetres with the dial facing +Z and twelve o'clock at +Y. Nodes named `hand-hour`, `hand-minute` and `hand-seconds` follow the clock. The loader is written but has not been run against a real file yet, so expect to adjust it with the first asset.
 
+## The History page
+
+`history.html` is one long scroll through seven eras of watchmaking, each with its own look, opening with a sequence that shows one watch changing across five centuries.
+
+- `history.html`, `history.css` — the page and the seven visual styles
+- `history-data.js` — all the text: eras, passages, comparisons and the numbered sources. Edit this to correct or add history.
+- `history.js` — the period drawings the archive lacks (drum watch, verge and railroad pocket watches, trench watch, quartz, LED, glass-back, smartwatch) and the scroll behaviour
+
+A passage with `c: [n]` cites source `n` in the list at the foot of the page. Passages without one repeat the general literature and were not individually checked. No photographs are used; drawings marked "illustrative reconstruction" show a type, not a specific surviving watch.
+
 ## Run it locally
 
     python3 -m http.server 8811
