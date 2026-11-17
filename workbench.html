@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#EDE6D8">
+<title>The Workbench · The Horological Archive</title>
+<meta name="description" content="Turn a vintage watch over in your hands. Open the caseback, separate the movement and watch the escapement beat.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Horological Archive">
+<meta property="og:title" content="The Workbench · The Horological Archive">
+<meta property="og:description" content="Turn a vintage watch over in your hands. Open the caseback, separate the movement and watch the escapement beat.">
+<meta property="og:image" content="https://horology-production.up.railway.app/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="workbench.css">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body class="wb">
+<header class="mast">
+  <a class="brand" href="index.html#/exam">
+    <svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="10.5"/><circle r="8.6"/><path d="M0,-8.6V-6.6M8.6,0H6.6M0,8.6V6.6M-8.6,0H-6.6M0,0L0,-5.4M0,0L3.9,2.2"/></svg>
+    <span><i class="the">The </i>Horological Archive</span>
+  </a>
+  <nav class="nav" aria-label="Sections">
+    <a href="index.html#/exam"><span class="long">Examination</span><span class="short">Exam</span></a>
+    <a href="index.html#/archive">Archive</a>
+    <a href="workbench.html" class="on" aria-current="page"><span class="long">Workbench</span><span class="short">Bench</span></a>
+  </nav>
+</header>
+
+<main class="bench">
+  <aside class="pane" id="pane-info" data-pane="info" aria-label="Specifications and history">
+    <div class="seg" role="tablist"><button type="button" class="on" data-tab="specs">Specifications</button><button type="button" data-tab="history">History</button></div>
+    <div id="specs"></div>
+    <div id="history" hidden></div>
+    <div class="legend"><span class="st D">Documented</span><span class="st E">Estimated</span><span class="st I">Interpretation</span></div>
+  </aside>
+
+  <section class="stage" aria-label="Watch viewport">
+    <header class="stage-head">
+      <div>
+        <p class="kicker" id="w-kicker"></p>
+        <h1 id="w-title"></h1>
+      </div>
+      <div class="seg" id="style-seg" aria-label="Rendering style"><button type="button" class="on" data-style="tech">Drawing</button><button type="button" data-style="real">Studio</button></div>
+    </header>
+
+    <div class="viewport" id="viewport">
+      <canvas id="gl" aria-label="Interactive 3D watch. Drag to rotate, scroll or pinch to zoom, click a part to identify it."></canvas>
+      <div id="labels" aria-hidden="true"></div>
+      <div id="blueprint" hidden></div>
+      <div id="loupe" hidden><canvas></canvas><div class="lclone"></div><span class="lcap"></span></div>
+      <div class="hud">
+        <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+        <button type="button" id="zoom-out" aria-label="Zoom out">−</button>
+        <button type="button" id="reset" aria-label="Reset camera">Reset</button>
+      </div>
+      <p class="caveat" id="caveat"></p>
+      <p class="hint3d" id="hint3d">Drag to turn · scroll or pinch to zoom · click a part</p>
+      <p class="fail" id="fail" hidden>The 3D view could not start in this browser. Blueprint mode is shown instead.</p>
+    </div>
+
+    <div class="tools">
+      <label class="tog"><input type="checkbox" id="t-labels" checked><span>Labels</span></label>
+      <label class="tog"><input type="checkbox" id="t-loupe"><span>Loupe</span></label>
+      <label class="tog"><input type="checkbox" id="t-run" checked><span>Run movement</span></label>
+      <label class="tog"><input type="checkbox" id="t-slow"><span>Slow motion</span></label>
+      <label class="sl"><span>Explode</span><input type="range" id="s-explode" min="0" max="1" step="0.01" value="0"></label>
+      <label class="sl" id="l-layers"><span>Separate layers</span><input type="range" id="s-layers" min="0" max="1" step="0.01" value="0"></label>
+    </div>
+
+    <nav class="toolbar" id="toolbar" aria-label="Views">
+      <button type="button" data-view="front" class="on">Front</button>
+      <button type="button" data-view="side">Side</button>
+      <button type="button" data-view="rear">Rear</button>
+      <button type="button" data-view="movement">Movement</button>
+      <button type="button" data-view="exploded">Exploded</button>
+      <button type="button" data-view="blueprint">Blueprint</button>
+      <button type="button" data-view="studio" title="A studio render of the model. No photographs of the watch are included.">Studio view</button>
+    </nav>
+  </section>
+
+  <aside class="pane" id="pane-parts" data-pane="parts" aria-label="Component explorer">
+    <div class="seg" id="level-seg" aria-label="Explanation level"><button type="button" class="on" data-level="beginner">Beginner</button><button type="button" data-level="horologist">Horologist</button></div>
+    <article id="detail" aria-live="polite"></article>
+    <div id="parts"></div>
+  </aside>
+</main>
+
+<nav class="mtabs" aria-label="Panels"><button type="button" data-show="parts" class="on">Parts</button><button type="button" data-show="info">Watch</button></nav>
+
+<script src="data.js"></script>
+<script src="draw.js"></script>
+<script type="module" src="workbench/app.js"></script>
+</body>
+</html>

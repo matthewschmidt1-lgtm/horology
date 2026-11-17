@@ -226,6 +226,8 @@ a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation
   .brand { font-size: 18px; gap: 8px; letter-spacing: .02em; min-height: 44px; white-space: nowrap; }
   .brand svg { width: 24px; height: 24px; }
   .the, .long { display: none; }
+  .mast .brand span { display: none; }
+  .nav a { padding: 0 9px; }
   .short { display: inline; }
   .nav { gap: 2px; }
   .nav a { padding: 0 10px; }

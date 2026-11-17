@@ -244,7 +244,7 @@ function markers(w, g, skip) {
   return s;
 }
 
-function subs(w, g) {
+function subs(w, g, o = {}) {
   const d = w.dial; if (!d.subs) return ''; const R0 = g.inR || g.edge(0), b = bps(w); let s = '';
   const rs = R0 * (d.subBig ? 0.31 : 0.235), off = R0 * (d.subBig ? 0.46 : 0.5);
   for (const [pos, role] of d.subs) {
@@ -253,7 +253,7 @@ function subs(w, g) {
     s += d.subSquare ? RC(cx - rs, cy - rs, 2 * rs, 2 * rs, cls, 0.9) : C(rs, cx, cy, 'p') + C(rs, cx, cy, cls, sty);
     const n = role === 'min30' ? 30 : 12;
     if (!d.subSquare) for (let i = 0; i < n; i++) s += rad(i * 360 / n, rs - (i % (n / 6) ? 0.45 : 0.9), rs - 0.12, 't', cx, cy);
-    s += `<g transform="translate(${cx},${cy})"><g ${role === 'sec' ? `data-hand="s" data-bps="${b}"` : ''}>${L(0, 0.8, 0, -rs * 0.82, 'hd')}</g>${C(0.32, 0, 0, 'k')}</g>`;
+    if (!o.noHands) s += `<g transform="translate(${cx},${cy})"><g ${role === 'sec' ? `data-hand="s" data-bps="${b}"` : ''}>${L(0, 0.8, 0, -rs * 0.82, 'hd')}</g>${C(0.32, 0, 0, 'k')}</g>`;
   }
   return s;
 }
@@ -292,7 +292,7 @@ function dial(w, g, o) {
     SLIDE.forEach(v => { const a = f(360 * Math.log10(v / 10)); s += T(v, 0, 0, 1.05, 'tx bz', `transform="rotate(${a}) translate(0,${f(-g.dialR + 1.15)})"`) + T(v, 0, 0, 1.05, 'tx bz', `transform="rotate(${a}) translate(0,${f(-g.inR - 0.35)})"`); });
   }
   const skip = new Set(); (d.subs || []).forEach(x => skip.add(x[0] % 12)); if (d.date && Number.isInteger(d.date)) skip.add(d.date);
-  s += markers(w, g, skip) + subs(w, g) + dateWin(w, g) + dtext(w, g, o);
+  s += markers(w, g, skip) + subs(w, g, o) + dateWin(w, g) + dtext(w, g, o);
   return s;
 }
 
@@ -494,5 +494,14 @@ function movement(w) {
   return svg('-20 -20 40 40', s, 'fig mvt', `${w.brand} ${w.model}, movement schematic`);
 }
 
-window.Draw = { front, side, rear, exploded, movement, bps };
+/* ---------- face texture for the 3D workbench (bezel + dial, no hands) ---------- */
+const REAL = ".l{fill:none;stroke:#8d8d88;stroke-width:.14}.p{fill:#ebe5cf;stroke:#0d0d0d;stroke-width:.06}.t{fill:none;stroke:#e9e6da;stroke-width:.13}.hair{fill:none;stroke:#e9e6da;stroke-width:.05}.k{fill:#e9e6da}.tn,.tn2{fill:#121212;stroke:#2b2b2b;stroke-width:.12}.bar{fill:none;stroke:#e9e6da;stroke-width:.5}text{fill:#f0ede2;font-family:Georgia,'Times New Roman',serif}.bz{font-family:Helvetica,Arial,sans-serif;font-weight:bold}";
+const TECH = ".l{fill:none;stroke:#242521;stroke-width:.2}.p{fill:#EDE6D8;stroke:#242521;stroke-width:.2}.t{fill:none;stroke:#242521;stroke-width:.1}.hair{fill:none;stroke:#242521;stroke-width:.05}.k{fill:#242521}.tn,.tn2{fill:#D9CEB9;stroke:#242521;stroke-width:.2}.bar{fill:none;stroke:#242521;stroke-width:.5}text{fill:#242521;font-family:Georgia,'Times New Roman',serif}.bz{font-family:Helvetica,Arial,sans-serif;font-weight:bold}";
+function face(w, real) {
+  const g = geo(w), R = g.bezR || g.hw;
+  const s = `<style>${real ? REAL : TECH}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/>` + bezel(w, g) + dial(w, g, { noHands: true });
+  return { svg: `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="${-R} ${-R} ${2 * R} ${2 * R}">${s}</svg>`, R, dialR: g.dialR, inR: g.inR, bezelInner: R - (w.bezel ? w.bezel.w : 0), handLen: g.hl };
+}
+
+window.Draw = { front, side, rear, exploded, movement, bps, face };
 })();

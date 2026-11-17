@@ -9,6 +9,45 @@ A static site: no build step, no keys, no accounts.
 - `draw.js` — draws each view (front, profile, caseback, exploded, movement) from the data
 - `app.js` — the examination, the archive, the live clock and the figure viewer
 
+## The Workbench
+
+`workbench.html` is an interactive bench for one watch at a time: a 3D model you can turn, open and take apart, a component explorer, a loupe, and a blueprint sheet.
+
+- `workbench.html`, `workbench.css` — the page
+- `workbench/app.js` — the interface and viewport
+- `workbench/model.js` — builds or loads the 3D model
+- `workbench/watches/` — one record per watch, plus `index.js`, which lists them
+
+Three.js loads from a CDN (jsDelivr), pinned to one version in the page's import map. There is still no build step.
+
+### What is and is not real
+
+No scan, factory model or photograph of the Speedmaster is bundled. The 3D model is built in code from published dimensions, and the calibre 321 is a schematic layout. Gear rates, the 18,000 A/h beat and the stepping of the train are physically correct; shapes and positions are not factory geometry. Every fact in a record is marked `D` (documented), `E` (estimated) or `I` (interpretation) and the page shows the mark. "Studio" is a render, not photography.
+
+### Adding a watch to the Workbench
+
+1. Copy `workbench/watches/speedmaster-105003.js` to a new file and edit it. A record holds:
+   - `id`, `brand`, `model`, `reference`, `year`, `movement`
+   - `archiveId` — the matching `id` in `data.js`, used for the blueprint sheet and the dial artwork
+   - `specs` — rows of `[label, value, status]`
+   - `history` — sections of `{ h, s, p }` (heading, status, paragraph)
+   - `components` — one entry per part: `id`, `name`, `group`, `status`, `beginner`, `horologist`, `fn`, `material`, `location`, `significance`, `related`, and optionally `anchor: [x, y, z]` (where its label sits, in millimetres) and `face` (1 if only visible from the front, -1 from the back)
+   - `asset` — how the 3D model is made (below)
+   - `images` — reserved for photographs; empty today
+2. Add the record to the list in `workbench/watches/index.js`. The page shows the first record; a picker is the next step once there are two.
+
+### Using a real 3D asset (.glb)
+
+Put the file in `workbench/assets/` and set, in the record:
+
+    asset: { type: 'gltf', url: 'workbench/assets/my-watch.glb', scale: 1, note: 'Where the model came from.' }
+
+Then give each component the name of its node in the file and how far it moves when exploded:
+
+    { id: 'crystal', node: 'Crystal', explode: [0, 0, 29], ... }
+
+Model in millimetres with the dial facing +Z and twelve o'clock at +Y. Nodes named `hand-hour`, `hand-minute` and `hand-seconds` follow the clock. The loader is written but has not been run against a real file yet, so expect to adjust it with the first asset.
+
 ## Run it locally
 
     python3 -m http.server 8811
