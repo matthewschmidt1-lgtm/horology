@@ -63,21 +63,21 @@ function sheet(w) {
     <p class="sub">${w.ref !== '-' ? `Ref. ${w.ref} · ` : ''}${w.year} · ${w.kind}</p>
   </header>
   <div class="figs">
-    <figure class="f1">${box(D.front(w, { dims: true }))}<figcaption><b>Fig. 1</b> Front elevation. Hands set to your local time, <span data-clock></span>.</figcaption></figure>
+    <figure class="f1">${box(D.front(w, { dims: true }))}<figcaption><b>Fig. 1</b> Front elevation, at your time.</figcaption></figure>
     <figure class="f2">${box(D.side(w))}<figcaption><b>Fig. 2</b> Profile${w.crown.pos === 9 ? ', seen from the pusher flank; the crown is on the far side' : w.crown.pos ? ', crown side' : '. No crown on the flank'}.</figcaption></figure>
     <figure class="f3">${box(D.rear(w))}<figcaption><b>Fig. 3</b> Caseback. ${w.back.note}</figcaption></figure>
     <figure class="f4">${box(ex.svg)}<figcaption><b>Fig. 4</b> Exploded assembly.</figcaption><ol class="parts">${ex.parts.map(p => `<li>${p}</li>`).join('')}</ol></figure>
     <figure class="f5">${box(D.movement(w))}<figcaption><b>Fig. 5</b> Movement, ${/^not /.test(w.mv.cal) ? 'calibre ' + w.mv.cal : 'cal. ' + w.mv.cal}. Schematic of the principal organs only.${w.mv.note ? ' ' + w.mv.note : ''}</figcaption></figure>
   </div>
   <div class="sheet-text">
-    <table class="spec"><caption>Particulars <span>dimensions in millimetres</span></caption>${rows}</table>
+    <table class="spec"><caption>Particulars</caption>${rows}</table>
     <div class="notes"><h3>Notes</h3>${w.notes.map(n => `<p>${n}</p>`).join('')}</div>
   </div>
   <footer class="title-block">
     <div><span>Subject</span>${w.brand} ${w.model}</div>
     <div><span>Sheet</span>${ROM[idx]} / XX</div>
     <div><span>Status</span>Modern interpretive drawing</div>
-    <p>Drawn from published specifications. This is not a manufacturer’s document and the movement figure is a schematic. “≈” marks an approximate figure; “n.v.” one that could not be verified and is left out.</p>
+    <p>Not a manufacturer’s document. ≈ marks an approximate figure.</p>
   </footer>
 </article>`;
 }
@@ -100,13 +100,13 @@ function renderExam() {
 <section class="exam">
   <div class="exam-plate">
     <div class="frame" id="specimen">${D.front(w, { redact: true })}</div>
-    <p class="cap">Specimen ${ROM[exam.i]} of XX · your time, <span data-clock></span></p>
+    <p class="cap">Your time, <span data-clock></span></p>
   </div>
   <div class="exam-panel">
     <p class="eyebrow">Examination · ${n} of ${exam.order.length}</p>
     <div class="q" id="q1">
       <h2>Which watch is on the bench?</h2>
-      <p class="hint">The signature has been masked. Read the case, the dial and the way the hands move.</p>
+      <p class="hint">Signature masked. Read the case, dial and hands.</p>
       <div class="opts">${identOptions(w).map(o => `<button type="button" data-id="${o.id}">${o.brand} <em>${o.model}</em>${o.ref !== '-' ? ` <small>${o.ref}</small>` : ''}</button>`).join('')}</div>
       <p class="verdict" aria-live="polite"></p>
     </div>
@@ -175,7 +175,7 @@ const tone = w => /Dive/.test(w.kind) ? 'navy' : /hronograph/.test(w.kind) ? 'ox
 function renderArchive() {
   view.innerHTML = `
 <section class="archive">
-  <header class="intro"><p class="eyebrow">The collection</p><h2>Twenty plates</h2><p>Dress watches, chronographs, divers and a few machines that fit no category. Every one is keeping your time.</p>
+  <header class="intro"><p class="eyebrow">The collection</p><h2>Twenty plates</h2><p>Every one is keeping your time.</p>
     <p class="tones" aria-label="Colour key"><span class="t-navy">Divers</span><span class="t-oxblood">Chronographs</span><span class="t-green">Dress watches</span><span class="t-brass">Everything else</span></p></header>
   <div class="grid">${W.map((w, i) => `<a class="card t-${tone(w)}" href="#/plate/${w.id}"><div class="thumb">${D.front(w, {})}</div><p class="no">${ROM[i]}</p><p class="k">${w.kind}</p><h3>${w.brand}</h3><p class="m">${w.model}</p><p class="y">${w.year}</p></a>`).join('')}</div>
 </section>`;
@@ -198,14 +198,12 @@ function renderHome() {
 <section class="home">
   <div class="h-hero">
     <div class="h-words">
-      <p class="h-eyebrow">The Horological Archive</p>
       <h1>The art, engineering and history of timekeeping.</h1>
-      <p>Discover the world of mechanical watchmaking through in-depth examinations, detailed technical illustrations and carefully researched horological history.</p>
-      <p>From the intricate architecture of a movement to the finest details of a case, dial and complication, explore the ingenuity, craftsmanship and design that define each timepiece.</p>
+      <p>Twenty vintage watches, drawn as engineering plates. Each one keeps your time.</p>
       <p class="h-motto">Look closer. Understand more.</p>
       <a class="h-btn" href="#/archive">Explore the archive</a>
     </div>
-    <figure class="h-watch">${D.front(omega, {})}<figcaption>Omega Speedmaster, ref. 105.003, 1964. It is keeping your time.</figcaption></figure>
+    <figure class="h-watch">${D.front(omega, {})}<figcaption>Omega Speedmaster, ref. 105.003, 1964.</figcaption></figure>
   </div>
 
   <div class="h-now" aria-label="Your time today">
@@ -214,28 +212,20 @@ function renderHome() {
     <p class="h-now-s"><span><b data-day-gone>0</b> seconds of today spent</span><span><b data-day-left>0</b> left</span></p>
   </div>
 
-  <div class="h-beyond">
-    <h2>Beyond the dial.</h2>
-    <div>
-      <p>A watch is more than an instrument for measuring time. It is a meeting of engineering, craftsmanship, design and human ingenuity, an intricate expression of centuries of horological innovation.</p>
-      <p>The Horological Archive brings these disciplines together through an evolving collection of interactive examinations, technical explorations and historical research.</p>
-    </div>
-  </div>
-
   <div class="h-previews">
     <article class="h-card c1">
       <a class="h-art mv" href="workbench.html" aria-label="Explore the workbench">${D.movement(omega)}</a>
-      <div class="h-txt"><h3>Examine the details.</h3><p>Go beyond the finished timepiece. Explore individual components, uncover the mechanics behind complex movements and examine the engineering and craftsmanship that bring iconic watches to life.</p>
+      <div class="h-txt"><h3>Examine the details.</h3><p>Take a movement apart, part by part.</p>
         <p class="h-links"><a class="h-go" href="workbench.html">Explore the workbench</a><a class="h-go" href="#/exam">Begin an examination</a></p></div>
     </article>
     <article class="h-card c2">
       <a class="h-art four" href="#/archive" aria-label="Browse the plates">${['tanklc', 'royaloak', 'ventura', 'spaceview'].map(id => D.front(by(id), {})).join('')}</a>
-      <div class="h-txt"><h3>Explore the archive.</h3><p>Discover the watches that have shaped horology. Examine their specifications, technical characteristics, distinctive features and historical significance.</p><p>From pioneering innovations to enduring designs, each timepiece tells a story of precision, ingenuity and progress.</p>
+      <div class="h-txt"><h3>Explore the archive.</h3><p>Specifications, features and history for twenty landmark watches.</p>
         <p class="h-links"><a class="h-go" href="#/archive">Browse the plates</a></p></div>
     </article>
     <article class="h-card c3">
       <a class="h-art eras" href="history.html" aria-label="Explore the history">${ERAS.map(e => `<i style="background:${e[1]};color:${e[2]}"><b>${e[0]}</b></i>`).join('')}</a>
-      <div class="h-txt"><h3>Understand the history.</h3><p>Trace the evolution of timekeeping across centuries. Discover the inventions, influential designs, technological breakthroughs and pioneering individuals that have shaped the art of watchmaking.</p><p>From the earliest mechanical clocks to the complexities of modern horology, explore the milestones that define its history.</p>
+      <div class="h-txt"><h3>Understand the history.</h3><p>Five centuries of inventions, designs and the people behind them.</p>
         <p class="h-links"><a class="h-go" href="history.html">Explore the history</a></p></div>
     </article>
   </div>
@@ -245,15 +235,10 @@ function renderHome() {
     <div class="h-time-txt">
       <p class="h-eyebrow">The Nature of Time</p>
       <h2>Beyond the measurement of time.</h2>
-      <p>From the daily passage of the sun to the oscillations of a mechanical balance, explore the rhythms, cycles and scientific principles that shape our understanding of time.</p>
+      <p>From the passage of the sun to the beat of a balance.</p>
       <p class="h-time-live" id="home-sun"></p>
       <a class="h-btn" href="time.html">Explore the nature of time</a>
     </div>
-  </div>
-
-  <div class="h-close">
-    <h2>A closer examination of horology.</h2>
-    <p>An independent exploration of the timepieces, mechanisms, craftsmanship and innovations that have shaped the art and science of timekeeping.</p>
   </div>
 </section>`;
   if (window.Sol) { homeLoc = Sol.guess(); homeDial = Sol.mount(document.getElementById('home-dial')); homeSun(new Date()); }

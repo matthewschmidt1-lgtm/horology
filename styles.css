@@ -273,12 +273,12 @@ a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation
 /* ---------- home ---------- */
 .home { --navy: #14283f; --navy-2: #1f3a59; --brass: #b8975a; --oxblood: #6e2420; --green: #2f4a3c; --cream: #efe6d2; }
 /* full-width colour bands inside the centred page */
-.h-hero, .h-now, .h-close { box-shadow: 0 0 0 100vmax var(--band); clip-path: inset(0 -100vmax); background: var(--band); }
+.h-hero, .h-now { box-shadow: 0 0 0 100vmax var(--band); clip-path: inset(0 -100vmax); background: var(--band); }
 .h-hero { --band: var(--navy); --paper: #14283f; --ink: #efe6d2; --tint: #1f3a59; --tint-2: #2c4f77; --sienna: #b8975a;
   color: var(--cream); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(20px, 5vw, 70px); align-items: center;
   margin-top: calc(-1 * clamp(20px, 4vw, 44px)); padding: clamp(40px, 6vw, 84px) 0 clamp(36px, 5vw, 70px); }
 .h-eyebrow { font-family: var(--mono); font-size: 13px; letter-spacing: .26em; text-transform: uppercase; color: var(--brass); }
-.h-hero h1 { margin: 16px 0 24px; font-family: var(--serif); font-weight: 500; font-size: clamp(40px, 5.4vw, 78px); line-height: 1.02; letter-spacing: -.01em; text-wrap: balance; }
+.h-hero h1 { margin: 0 0 24px; font-family: var(--serif); font-weight: 500; font-size: clamp(40px, 5.4vw, 78px); line-height: 1.02; letter-spacing: -.01em; text-wrap: balance; }
 .h-words > p:not(.h-eyebrow):not(.h-motto) { font-size: clamp(19px, 1.5vw, 22px); line-height: 1.5; max-width: 44ch; color: #d6cdb8; }
 .h-words > p + p { margin-top: 14px; }
 .h-motto { margin-top: 26px !important; font-size: clamp(26px, 2.8vw, 38px); font-style: italic; color: var(--brass); line-height: 1.1; }
@@ -296,10 +296,7 @@ a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation
 .h-now-s b { font-size: 22px; margin-right: 4px; } .h-now-s { gap: 6px 22px !important; justify-content: flex-end; }
 .h-day { height: 8px; border: 1px solid #1d1a16; background: rgba(255, 255, 255, .28); }
 .h-day i { display: block; height: 100%; width: 0; background: #1d1a16; }
-.h-beyond { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(20px, 5vw, 70px); align-items: start; padding: clamp(56px, 9vw, 120px) 0 clamp(40px, 6vw, 80px); }
-.h-beyond h2 { font-family: var(--serif); font-size: clamp(44px, 6.4vw, 92px); font-weight: 500; line-height: .98; color: var(--oxblood); letter-spacing: -.01em; }
-.h-beyond p { font-size: clamp(21px, 1.9vw, 27px); line-height: 1.42; max-width: 36em; } .h-beyond p + p { margin-top: 18px; color: var(--ink-2); }
-.h-beyond > div { border-left: 3px solid var(--brass); padding-left: clamp(18px, 2.4vw, 32px); }
+.h-now + .h-previews { margin-top: clamp(40px, 6vw, 80px); }
 .h-previews { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 26px); }
 .h-card { display: flex; flex-direction: column; background: var(--paper); border: 1px solid var(--ink); }
 .h-card.c1 { --c: var(--oxblood); } .h-card.c2 { --c: var(--green); } .h-card.c3 { --c: var(--navy); }
@@ -320,9 +317,6 @@ a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation
 .h-go:first-child { background: var(--c); color: #efe6d2; }
 .h-go::after { content: "→"; margin-left: 9px; }
 @media (hover: hover) { .h-go:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); } }
-.h-close { --band: var(--green); color: var(--cream); text-align: center; margin-top: clamp(56px, 9vw, 110px); padding: clamp(56px, 8vw, 110px) 0; }
-.h-close h2 { font-family: var(--serif); font-size: clamp(36px, 5.2vw, 72px); font-weight: 500; font-style: italic; line-height: 1.04; text-wrap: balance; }
-.h-close p { margin: 20px auto 0; max-width: 40ch; font-size: clamp(20px, 1.8vw, 25px); line-height: 1.45; color: #cfd6c8; text-wrap: balance; }
 main:has(.home) { padding-bottom: 0; }
 
 /* ---------- site footer ---------- */
@@ -345,7 +339,6 @@ main:has(.home) { padding-bottom: 0; }
   .h-hero { grid-template-columns: 1fr; gap: 26px; }
   .h-watch .fig { height: min(46svh, 420px); }
   .h-now { grid-template-columns: 1fr; gap: 8px; } .h-now-s { justify-content: space-between; }
-  .h-beyond { grid-template-columns: 1fr; gap: 22px; }
   .h-previews { grid-template-columns: 1fr; }
   .h-art { --ah: 230px; }
   .sf-nav { grid-template-columns: 1fr 1fr; }
@@ -434,7 +427,6 @@ main:has(.home) { padding-bottom: 0; }
 
 /* ---------- the Nature of Time on the homepage ---------- */
 .h-time { --band: #0f1826; box-shadow: 0 0 0 100vmax var(--band); clip-path: inset(0 -100vmax); background: var(--band); color: var(--cream); display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(22px, 5vw, 70px); align-items: center; margin-top: clamp(56px, 9vw, 110px); padding: clamp(46px, 7vw, 96px) 0; }
-.h-time + .h-close { margin-top: 0; }
 .h-time-dial { display: block; max-width: 520px; width: 100%; margin: 0 auto; transition: transform .3s ease; }
 @media (hover: hover) { .h-time-dial:hover { transform: scale(1.015); } }
 .h-time-dial:focus-visible { outline: 2px solid var(--cream); outline-offset: 6px; }

@@ -37,8 +37,8 @@ window.HX = {
       title: 'Time leaves the tower',
       dek: 'For two centuries a watch was jewellery that happened to tick. Then one spring, finer than a hair, made it an instrument.',
       figs: [
-        { k: 'drum', cap: 'Drum watch, mid-1500s. An illustrative reconstruction of the type: gilt case, a single hand, and raised studs at each hour for feeling the time in the dark.' },
-        { k: 'verge', cap: 'Pocket watch, late 1600s onward. An illustrative reconstruction: once the balance spring arrived, a minute hand was worth having.' }
+        { k: 'drum', cap: 'Drum watch, mid-1500s. Gilt case, a single hand, and raised studs at each hour for feeling the time in the dark.' },
+        { k: 'verge', cap: 'Pocket watch, late 1600s onward. Once the balance spring arrived, a minute hand was worth having.' }
       ],
       beats: [
         { y: '1400s', h: 'A spring instead of a weight', t: 'Clocks had been driven by falling weights, which kept them on walls and in towers. A coiled spring stores the same energy in a drum the size of a coin. Once a clock had a spring, it could travel.' },
@@ -46,7 +46,7 @@ window.HX = {
         { y: '1530', h: 'The oldest date on a watch', t: 'A gilt sphere now in the Walters Art Museum is engraved with the name of the reformer Philip Melanchthon and the year 1530. The museum calls it the earliest dated watch known. It carries no maker’s mark.', c: [1] },
         { kind: 'inv', h: 'How it kept time, roughly', rows: [['Verge', 'An escapement inherited from tower clocks. It worked, crudely.'], ['Fusee', 'A cone and cord that evened out the pull of the spring as it ran down.'], ['One hand', 'A watch could wander by tens of minutes in a day. Minutes were not worth showing.']] },
         { y: '1541', kind: 'world', h: 'Geneva', t: 'Calvin’s reforms discouraged the wearing of jewellery. Geneva’s goldsmiths, the story goes, turned to an ornament that was still allowed. By 1601 the city’s watchmakers had a guild of their own.' },
-        { y: '1675', f: 1, h: 'The balance spring', t: 'Christiaan Huygens published a spiral spring to govern the balance wheel. Robert Hooke said the idea was his, and the quarrel has never been settled. The result is not in doubt: errors fell from many minutes a day to a few, and watches gained a second hand, for minutes.' },
+        { y: '1675', f: 1, h: 'The balance spring', t: 'Christiaan Huygens published a spiral spring to govern the balance wheel. Robert Hooke said the idea was his, and the quarrel has never been settled. The result is not in doubt: errors fell from many minutes a day to a few, and watches gained a minute hand.' },
         { y: 'Later 1600s', f: 1, kind: 'world', h: 'The waistcoat', t: 'Around the same time the waistcoat came into fashion at the English court. Watches moved off chains and belts and into a pocket, and their cases grew flatter and smoother to suit it.' },
         { kind: 'makers', f: 1, h: 'Who made them', t: 'Not companies yet. Individual masters and their guilds, in Nuremberg and Augsburg, then Blois, Geneva and London.' }
       ]
@@ -55,7 +55,7 @@ window.HX = {
       id: 'e2', from: 1700, to: 1799, range: '1700s', short: '1700s',
       title: 'Ornament and ingenuity',
       dek: 'Enamellers, engravers and chasers made the watch a work of art. Behind the decoration, a handful of men solved its hardest problems.',
-      figs: [{ k: 'verge', cap: 'Verge pocket watch, mid-1700s. An illustrative reconstruction: enamel dial, Roman hours, Arabic minutes, and a square in the dial for the winding key.' }],
+      figs: [{ k: 'verge', cap: 'Verge pocket watch, mid-1700s. Enamel dial, Roman hours, Arabic minutes, and a square in the dial for the winding key.' }],
       beats: [
         { y: '1685', kind: 'world', h: 'Refugees with skills', t: 'When France revoked the Edict of Nantes, Protestant craftsmen left in their thousands. Many settled in Geneva and London, which became the two capitals of watchmaking for the next century.' },
         { y: '1704', h: 'Jewels', t: 'In London, Nicolas Fatio de Duillier and the Debaufre brothers patented a way to pierce rubies for use as bearings. Hard, smooth and almost frictionless: watches still count their jewels.' },
@@ -71,7 +71,7 @@ window.HX = {
       id: 'e3', from: 1800, to: 1899, range: '1800s', short: '1800s',
       title: 'Precision by the thousand',
       dek: 'Railways needed everyone to agree on the time. Factories learned to make accuracy cheap. The watch stopped being a treasure and became equipment.',
-      figs: [{ k: 'railroad', cap: 'Railroad-grade pocket watch, 1890s. An illustrative reconstruction of the type: bold Arabic numerals, an open face, and winding by the crown at twelve.' }],
+      figs: [{ k: 'railroad', cap: 'Railroad-grade pocket watch, 1890s. Bold Arabic numerals, an open face, and winding by the crown at twelve.' }],
       beats: [
         { y: '1810', h: 'A watch for a queen’s wrist', t: 'Breguet’s ledgers record an order from Caroline Murat, Queen of Naples, for a repeating watch on a wristlet of hair and gold thread. Delivered in 1812 and since lost, it is the earliest wristwatch on record. For a century afterwards, a wristwatch was a lady’s bracelet.', c: [4] },
         { y: '1816', h: 'Timing the stars', t: 'Louis Moinet built a pocket instrument that measured sixtieths of a second, for astronomy. It resurfaced only in the 2010s and displaced Nicolas Rieussec’s device of 1821 as the first chronograph. Rieussec keeps the word, though: his machine marked elapsed time in ink, so it wrote time.', c: [5] },
@@ -87,7 +87,7 @@ window.HX = {
       title: 'The watch moves to the wrist',
       dek: 'In 1900 a man with a watch on his wrist was thought eccentric. By 1930 he was simply dressed.',
       figs: [
-        { k: 'trench', cap: 'Trench watch, c. 1915. An illustrative reconstruction of the type: wire lugs, luminous numerals, small seconds.' },
+        { k: 'trench', cap: 'Trench watch, c. 1915. Wire lugs, luminous numerals, small seconds.' },
         { k: 'w:tanklc' }, { k: 'w:reverso' }, { k: 'w:calatrava' }
       ],
       beats: [
@@ -135,7 +135,7 @@ window.HX = {
         { k: 'w:royaloak' }, { k: 'w:a386' }
       ],
       beats: [
-        { y: '25 December 1969', h: 'Astron', t: 'Seiko’s Quartz Astron cost 450,000 yen, about the price of a small car, and kept time to five seconds a month. A sliver of quartz, vibrating thousands of times a second, had taken the place of the balance wheel.', c: [10] },
+        { y: '25 December 1969', h: 'Astron', t: 'Seiko’s Quartz Astron cost 450,000 yen, about the price of a small car, and kept time to five seconds a month.', c: [10] },
         { y: '1972', f: 1, h: 'Numbers that glow', t: 'The Hamilton Pulsar had no hands and no moving parts. Press a button and red digits lit. In gold it cost more than a Rolex. Within a few years a digital watch cost a few dollars.' },
         { kind: 'inv', f: 1, h: 'What quartz did to the shape of a watch', rows: [['Thinner', 'No tall balance, no rotor: the movement is a flat disc.'], ['Not round', 'A digital display has no hands to sweep, so the case can be any shape.'], ['Sealed', 'Nothing to wind, and nothing to service for years.']] },
         { y: '1970 – 1988', f: 1, kind: 'world', h: 'The crisis', t: 'Swiss watchmaking employed about 90,000 people in 1970 and little more than 30,000 by the late 1980s. Of some 1,600 companies, about 600 were left. Quartz was not the only cause, but it was the one nobody could argue with.', c: [11] },
@@ -158,12 +158,12 @@ window.HX = {
         { k: 'smart', cap: 'Smartwatch, 2015 onward. An illustrative outline.' }
       ],
       beats: [
-        { y: '1980s', h: 'Never a quartz', t: 'Jean-Claude Biver relaunched the dormant name of Blancpain on a single promise: there had never been a quartz Blancpain, and there never would be. Being obsolete became the selling point.' },
+        { y: '1980s', h: 'Never a quartz', t: 'Jean-Claude Biver relaunched the dormant name of Blancpain on a single promise: there had never been a quartz Blancpain, and there never would be.' },
         { y: '1994', h: 'Glashütte returns', t: 'After German reunification Walter Lange refounded the family firm that the East German state had taken in 1948. The first new A. Lange & Söhne watches were shown in 1994.' },
         { h: 'The glass back', t: 'Once the movement was the reason to buy, makers put a window in the case. Finishing that had been hidden for two centuries, bevelled and striped and polished by hand, went on show.' },
         { kind: 'inv', h: 'Invented, then adopted, again', c: [13], rows: [['c. 1974', 'George Daniels devises the co-axial escapement, which needs less oil than the lever.'], ['1980', 'He patents it. No manufacturer wants it.'], ['1999', 'Omega puts it into series production.']] },
         { y: '2010s', f: 1, h: 'Looking back', t: 'Makers began to remake their own past. Omega put calibre 321 back into production in 2019. Zenith reissued the A386. Citizen rebuilt the diver that had washed up on an Australian beach. The originals of all three are in this archive.', c: [14], links: [['speedy105003', 'Speedmaster 105.003'], ['a386', 'El Primero A386'], ['challenge', 'Citizen Challenge Diver']] },
-        { y: '2015 – 2019', f: 2, kind: 'world', h: 'The computer on the wrist', t: 'The Apple Watch arrived in 2015. In 2019 an estimated 30.7 million were shipped, against 21.1 million watches from the whole of Switzerland. The mechanical watch hardly noticed. It had stopped competing on usefulness thirty years before.', c: [12] },
+        { y: '2015 – 2019', f: 2, kind: 'world', h: 'The computer on the wrist', t: 'The Apple Watch arrived in 2015. In 2019 an estimated 30.7 million were shipped, against 21.1 million watches from the whole of Switzerland.', c: [12] },
         { kind: 'makers', f: 0, h: 'Who makes them now', t: 'The old houses, most of them inside a few large groups, and a growing number of independent watchmakers working alone or in small workshops.' }
       ]
     }

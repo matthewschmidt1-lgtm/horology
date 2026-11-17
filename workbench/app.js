@@ -23,12 +23,12 @@ $('#parts').innerHTML = groups.map(g => `<h3>${g}</h3><ul>${comps.filter(c => c.
 
 function renderDetail() {
   const c = byId[state.sel];
-  if (!c) { $('#detail').innerHTML = `<p class="kicker">Component explorer</p><h2>Pick a part</h2><p class="lead">Click anything on the watch, or choose from the list below. The Movement view unscrews the back.</p>`; return; }
+  if (!c) { $('#detail').innerHTML = `<p class="kicker">Component explorer</p><h2>Pick a part</h2><p class="lead">Click a part on the watch or in the list.</p>`; return; }
   const row = (k, v) => v ? `<div><dt>${k}</dt><dd>${v}</dd></div>` : '';
   $('#detail').innerHTML = `<p class="kicker">${c.group}<span class="st ${c.status}">${ST[c.status]}</span></p><h2>${c.name}</h2>
     <p class="lead">${c[state.level]}</p>
-    <dl>${row('What it does', c.fn)}</dl>
-    <details><summary>More about this part</summary><dl>${row('Material', c.material)}${row('Where it is', c.location)}${row('Why it matters', c.significance)}</dl></details>
+    ${state.level === 'horologist' ? `<dl>${row('What it does', c.fn)}</dl>` : ''}
+    <details><summary>More about this part</summary><dl>${row('Material', c.material)}${row('Why it matters', c.significance)}</dl></details>
     ${c.related && c.related.length ? `<p class="rel"><span>Related</span>${c.related.filter(r => byId[r]).map(r => `<button type="button" data-part="${r}">${byId[r].name}</button>`).join('')}</p>` : ''}`;
 }
 function select(id, fromScene) {

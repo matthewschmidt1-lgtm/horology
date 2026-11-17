@@ -22,7 +22,7 @@ export default {
   asset: {
     type: 'procedural',
     builder: 'round-chronograph',
-    note: 'Approximate reconstruction built from published dimensions. The case, lugs and every internal part are simplified. This is not a factory model or a scan.',
+    note: 'Case, lugs and every internal part are simplified. Not a factory model or scan.',
     params: { thickness: 14, lugToLug: 47.6, lugWidth: 19, movementDiameter: 27, beatsPerHour: 18000 }
   },
   images: [],                           // no photographs are bundled; Studio mode is a render
@@ -47,7 +47,6 @@ export default {
   ],
 
   history: [
-    { h: 'A note on the name', s: 'D', p: 'The brief for this page calls the watch a “Speedmaster Professional”. The 105.003 dial reads only “Speedmaster”. The word “Professional” arrived with its successor, the 105.012, so this page uses the name on the dial.' },
     { h: 'Production period', s: 'D', p: 'Made from about 1964 to 1969. Casebacks are stamped 105.003-63, -64 or -65 inside.' },
     { h: 'Original purpose', s: 'D', p: 'The Speedmaster was launched in 1957 as a chronograph for motor racing and engineering work. Moving the tachymeter scale from the dial to the bezel was its signature idea. Space was not part of the plan.' },
     { h: 'Design context', s: 'D', p: 'The 105.003 is the last Speedmaster with a symmetrical case and straight lugs. It has no guards around the crown or pushers. It introduced the white baton hands that the model still wears, replacing the leaf-shaped “alpha” hands of the 105.002.' },
@@ -113,7 +112,7 @@ export default {
       beginner: 'A ring that fills the space between the round mechanism and the wider case, so the mechanism cannot shift.',
       horologist: 'Shown to account for the gap between the 27 mm calibre and the case interior. How this reference actually locates and clamps its movement is not documented here, so treat the part as a placeholder.',
       fn: 'Centres and supports the movement in the case.', material: 'Not documented', location: 'Around the movement.',
-      significance: 'None claimed.', related: ['plate', 'case'] },
+      significance: '', related: ['plate', 'case'] },
 
     /* ---------- going train and escapement ---------- */
     { id: 'plate', name: 'Main plate', group: 'Movement', status: 'I', anchor: [-11, -6, 0.2], face: -1,
@@ -135,7 +134,7 @@ export default {
       beginner: 'A go-between wheel that speeds the turning up on its way to the seconds wheel.',
       horologist: 'Intermediate mobile between centre and fourth. Together the two stages multiply one turn per hour into sixty. The split used in the animation, 8 then 7.5, is a typical one and not taken from the calibre’s tooth counts.',
       fn: 'Multiplies speed between the centre and fourth wheels.', material: 'Brass wheel, steel pinion', location: 'Between the centre and fourth wheels.',
-      significance: 'None on its own; it is a link in the chain.', related: ['centre', 'fourth'] },
+      significance: '', related: ['centre', 'fourth'] },
     { id: 'fourth', name: 'Fourth wheel', group: 'Movement', status: 'D',
       beginner: 'This wheel turns once a minute. The small seconds hand on the left of the dial is fixed to it.',
       horologist: 'One turn per minute; its extended pivot carries the running seconds hand at 9. It also carries the chronograph driving wheel, which is how the stopwatch borrows power from the going train.',
@@ -170,17 +169,17 @@ export default {
       beginner: 'A metal cover screwed over the spring drum to hold it in place.',
       horologist: 'Carries the upper barrel pivot and the winding wheels. The outline is a simplified shape, not the calibre’s.',
       fn: 'Supports the barrel.', material: 'Brass, copper-coloured plating', location: 'Over the barrel.',
-      significance: 'None claimed for this simplified form.', related: ['barrel', 'plate'] },
+      significance: '', related: ['barrel', 'plate'] },
     { id: 'train-bridge', name: 'Train bridge', group: 'Movement', status: 'I',
       beginner: 'A metal plate that holds the tops of the turning wheels.',
       horologist: 'Holds the upper pivots of the third, fourth and escape wheels. Simplified outline.',
       fn: 'Supports the going train.', material: 'Brass, copper-coloured plating', location: 'Over the train wheels.',
-      significance: 'None claimed for this simplified form.', related: ['third', 'fourth', 'escape', 'jewels'] },
+      significance: '', related: ['third', 'fourth', 'escape', 'jewels'] },
     { id: 'balance-cock', name: 'Balance cock', group: 'Movement', status: 'I',
       beginner: 'A bridge held at one end only, reaching over the balance wheel to hold its upper pivot.',
       horologist: 'Single-footed bridge carrying the upper balance jewel and the regulator. Simplified outline; the regulator is not modelled.',
       fn: 'Supports and regulates the balance.', material: 'Brass, copper-coloured plating', location: 'Over the balance wheel.',
-      significance: 'None claimed for this simplified form.', related: ['balance', 'hairspring'] },
+      significance: '', related: ['balance', 'hairspring'] },
 
     /* ---------- chronograph ---------- */
     { id: 'column-wheel', name: 'Column wheel', group: 'Chronograph', status: 'D',
@@ -202,16 +201,16 @@ export default {
       beginner: 'Counts the stopwatch’s minutes, up to thirty, on the right-hand small dial.',
       horologist: 'Advanced one tooth per turn of the runner and held by a jumper spring. It sits beneath the 3 o’clock register. The 12-hour recorder is on the dial side of the calibre and is not modelled.',
       fn: 'Counts elapsed minutes.', material: 'Brass', location: 'Under the 3 o’clock register.',
-      significance: 'None on its own.', related: ['chrono-runner', 'dial'] },
+      significance: '', related: ['chrono-runner', 'dial'] },
     { id: 'hammer', name: 'Reset hammer', group: 'Chronograph', status: 'I',
       beginner: 'Press the bottom button and this lever snaps against the stopwatch wheels, knocking the hands back to zero.',
       horologist: 'Strikes the heart cams on the runner and minute recorder; a heart cam’s shape forces it to settle at one angle whichever way it is turned. The column wheel blocks the hammer while the chronograph runs. Simplified shape.',
       fn: 'Returns the chronograph hands to zero.', material: 'Steel', location: 'Across the top layer, between the pusher side and the centre.',
-      significance: 'None claimed for this simplified form.', related: ['column-wheel', 'chrono-runner', 'pushers'] },
+      significance: '', related: ['column-wheel', 'chrono-runner', 'pushers'] },
     { id: 'chrono-bridge', name: 'Chronograph bridge', group: 'Chronograph', status: 'I',
       beginner: 'The topmost bridge, holding the stopwatch wheels in place.',
       horologist: 'Carries the upper pivots of the runner and minute recorder. The real bridge has a distinctive curved form; this is a plain bar.',
       fn: 'Supports the chronograph wheels.', material: 'Brass, copper-coloured plating', location: 'Top of the movement.',
-      significance: 'None claimed for this simplified form.', related: ['chrono-runner', 'minute-recorder'] }
+      significance: '', related: ['chrono-runner', 'minute-recorder'] }
   ]
 };

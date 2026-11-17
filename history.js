@@ -99,9 +99,9 @@ const cites = c => c ? c.map(n => `<a class="cite" href="#src-${n}" aria-label="
 function beat(b, i) {
   const y = b.y ? `<p class="by">${b.y}</p>` : '';
   let inner;
-  if (b.kind === 'inv') inner = `<p class="bk">How it worked</p><h3>${b.h}${cites(b.c)}</h3><dl class="inv">${b.rows.map(r => `<div><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join('')}</dl>${b.note ? `<p class="note">${b.note}</p>` : ''}`;
+  if (b.kind === 'inv') inner = `<h3>${b.h}${cites(b.c)}</h3><dl class="inv">${b.rows.map(r => `<div><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join('')}</dl>${b.note ? `<p class="note">${b.note}</p>` : ''}`;
   else if (b.kind === 'world') inner = `${y}<p class="bk">Meanwhile</p><h3>${b.h}</h3><p>${b.t}${cites(b.c)}</p>`;
-  else if (b.kind === 'makers') inner = `<p class="bk">Makers</p><h3>${b.h}</h3><p>${b.t}</p>`;
+  else if (b.kind === 'makers') inner = `<h3>${b.h}</h3><p>${b.t}</p>`;
   else inner = `${y}<h3>${b.h}</h3><p>${b.t}${cites(b.c)}</p>`;
   if (b.links) inner += `<p class="go">${b.links.map(l => `<a href="${plate(l[0])}">${l[1]}</a>`).join('')}</p>`;
   const m = /\d{4}/.exec(b.y || (b.rows && b.rows[0][0]) || '');
@@ -117,7 +117,7 @@ $('#evo').innerHTML = `<div class="evo-pin">
 
 $('#eras').innerHTML = HX.eras.map((e, n) => `
 <section class="era ${e.id}" id="${e.id}" data-from="${e.from}" data-to="${e.to}" aria-labelledby="${e.id}-t">
-  <header class="era-open"><p class="era-no">Chapter ${n + 1} of ${HX.eras.length}</p><p class="era-range">${e.range}</p><h2 id="${e.id}-t">${e.title}</h2><p class="dek">${e.dek}</p></header>
+  <header class="era-open"><p class="era-range">${e.range}</p><h2 id="${e.id}-t">${e.title}</h2><p class="dek">${e.dek}</p></header>
   <div class="era-body">
     <div class="stage"><div class="stage-in">${e.figs.map((fg, i) => `<figure class="layer${i ? '' : ' on'}" data-i="${i}">${draw(fg.k)}<figcaption>${capOf(fg)}</figcaption>${links(fg.k)}</figure>`).join('')}</div></div>
     <div class="beats">${e.beats.map(beat).join('')}</div>

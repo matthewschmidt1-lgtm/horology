@@ -10,7 +10,7 @@ window.WATCHES = [
   mv:{cal:'1530, later 1520', type:'auto', vph:18000, wind:'Automatic, full rotor', note:'Cal. 1530 beats at 18,000 A/h; the later cal. 1520 at 19,800 A/h. Drawn here at the earlier rate.'},
   back:{type:'fluted', note:'Screw-down Oyster back with fluted edge.'},
   specs:[['Water resistance','200 m / 660 ft'],['Crystal','Domed acrylic'],['Complication','Time only, no date']],
-  notes:['The no-date, non-chronometer Submariner, produced with little change for almost three decades.','Crown guards and a rotating sixty-minute bezel, graduated minute by minute for the first fifteen.'],
+  notes:['The no-date, non-chronometer Submariner, produced with little change for almost three decades.'],
   q:{t:'To what depth was the 5513 rated?', a:'200 m / 660 ft', w:['100 m / 330 ft','300 m / 1,000 ft','610 m / 2,000 ft']}
 },
 {
@@ -74,7 +74,7 @@ window.WATCHES = [
   dial:{dark:false, markers:'roman', text:['CARTIER']},
   hands:'epee', sec:'none', crown:{pos:3, cabochon:true}, strap:'leather',
   mv:{cal:'not specified', type:'manual', vph:18000, wind:'Manual', note:'Early movements were supplied through the European Watch & Clock Co., Cartier’s venture with Edmond Jaeger and LeCoultre. No single calibre is given here; the beat rate is assumed for drawing.'},
-  back:{type:'plainrect', note:'Caseback detail not verified. Shown plain.'},
+  back:{type:'plainrect', note:'Detail not verified; shown plain.'},
   specs:[['Case','Precious metal; brancards with rounded corners'],['Dial','Roman numerals, chemin-de-fer minute track'],['Crown','Set with a sapphire cabochon'],['Hands','Blued steel, sword-shaped']],
   notes:['Louis Cartier’s refinement of the 1917 Tank: softer brancards, the strap flowing straight out of the case.','The plan is traditionally said to follow a First World War tank seen from above, the brancards being the tracks.','Sizes varied across a century of production. The dimensions here are representative, not definitive.'],
   q:{t:'What, by tradition, inspired the Tank’s form?', a:'A First World War tank seen from above', w:['A railway carriage window','A cigarette case','A Roman tablet']}
@@ -87,7 +87,7 @@ window.WATCHES = [
   mv:{cal:'Tavannes, then LeCoultre 410', type:'manual', vph:18000, wind:'Manual', rect:true, note:'The first Reversos used Tavannes movements; LeCoultre’s own shaped calibre followed in 1933. Beat rate assumed for drawing.'},
   back:{type:'plainrect', note:'A blank metal reverse. Turned outward, it shields the crystal.'},
   specs:[['Case','Swivels within its carriage'],['Patent','René-Alfred Chauvot, filed 4 March 1931'],['Decoration','Three gadroons above and below the dial']],
-  notes:['Made for polo players in British India who wanted a crystal that would survive a match.','The case slides sideways in its carriage and turns over completely, presenting a plain steel back.','Original dimensions are given approximately.'],
+  notes:['Made for polo players in British India who wanted a crystal that would survive a match.'],
   q:{t:'Why does the Reverso’s case flip over?', a:'To protect the crystal during polo matches', w:['To show a second time zone','To wind the mainspring','To reveal a hidden portrait']}
 },
 {
@@ -96,7 +96,7 @@ window.WATCHES = [
   dial:{dark:true, markers:'monaco', date:6, subs:[[3,'min30'],[9,'hr12']], subSquare:true, text:['MONACO','HEUER']},
   hands:'baton', sec:'none', chrono:true, crown:{pos:9}, pushers:'pump', strap:'leather',
   mv:{cal:'Calibre 11', type:'microchrono', vph:19800, wind:'Automatic, micro-rotor', note:'The “Chronomatic”: a modular automatic chronograph developed by Heuer, Breitling, Büren and Dubois-Dépraz.'},
-  back:{type:'plainsq', note:'Caseback detail not verified. Shown plain.'},
+  back:{type:'plainsq', note:'Detail not verified; shown plain.'},
   specs:[['Case','Square, water-resistant'],['Registers','30 min at 3 · 12 h at 9 · no running seconds'],['Crown','Left flank, at 9']],
   notes:['Among the first automatic chronographs, and the first in a water-resistant square case.','The crown sits on the left to announce that the watch seldom needs winding.','Worn by Steve McQueen in the 1971 film “Le Mans”.'],
   q:{t:'Where does the crown sit on a Calibre 11 Monaco?', a:'On the left flank, at 9', w:['At 3, between the pushers','At 12, under the strap','On the caseback']}
@@ -118,7 +118,7 @@ window.WATCHES = [
   bezel:{type:'slide', w:1.8}, dial:{dark:true, markers:'arabic', sliderule:true, subs:[[3,'min30'],[6,'hr12'],[9,'sec']], text:['BREITLING','NAVITIMER']},
   hands:'pencil', sec:'sub', chrono:true, crown:{pos:3}, pushers:'pump', strap:'leather',
   mv:{cal:'Venus 178', type:'chrono', vph:18000, wind:'Manual', note:'Column-wheel chronograph. Some of the earliest examples used the Valjoux 72.'},
-  back:{type:'snap', note:'Caseback detail not verified. Shown plain.'},
+  back:{type:'snap', note:'Detail not verified; shown plain.'},
   specs:[['Bezel','Beaded, bidirectional; drives the outer slide-rule scale'],['Scale','Logarithmic circular slide rule'],['Registers','30 min at 3 · 12 h at 6 · seconds at 9']],
   notes:['Developed with the Aircraft Owners and Pilots Association; its name joins “navigation” and “timer”.','The slide rule computes fuel burn, ground speed, climb rate and unit conversions.','The scale drawn here is a true logarithmic one, simplified to its principal figures.'],
   q:{t:'What is the Navitimer’s rotating scale?', a:'A circular slide rule for flight calculations', w:['A decompression table','A second time zone','A tide indicator']}
@@ -129,7 +129,7 @@ window.WATCHES = [
   bezel:{type:'plain', w:1.4}, dial:{dark:false, markers:'baton', flange:'tachy', date:4.5, subs:[[3,'min30'],[6,'hr12'],[9,'sec']], subBig:true, subTints:{3:.34,6:.6,9:.12}, text:['ZENITH','El Primero']},
   hands:'baton', sec:'sub', chrono:true, crown:{pos:3}, pushers:'pump', strap:'leather',
   mv:{cal:'3019 PHC', type:'autochrono', vph:36000, jewels:31, wind:'Automatic, full rotor', size:'13 lignes', note:'Integrated automatic chronograph with column wheel, dividing the second into tenths.'},
-  back:{type:'screw', note:'Caseback detail not verified. Shown plain.'},
+  back:{type:'screw', note:'Detail not verified; shown plain.'},
   specs:[['Dial','Three overlapping registers: light grey, blue, anthracite'],['Complication','Date between 4 and 5'],['Scale','Tachymeter and decimal on the flange']],
   notes:['Announced in January 1969: an integrated, automatic, high-frequency chronograph.','At ten beats a second the seconds hand moves in tenths. Watch the hand on the register at nine.'],
   q:{t:'How fast does the El Primero beat?', a:'36,000 vibrations per hour', w:['18,000 vibrations per hour','21,600 vibrations per hour','28,800 vibrations per hour']}
@@ -140,7 +140,7 @@ window.WATCHES = [
   bezel:{type:'plain', w:1.3}, dial:{dark:true, markers:'polerouter', text:['UNIVERSAL GENÈVE','POLEROUTER']},
   hands:'dauphine', sec:'center', crown:{pos:3, small:true}, strap:'leather',
   mv:{cal:'215 “Microtor”', type:'micro', vph:18000, wind:'Automatic, micro-rotor', note:'The first Polerouters used the bumper cal. 138 SS; the micro-rotor cal. 215 followed in 1955.'},
-  back:{type:'screw', note:'Caseback detail not verified. Shown plain.'},
+  back:{type:'screw', note:'Detail not verified; shown plain.'},
   specs:[['Design','Gérald Genta'],['Case','Twisted “lyre” lugs'],['Dial','Raised outer ring carrying the indices; crosshair']],
   notes:['Commissioned to mark SAS’s polar route between Copenhagen and Los Angeles; first called the Polarouter.','An early work by Gérald Genta, then in his early twenties.','The micro-rotor sits within the movement’s thickness, so the watch stays slim.'],
   q:{t:'Which airline’s polar route gave the Polerouter its name?', a:'SAS', w:['Pan Am','BOAC','KLM']}
@@ -164,7 +164,7 @@ window.WATCHES = [
   mv:{cal:'2121', type:'auto', vph:19800, wind:'Automatic, full rotor', size:'28.4 mm × 3.05 mm', note:'Extra-thin automatic derived from the Jaeger-LeCoultre cal. 920.'},
   back:{type:'bolts', note:'Eight nuts receive the bolts that pass down through bezel, gasket and case.'},
   specs:[['Design','Gérald Genta'],['Bezel','Octagonal, eight hexagonal white-gold bolts'],['Dial','“Petite tapisserie” guilloché'],['Bracelet','Integrated, tapering steel']],
-  notes:['A steel watch priced above gold ones, shown at Basel in 1972.','The bezel bolts are functional: they clamp the case together around its gasket.','No seconds hand; the calibre is barely three millimetres thick.'],
+  notes:['A steel watch priced above gold ones, shown at Basel in 1972.','The bezel bolts are functional: they clamp the case together around its gasket.','No seconds hand.'],
   q:{t:'How many hexagonal bolts hold down the Royal Oak’s bezel?', a:'Eight', w:['Six','Ten','Twelve']}
 },
 {
@@ -206,7 +206,7 @@ window.WATCHES = [
   dial:{dark:true, markers:'ventura', text:['HAMILTON','ELECTRIC']},
   hands:'dauphine', sec:'center', crown:{pos:3, small:true}, strap:'leather',
   mv:{cal:'500', type:'electric', vph:18000, wind:'Battery-driven balance', note:'A coil carried on the balance wheel is impulsed by fixed magnets. Beat rate assumed for drawing. Succeeded by the cal. 505.'},
-  back:{type:'plainshield', note:'Caseback detail not verified. Shown plain.'},
+  back:{type:'plainshield', note:'Detail not verified; shown plain.'},
   specs:[['Design','Richard Arbib'],['Case','Asymmetrical shield, 14 k gold'],['Power','Battery']],
   notes:['The first battery-powered wristwatch offered to the public, announced in January 1957.','Arbib’s case owes more to tail fins than to watchmaking tradition.','Elvis Presley wore one in “Blue Hawaii”.','Case outline and dial ornament are interpretive; overall size is approximate.'],
   q:{t:'What was new about the Ventura in 1957?', a:'It ran on a battery', w:['It was the first automatic','It had the first sapphire crystal','It used a quartz crystal']}

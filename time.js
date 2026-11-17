@@ -6,7 +6,6 @@ const S = window.Sol, $ = s => document.querySelector(s), $$ = s => [...document
 const pad = n => String(n).padStart(2, '0'), f = n => Math.round(n * 100) / 100, mod = (a, n) => ((a % n) + n) % n, R = Math.PI / 180;
 const hms = minutes => { const s = Math.floor(mod(minutes, 1440) * 60); return `${pad(Math.floor(s / 3600))}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`; };
 const dayMonth = (date, tz) => new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', timeZone: tz }).format(date);
-const zoneName = (date, tz) => { try { return new Intl.DateTimeFormat('en', { timeZone: tz, timeZoneName: 'short' }).formatToParts(date).find(p => p.type === 'timeZoneName').value; } catch (e) { return ''; } };
 const COMPASS = ['north', 'north-east', 'east', 'south-east', 'south', 'south-west', 'west', 'north-west'];
 let browserTz = 'UTC'; try { browserTz = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) {}
 
@@ -27,7 +26,6 @@ function render() {
   if (live) shown = new Date();
   const r = dial.set(loc, shown), p = r.parts, ev = r.ev, ps = r.pos; last = r;
   const none = ev.polar === 'day' ? 'The sun does not set' : 'The sun does not rise';
-  $('#r-time').textContent = `${S.clock(shown, loc.tz, live)} ${zoneName(shown, loc.tz)}`;
   $('#r-rise').textContent = ev.rise ? S.clock(ev.rise, loc.tz) : none;
   $('#r-noon').textContent = S.clock(ev.noon, loc.tz);
   $('#r-set').textContent = ev.set ? S.clock(ev.set, loc.tz) : none;
@@ -124,8 +122,8 @@ anat(0);
 /* =================== 4. the measure of time: live read-outs =================== */
 const T0 = performance.now();
 function measure() {
-  const now = new Date(), ps = S.position(now, loc.lat, loc.lon), tai = new Date(now.getTime() + 37000);
-  $('#ms-app').textContent = hms(ps.tst); $('#ms-mean').textContent = hms(ps.mean); $('#ms-sid').textContent = hms(S.sidereal(now, loc.lon));
+  const now = new Date(), tai = new Date(now.getTime() + 37000);
+  $('#ms-sid').textContent = hms(S.sidereal(now, loc.lon));
   $('#ms-tai').textContent = `${pad(tai.getUTCHours())}:${pad(tai.getUTCMinutes())}:${pad(tai.getUTCSeconds())}`;
 }
 setInterval(() => { $('#ms-cs').textContent = Math.floor((performance.now() - T0) / 1000 * 9192631770).toLocaleString('en-US'); }, 90);
