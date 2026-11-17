@@ -198,7 +198,8 @@ function renderHome() {
 <section class="home">
   <div class="h-hero">
     <div class="h-words">
-      <h1>The art, engineering and history of timekeeping.</h1>
+      <h1>Time, given shape.</h1>
+      <p class="h-sub">The art, engineering and history of timekeeping.</p>
       <p>Twenty vintage watches, drawn as engineering plates. Each one keeps your time.</p>
       <p class="h-motto">Look closer. Understand more.</p>
       <a class="h-btn" href="#/archive">Explore the archive</a>
