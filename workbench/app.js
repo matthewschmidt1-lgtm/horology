@@ -14,7 +14,7 @@ $('#w-kicker').textContent = `${watch.brand} · Ref. ${watch.reference} · ${wat
 $('#w-title').innerHTML = `${watch.model} <em>${watch.reference}</em>`;
 $('#caveat').textContent = watch.asset.note;
 document.title = `${watch.brand} ${watch.model} · The Workbench`;
-$('#picker').innerHTML = watches.length > 1 ? watches.map(w => `<a href="?watch=${w.id}" class="${w === watch ? 'on' : ''}"${w === watch ? ' aria-current="true"' : ''}>${w.short || w.model}</a>`).join('') : '';
+$('#picker').innerHTML = watches.length > 1 ? '<span class="pk-label">On the bench</span>' + watches.map(w => `<a href="?watch=${w.id}" class="${w === watch ? 'on' : ''}"${w === watch ? ' aria-current="true"' : ''}><span class="long">${w.short || w.model}</span><span class="short">${w.model}</span></a>`).join('') : '';
 $('#specs').innerHTML = `<table class="wspec">${watch.specs.map(([k, v, s]) => `<tr><th>${k}</th><td>${v}<i class="st ${s}" title="${ST[s]}"></i></td></tr>`).join('')}</table>`;
 $('#history').innerHTML = watch.history.map(h => `<section><h3>${h.h}<i class="st ${h.s}" title="${ST[h.s]}"></i></h3><p>${h.p}</p></section>`).join('');
 const groups = [...new Set(comps.map(c => c.group))];
@@ -113,7 +113,12 @@ $('#zoom-in').addEventListener('click', () => dolly(0.8)); $('#zoom-out').addEve
 $('#t-labels').addEventListener('change', e => { state.labels = e.target.checked; $('#labels').hidden = !state.labels; });
 $('#t-run').addEventListener('change', e => { state.run = e.target.checked; });
 $('#t-slow').addEventListener('change', e => { state.slow = e.target.checked; });
-$('#s-explode').addEventListener('input', e => { state.explode = +e.target.value; });
+$('#s-explode').addEventListener('input', e => {
+  const v = +e.target.value, was = state.explode;
+  // seen straight on, the parts separate towards you and nothing appears to happen: turn to the exploded angle first
+  if (was === 0 && v > 0 && camera && state.view !== 'exploded' && state.view !== 'blueprint') { const f = new THREE.Spherical().setFromVector3(camera.position); if (Math.abs(Math.sin(f.theta)) < 0.6) setView('exploded'); }
+  state.explode = v; $('#s-explode').value = v;
+});
 $('#s-layers').addEventListener('input', e => {
   const v = +e.target.value, was = state.layers;
   if (state.view !== 'movement' && v > 0) setView('movement');

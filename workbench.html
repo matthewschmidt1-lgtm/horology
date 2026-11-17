@@ -70,12 +70,16 @@
     </div>
 
     <div class="tools">
-      <label class="tog"><input type="checkbox" id="t-labels" checked><span>Labels</span></label>
-      <label class="tog"><input type="checkbox" id="t-loupe"><span>Loupe</span></label>
-      <label class="tog"><input type="checkbox" id="t-run" checked><span>Run movement</span></label>
-      <label class="tog"><input type="checkbox" id="t-slow"><span>Slow motion</span></label>
-      <label class="sl"><span>Explode</span><input type="range" id="s-explode" min="0" max="1" step="0.01" value="0"></label>
-      <label class="sl" id="l-layers"><span>Separate layers</span><input type="range" id="s-layers" min="0" max="1" step="0.01" value="0"></label>
+      <div class="slides">
+        <label class="sl" id="l-explode"><span>Explode</span><input type="range" id="s-explode" min="0" max="1" step="0.01" value="0" aria-label="Explode the watch"><em>Apart</em></label>
+        <label class="sl" id="l-layers"><span><b class="long">Separate layers</b><b class="short">Layers</b></span><input type="range" id="s-layers" min="0" max="1" step="0.01" value="0" aria-label="Separate the movement layers"><em>Apart</em></label>
+      </div>
+      <div class="togs">
+        <label class="tog"><input type="checkbox" id="t-labels" checked><span>Labels</span></label>
+        <label class="tog"><input type="checkbox" id="t-loupe"><span>Loupe</span></label>
+        <label class="tog"><input type="checkbox" id="t-run" checked><span><b class="long">Run movement</b><b class="short">Run</b></span></label>
+        <label class="tog"><input type="checkbox" id="t-slow"><span><b class="long">Slow motion</b><b class="short">Slow</b></span></label>
+      </div>
     </div>
 
     <nav class="toolbar" id="toolbar" aria-label="Views">
