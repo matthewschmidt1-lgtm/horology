@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Link preview image source: The Horological Archive</title>
+<!-- Source for og-image.png (1200 x 630). Re-render with headless Chrome from this folder:
+     "Google Chrome" --headless=new --hide-scrollbars --window-size=1200,630 --virtual-time-budget=6000 --screenshot=og-image.png og-image-source.html -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  body { background-color: var(--paper); background-image: none; }
+  .card-og { position: absolute; inset: 22px; border: 1.5px solid var(--ink); outline: 1px solid var(--rule); outline-offset: 7px; display: grid; grid-template-columns: 455px 1fr; }
+  .words { padding: 58px 0 0 54px; display: flex; flex-direction: column; }
+  .words .eb { font-family: var(--mono); font-size: 17px; letter-spacing: .2em; text-transform: uppercase; color: var(--sienna); }
+  .words h1 { margin: 20px 0 0; font-family: var(--serif); font-weight: 500; font-size: 74px; line-height: .98; letter-spacing: -.005em; }
+  .words h1 em { font-style: italic; }
+  .words p { margin: 26px 0 0; font-family: var(--serif); font-size: 28px; line-height: 1.24; color: var(--ink-2); max-width: 372px; text-wrap: balance; }
+  .words .ft { margin-top: auto; padding-bottom: 44px; font-family: var(--mono); font-size: 15px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); }
+  .words .ft span { color: var(--sienna); margin: 0 10px; }
+  .bench { position: relative; display: flex; align-items: center; justify-content: center; padding-right: 18px; }
+  .bench > div { flex: none; }
+  .bench .side { width: 226px; }
+  .bench .mid { width: 350px; margin: 0 -52px; position: relative; z-index: 2; }
+  .bench .fig { overflow: visible; }
+  .rule { position: absolute; left: 0; top: 46px; bottom: 46px; border-left: 1px solid var(--rule); }
+</style>
+</head>
+<body>
+<div class="card-og">
+  <div class="words">
+    <div class="eb">Plates I – XX</div>
+    <h1>The Horological <em>Archive</em></h1>
+    <p>Twenty vintage watches, drawn as engineering plates. Each one keeps your time. Can you name them?</p>
+    <div class="ft">Examination<span>·</span>Archive</div>
+  </div>
+  <div class="bench">
+    <div class="rule"></div>
+    <div class="side" data-w="monaco"></div>
+    <div class="mid" data-w="sub5513"></div>
+    <div class="side" data-w="tanklc"></div>
+  </div>
+</div>
+<script src="data.js"></script>
+<script src="draw.js"></script>
+<script>
+  document.querySelectorAll('[data-w]').forEach(el => { el.innerHTML = Draw.front(WATCHES.find(w => w.id === el.dataset.w), { redact: true }); });
+  // Hands fixed at 10:08:36 so the image is the same every time it is rendered.
+  const A = { h: 304.3, m: 51.6, s: 216 };
+  document.querySelectorAll('[data-hand]').forEach(el => el.setAttribute('transform', `rotate(${A[el.dataset.hand]})`));
+</script>
+</body>
+</html>
