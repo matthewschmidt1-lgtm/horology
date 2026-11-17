@@ -9,6 +9,7 @@ const pad = n => String(n).padStart(2, '0');
 
 /* ---------- the clock: every hand on the page follows the visitor's system time ---------- */
 let lastSec = -1;
+const ARRIVED = performance.now();
 function tick() {
   const now = new Date(), ms = now.getMilliseconds(), s = now.getSeconds(), m = now.getMinutes(), h = now.getHours();
   const t = s + ms / 1000, mA = (m + t / 60) * 6, hA = ((h % 12) + m / 60 + t / 3600) * 30;
@@ -24,7 +25,11 @@ function tick() {
     document.querySelectorAll('[data-clock]').forEach(el => { el.textContent = txt; });
     document.querySelectorAll('[data-date]').forEach(el => { el.textContent = now.getDate(); });
     document.querySelectorAll('[data-daydate]').forEach(el => { el.textContent = `${DAYS[now.getDay()]} ${now.getDate()}`; });
+    const gone = h * 3600 + m * 60 + s, bar = document.querySelector('[data-day-bar]');
+    if (bar) { bar.style.width = (gone / 864).toFixed(2) + '%'; document.querySelector('[data-day-gone]').textContent = gone.toLocaleString('en-US'); document.querySelector('[data-day-left]').textContent = (86400 - gone).toLocaleString('en-US'); }
   }
+  const beats = document.querySelector('[data-beats]');
+  if (beats) beats.textContent = Math.floor((performance.now() - ARRIVED) / 200).toLocaleString('en-US'); // 18,000 A/h is five beats a second
   requestAnimationFrame(tick);
 }
 const refresh = () => { lastSec = -1; };
@@ -180,10 +185,70 @@ function renderPlate(id) {
   refresh();
 }
 
+/* ---------- home ---------- */
+const ERAS = [['1500s', '#15100b', '#d0a857'], ['1700s', '#f4ecdb', '#1c2f4f'], ['1800s', '#e8e2d2', '#151515'], ['1900', '#0e0e0f', '#c9a44c'], ['1940', '#383e2e', '#f0b24a'], ['1970', '#050507', '#ff3b30'], ['Today', '#f8f8f5', '#191919']];
+function renderHome() {
+  const by = id => W.find(w => w.id === id), cal = by('calatrava'), masked = W[Math.floor(Math.random() * W.length)];
+  view.innerHTML = `
+<section class="home">
+  <div class="h-hero">
+    <div class="h-words">
+      <p class="eyebrow">The Horological Archive</p>
+      <h1>It is <span class="h-clock" data-clock>00:00:00</span></h1>
+      <p class="h-lede">It has never been this moment before, and it will not be again.</p>
+      <p class="h-sub">Nobody can say quite what time is. We know only that each of us is given some of it, and that a watch is how we keep count.</p>
+    </div>
+    <figure class="h-watch">${D.front(cal, {})}<figcaption>Patek Philippe Calatrava, 1932. Like every watch on this site, it is keeping your time.</figcaption></figure>
+  </div>
+
+  <div class="h-three">
+    <article>
+      <p class="h-no">I</p><h2>A mystery</h2>
+      <blockquote>“What then is time? If no one asks me, I know.”<cite>Augustine, about the year 400</cite></blockquote>
+      <p>Sixteen centuries on, the best clocks would not lose a second in the age of the universe, and his question is still open.</p>
+    </article>
+    <article>
+      <p class="h-no">II</p><h2>A count</h2>
+      <p>A watch does not know what time is either. It cuts each second into equal beats and counts them.</p>
+      <p class="h-live"><b data-beats>0</b><span>beats of a watch like the one above, since you arrived</span></p>
+    </article>
+    <article>
+      <p class="h-no">III</p><h2>An allowance</h2>
+      <p>Today holds 86,400 seconds.</p>
+      <div class="h-day" role="img" aria-label="How much of today has passed"><i data-day-bar></i></div>
+      <p class="h-split"><span><b data-day-gone>0</b> spent</span><span><b data-day-left>0</b> left</span></p>
+      <p>A life of eighty years holds about two and a half billion. None of them can be saved, lent or earned back.</p>
+    </article>
+  </div>
+
+  <header class="h-ways"><p class="eyebrow">If you have a few minutes to spend</p><h2>Four ways to spend them</h2></header>
+  <div class="h-previews">
+    <a class="h-card" href="#/exam">
+      <div class="h-art">${D.front(masked, { redact: true })}</div>
+      <div class="h-txt"><p class="h-kick">Examination</p><h3>Name the watch</h3><p>Twenty watches with their signatures masked. Read the case, the dial and the way the hands move.</p><span class="h-go">Sit the examination</span></div>
+    </a>
+    <a class="h-card" href="#/archive">
+      <div class="h-art four">${['tanklc', 'royaloak', 'ventura', 'spaceview'].map(id => D.front(by(id), {})).join('')}</div>
+      <div class="h-txt"><p class="h-kick">Archive</p><h3>Twenty plates</h3><p>Each watch drawn as an engineering sheet: front, profile, caseback, exploded view and movement.</p><span class="h-go">Browse the archive</span></div>
+    </a>
+    <a class="h-card" href="workbench.html">
+      <div class="h-art mv">${D.movement(by('speedy105003'))}</div>
+      <div class="h-txt"><p class="h-kick">Workbench</p><h3>Take one apart</h3><p>Turn four watches in three dimensions, open the back, lift the bridges and watch the escapement beat.</p><span class="h-go">Open the workbench</span></div>
+    </a>
+    <a class="h-card" href="history.html">
+      <div class="h-art eras">${ERAS.map(e => `<i style="background:${e[1]};color:${e[2]}"><b>${e[0]}</b></i>`).join('')}</div>
+      <div class="h-txt"><p class="h-kick">History</p><h3>Five centuries in one scroll</h3><p>From a gilt sphere of 1530 to the mechanical revival, in seven eras that each look like their time.</p><span class="h-go">Travel through it</span></div>
+    </a>
+  </div>
+  <p class="h-close">The seconds you spend here are yours either way. We hope these are good ones.</p>
+</section>`;
+  refresh();
+}
+
 function route() {
-  const h = location.hash.replace(/^#\/?/, '') || 'exam', [a, b] = h.split('/');
+  const h = location.hash.replace(/^#\/?/, '') || 'home', [a, b] = h.split('/');
   document.querySelectorAll('.nav a').forEach(el => el.classList.toggle('on', el.dataset.r === (a === 'plate' ? 'archive' : a)));
-  if (a === 'archive') renderArchive(); else if (a === 'plate') renderPlate(b); else renderExam();
+  if (a === 'archive') renderArchive(); else if (a === 'plate') renderPlate(b); else if (a === 'exam') renderExam(); else renderHome();
   window.scrollTo(0, 0);
 }
 /* ---------- figure viewer ---------- */
