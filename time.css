@@ -166,3 +166,8 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
   .sol-num { font-size: 5.4px; } .sol-evt { font-size: 4px; } .sol-phase { font-size: 4px; }
 }
 @media (prefers-reduced-motion: reduce) { .nt * { transition: none !important; } }
+
+/* section introductions with a lead line and a closing line */
+.sec-head p:not(.nt-eyebrow) + p { margin-top: 12px; }
+.sec-head .sec-lead { font-family: var(--serif); font-size: clamp(25px, 2.6vw, 36px) !important; line-height: 1.15 !important; font-style: italic; color: var(--cream) !important; }
+.sec-head .sec-tag { margin-top: 22px !important; font-family: var(--serif); font-size: clamp(25px, 2.6vw, 36px) !important; line-height: 1.15 !important; font-style: italic; color: var(--brass) !important; }
