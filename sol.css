@@ -18,3 +18,11 @@
 
 /* legibility: the dial is smaller on phones and tablets, so its lettering is set larger there */
 @media (max-width: 900px) { .sol-num { font-size: 7.2px; } .sol-card { font-size: 6.8px; } .sol-evt { font-size: 5.2px; } .sol-phase { font-size: 5px; letter-spacing: .12em; } }
+
+/* dial lettering follows the width of the dial itself, so a small dial gets proportionally larger type */
+#dial, #home-dial { container-type: inline-size; }
+.sol-num, .sol-evt { dominant-baseline: central; }
+.sol-num { font-size: 5.6px; } .sol-card { font-size: 5.6px; } .sol-evt { font-size: 5.4px; } .sol-phase { font-size: 5.6px; }
+@media (max-width: 900px) { .sol-num { font-size: 5.6px; } .sol-card { font-size: 5.6px; } .sol-evt { font-size: 5.4px; } .sol-phase { font-size: 5.6px; } }
+@container (max-width: 520px) { .sol-num { font-size: 7px; } .sol-card { font-size: 7px; } .sol-evt { font-size: 6.8px; letter-spacing: .14em; } .sol-phase { font-size: 6.6px; letter-spacing: .08em; } }
+@container (max-width: 380px) { .sol-num { font-size: 8.6px; } .sol-card { font-size: 8.4px; } .sol-evt { font-size: 8.4px; letter-spacing: .12em; } .sol-phase { font-size: 7.6px; letter-spacing: .06em; } }

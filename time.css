@@ -32,17 +32,17 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 .sg { fill: none; stroke-width: 15; }
 .sg-day { stroke: #ead9a4; } .sg-civ { stroke: #c08a55; } .sg-nau { stroke: #6f5f7c; } .sg-ast { stroke: #36406a; } .sg-night { stroke: #141d33; }
 .sol-line { fill: none; stroke: var(--brass); stroke-width: .35; } .sol-tick { stroke: var(--cream); stroke-width: .3; opacity: .7; }
-.sol-num { font-family: var(--mono); font-size: 5.2px; fill: #b9b09b; text-anchor: middle; }
+.sol-num { font-family: var(--mono); fill: #b9b09b; text-anchor: middle; }
 .sol-ev { stroke: var(--cream); stroke-width: .5; } .sol-ev.n { stroke: var(--brass); stroke-width: .7; }
-.sol-evt { font-family: var(--mono); font-size: 5px; letter-spacing: .18em; fill: var(--brass); text-anchor: middle; }
+.sol-evt { font-family: var(--mono); fill: var(--brass); text-anchor: middle; }
 .sol-ground { fill: #0a101c; } .sol-hz { stroke: var(--cream); stroke-width: .3; opacity: .65; }
 .sol-path { fill: none; stroke-width: .7; stroke-linejoin: round; } .sol-path.up { stroke: #ead9a4; } .sol-path.down { stroke: #56607c; stroke-dasharray: 1.4 1.6; }
-.sol-card { font-family: var(--mono); font-size: 5.2px; letter-spacing: .1em; fill: #8d93a6; text-anchor: middle; }
+.sol-card { font-family: var(--mono); fill: #8d93a6; text-anchor: middle; }
 .sol-hand { stroke: var(--cream); stroke-width: .45; }
 .sol-sun-ring { fill: none; stroke: var(--cream); stroke-width: .9; } .sol-sun-ring.down { stroke-dasharray: 1.5 1.5; opacity: .7; }
 .sol-sun.up { fill: #f1dc92; stroke: #0b1220; stroke-width: .5; filter: drop-shadow(0 0 2px rgba(241, 220, 146, .9)); } .sol-sun.down { fill: #0b1220; stroke: #8d93a6; stroke-width: .6; }
 .sol-time { font-family: var(--serif); font-size: 15px; font-weight: 500; fill: var(--cream); text-anchor: middle; font-variant-numeric: lining-nums tabular-nums; font-feature-settings: "lnum" 1, "tnum" 1; }
-.sol-phase { font-family: var(--mono); font-size: 5px; letter-spacing: .12em; fill: var(--brass); text-anchor: middle; }
+.sol-phase { font-family: var(--mono); fill: var(--brass); text-anchor: middle; }
 .dial-key { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; margin: 14px 0 0; padding: 0; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: #a9a08b; }
 .dial-key li { display: flex; align-items: center; gap: 7px; } .dial-key li::before { content: ""; width: 14px; height: 8px; border: 1px solid #56607c; }
 .k-day::before { background: #ead9a4; } .k-civ::before { background: #c08a55; } .k-nau::before { background: #6f5f7c; } .k-ast::before { background: #36406a; } .k-night::before { background: #141d33; }
@@ -163,7 +163,7 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
   .reads dd { font-size: 20px; } .measures, .sounds, .cyc, .nexts { grid-template-columns: 1fr; } .measures li:nth-child(even) { border-left: 0; }
   .three-times dl { grid-template-columns: 1fr; } .mini { grid-template-columns: 1fr; gap: 10px; } .ladder li { grid-template-columns: 1fr; gap: 0; } .ladder b { text-align: left; }
   .prose p { font-size: 19px; } .jump span { width: 100%; margin: 0; } .jump a { padding: 0 11px; }
-  .sol-num { font-size: 7.2px; } .sol-card { font-size: 6.8px; } .sol-evt { font-size: 5.2px; } .sol-phase { font-size: 5px; letter-spacing: .12em; }
+
 }
 @media (prefers-reduced-motion: reduce) { .nt * { transition: none !important; } }
 
@@ -188,3 +188,11 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 .sounds span { font-size: 12.5px; }
 .place-note, .three-times dl p, .nexts span, .method ol { font-size: 16.5px; }
 @media (max-width: 560px) { #anat .i-lab { font-size: 5.4px; letter-spacing: .1em; } }
+
+/* year chart: month letters are real text under the chart, so they no longer stretch or shrink with it */
+.year svg { height: 68px; }
+.y-months { position: relative; height: 16px; margin-top: 3px; font-family: var(--mono); font-size: 11.5px; line-height: 16px; color: #8d93a6; }
+.y-months span { position: absolute; top: 0; transform: translateX(-50%); }
+/* orbit: the side labels break onto two lines, which leaves room for larger lettering */
+#c-orbit .i-lab { font-size: 5.6px; letter-spacing: .1em; }
+@media (max-width: 560px) { #c-orbit .i-lab { font-size: 7.2px; letter-spacing: .06em; } }

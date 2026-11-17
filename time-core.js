@@ -97,7 +97,7 @@ const P = (a, r) => [f(r * Math.sin(a * R)), f(-r * Math.cos(a * R))];
 const ang = minutes => minutes / 1440 * 360 + 180; // midnight at the foot of the dial, noon at the top
 function mount(el, opt = {}) {
   const mini = !!opt.mini;
-  el.innerHTML = `<svg class="sol${mini ? ' mini' : ''}" viewBox="-112 -112 224 224" role="img" aria-label="Solar clock"><g class="sol-static"></g><g class="sol-live"></g></svg>`;
+  el.innerHTML = `<svg class="sol${mini ? ' mini' : ''}" viewBox="${mini ? '-112 -112 224 224' : '-121 -121 242 242'}" role="img" aria-label="Solar clock"><g class="sol-static"></g><g class="sol-live"></g></svg>`;
   const S = el.querySelector('.sol-static'), L = el.querySelector('.sol-live'), svg = el.querySelector('svg');
   let key = '', base = 0, loc = null, south = false, sky = [];
   const skyXY = (alt, az) => { const a = south ? mod(az + 180, 360) - 180 : az - 180, x = (south ? -1 : 1) * a / 125 * 56; return [f(Math.max(-60, Math.min(60, x))), f(10 - alt / 90 * 56)]; };
@@ -109,8 +109,8 @@ function mount(el, opt = {}) {
       s += `<path class="sg sg-${band(position(t, l.lat, l.lon).alt)}" d="M${p0}A90,90 0 0 1 ${p1}"/>`;
     }
     s += `<circle class="sol-line" r="97.5"/><circle class="sol-line" r="82.5"/>`;
-    for (let h = 0; h < 24; h++) { const a = ang(h * 60), q0 = P(a, 82.5), q1 = P(a, h % 3 ? 79.5 : 77); s += `<line class="sol-tick" x1="${q0[0]}" y1="${q0[1]}" x2="${q1[0]}" y2="${q1[1]}"/>`; if (h % 3 === 0 && !mini) { const q = P(a, 71.5); s += `<text class="sol-num" x="${q[0]}" y="${f(q[1] + 2)}">${pad(h)}</text>`; } }
-    const mark = (date, label, cls) => { if (!date) return ''; const a = ang((date.getTime() - base) / 60000), q0 = P(a, 82.5), q1 = P(a, 103), q = P(a, 107.5); return `<line class="sol-ev ${cls}" x1="${q0[0]}" y1="${q0[1]}" x2="${q1[0]}" y2="${q1[1]}"/>` + (mini ? '' : `<text class="sol-evt" x="${q[0]}" y="${f(q[1] + 1.6)}" transform="rotate(${f(a > 90 && a < 270 ? a - 180 : a)} ${q[0]} ${q[1]})">${label}</text>`); };
+    for (let h = 0; h < 24; h++) { const a = ang(h * 60), q0 = P(a, 82.5), q1 = P(a, h % 3 ? 79.5 : 77); s += `<line class="sol-tick" x1="${q0[0]}" y1="${q0[1]}" x2="${q1[0]}" y2="${q1[1]}"/>`; if (h % 3 === 0 && !mini) { const q = P(a, 71.5); s += `<text class="sol-num" x="${q[0]}" y="${q[1]}">${pad(h)}</text>`; } }
+    const mark = (date, label, cls) => { if (!date) return ''; const a = ang((date.getTime() - base) / 60000), q0 = P(a, 82.5), q1 = P(a, 106), q = P(a, 114.5); return `<line class="sol-ev ${cls}" x1="${q0[0]}" y1="${q0[1]}" x2="${q1[0]}" y2="${q1[1]}"/>` + (mini ? '' : `<text class="sol-evt" x="${q[0]}" y="${q[1]}" transform="rotate(${f(a > 90 && a < 270 ? a - 180 : a)} ${q[0]} ${q[1]})">${label}</text>`); };
     s += mark(ev.rise, 'RISE', 'r') + mark(ev.noon, 'NOON', 'n') + mark(ev.set, 'SET', 's');
     // the sky as the visitor would face it: the sun's path for this day, horizon across the middle
     sky = []; let d = '';
@@ -128,7 +128,7 @@ function mount(el, opt = {}) {
       if (k !== key) { key = k; drawStatic(l, p, ev); }
       const ps = position(date, l.lat, l.lon), minutes = (date.getTime() - base) / 60000, a = ang(minutes), q = P(a, 90), h0 = P(a, 64), h1 = P(a, 82), xy = skyXY(ps.alt, ps.az), up = ps.alt > -0.833;
       L.innerHTML = `<line class="sol-hand" x1="${h0[0]}" y1="${h0[1]}" x2="${h1[0]}" y2="${h1[1]}"/><circle class="sol-sun-ring ${up ? 'up' : 'down'}" cx="${q[0]}" cy="${q[1]}" r="5.4"/><circle class="sol-sun ${up ? 'up' : 'down'}" cx="${xy[0]}" cy="${xy[1]}" r="${mini ? 4 : 3.4}"/>`
-        + (mini ? '' : `<text class="sol-time" x="0" y="38">${clock(date, l.tz)}</text><text class="sol-phase" x="0" y="48">${phase(ps.alt, ps.ha).split(',')[0].toUpperCase()}</text>`);
+        + (mini ? '' : `<text class="sol-time" x="0" y="38">${clock(date, l.tz)}</text>${(w => w.length > 1 ? `<text class="sol-phase two" x="0" y="46.5">${w[0]}<tspan x="0" dy="1.08em">${w.slice(1).join(' ')}</tspan></text>` : `<text class="sol-phase" x="0" y="48.5">${w[0]}</text>`)(phase(ps.alt, ps.ha).split(',')[0].toUpperCase().split(' '))}`);
       svg.setAttribute('aria-label', `Solar clock for ${l.name}: ${clock(date, l.tz)}, ${phase(ps.alt, ps.ha).toLowerCase()}. Sunrise ${clock(ev.rise, l.tz)}, solar noon ${clock(ev.noon, l.tz)}, sunset ${clock(ev.set, l.tz)}.`);
       return { parts: p, ev, pos: ps, phase: phase(ps.alt, ps.ha) };
     }
