@@ -254,6 +254,14 @@ $('#cy-t').addEventListener('input', e => { C.year = +e.target.value; drawYear()
 $('#cy-go').addEventListener('click', e => cycToggle('yearOn', e.currentTarget, 'Travel a year', 'Pause'));
 $('#cy-now').addEventListener('click', () => { if (C.yearOn) cycToggle('yearOn', $('#cy-go'), 'Travel a year', 'Pause'); C.year = null; drawYear(); });
 
+/* =================== atmosphere: a still field of stars behind the opening and the universe section =================== */
+function stars(el, n, seed) { // fixed positions from a small seeded generator, so the sky is the same on every visit and never moves
+  let x = seed; const rnd = () => (x = (x * 16807) % 2147483647) / 2147483647; let c = '';
+  for (let i = 0; i < n; i++) { const r = rnd(); c += `<circle cx="${f(rnd() * 100)}%" cy="${f(rnd() * 100)}%" r="${r > 0.95 ? 1.3 : r > 0.7 ? 0.9 : 0.6}" opacity="${f(0.18 + rnd() * 0.5)}"/>`; }
+  el.insertAdjacentHTML('afterbegin', `<svg class="stars" aria-hidden="true">${c}</svg>`);
+}
+stars($('.nt-hero'), 150, 20261); stars($('#universe'), 220, 4711);
+
 /* =================== start =================== */
 setLoc(loc, loc.rough ? 'Placed on the meridian your time zone implies. Choose a place or share your location for a true reading.' : 'Chosen from your time zone. Nothing about your position leaves this page.');
 const present = () => { const n = new Date(); $('#pm-clock').textContent = `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`; };

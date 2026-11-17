@@ -275,3 +275,28 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 @media (max-width: 900px) { .solar-panel, .two.even, .deeper { grid-template-columns: 1fr; } .cyc { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 640px) { .measures.four { grid-template-columns: 1fr; } }
 @media (max-width: 560px) { .cyc { grid-template-columns: 1fr; } .snd-panel { grid-template-columns: 1fr; } .snd-panel #snd-stop { grid-column: 1; grid-row: auto; justify-self: start; } .sun-trio dt { font-size: 11.5px; letter-spacing: .08em; } }
+
+/* ================= atmosphere and scale ================= */
+.nt-hero, .cosmos { position: relative; overflow: hidden; } .nt-hero > *, .cosmos > * { position: relative; }
+.stars { position: absolute !important; inset: 0; width: 100%; height: 100%; max-width: none !important; margin: 0 !important; fill: #efe6d2; pointer-events: none; }
+.nt-hero { padding-bottom: clamp(44px, 7vw, 90px); }
+.nt-hero h1 { font-size: clamp(34px, 4.4vw, 62px); line-height: 1.05; color: #cfc6b1; margin-bottom: 10px; }
+.nt-ask { font-size: clamp(46px, 8vw, 118px); line-height: 1; letter-spacing: -.01em; color: var(--cream); text-wrap: balance; }
+.nt-scale { margin-top: clamp(22px, 3vw, 36px) !important; max-width: 34em !important; margin-left: max(0px, calc((100% - 1180px) / 2)) !important; font-size: clamp(19px, 1.7vw, 24px); line-height: 1.5; color: #cfc6b1; text-wrap: pretty; }
+/* one quiet line at the end of a section */
+.wonder { margin-top: clamp(40px, 6vw, 76px) !important; max-width: 26em !important; text-align: center; font-family: var(--serif); font-style: italic; font-size: clamp(22px, 2.5vw, 32px); line-height: 1.3; color: var(--acc, var(--brass)); text-wrap: balance; }
+.wonder::before { content: ""; display: block; width: 44px; height: 1px; margin: 0 auto 22px; background: currentColor; opacity: .7; }
+.solar .wonder, .cosmos .wonder { color: var(--brass); } .s-cycles .wonder { color: #d9c08a; }
+/* a universe of time */
+.cosmos { background: #0a1019; color: var(--cream); padding-top: clamp(70px, 11vw, 150px); padding-bottom: clamp(60px, 9vw, 120px); }
+.cosmos .sec-head h2 { color: var(--cream); } .cosmos .sec-head p:not(.nt-eyebrow) { color: #cfc6b1; }
+.ages { list-style: none; margin: clamp(30px, 5vw, 56px) auto 0; padding: 0; }
+.ages li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 16px; align-items: baseline; padding: 14px 0 16px; border-top: 1px solid #1f2b42; }
+.ages b { font-family: var(--serif); font-size: clamp(22px, 2.4vw, 30px); font-weight: 500; line-height: 1.1; }
+.ages span { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #a9a08b; text-align: right; }
+.ages i { grid-column: 1 / -1; display: block; height: 7px; margin-top: 8px; width: var(--w, 0%); background: linear-gradient(90deg, #b8975a, #ead9a4); }
+.ages .hair i { width: 1px; background: #ead9a4; }
+.ages-note { margin-top: 18px !important; max-width: 40em !important; margin-left: max(0px, calc((100% - 1180px) / 2)) !important; font-size: 17px; line-height: 1.48; color: #a9a08b; }
+.pm-lead { margin-top: 20px !important; font-family: var(--serif); font-style: italic; font-size: clamp(22px, 2.4vw, 30px); color: #cfc6b1; }
+.present { border-top: 0; background: linear-gradient(#0a1019, var(--night) 40%); }
+@media (max-width: 560px) { .ages li { grid-template-columns: 1fr; } .ages span { text-align: left; } }
