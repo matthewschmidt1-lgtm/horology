@@ -4,15 +4,15 @@
 .sg { fill: none; stroke-width: 15; }
 .sg-day { stroke: #ead9a4; } .sg-civ { stroke: #c08a55; } .sg-nau { stroke: #6f5f7c; } .sg-ast { stroke: #36406a; } .sg-night { stroke: #141d33; }
 .sol-line { fill: none; stroke: #b8975a; stroke-width: .35; } .sol-tick { stroke: #efe6d2; stroke-width: .3; opacity: .7; }
-.sol-num { font-family: var(--mono); font-size: 5.2px; fill: #b9b09b; text-anchor: middle; }
+.sol-num { font-family: var(--mono); font-size: 5.2px; fill: #d2c9b3; text-anchor: middle; }
 .sol-ev { stroke: #efe6d2; stroke-width: .5; } .sol-ev.n { stroke: #b8975a; stroke-width: .7; }
 .sol-evt { font-family: var(--mono); font-size: 5px; letter-spacing: .18em; fill: #b8975a; text-anchor: middle; }
 .sol-ground { fill: #0a101c; } .sol-hz { stroke: #efe6d2; stroke-width: .3; opacity: .65; }
 .sol-path { fill: none; stroke-width: .7; stroke-linejoin: round; } .sol-path.up { stroke: #ead9a4; } .sol-path.down { stroke: #56607c; stroke-dasharray: 1.4 1.6; }
-.sol-card { font-family: var(--mono); font-size: 5.2px; letter-spacing: .1em; fill: #8d93a6; text-anchor: middle; }
+.sol-card { font-family: var(--mono); font-size: 5.2px; letter-spacing: .1em; fill: #b6bbcb; text-anchor: middle; }
 .sol-hand { stroke: #efe6d2; stroke-width: .45; }
 .sol-sun-ring { fill: none; stroke: #efe6d2; stroke-width: .9; } .sol-sun-ring.down { stroke-dasharray: 1.5 1.5; opacity: .7; }
-.sol-sun.up { fill: #f1dc92; stroke: #0b1220; stroke-width: .5; filter: drop-shadow(0 0 2px rgba(241, 220, 146, .9)); } .sol-sun.down { fill: #0b1220; stroke: #8d93a6; stroke-width: .6; }
+.sol-sun.up { fill: #f1dc92; stroke: #0b1220; stroke-width: .5; filter: drop-shadow(0 0 2px rgba(241, 220, 146, .9)); } .sol-sun.down { fill: #0b1220; stroke: #b6bbcb; stroke-width: .6; }
 .sol-time { font-family: var(--serif); font-size: 15px; font-weight: 500; fill: #efe6d2; text-anchor: middle; font-variant-numeric: lining-nums tabular-nums; font-feature-settings: "lnum" 1, "tnum" 1; }
 .sol-phase { font-family: var(--mono); font-size: 5px; letter-spacing: .12em; fill: #b8975a; text-anchor: middle; }
 

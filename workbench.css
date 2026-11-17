@@ -1,7 +1,7 @@
 /* The Interactive Watch Workbench */
 body.wb {
-  --ivory: #EDE6D8; --parchment: #D9CEB9; --charcoal: #242521; --navy: #172C43; --brass: #A88952; --gray: #77766E;
-  --paper: var(--ivory); --ink: var(--charcoal); --ink-2: #5d5c55; --rule: #c4b89f; --sienna: #8a6a2a; --tint: var(--parchment); --tint-2: #b3a78f; --desk: #e3dac8;
+  --ivory: #EDE6D8; --parchment: #D9CEB9; --charcoal: #242521; --navy: #172C43; --brass: #A88952; --gray: #55544e;
+  --paper: var(--ivory); --ink: var(--charcoal); --ink-2: #43423d; --rule: #c4b89f; --sienna: #8a6a2a; --tint: var(--parchment); --tint-2: #b3a78f; --desk: #e3dac8;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   background: var(--desk); font-size: 17px;
 }
@@ -56,7 +56,7 @@ span.st.I::before { border: 1.5px solid var(--gray); box-sizing: border-box; }
 .hud button { min-width: 44px; min-height: 44px; padding: 0 12px; background: var(--ivory); border: 1px solid var(--charcoal); font-size: 13px; font-weight: 500; cursor: pointer; color: var(--charcoal); }
 .hud button:active { background: var(--parchment); }
 .caveat { position: absolute; left: 14px; bottom: 10px; right: 14px; max-width: 520px; font-family: var(--sans); font-size: 11px; line-height: 1.4; color: var(--gray); pointer-events: none; }
-.viewport.real .caveat { color: #a9a698; }
+.viewport.real .caveat { color: #c4c1b3; }
 .hint3d { position: absolute; left: 14px; top: 14px; font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--gray); pointer-events: none; transition: opacity .6s; max-width: calc(100% - 200px); }
 .hint3d.gone { opacity: 0; }
 .fail { position: absolute; left: 14px; top: 14px; right: 14px; z-index: 6; background: var(--ivory); border: 1px solid var(--charcoal); padding: 10px 12px; font-family: var(--sans); font-size: 13px; }
@@ -200,7 +200,7 @@ span.st.I::before { border: 1.5px solid var(--gray); box-sizing: border-box; }
 
 /* ---------- watch tabs: dark bar, brass for the watch on the bench ---------- */
 .picker { background: var(--charcoal); border-bottom: 1px solid var(--charcoal); align-items: stretch; }
-.pk-label { display: inline-flex; align-items: center; padding: 0 16px 0 22px; font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #9d9788; white-space: nowrap; }
+.pk-label { display: inline-flex; align-items: center; padding: 0 16px 0 22px; font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #c2bdaa; white-space: nowrap; }
 .picker a { min-height: 48px; padding: 0 22px; font-family: var(--serif); font-size: 20px; font-style: normal; font-weight: 500; color: #e6dfd0; border-right: 0; border-left: 1px solid #3b3c37; box-shadow: none; }
 .picker a.on { background: var(--brass); color: var(--charcoal); font-weight: 600; box-shadow: none; }
 .picker a.on::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--charcoal); margin-right: 10px; flex: none; }
@@ -315,3 +315,6 @@ span.st { font-size: 11.5px; }
 .bp-note, .rel button, .asset-note { font-size: 13px; }
 #detail dd { font-size: 17px; }
 @media (max-width: 900px) { .caveat { font-size: 12px; } .sl em { font-size: 11.5px; } .toolbar button { font-size: 12px; } }
+
+/* contrast: text that sits on the dark viewport, and brass headings on paper */
+.hint3d { color: #bdbaac; } #parts h3 { color: #6a4f1c; }

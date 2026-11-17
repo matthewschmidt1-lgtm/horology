@@ -77,7 +77,7 @@ function sheet(w) {
     <div><span>Subject</span>${w.brand} ${w.model}</div>
     <div><span>Sheet</span>${ROM[idx]} / XX</div>
     <div><span>Status</span>Modern interpretive drawing</div>
-    <p>Not a manufacturer’s document. ≈ marks an approximate figure.</p>
+    <p>Not a manufacturer’s document. ≈ marks an approximate figure; “n.v.” on a drawing marks a dimension that could not be verified.</p>
   </footer>
 </article>`;
 }
