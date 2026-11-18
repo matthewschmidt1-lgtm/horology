@@ -186,7 +186,8 @@ function renderPlate(id) {
   const i = W.findIndex(w => w.id === id); if (i < 0) return renderArchive();
   const prev = W[(i + W.length - 1) % W.length], next = W[(i + 1) % W.length];
   const pager = `<nav class="pager" aria-label="Plates"><a class="back" href="#/archive" aria-label="Back to all plates">Back</a><a class="pn prev" href="#/plate/${prev.id}" aria-label="Previous plate: ${prev.brand} ${prev.model}"><span>${prev.brand} ${prev.model}</span></a><a class="pn nxt" href="#/plate/${next.id}" aria-label="Next plate: ${next.brand} ${next.model}"><span>${next.brand} ${next.model}</span></a></nav>`;
-  view.innerHTML = pager + sheet(W[i]) + pager.replace('class="pager"', 'class="pager foot"');
+  const ni = (i + 1) % W.length, nextUp = `<a class="next-plate t-${tone(next)}" href="#/plate/${next.id}" aria-label="Next specimen: ${next.brand} ${next.model}"><span class="np-art" aria-hidden="true">${D.front(next, {})}</span><span class="np-txt"><em>Next specimen · ${ni + 1} of ${W.length}</em><b>${next.brand} ${next.model}</b><i>View the plate</i></span></a>`;
+  view.innerHTML = pager + sheet(W[i]) + nextUp + pager.replace('class="pager"', 'class="pager foot"');
   refresh();
 }
 
