@@ -515,3 +515,8 @@ figcaption { font-size: 17px; } figcaption b { font-size: 12px; }
 .h-meaning h2 { max-width: 16em; margin: 14px auto 16px; font-family: var(--serif); font-weight: 500; font-style: italic; font-size: clamp(30px, 4.2vw, 58px); line-height: 1.1; text-wrap: balance; }
 .h-meaning > p:not(.h-eyebrow) { font-size: clamp(21px, 1.6vw, 23px); line-height: 1.5; color: #cfc6b1; margin-bottom: 26px; }
 .h-meaning .h-btn { background: var(--brass); color: #0f1826; }
+
+/* footer: a very dark navy ground on every page */
+.site-foot { background: #081120; }
+.sf-nav, .sf-nav a, .sf-nav.six a { border-color: #22314a !important; }
+@media (hover: hover) { .sf-nav a:hover { background: #101d33; } }
