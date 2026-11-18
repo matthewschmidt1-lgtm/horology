@@ -81,3 +81,13 @@ body.mn { --night: #0a1019; --deep: #060a11; --navy: #14283f; --brass: #b8975a; 
 /* the shared figure-caption style is for the plates; these captions are plain prose */
 .thinkers figcaption { border: 0; margin: 0; padding: 0; max-width: none; font-size: inherit; }
 .thinkers figcaption b { font-family: var(--serif); font-size: inherit; letter-spacing: 0; text-transform: none; margin: 0; }
+
+/* Begin is a real button: it starts the visitor's own count and leads into the page */
+button.mn-cue { background: none; border: 0; cursor: pointer; padding: 14px 0 0; width: max-content; left: 50% !important; right: auto !important; transform: translateX(-50%); font: inherit; font-family: var(--mono); font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); min-height: 44px; }
+@media (hover: hover) { button.mn-cue:hover { color: var(--cream); } }
+/* the present moment: the visitor's own elapsed time */
+.mn-yours { margin-top: 18px !important; font-family: var(--serif); font-style: italic; font-size: 1.3em !important; line-height: 1.25 !important; color: var(--gold) !important; text-wrap: balance; }
+.mn-gone { margin: 14px 0 clamp(44px, 7vw, 80px) !important; color: var(--cream) !important; }
+button.mn-cue { bottom: 34px; padding: 0 26px; min-height: 48px; border: 1px solid var(--brass); font-size: 13px; transition: background .2s, color .2s; }
+button.mn-cue::after { display: none; }
+@media (hover: hover) { button.mn-cue:hover { background: var(--brass); color: var(--night); } }

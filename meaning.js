@@ -27,11 +27,18 @@ else {
 }
 
 /* ---------- the present moment ---------- */
-const pad = n => String(n).padStart(2, '0'), t0 = Date.now();
+/* Not a clock and not a countdown: only the time the visitor has spent here, counted from arrival or from pressing Begin. */
+const pad = n => String(n).padStart(2, '0'); let t0 = Date.now();
+const ONES = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'], TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty'];
+const word = n => n < 20 ? ONES[n] : n < 60 ? TENS[Math.floor(n / 10)] + (n % 10 ? '-' + ONES[n % 10] : '') : String(n);
+const unit = (n, u) => `${word(n)} ${u}${n === 1 ? '' : 's'}`;
 function now() {
-  const n = new Date(), s = Math.floor((Date.now() - t0) / 1000), m = Math.floor(s / 60);
-  $('#mn-clock').textContent = `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
-  $('#mn-here').textContent = s < 5 ? '' : `You have been here for ${m ? `${m} minute${m === 1 ? '' : 's'} and ` : ''}${s % 60} second${s % 60 === 1 ? '' : 's'}.`;
+  const s = Math.floor((Date.now() - t0) / 1000), h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60, sec = s % 60;
+  $('#mn-clock').textContent = `${pad(h)}:${pad(m)}:${pad(sec)}`;
+  const parts = []; if (h) parts.push(unit(h, 'hour')); if (m) parts.push(unit(m, 'minute')); if (sec || !parts.length) parts.push(unit(sec, 'second'));
+  const t = parts.length > 1 ? parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1] : parts[0];
+  $('#mn-here').textContent = s < 1 ? 'A moment of your life.' : t.charAt(0).toUpperCase() + t.slice(1) + ' of your life.';
 }
 now(); setInterval(now, 1000);
+$('#mn-begin').addEventListener('click', () => { t0 = Date.now(); now(); $('.mn-q').scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' }); });
 })();
