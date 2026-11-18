@@ -143,7 +143,9 @@ function renderExam() {
     q2.querySelector('.verdict').textContent = ok ? 'Correct.' : `The answer: ${w.q.a}.`;
     q2.querySelector('.verdict').classList.add(ok ? 'ok' : 'no');
     marks(2);
-    view.querySelector('#reveal').innerHTML = `<p class="reveal-rule">The plate</p>` + sheet(w);
+    const last = n === exam.order.length;
+    view.querySelector('#reveal').innerHTML = `<p class="reveal-rule">The plate</p>` + sheet(w) + `<div class="reveal-next"><p class="marks">Marks <b>${exam.marks}</b> / ${exam.i * 2 + 2} · ${n} of ${exam.order.length}</p><button type="button" class="next" id="next2">${last ? 'See the result' : 'Next specimen'}</button></div>`;
+    view.querySelector('#next2').addEventListener('click', () => view.querySelector('#next').click());
     const nx = view.querySelector('#next'); nx.hidden = false; nx.closest('.exam-foot').classList.add('ready'); nx.focus({ preventScroll: true }); refresh(); bring(q2);
   });
   view.querySelector('#next').addEventListener('click', () => { exam.i++; renderExam(); window.scrollTo(0, 0); });
