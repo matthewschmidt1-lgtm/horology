@@ -8,5 +8,6 @@ import spaceview from './accutron-spaceview.js';
 import royalOak from './royal-oak-5402.js';
 import monaco from './monaco-1133b.js';
 import tank from './tank-louis-cartier.js';
+import daytona from './daytona-6263.js';
 
-export const watches = [speedmaster, submariner, calatrava, elPrimero, spaceview, royalOak, monaco, tank];
+export const watches = [speedmaster, submariner, calatrava, elPrimero, spaceview, royalOak, monaco, tank, daytona];

@@ -500,7 +500,9 @@ const REAL_LIGHT = ".l{fill:none;stroke:#6d6657;stroke-width:.14}.p{fill:#ece6d4
 const TECH = ".l{fill:none;stroke:#242521;stroke-width:.2}.p{fill:#EDE6D8;stroke:#242521;stroke-width:.2}.t{fill:none;stroke:#242521;stroke-width:.1}.hair{fill:none;stroke:#242521;stroke-width:.05}.k{fill:#242521}.tn,.tn2{fill:#D9CEB9;stroke:#242521;stroke-width:.2}.bar{fill:none;stroke:#242521;stroke-width:.5}text{fill:#242521;font-family:Georgia,'Times New Roman',serif}.bz{font-family:Helvetica,Arial,sans-serif;font-weight:bold}";
 function face(w, real) {
   const g = geo(w), R = g.bezR || g.hw;
-  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/>` + bezel(w, g) + dial(w, g, { noHands: true });
+  // A light dial can still carry a black bezel and dark registers (the Daytona): those keep the dark palette.
+  const mixed = real && !w.dial.dark ? `${w.bezel && w.bezel.dark ? '.bzd .tn{fill:#121212;stroke:#2b2b2b}.bzd text{fill:#f0ede2}.bzd .t,.bzd .hair{stroke:#e9e6da}.bzd .bar{stroke:#e9e6da}.bzd .k{fill:#e9e6da}' : ''}${w.dial.subDark ? '.tn2{fill:#161616;stroke:#2b2b2b}' : ''}` : '';
+  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
   return { svg: `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="${-R} ${-R} ${2 * R} ${2 * R}">${s}</svg>`, R, dialR: g.dialR, inR: g.inR, bezelInner: R - (w.bezel ? w.bezel.w : 0), handLen: g.hl };
 }
 
