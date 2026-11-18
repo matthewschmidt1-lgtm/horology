@@ -308,3 +308,6 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 /* the way on, from the present moment to the meaning of time */
 .pm-on { margin-top: clamp(40px, 6vw, 70px) !important; } .pm-on a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border: 1px solid var(--brass); color: var(--cream); text-decoration: none; font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; transition: background .2s, color .2s; } .pm-on a::after { content: "→"; margin-left: 10px; }
 @media (hover: hover) { .pm-on a:hover { background: var(--brass); color: var(--night); } }
+
+/* with the Measure section gone, Sound follows Anatomy: give it the desk ground so the two do not merge */
+.s-sound { background: transparent; } .s-sound .sounds button { background: var(--paper); }

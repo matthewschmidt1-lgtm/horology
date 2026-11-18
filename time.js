@@ -49,7 +49,7 @@ function setLoc(l, note) {
   loc = l; $('#place-name').textContent = l.name;
   $('#place-coord').textContent = `${Math.abs(l.lat).toFixed(2)}° ${l.lat >= 0 ? 'N' : 'S'}, ${Math.abs(l.lon).toFixed(2)}° ${l.lon >= 0 ? 'E' : 'W'}`;
   $('#place-note').textContent = note; sel.value = S.CITIES.some(c => c.name === l.name) ? l.name : '';
-  yearKey = ''; render(); cycles(); measure();
+  yearKey = ''; render(); cycles();
 }
 sel.addEventListener('change', () => { const c = S.CITIES.find(x => x.name === sel.value); if (c) setLoc(c, 'A place you chose. Times are shown in that place’s own zone.'); });
 $('#geo').addEventListener('click', () => {
@@ -115,16 +115,6 @@ function anatFrame(ms) { if (!A.on) return; const dt = ms - A.last; A.last = ms;
 $('#a-t').addEventListener('input', e => anat(+e.target.value));
 $('#a-go').addEventListener('click', e => { A.on = !A.on; e.currentTarget.textContent = A.on ? 'Pause' : 'Play slowly'; e.currentTarget.setAttribute('aria-pressed', A.on); if (A.on) { A.last = performance.now(); requestAnimationFrame(anatFrame); } });
 anat(0);
-
-/* =================== 4. the measure of time: live read-outs =================== */
-const T0 = performance.now();
-function measure() {
-  const now = new Date(), tai = new Date(now.getTime() + 37000);
-  $('#ms-sid').textContent = hms(S.sidereal(now, loc.lon));
-  $('#ms-tai').textContent = `${pad(tai.getUTCHours())}:${pad(tai.getUTCMinutes())}:${pad(tai.getUTCSeconds())}`;
-}
-const caesium = () => { $('#ms-cs').textContent = Math.floor((performance.now() - T0) / 1000 * 9192631770).toLocaleString('en-US'); };
-caesium(); setInterval(caesium, 90);
 
 /* =================== 5. the sound of time: opt-in, synthesised =================== */
 let ctx = null, master = null, stopT = null, noise = null;
@@ -263,7 +253,7 @@ stars($('.nt-hero'), 150, 20261); stars($('#universe'), 220, 4711);
 setLoc(loc, loc.rough ? 'Placed on the meridian your time zone implies. Choose a place or share your location for a true reading.' : 'Chosen from your time zone. Nothing about your position leaves this page.');
 const present = () => { const n = new Date(); $('#pm-clock').textContent = `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`; };
 present();
-setInterval(() => { if (live) render(); measure(); present(); }, 1000);
+setInterval(() => { if (live) render(); present(); }, 1000);
 setInterval(cycles, 60000);
 window.__time = { get loc() { return loc; }, get last() { return last; }, render, setLoc };
 })();
