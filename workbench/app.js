@@ -98,7 +98,7 @@ function setView(v) {
   state.view = v; const bp = v === 'blueprint', def = VIEWS[v] || {};
   $$('#toolbar button').forEach(b => b.classList.toggle('on', b.dataset.view === v));
   $('#blueprint').hidden = !bp; vp.classList.toggle('bp', bp); vp.classList.toggle('mv', v === 'movement');
-  $('#hint3d').hidden = bp || !model; $('#l-layers').classList.toggle('off', v !== 'movement');
+  $('#hint3d').hidden = bp || !model; $('#l-layers').classList.toggle('off', bp); // both sliders are offered in every 3D view; moving Separate layers opens the Movement view by itself
   if (bp || !model) return;
   if (def.style) setStyle(def.style);
   state.explode = def.explode || 0; $('#s-explode').value = state.explode;
