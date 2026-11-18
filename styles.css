@@ -472,3 +472,15 @@ figcaption { font-size: 17px; } figcaption b { font-size: 12px; }
 
 /* contrast: brass lettering on dark grounds uses a lighter brass; fills keep the original */
 .h-time .h-eyebrow, .h-time-live span:first-child, .intro .eyebrow { color: #dcc081 !important; }
+
+/* homepage flow: on phones the hero button sits under the watch; the Nature of Time band follows the hero */
+@media (max-width: 900px) {
+  .h-hero { display: flex; flex-direction: column; gap: 0; } .h-words { display: contents; }
+  .h-hero .h-watch { order: 1; margin-top: 30px; } .h-hero .h-hero-btn { order: 2; align-self: center; margin-top: 22px; }
+}
+.h-now + .h-time { margin-top: 0; } .h-time + .h-previews { margin-top: clamp(44px, 6vw, 84px); }
+.home > .h-previews:last-child { margin-bottom: clamp(48px, 7vw, 90px); }
+/* footer: section names only */
+.sf-nav a { min-height: 0; padding: 20px 18px; justify-content: center; } .sf-nav b { font-size: 23px; }
+@media (max-width: 900px) { .sf-nav a { min-height: 0; padding: 16px 12px; } .sf-nav b { font-size: 21px; } }
+@media (max-width: 900px) { .sf-nav b::after { content: none; } }

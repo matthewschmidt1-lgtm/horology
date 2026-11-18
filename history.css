@@ -316,3 +316,8 @@ body[data-era="e5"] { --hxbg: #383e2e; } body[data-era="e6"] { --hxbg: #050507; 
 
 /* very short phones: the opening sequence keeps its smaller description so the pinned facts stay on screen */
 @media (max-width: 900px) and (max-height: 620px) { .evo-step > p:not(.evo-y) { font-size: 17px; } }
+
+/* footer: section names only */
+.hx-foot-nav a { min-height: 0; padding-top: 20px; padding-bottom: 20px; justify-content: center; } .hx-foot-nav b { font-size: 23px; }
+@media (max-width: 760px) { .hx-foot-nav a { min-height: 0; padding: 16px 12px; } .hx-foot-nav b { font-size: 21px; } }
+@media (max-width: 760px) { .hx-foot-nav b::after { content: none; } }

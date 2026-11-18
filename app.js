@@ -201,7 +201,7 @@ function renderHome() {
       <h1>The art, engineering and history of timekeeping.</h1>
       <p>Twenty vintage watches, drawn as engineering plates. Each one keeps your time.</p>
       <p class="h-motto">Look closer. Understand more.</p>
-      <a class="h-btn" href="#/archive">Explore the archive</a>
+      <a class="h-btn h-hero-btn" href="workbench.html">Explore the workbench</a>
     </div>
     <figure class="h-watch">${D.front(omega, {})}<figcaption>Omega Speedmaster, ref. 105.003, 1964.</figcaption></figure>
   </div>
@@ -210,6 +210,18 @@ function renderHome() {
     <p class="h-now-t"><span>Your time</span><b data-clock>00:00:00</b></p>
     <div class="h-day" role="img" aria-label="How much of today has passed"><i data-day-bar></i></div>
     <p class="h-now-s"><span><b data-day-gone>0</b> seconds of today spent</span><span><b data-day-left>0</b> left</span></p>
+  </div>
+
+  <div class="h-time">
+    <a class="h-time-dial" id="home-dial" href="time.html" aria-label="Open the living solar clock"></a>
+    <div class="h-time-txt">
+      <p class="h-eyebrow">The Nature of Time</p>
+      <p class="h-time-pre">Beyond the measurement of time.</p>
+      <h2>What is time itself?</h2>
+      <p>From the turning sky to the vibrations of an atom, and a universe that was keeping time long before us.</p>
+      <p class="h-time-live" id="home-sun"></p>
+      <a class="h-btn" href="time.html">Explore the nature of time</a>
+    </div>
   </div>
 
   <div class="h-previews">
@@ -228,18 +240,6 @@ function renderHome() {
       <div class="h-txt"><h3>Understand the history.</h3><p>Five centuries of inventions, designs and the people behind them.</p>
         <p class="h-links"><a class="h-go" href="history.html">Explore the history</a></p></div>
     </article>
-  </div>
-
-  <div class="h-time">
-    <a class="h-time-dial" id="home-dial" href="time.html" aria-label="Open the living solar clock"></a>
-    <div class="h-time-txt">
-      <p class="h-eyebrow">The Nature of Time</p>
-      <p class="h-time-pre">Beyond the measurement of time.</p>
-      <h2>What is time itself?</h2>
-      <p>From the turning sky to the vibrations of an atom, and a universe that was keeping time long before us.</p>
-      <p class="h-time-live" id="home-sun"></p>
-      <a class="h-btn" href="time.html">Explore the nature of time</a>
-    </div>
   </div>
 </section>`;
   if (window.Sol) { homeLoc = Sol.guess(); homeDial = Sol.mount(document.getElementById('home-dial')); homeSun(new Date()); }
