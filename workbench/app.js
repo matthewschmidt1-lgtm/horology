@@ -47,6 +47,12 @@ function showPane(p) { $$('.pane').forEach(x => x.classList.toggle('show', x.dat
 $('.mtabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) showPane(b.dataset.show); });
 showPane('parts'); renderDetail();
 { const on = $('#picker .on'), pk = $('#picker'); if (on) pk.scrollLeft = on.offsetLeft - (pk.clientWidth - on.offsetWidth) / 2; }
+/* ---------- an invitation at the foot of each panel, so the page never ends on a dead end ---------- */
+if (watches.length > 1) {
+  const i = watches.indexOf(watch), next = watches[(i + 1) % watches.length], rest = watches.filter(w => w !== watch && w !== next);
+  const html = `<p class="kicker">Next on the bench</p><a class="wbn-main" href="?watch=${next.id}"><b>${next.short || next.model}</b><span>${next.year}</span></a>` + (rest.length ? `<p class="wbn-rest">Or ${rest.map(w => `<a href="?watch=${w.id}">${w.short || w.model}</a>`).join(' or ')}</p>` : '');
+  document.querySelectorAll('.pane').forEach(pane => { const n = document.createElement('nav'); n.className = 'wb-next'; n.setAttribute('aria-label', 'Another watch'); n.innerHTML = html; pane.appendChild(n); });
+}
 
 /* ---------- blueprint sheet (2D, from the archive plate) ---------- */
 const LEG = { crystal: 'crystal', bezel: 'bezel', hands: 'hands', dial: 'dial', movement: 'plate', 'case middle': 'case', crown: 'crown', caseback: 'caseback' };
@@ -241,3 +247,15 @@ function frame(ms) {
   }
 }
 start3D().catch(err => { console.error(err); $('#fail').hidden = false; $$('#toolbar button').forEach(b => { if (b.dataset.view !== 'blueprint') b.disabled = true; }); setView('blueprint'); requestAnimationFrame(function f() { tick2d(); requestAnimationFrame(f); }); });
+
+/* ---------- the next watch: an invitation at the end of each panel, so the page never ends in a dead end ---------- */
+if (watches.length > 1) {
+  const nx = watches[(watches.indexOf(watch) + 1) % watches.length], rest = watches.filter(w => w !== watch && w !== nx)
+  const plate = (window.WATCHES || []).find(w => w.id === nx.archiveId)
+  const html = `<aside class="wb-next" aria-label="More watches"><p class="kicker">Next on the bench</p>
+    <a class="wn-main" href="?watch=${nx.id}">${plate && Draw ? `<span class="wn-art" aria-hidden="true">${Draw.front(plate, {})}</span>` : ''}<span class="wn-txt"><b>${nx.brand} ${nx.model}</b><em>Ref. ${nx.reference} · ${nx.year}</em><i>Take it apart</i></span></a>
+    ${rest.length ? `<p class="wn-rest"><span>Or try</span>${rest.map(w => `<a href="?watch=${w.id}">${w.short || w.model}</a>`).join('')}</p>` : ''}</aside>`
+  document.querySelectorAll('.pane').forEach(p => p.insertAdjacentHTML('beforeend', html))
+  const A = { h: 304.3, m: 51.6, s: 216 } // the small drawing shows a fixed ten past ten
+  document.querySelectorAll('.wn-art [data-hand]').forEach(el => el.setAttribute('transform', `rotate(${A[el.dataset.hand]})`))
+}

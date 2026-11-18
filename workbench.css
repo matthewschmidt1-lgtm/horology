@@ -318,3 +318,26 @@ span.st { font-size: 11.5px; }
 
 /* contrast: text that sits on the dark viewport, and brass headings on paper */
 .hint3d { color: #bdbaac; } #parts h3 { color: #6a4f1c; }
+
+/* the next watch, at the end of each panel */
+.wb-next { margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--charcoal); }
+.wn-main { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; align-items: center; margin-top: 12px; padding: 14px 16px; background: var(--charcoal); color: #EDE6D8; text-decoration: none; transition: background .2s; }
+.wn-art { display: block; --paper: #242521; --ink: #EDE6D8; --tint: #34352f; --tint-2: #4a4b44; --sienna: #C9A968; } .wn-art .fig { display: block; width: 100%; height: auto; }
+.wn-txt { display: grid; gap: 4px; } .wn-txt b { font-family: var(--serif); font-size: 25px; font-weight: 500; line-height: 1.08; }
+.wn-txt em { font-family: var(--mono); font-size: 12px; font-style: normal; letter-spacing: .08em; text-transform: uppercase; color: #c4c1b3; }
+.wn-txt i { justify-self: start; margin-top: 8px; padding: 9px 12px; background: var(--brass); color: var(--charcoal); font-family: var(--sans); font-size: 12px; font-style: normal; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; } .wn-txt i::after { content: " →"; }
+@media (hover: hover) { .wn-main:hover { background: #33342f; } }
+.wn-main:focus-visible, .wn-rest a:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+.wn-rest { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.wn-rest span { font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--gray); margin-right: 2px; }
+.wn-rest a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; border: 1px solid var(--charcoal); color: var(--ink); text-decoration: none; font-family: var(--serif); font-size: 18px; }
+@media (hover: hover) { .wn-rest a:hover { background: var(--charcoal); color: #EDE6D8; } }
+
+/* the foot of each panel invites the visitor on to another watch */
+.wb-next { margin-top: 34px; padding-top: 20px; border-top: 1px solid var(--charcoal); }
+.wbn-main { display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 64px; margin-top: 10px; padding: 14px 16px; background: var(--charcoal); color: #f2ecdf; text-decoration: none; transition: background .2s; }
+.wbn-main b { font-family: var(--serif); font-size: 23px; font-weight: 500; line-height: 1.1; } .wbn-main b::after { content: " \2192"; color: var(--brass); }
+.wbn-main span { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; color: #c2bdaa; flex: none; }
+@media (hover: hover) { .wbn-main:hover { background: #33342f; } }
+.wbn-main:focus-visible, .wbn-rest a:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+.wbn-rest { margin-top: 12px; font-family: var(--serif); font-size: 18px; line-height: 1.5; color: var(--ink-2); } .wbn-rest a { color: var(--ink); text-underline-offset: 4px; display: inline-block; padding: 6px 0; }
