@@ -47,12 +47,6 @@ function showPane(p) { $$('.pane').forEach(x => x.classList.toggle('show', x.dat
 $('.mtabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) showPane(b.dataset.show); });
 showPane('parts'); renderDetail();
 { const on = $('#picker .on'), pk = $('#picker'); if (on) pk.scrollLeft = on.offsetLeft - (pk.clientWidth - on.offsetWidth) / 2; }
-/* ---------- an invitation at the foot of each panel, so the page never ends on a dead end ---------- */
-if (watches.length > 1) {
-  const i = watches.indexOf(watch), next = watches[(i + 1) % watches.length], rest = watches.filter(w => w !== watch && w !== next);
-  const html = `<p class="kicker">Next on the bench</p><a class="wbn-main" href="?watch=${next.id}"><b>${next.short || next.model}</b><span>${next.year}</span></a>` + (rest.length ? `<p class="wbn-rest">Or ${rest.map(w => `<a href="?watch=${w.id}">${w.short || w.model}</a>`).join(' or ')}</p>` : '');
-  document.querySelectorAll('.pane').forEach(pane => { const n = document.createElement('nav'); n.className = 'wb-next'; n.setAttribute('aria-label', 'Another watch'); n.innerHTML = html; pane.appendChild(n); });
-}
 
 /* ---------- blueprint sheet (2D, from the archive plate) ---------- */
 const LEG = { crystal: 'crystal', bezel: 'bezel', hands: 'hands', dial: 'dial', movement: 'plate', 'case middle': 'case', crown: 'crown', caseback: 'caseback' };
