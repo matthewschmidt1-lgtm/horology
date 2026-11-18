@@ -1,0 +1,83 @@
+/* The Meaning of Time. One long, quiet column: night, then the turning sky, then lamplight, then night again. */
+body.mn { --night: #0a1019; --deep: #060a11; --navy: #14283f; --brass: #b8975a; --gold: #dcc081; --cream: #efe6d2; --soft: #cfc6b1; background: var(--night); }
+.mn main { max-width: none; margin: 0; padding: 0; color: var(--cream); }
+.mn main > section { position: relative; overflow: hidden; padding-left: max(6vw, 22px); padding-right: max(6vw, 22px); }
+.mn main > section > * { position: relative; }
+.mn-sky { position: absolute !important; inset: 0; pointer-events: none; } .mn-sky svg { display: block; width: 100%; height: 100%; fill: var(--cream); }
+.mn h2 { font-family: var(--serif); font-weight: 500; font-style: italic; font-size: clamp(34px, 5vw, 66px); line-height: 1.04; text-wrap: balance; }
+.mn-col { max-width: 30em; margin: 0 auto; font-size: clamp(21px, 2vw, 27px); }
+.mn-col h2 { margin-bottom: clamp(26px, 4vw, 44px); }
+.mn-col p { font-size: 1em; line-height: 1.55; text-wrap: pretty; } .mn-col p + p { margin-top: 1.05em; }
+.mn-em { font-style: italic; font-size: 1.22em !important; line-height: 1.34 !important; text-wrap: balance; }
+
+/* text arrives as it is reached (only when the script is running and motion is welcome) */
+.mn-js .rv { opacity: 0; transform: translateY(18px); transition: opacity 1.1s ease, transform 1.1s ease; }
+.mn-js .rv.in { opacity: 1; transform: none; }
+
+/* ---------- opening ---------- */
+.mn-open { min-height: calc(100svh - var(--mast-h, 77px)); display: grid; align-content: center; justify-items: center; text-align: center; padding-top: 60px; padding-bottom: 90px; background: radial-gradient(ellipse 70% 60% at 50% 38%, #16263c 0%, var(--night) 62%, var(--deep) 100%); }
+.mn-open h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(46px, 9vw, 132px); line-height: .98; letter-spacing: -.01em; text-wrap: balance; }
+.mn-beyond { margin-top: clamp(22px, 3.4vw, 40px); font-family: var(--serif); font-style: italic; font-size: clamp(22px, 2.9vw, 38px); line-height: 1.3; color: var(--gold); }
+.mn-beyond span { display: inline-block; }
+.mn-cue { position: absolute !important; left: 0; right: 0; bottom: 30px; font-family: var(--mono); font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: var(--soft); }
+.mn-cue::after { content: ""; display: block; width: 1px; height: 30px; margin: 10px auto 0; background: linear-gradient(var(--soft), transparent); }
+
+/* ---------- the question and three answers ---------- */
+.mn-q { padding-top: clamp(90px, 14vw, 190px); padding-bottom: clamp(80px, 12vw, 160px); background: var(--night); text-align: center; }
+.mn-ask { font-size: clamp(52px, 10vw, 150px) !important; line-height: .98 !important; }
+.mn-lead { max-width: 30em; margin: clamp(26px, 4vw, 46px) auto 0; font-size: clamp(21px, 2vw, 27px); line-height: 1.55; color: var(--soft); text-wrap: pretty; }
+.thinkers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(26px, 4vw, 56px); max-width: 1120px; margin: clamp(60px, 9vw, 120px) auto 0; }
+.thinkers figure { margin: 0; padding-top: 26px; border-top: 1px solid rgba(184, 151, 90, .55); }
+.thinkers svg { display: block; width: min(190px, 60%); height: auto; margin: 0 auto 22px; overflow: visible; }
+.t-face { fill: none; stroke: var(--cream); stroke-width: .9; } .t-ticks { fill: none; stroke: var(--soft); stroke-width: .8; stroke-linecap: round; }
+.t-hand { stroke: var(--gold); stroke-width: 1.5; stroke-linecap: round; } .t-pin { fill: var(--gold); }
+.t-flow { fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 5 7; }
+.thinkers p { font-size: clamp(21px, 1.8vw, 24px); line-height: 1.45; text-wrap: pretty; } .thinkers b { font-weight: 600; color: var(--cream); }
+.thinkers figcaption { color: var(--soft); }
+.thinkers small { display: block; margin-top: 12px; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); } .thinkers small i { font-style: normal; }
+.mn-turn { max-width: 24em; margin: clamp(60px, 9vw, 120px) auto 0; font-family: var(--serif); font-style: italic; font-size: clamp(25px, 3vw, 40px); line-height: 1.3; text-wrap: balance; }
+@keyframes mn-spin { to { transform: rotate(360deg); } }
+@keyframes mn-flow { to { stroke-dashoffset: -48; } }
+@media (prefers-reduced-motion: no-preference) {
+  .spin { transform-origin: 0 0; animation: mn-spin 9s linear infinite; } .spin.b { animation-duration: 15s; }
+  .t-flow { animation: mn-flow 3.6s linear infinite; }
+}
+
+/* ---------- a universe in motion: the sky wheels, very slowly ---------- */
+.mn-universe { padding-top: clamp(110px, 18vw, 240px); padding-bottom: clamp(110px, 18vw, 240px); background: var(--deep); }
+.mn-wheel { position: absolute !important; left: 50%; top: 50%; width: 190vmax; height: 190vmax; margin: -95vmax 0 0 -95vmax; pointer-events: none; }
+.mn-wheel svg { display: block; width: 100%; height: 100%; fill: var(--cream); }
+@media (prefers-reduced-motion: no-preference) { .mn-wheel { animation: mn-spin 900s linear infinite; } }
+.mn-universe .mn-col p:not(.mn-em) { color: var(--soft); } .mn-universe .mn-em { color: var(--gold); }
+.mn-universe::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(transparent, #1a1611); pointer-events: none; }
+
+/* ---------- the human experience: lamplight ---------- */
+.mn-human { padding-top: clamp(100px, 16vw, 210px); padding-bottom: clamp(100px, 16vw, 210px); background: radial-gradient(ellipse 80% 70% at 50% 45%, #f4ead2 0%, #e6d9bb 60%, #cdbb94 100%); color: #1d1a16; }
+.mn-human h2 { color: #6e2420; } .mn-human .mn-em { color: #14283f; }
+
+/* ---------- the present moment ---------- */
+.mn-present { padding-top: clamp(100px, 16vw, 210px); padding-bottom: clamp(90px, 14vw, 180px); background: linear-gradient(#1a2a40, var(--navy) 30%, var(--night)); text-align: center; }
+.mn-present .mn-col p:not(.mn-em):not(.mn-clock):not(.mn-here) { color: var(--soft); }
+.mn-clock { margin-top: clamp(40px, 6vw, 70px) !important; font-family: var(--serif); font-weight: 500; font-size: clamp(60px, 13vw, 170px) !important; line-height: 1 !important; color: var(--cream); font-variant-numeric: lining-nums tabular-nums; font-feature-settings: "lnum" 1, "tnum" 1; }
+.mn-here { margin: 14px 0 clamp(40px, 6vw, 70px) !important; min-height: 1.6em; font-family: var(--mono); font-size: 13px !important; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.mn-present .mn-em { color: var(--cream); } .mn-present .mn-em + .mn-em { color: var(--gold); }
+
+/* ---------- closing ---------- */
+.mn-close { padding-top: clamp(120px, 20vw, 260px); padding-bottom: clamp(70px, 10vw, 120px); background: radial-gradient(ellipse 70% 55% at 50% 30%, #16263c 0%, var(--night) 60%, var(--deep) 100%); text-align: center; }
+.mn-last { max-width: 17em; margin: 0 auto; font-family: var(--serif); font-weight: 500; font-size: clamp(34px, 6vw, 84px); line-height: 1.12; text-wrap: balance; }
+.mn-last span { display: block; } .mn-last span + span { margin-top: .35em; } .mn-last span:last-child { font-style: italic; color: var(--gold); }
+.mn-go { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: clamp(70px, 10vw, 130px); }
+.mn-go a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; border: 1px solid var(--brass); color: var(--cream); text-decoration: none; font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; transition: background .2s, color .2s; }
+.mn-go a::after { content: "→"; margin-left: 10px; }
+@media (hover: hover) { .mn-go a:hover { background: var(--brass); color: var(--night); } }
+.mn :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.mn-note { max-width: 44em; margin: clamp(50px, 7vw, 90px) auto 0; text-align: left; }
+.mn-note summary { display: inline-flex; align-items: center; min-height: 44px; font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); cursor: pointer; list-style: none; }
+.mn-note summary::-webkit-details-marker { display: none; } .mn-note summary::after { content: "+"; margin-left: 10px; font-size: 15px; } .mn-note[open] summary::after { content: "\2212"; }
+.mn-note p { margin-top: 10px; font-size: 17px; line-height: 1.5; color: var(--soft); }
+
+@media (max-width: 800px) { .thinkers { grid-template-columns: 1fr; max-width: 26em; } .thinkers svg { width: 150px; } }
+@media (prefers-reduced-motion: reduce) { .mn * { transition: none !important; animation: none !important; } }
+/* the shared figure-caption style is for the plates; these captions are plain prose */
+.thinkers figcaption { border: 0; margin: 0; padding: 0; max-width: none; font-size: inherit; }
+.thinkers figcaption b { font-family: var(--serif); font-size: inherit; letter-spacing: 0; text-transform: none; margin: 0; }

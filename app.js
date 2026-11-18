@@ -244,6 +244,12 @@ function renderHome() {
         <p class="h-links"><a class="h-go" href="history.html">Explore the history</a></p></div>
     </article>
   </div>
+  <div class="h-meaning">
+    <p class="h-eyebrow">The Meaning of Time</p>
+    <h2>Beyond the clocks. Beyond the measurements. Beyond the moment.</h2>
+    <p>A short journey through one of humanity’s oldest questions.</p>
+    <a class="h-btn" href="meaning.html">Consider the meaning of time</a>
+  </div>
 </section>`;
   if (window.Sol) { homeLoc = Sol.guess(); homeDial = Sol.mount(document.getElementById('home-dial')); homeSun(new Date()); }
   // a still field of stars behind the Nature of Time band, as on that page: fixed positions, no motion

@@ -502,3 +502,16 @@ figcaption { font-size: 17px; } figcaption b { font-size: 12px; }
 .reveal-next .next { min-height: 52px; padding: 0 26px; background: var(--brass); border-color: var(--brass); color: #1d1a16; font-family: var(--mono); font-size: 14px; letter-spacing: .14em; text-transform: uppercase; }
 .reveal-next .next::after { content: "→"; margin-left: 12px; }
 @media (max-width: 560px) { .reveal-next .next { width: 100%; } }
+
+/* six sections: menus, footers and the homepage's closing band for the Meaning of Time */
+.sf-nav.six { grid-template-columns: repeat(3, minmax(0, 1fr)); } .sf-nav.six a { border-top: 1px solid #45403a; } .sf-nav.six a:nth-child(-n+3) { border-top: 0; } .sf-nav.six a:nth-child(3n+1) { border-left: 0; padding-left: 0; }
+@media (max-width: 900px) { .sf-nav.six { grid-template-columns: 1fr 1fr; } .sf-nav.six a:nth-child(n) { border-top: 1px solid #45403a; border-left: 0; padding-left: 12px; } .sf-nav.six a:nth-child(-n+2) { border-top: 0; } .sf-nav.six a:nth-child(even) { border-left: 1px solid #45403a; } }
+@media (max-width: 1180px) and (min-width: 901px) { .nav { gap: 2px; } .nav a { padding: 8px 8px; letter-spacing: .08em; } }
+@media (max-width: 560px) { .nav { gap: 0 !important; } .nav a { padding: 0 4px !important; font-size: 11.5px !important; letter-spacing: 0 !important; } .mast { padding-left: 12px !important; padding-right: 10px !important; } }
+@media (max-width: 380px) { .nav a { padding: 0 3px !important; font-size: 11px !important; } .brand svg { width: 22px; height: 22px; } }
+.home > .h-previews:last-child { margin-bottom: 0; }
+.h-meaning { --band: #0a1019; box-shadow: 0 0 0 100vmax var(--band); clip-path: inset(0 -100vmax); background: var(--band); color: var(--cream); text-align: center; margin-top: clamp(48px, 7vw, 90px); padding: clamp(60px, 9vw, 120px) 0; }
+.h-meaning .h-eyebrow { color: #dcc081; }
+.h-meaning h2 { max-width: 16em; margin: 14px auto 16px; font-family: var(--serif); font-weight: 500; font-style: italic; font-size: clamp(30px, 4.2vw, 58px); line-height: 1.1; text-wrap: balance; }
+.h-meaning > p:not(.h-eyebrow) { font-size: clamp(21px, 1.6vw, 23px); line-height: 1.5; color: #cfc6b1; margin-bottom: 26px; }
+.h-meaning .h-btn { background: var(--brass); color: #0f1826; }

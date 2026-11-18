@@ -304,3 +304,7 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 /* contrast: brass lettering on the night sections uses a lighter brass; fills keep the original */
 .nt-hero .nt-eyebrow, .solar .nt-eyebrow, .s-cycles .nt-eyebrow, .cosmos .nt-eyebrow, .present .nt-eyebrow { color: #dcc081; }
 .solar .wonder, .cosmos .wonder, .s-cycles .wonder { color: #dcc081; }
+
+/* the way on, from the present moment to the meaning of time */
+.pm-on { margin-top: clamp(40px, 6vw, 70px) !important; } .pm-on a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border: 1px solid var(--brass); color: var(--cream); text-decoration: none; font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; transition: background .2s, color .2s; } .pm-on a::after { content: "→"; margin-left: 10px; }
+@media (hover: hover) { .pm-on a:hover { background: var(--brass); color: var(--night); } }
