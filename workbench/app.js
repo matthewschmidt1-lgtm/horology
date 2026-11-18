@@ -20,9 +20,14 @@ document.title = `${watch.brand} ${watch.model} · The Workbench`;
   const n = watches.length, at = watches.indexOf(watch), prev = watches[(at + n - 1) % n], next = watches[(at + 1) % n], plates = window.WATCHES || [];
   const thumb = w => { const pl = plates.find(x => x.id === w.archiveId); return pl && Draw ? Draw.front(pl, {}) : ''; };
   $('#picker').innerHTML = n > 1 ? `<span class="pk-label">On the bench</span>
-    <button type="button" class="pk-cur" id="pk-cur" aria-expanded="false" aria-controls="pk-menu"><b>${watch.short || watch.model}</b><i>${at + 1} of ${n}</i></button>
+    <button type="button" class="pk-cur" id="pk-cur" aria-expanded="false" aria-controls="pk-menu"><b><span class="long">${watch.short || watch.model}</span><span class="short">Choose a watch</span></b><i>${at + 1} of ${n}</i></button>
     <span class="pk-step"><a href="?watch=${prev.id}" aria-label="Previous watch: ${prev.short || prev.model}">\u2039</a><a href="?watch=${next.id}" aria-label="Next watch: ${next.short || next.model}">\u203A</a></span>
     <div class="pk-menu" id="pk-menu" hidden>${watches.map(w => `<a href="?watch=${w.id}"${w === watch ? ' class="on" aria-current="true"' : ''}><span class="pk-art" aria-hidden="true">${thumb(w)}</span><span class="pk-txt"><b>${w.short || w.model}</b><em>${w.year}</em></span></a>`).join('')}</div>` : '';
+  { // a still field of stars behind the bar, as on the Nature of Time: seeded, so it never changes or moves
+    let x = 8128, c = ''; const rnd = () => (x = (x * 16807) % 2147483647) / 2147483647;
+    for (let i = 0; i < 90; i++) { const r = rnd(); c += `<circle cx="${(rnd() * 100).toFixed(2)}%" cy="${(rnd() * 100).toFixed(2)}%" r="${r > 0.94 ? 1.2 : r > 0.7 ? 0.85 : 0.55}" opacity="${(0.2 + rnd() * 0.55).toFixed(2)}"/>`; }
+    if (n > 1) $('#picker').insertAdjacentHTML('afterbegin', `<svg class="pk-stars" aria-hidden="true">${c}</svg>`);
+  }
   const cur = $('#pk-cur'), menu = $('#pk-menu'), open = v => { menu.hidden = !v; cur.setAttribute('aria-expanded', v); };
   if (cur) {
     cur.addEventListener('click', e => { e.stopPropagation(); open(menu.hidden); });
