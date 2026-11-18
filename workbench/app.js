@@ -28,7 +28,17 @@ document.title = `${watch.brand} ${watch.model} · The Workbench`;
     for (let i = 0; i < 90; i++) { const r = rnd(); c += `<circle cx="${(rnd() * 100).toFixed(2)}%" cy="${(rnd() * 100).toFixed(2)}%" r="${r > 0.94 ? 1.2 : r > 0.7 ? 0.85 : 0.55}" opacity="${(0.2 + rnd() * 0.55).toFixed(2)}"/>`; }
     if (n > 1) $('#picker').insertAdjacentHTML('afterbegin', `<svg class="pk-stars" aria-hidden="true">${c}</svg>`);
   }
-  if (n > 1) { const step = $('#picker .pk-step'); step.before($('#style-seg'), $('#pane-tog')); } // the title row is folded into this bar: one line for the watch's name, its look and its panel
+  /* The look, the labels and the side panel are tucked behind one small button, so the bar is the watch's name and little else. */
+  if (n > 1) {
+    $('#picker .pk-step').insertAdjacentHTML('beforebegin', `<button type="button" class="pk-dots" id="pk-dots" aria-expanded="false" aria-controls="pk-opts" aria-label="View options"><span aria-hidden="true">\u22EF</span></button>`);
+    $('#pk-menu').insertAdjacentHTML('afterend', `<div class="pk-opts" id="pk-opts" hidden><p class="pk-opt-l">Look</p><p class="pk-opt-l" id="pk-opt-show">Show</p></div>`);
+    const opts = $('#pk-opts'), dots = $('#pk-dots'), openOpts = v => { opts.hidden = !v; dots.setAttribute('aria-expanded', v); };
+    opts.firstElementChild.after($('#style-seg')); opts.append($('#t-labels'), $('#pane-tog'));
+    dots.addEventListener('click', e => { e.stopPropagation(); openOpts(opts.hidden); });
+    $('#pane-tog').addEventListener('click', () => openOpts(false));
+    document.addEventListener('click', e => { if (!opts.hidden && !e.target.closest('#pk-opts')) openOpts(false); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !opts.hidden) { openOpts(false); dots.focus(); } });
+  }
   const cur = $('#pk-cur'), menu = $('#pk-menu'), open = v => { menu.hidden = !v; cur.setAttribute('aria-expanded', v); };
   if (cur) {
     cur.addEventListener('click', e => { e.stopPropagation(); open(menu.hidden); });
