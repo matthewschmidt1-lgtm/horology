@@ -17,6 +17,7 @@ const KIND = {
   white:    { real: { color: 0xf3f1e8, metalness: 0, roughness: 0.6 }, tech: 0xFFFFFF },
   leather:  { real: { color: 0x2a2320, metalness: 0, roughness: 0.9 }, tech: 0xD9CEB9 },
   face:     { real: { color: 0xffffff, metalness: 0.15, roughness: 0.7 }, tech: 0xFFFFFF },
+  coil:     { real: { color: 0x2f7a55, metalness: 0, roughness: 0.55 }, tech: 0xCFE0D2 },
   acrylic:  { real: { color: 0xffffff, metalness: 0, roughness: 0.03, transparent: true, opacity: 0.14, depthWrite: false, side: THREE.DoubleSide }, tech: 0xFFFFFF, techOpacity: 0.1 }
 };
 const lineMat = new THREE.LineBasicMaterial({ color: INK });
@@ -87,12 +88,13 @@ export function buildProcedural(watch, face, tex) {
   if (P.crownGuards) for (const sy of [-1, 1]) { const gd = mk(new THREE.BoxGeometry(3.2, 2.4, 3.4), CASE); gd.position.set(R + 0.7, sy * 3.9, -0.9); gd.rotation.z = -sy * 0.5; kase.add(gd); }
   const crown = part('crown');
   const cR = P.crownR || 2.9, cL = cR > 2.4 ? 3 : 2;
-  crown.add(at(mk(new THREE.CylinderGeometry(cR, cR, cL, 28).rotateZ(Math.PI / 2), CASE, { edgeAngle: 10 }), R + 0.6 + cL / 2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.2, 16).rotateZ(Math.PI / 2), CASE), R + 0.3, 0, -0.9));
+  const backCrown = P.crown === 'back'; // an Accutron 214 has no crown on the flank: it is set from the back
+  if (!backCrown) crown.add(at(mk(new THREE.CylinderGeometry(cR, cR, cL, 28).rotateZ(Math.PI / 2), CASE, { edgeAngle: 10 }), R + 0.6 + cL / 2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.2, 16).rotateZ(Math.PI / 2), CASE), R + 0.3, 0, -0.9));
   const push = chrono ? part('pushers') : null;
   if (push) for (const a of [-1, 1]) { const g = new THREE.Group(); g.rotation.z = a * Math.PI / 6; g.add(at(mk(new THREE.CylinderGeometry(1.9, 1.9, 2, 22).rotateZ(Math.PI / 2), 'steel'), R + 2.2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.6, 16).rotateZ(Math.PI / 2), 'steel'), R + 0.6, 0, -0.9)); push.add(g); }
   const strap = part('strap');
   for (const sy of [-1, 1]) { const s = mk(new THREE.BoxGeometry(P.lugWidth - 0.4, 13, 2.2), 'leather'); s.position.set(0, sy * (P.lugToLug / 2 + 2.6), -4.3); s.rotation.x = -sy * 0.5; strap.add(s); }
-  assembly(kase, -15); assembly(crown, -15, 9); if (push) assembly(push, -15, 5); assembly(strap, -15);
+  assembly(kase, -15); if (!backCrown) assembly(crown, -15, 9); if (push) assembly(push, -15, 5); assembly(strap, -15);
 
   /* ----- bezel, crystal, dial, hands ----- */
   const bezel = part('bezel');
@@ -103,9 +105,9 @@ export function buildProcedural(watch, face, tex) {
   for (let i = 0; i <= 14; i++) { const a = i / 14 * Math.PI / 2; dome.push([ri * Math.cos(a), 3.95 + (P.dome || 3.3) * Math.sin(a)]); }
   crystal.add(mk(lathe(dome), 'acrylic', { edgeAngle: 80 }));
   assembly(crystal, 29);
-  const dial = part('dial'), dg = new THREE.CircleGeometry(ri, 128), uv = dg.attributes.uv;
+  const openDial = P.dial === 'open', dial = part('dial'), dg = openDial ? new THREE.RingGeometry(ri - 2.7, ri, 128) : new THREE.CircleGeometry(ri, 128), uv = dg.attributes.uv; // an open dial is only its chapter ring
   for (let i = 0; i < uv.count; i++) uv.setXY(i, 0.5 + (uv.getX(i) - 0.5) * ri / R, 0.5 + (uv.getY(i) - 0.5) * ri / R);
-  dial.add(at(mk(dg, 'face', { noEdges: true, real: { map: tex.real }, tech: { map: tex.tech } }), 0, 0, 2.32), at(mk(cyl(ri, 0.3, 64), 'brass'), 0, 0, 2.15));
+  dial.add(at(mk(dg, 'face', { noEdges: true, real: { map: tex.real }, tech: { map: tex.tech } }), 0, 0, 2.32)); if (!openDial) dial.add(at(mk(cyl(ri, 0.3, 64), 'brass'), 0, 0, 2.15));
   assembly(dial, 8);
   const hands = part('hands'), Lm = face.handLen, Lh = Lm * 0.64;
   const kite = (w, L) => { const k = new THREE.Shape(); k.moveTo(0, -1.3); k.lineTo(w / 2, L * 0.14); k.lineTo(0, L - 1.3); k.lineTo(-w / 2, L * 0.14); k.closePath(); return extr(k, 0.14).translate(0, 0, -0.07); };
@@ -122,6 +124,76 @@ export function buildProcedural(watch, face, tex) {
   if (P.spacer !== false) { const spacer = part('spacer'); spacer.add(mk(lathe([[mvR + 0.05, -3.6], [inner - 0.1, -3.6], [inner - 0.1, 2.0], [mvR + 0.05, 2.0], [mvR + 0.05, -3.6]]), 'steelDark')); assembly(spacer, -7); }
   const dust = P.dustCover === false ? null : part('dustcover'); if (dust) { dust.add(at(mk(cyl(inner - 0.3, 0.25, 64), 'iron'), 0, 0, -4.3)); assembly(dust, -24); }
   const back = part('caseback'); back.add(mk(lathe([[0, -6.4], [R - 6.85, -6.4], [R - 2.25, -5.4], [R - 1.45, -4.6], [0, -4.6]]), CASE)); assembly(back, -31);
+
+  /* ----- tuning-fork movement (Bulova Accutron 214) -----
+     The works of a 214 face the dial, which is why a Spaceview can do without one. So this movement is not
+     turned over like the others: local +Z points out of the front, and "opening" the watch lifts the
+     crystal, chapter ring and hands away. The layout is a simplified interpretation, not the calibre's. */
+  if (P.oscillator === 'fork') {
+    const mv = new THREE.Group(); mv.position.z = -0.4; root.add(mv); assembly(mv, 0);
+    part('plate', mv).add(at(mk(cyl(mvR, 1, 72), 'steel', { real: { color: 0x7f7f7c, roughness: 0.72 } }), 0, 0, -0.5));
+    // the fork: a U with its foot at six o'clock and a cup magnet on the tip of each tine
+    const TX = 4.7, fork = part('fork', mv), tines = [];
+    fork.add(at(mk(new THREE.BoxGeometry(2 * TX + 1.1, 2.2, 0.9), 'steelDark'), 0, -8.4, 0.75), at(mk(cyl(0.7, 1.3, 16), 'steel'), 0, -8.4, 0.9));
+    for (const sx of [-1, 1]) {
+      const t = new THREE.Group(); t.position.set(sx * TX, -7.4, 0);
+      t.add(at(mk(new THREE.BoxGeometry(1.1, 14.6, 0.9), 'steelDark'), 0, 7.3, 0.75), at(mk(new THREE.CylinderGeometry(1.25, 1.25, 2.5, 28).rotateZ(Math.PI / 2), 'steelDark', { edgeAngle: 20 }), sx * 0.9, 15.4, 1.3));
+      fork.add(t); tines.push(t);
+    }
+    fork.userData.anchor = [-TX, -3, 1.4];
+    // one fixed drive coil reaches into each magnet cup; the circuit that switches them sits between
+    const coils = part('coils', mv);
+    for (const sx of [-1, 1]) coils.add(at(mk(new THREE.CylinderGeometry(0.85, 0.85, 3.0, 24).rotateZ(Math.PI / 2), 'coil', { edgeAngle: 20 }), sx * (TX + 2.9), 8.0, 1.3), at(mk(new THREE.BoxGeometry(1.2, 1.6, 0.5), 'steel'), sx * (TX + 4.0), 8.0, 0.25));
+    coils.userData.anchor = [TX + 2.9, 8, 2.2];
+    const circuit = part('circuit', mv);
+    circuit.add(at(mk(new THREE.BoxGeometry(5.2, 2.4, 0.3), 'coil'), 0, 10.6, 0.15), at(mk(cyl(0.8, 1.1, 18), 'steelDark'), -1.3, 10.6, 0.85), at(mk(new THREE.BoxGeometry(1.5, 0.7, 0.7), 'copper'), 1.2, 11.0, 0.65), at(mk(cyl(0.42, 0.8, 12), 'brass'), 1.2, 10.1, 0.7));
+    circuit.userData.anchor = [0, 10.6, 1.5];
+    // index wheel and the short train to the seconds hand. Wheel and pinion centres are set so the teeth meet.
+    const spins = {}, IX = -2.6, IY = 1.2;
+    const mobile = (id, x, y, o) => {
+      const g = at(part(id, mv), x, y, 0), sp = new THREE.Group(); g.add(sp);
+      sp.add(at(mk(extr(gearShape(o.R, o.n, o.tooth || 0.2, o.spokes), 0.2), o.kind || 'brass', { edgeAngle: 40 }), 0, 0, o.z));
+      if (o.pin) sp.add(at(mk(cyl(o.pin, 0.45, 12), 'steelDark'), 0, 0, o.pinZ));
+      sp.add(at(mk(cyl(0.16, 2.0, 10), 'steelDark', { noEdges: true }), 0, 0, 1.0));
+      g.userData.anchor = [0, 0, 1.9]; return sp;
+    };
+    spins.index = mobile('index-wheel', IX, IY, { R: 1.2, n: 300, tooth: 0.035, spokes: 0, z: 1.2, kind: 'steel', pin: 0.3, pinZ: 0.78 });
+    spins.inter = mobile('train', -0.73, 2.86, { R: 2.2, n: 60, z: 0.55, pin: 0.35, pinZ: 1.28, spokes: 4 });
+    spins.sec = mobile('seconds-wheel', 0, 0, { R: 2.6, n: 72, z: 1.05, spokes: 4 });
+    // the index jewel rides on the left tine and pushes the wheel; the pawl jewel is fixed and stops it running back
+    const ij = part('index-jewel', tines[0]);
+    ij.add(at(mk(new THREE.BoxGeometry(1.7, 0.22, 0.22), 'steel'), 1.4, IY + 1.2 + 7.4, 1.3), at(mk(new THREE.BoxGeometry(0.34, 0.34, 0.34), 'ruby'), TX + IX, IY + 1.2 + 7.4, 1.3));
+    ij.userData.anchor = [TX + IX, IY + 1.2 + 7.4, 1.6];
+    const pawl = part('pawl', mv);
+    pawl.add(at(mk(new THREE.BoxGeometry(0.22, 1.9, 0.22), 'steel'), IX, IY - 2.2, 1.3), at(mk(new THREE.BoxGeometry(0.34, 0.34, 0.34), 'ruby'), IX, IY - 1.22, 1.3), at(mk(cyl(0.35, 1.3, 12), 'steel'), IX, IY - 3.2, 0.65));
+    pawl.userData.anchor = [IX, IY - 2.2, 1.6];
+    const bridge = part('train-bridge', mv);
+    bridge.add(at(mk(extr(hullShape([[-0.73, 2.86, 0.9], [0, 0, 0.9], [3.0, 2.6, 1.0]]), 0.35), 'steel', { edgeAngle: 40 }), 0, 0, 1.75), at(mk(cyl(0.34, 0.14, 14), 'ruby'), -0.73, 2.86, 2.12));
+    bridge.userData.anchor = [2.6, 2.4, 2.2]; layer(bridge, 5);
+    // the cell sits behind the plate, under a hatch in the back; the setting handle is on the back too
+    const cell = part('battery', mv); cell.add(at(mk(cyl(4.4, 2.6, 40), 'steel'), 0, -4.6, -2.4), at(mk(cyl(3.6, 0.2, 32), 'brass'), 0, -4.6, -3.8));
+    cell.userData.anchor = [0, -4.6, -3.9]; assembly(cell, -8);
+    const hatch = part('hatch', back); hatch.add(at(mk(cyl(4.8, 0.3, 40), CASE), 0, -4.6, -6.5), at(mk(new THREE.BoxGeometry(5, 0.5, 0.2), 'steelDark'), 0, -4.6, -6.7));
+    back.add(crown); crown.add(at(mk(cyl(2.4, 0.5, 28), CASE), 0, 6.0, -6.6), at(mk(new THREE.TorusGeometry(1.7, 0.22, 8, 24, Math.PI), CASE), 0, 6.0, -6.95));
+
+    const TAU = Math.PI * 2;
+    function animate(tv, now) {
+      const v = Math.sin(tv * TAU * 360) * 0.006; tines[0].rotation.z = v; tines[1].rotation.z = -v; // 360 Hz is far faster than a screen refreshes, so it shows only as a shimmer
+      const idx = tv * 1.2 * TAU; spins.index.rotation.z = -idx; spins.inter.rotation.z = idx / 8.5; spins.sec.rotation.z = -tv * TAU / 60; // 360 teeth a second on a 300-tooth wheel is 1.2 turns a second; the train ratios are illustrative
+      hSec.rotation.z = -tv * TAU / 60; // no beat: the seconds hand glides
+      const s = now.getSeconds() + now.getMilliseconds() / 1000, m = now.getMinutes() + s / 60, h = (now.getHours() % 12) + m / 60;
+      hMin.rotation.z = -m * TAU / 60; hHour.rotation.z = -h * TAU / 12;
+    }
+    const setExplode = v => asm.forEach(a => a.g.position.set(a.home.x + a.ex * v, a.home.y + a.ey * v, a.home.z + a.ez * v));
+    function setOpen(v) { // lift the crystal and bezel, then the chapter ring and hands, and set them aside
+      const u = Math.min(1, v * 2), s = Math.max(0, v * 2 - 1);
+      for (const g of [bezel, crystal]) { g.position.z += 5 * u; g.position.x += -46 * s; }
+      for (const g of [dial, hands]) { g.position.z += 3 * u; g.position.x += 46 * s; }
+    }
+    const setLayers = v => layers.forEach(l => { l.o.position.z = l.z0 + l.dz * v; });
+    root.scale.z = (P.thickness || 14) / 14;
+    return finish({ root, parts, animate, setExplode, setOpen, setLayers, frontMovement: true, fit: { h: P.lugToLug / 2 + 10, w: R + 7, d: 62 } });
+  }
 
   /* ----- movement: local +Z points out of the back of the watch ----- */
   const mv = new THREE.Group(); mv.position.z = 0.2; mv.rotation.y = Math.PI; if (P.subSeconds === 6) mv.rotation.z = -Math.PI / 2; /* puts the fourth wheel under the six o'clock register */ root.add(mv); assembly(mv, 0);

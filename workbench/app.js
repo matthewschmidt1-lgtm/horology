@@ -127,7 +127,7 @@ $('#s-layers').addEventListener('input', e => {
   if (state.view !== 'movement' && v > 0) setView('movement');
   state.layers = v; $('#s-layers').value = v;
   // seen straight on, lifted layers hide one another: tip the watch so the separation reads
-  if (was === 0 && v > 0 && camera) { const f = new THREE.Spherical().setFromVector3(camera.position); if (Math.abs(f.phi - Math.PI / 2) < 0.25) tween = { t: 0, from: { r: f.radius, phi: f.phi, theta: f.theta }, to: { r: baseDist() * 0.92, phi: 1.02, theta: f.theta > 0 ? Math.PI - 0.8 : -Math.PI + 0.8 } }; }
+  if (was === 0 && v > 0 && camera) { const f = new THREE.Spherical().setFromVector3(camera.position); if (Math.abs(f.phi - Math.PI / 2) < 0.25) tween = { t: 0, from: { r: f.radius, phi: f.phi, theta: f.theta }, to: { r: baseDist() * 0.92, phi: 1.02, theta: model.frontMovement ? (f.theta > 0 ? 0.8 : -0.8) : f.theta > 0 ? Math.PI - 0.8 : -Math.PI + 0.8 } }; }
 });
 
 /* loupe: a second, magnified camera in 3D; a magnified copy of the sheet in Blueprint mode */
@@ -202,6 +202,7 @@ async function start3D() {
   scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8478, 1.1));
   camera = new THREE.PerspectiveCamera(30, 1, 5, 900);
   model = watch.asset.type === 'gltf' ? await M.loadGLTF(watch) : M.buildProcedural(watch, Draw.face(archive, true), { real: texture(true), tech: texture(false) });
+  if (model.frontMovement) VIEWS.movement.theta = 0; // this watch's works face the dial, so the Movement view opens it from the front
   scene.add(model.root);
   ray = new THREE.Raycaster(); ray.params.Line.threshold = 0.35;
   controls = new OrbitControls(camera, canvas); controls.enablePan = false; controls.enableDamping = true; controls.dampingFactor = 0.09; controls.rotateSpeed = 0.7;
