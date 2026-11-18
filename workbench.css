@@ -340,3 +340,14 @@ span.st { font-size: 11.5px; }
   .sl { padding: 0 8px; gap: 6px; } .sl input { width: 64px; flex: 1 1 64px; min-width: 40px; }
   .tools .long { display: none; } .tools .short { display: inline; }
 }
+
+/* the side panel can be closed; on a desktop it starts closed and the watch takes the full width */
+.pane-tog { display: none; }
+@media (min-width: 901px) {
+  .pane-tog { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 16px; background: var(--charcoal); color: var(--ivory); border: 1.5px solid var(--charcoal); font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
+  .pane-tog::after { content: "\203A"; font-size: 18px; line-height: 1; transition: transform .2s; } .pane-tog[aria-expanded="true"] { background: var(--ivory); color: var(--charcoal); } .pane-tog[aria-expanded="true"]::after { transform: rotate(180deg); }
+  .pane-tog:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+  .stage-head { flex-wrap: nowrap; } .stage-head > div:first-child { margin-right: auto; min-width: 0; }
+  body.pane-closed .bench { grid-template-columns: minmax(0, 1fr); }
+  body.pane-closed .mtabs, body.pane-closed .pane, body.pane-closed .pane.show { display: none; }
+}

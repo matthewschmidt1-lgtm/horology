@@ -35,6 +35,13 @@ function mk(geo, kind, x = {}) {
 const lathe = (pts, seg = 96) => new THREE.LatheGeometry(pts.map(p => new THREE.Vector2(Math.max(p[0], 0.0001), p[1])), seg).rotateX(Math.PI / 2);
 const cyl = (r, h, seg = 40) => new THREE.CylinderGeometry(r, r, h, seg).rotateX(Math.PI / 2);
 const at = (o, x, y, z) => { o.position.set(x, y, z); return o; };
+// A square with rounded corners, optionally with a round hole: used for square cases, their crystal and dial.
+function rrShape(h, r, hole) {
+  const s = new THREE.Shape(); s.moveTo(-h + r, -h); s.lineTo(h - r, -h); s.absarc(h - r, -h + r, r, -Math.PI / 2, 0, false); s.lineTo(h, h - r); s.absarc(h - r, h - r, r, 0, Math.PI / 2, false);
+  s.lineTo(-h + r, h); s.absarc(-h + r, h - r, r, Math.PI / 2, Math.PI, false); s.lineTo(-h, -h + r); s.absarc(-h + r, -h + r, r, Math.PI, Math.PI * 1.5, false);
+  if (hole) { const p = new THREE.Path(); if (hole.square) { const q = rrShape(hole.h, hole.r); p.setFromPoints(q.getPoints(12).reverse()); } else p.absarc(0, 0, hole.R, 0, Math.PI * 2, true); s.holes.push(p); }
+  return s;
+}
 const extr = (shape, depth) => new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false, curveSegments: 10 });
 
 function gearShape(R, n, tooth, spokes = 5) {
@@ -75,7 +82,7 @@ export function buildProcedural(watch, face, tex) {
   const P = watch.asset.params, R = face.R, ri = P.bezel === 'octagon' ? face.dialR : face.bezelInner, // an octagonal bezel frames the round dial opening
      sub = (P.chrono === false && !P.subSeconds) ? 8 : face.inR * (P.subOffset || 0.5);
   const CASE = P.metal === 'gold' ? 'gold' : 'steel', inner = R - (P.wall || 3.25), HAND = P.handKind || (P.metal === 'gold' ? 'gold' : 'white');
-  const chrono = P.chrono !== false, mvR = (P.movementDiameter || 27) / 2;
+  const chrono = P.chrono !== false, mvR = (P.movementDiameter || 27) / 2, square = P.caseShape === 'square', dh = P.dialHalf || 15.4;
   const root = new THREE.Group(), parts = {}, asm = [], layers = [];
   const part = (id, parent = root) => { const g = new THREE.Group(); g.userData.part = id; parent.add(g); parts[id] = g; return g; };
   const assembly = (g, ez, ex = 0, ey = 0) => asm.push({ g, ez, ex, ey, home: g.position.clone() });
@@ -84,7 +91,8 @@ export function buildProcedural(watch, face, tex) {
   /* ----- case, crown, pushers, strap ----- */
   const kase = part('case');
   const BAND = P.bezel === 'octagon' ? 'steelDark' : CASE; // a darker band lets the eight-sided bezel read against the round case beneath it
-  kase.add(mk(lathe([[inner, -4.6], [R - 1.45, -4.6], [R, -3.3], [R, 1.7], [R - 0.7, 2.5], [inner, 2.5], [inner, -4.6]]), BAND));
+  if (square) kase.add(at(mk(new THREE.ExtrudeGeometry(rrShape(R, 3.2, { R: inner }), { depth: 7.1, bevelEnabled: false, curveSegments: 16 }), CASE), 0, 0, -4.6));
+  else kase.add(mk(lathe([[inner, -4.6], [R - 1.45, -4.6], [R, -3.3], [R, 1.7], [R - 0.7, 2.5], [inner, 2.5], [inner, -4.6]]), BAND));
   const lugL = Math.max(5, P.lugToLug / 2 - R + 5.5), lugT = P.lugThick || 2.7;
   if (P.integrated) { for (const sy of [-1, 1]) { const sh = mk(new THREE.BoxGeometry(P.lugWidth + 1.5, 7, 3.6), 'steelDark'); sh.position.set(0, sy * (R - 1.2), -1.6); sh.rotation.x = -sy * 0.2; kase.add(sh); } } // no separate lugs: the case runs straight into the bracelet
   else for (const sx of [-1, 1]) for (const sy of [-1, 1]) { const lug = mk(new THREE.BoxGeometry(lugT, lugL, 3.4), CASE); lug.position.set(sx * (P.lugWidth / 2 + lugT / 2), sy * (P.lugToLug / 2 - lugL / 2 + 0.55), -2.0); lug.rotation.x = -sy * 0.28; kase.add(lug); }
@@ -93,15 +101,17 @@ export function buildProcedural(watch, face, tex) {
   const cR = P.crownR || 2.9, cL = cR > 2.4 ? 3 : 2;
   const backCrown = P.crown === 'back'; // an Accutron 214 has no crown on the flank: it is set from the back
   if (!backCrown) crown.add(at(mk(new THREE.CylinderGeometry(cR, cR, cL, P.crownHex ? 6 : 28).rotateZ(Math.PI / 2), CASE, { edgeAngle: 10 }), R + 0.6 + cL / 2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.2, 16).rotateZ(Math.PI / 2), CASE), R + 0.3, 0, -0.9));
+  if (P.crownLeft) crown.rotation.z = Math.PI; // the Calibre 11 watches carry the crown at nine
   const push = chrono ? part('pushers') : null;
-  if (push) for (const a of [-1, 1]) { const g = new THREE.Group(); g.rotation.z = a * Math.PI / 6; g.add(at(mk(new THREE.CylinderGeometry(1.9, 1.9, 2, 22).rotateZ(Math.PI / 2), 'steel'), R + 2.2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.6, 16).rotateZ(Math.PI / 2), 'steel'), R + 0.6, 0, -0.9)); push.add(g); }
+  if (push) for (const a of [-1, 1]) { const g = new THREE.Group(); if (square) g.position.y = a * 7; else g.rotation.z = a * Math.PI / 6; /* on a square case the pushers stand straight out of the flank */ g.add(at(mk(new THREE.CylinderGeometry(1.9, 1.9, 2, 22).rotateZ(Math.PI / 2), 'steel'), R + 2.2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.6, 16).rotateZ(Math.PI / 2), 'steel'), R + 0.6, 0, -0.9)); push.add(g); }
   const strap = part('strap');
   for (const sy of [-1, 1]) { const s = mk(new THREE.BoxGeometry(P.lugWidth - 0.4, 13, 2.2), P.integrated ? 'steelDark' : 'leather'); s.position.set(0, sy * (P.lugToLug / 2 + 2.6), P.integrated ? -3.2 : -4.3); s.rotation.x = -sy * (P.integrated ? 0.3 : 0.5); if (P.integrated) s.userData.real.roughness = 0.62; strap.add(s); }
-  assembly(kase, -15); if (!backCrown) assembly(crown, -15, 9); if (push) assembly(push, -15, 5); assembly(strap, -15);
+  assembly(kase, -15); if (!backCrown) assembly(crown, -15, P.crownLeft ? -9 : 9); if (push) assembly(push, -15, 5); assembly(strap, -15);
 
   /* ----- bezel, crystal, dial, hands ----- */
   const bezel = part('bezel');
-  if (P.bezel === 'octagon') { // eight flat sides, a round opening, and a hexagonal bolt at each corner
+  if (square) bezel.add(at(mk(new THREE.ExtrudeGeometry(rrShape(R - 0.4, 3, { square: true, h: dh, r: 2.4 }), { depth: 1.4, bevelEnabled: false, curveSegments: 12 }), CASE), 0, 0, 2.5)); // no separate bezel: a flat frame around a square opening
+  else if (P.bezel === 'octagon') { // eight flat sides, a round opening, and a hexagonal bolt at each corner
     const o = new THREE.Shape(), hole = new THREE.Path(), A = k => (22.5 + 45 * k) * Math.PI / 180;
     for (let k = 0; k < 8; k++) (k ? o.lineTo(R * Math.cos(A(k)), R * Math.sin(A(k))) : o.moveTo(R * Math.cos(A(k)), R * Math.sin(A(k)))); o.closePath();
     hole.absarc(0, 0, ri, 0, Math.PI * 2, true); o.holes.push(hole);
@@ -114,11 +124,12 @@ export function buildProcedural(watch, face, tex) {
   assembly(bezel, 21);
   const crystal = part('crystal'), dome = [];
   for (let i = 0; i <= 14; i++) { const a = i / 14 * Math.PI / 2; dome.push([ri * Math.cos(a), 3.95 + (P.dome || 3.3) * Math.sin(a)]); }
-  crystal.add(mk(lathe(dome), 'acrylic', { edgeAngle: 80 }));
+  if (square) crystal.add(at(mk(extr(rrShape(dh + 0.25, 2.4), 1.5), 'acrylic', { edgeAngle: 80 }), 0, 0, 3.7)); else crystal.add(mk(lathe(dome), 'acrylic', { edgeAngle: 80 }));
   assembly(crystal, 29);
-  const openDial = P.dial === 'open', dial = part('dial'), dg = openDial ? new THREE.RingGeometry(ri - 2.7, ri, 128) : new THREE.CircleGeometry(ri, 128), uv = dg.attributes.uv; // an open dial is only its chapter ring
-  for (let i = 0; i < uv.count; i++) uv.setXY(i, 0.5 + (uv.getX(i) - 0.5) * ri / R, 0.5 + (uv.getY(i) - 0.5) * ri / R);
-  dial.add(at(mk(dg, 'face', { noEdges: true, real: { map: tex.real }, tech: { map: tex.tech } }), 0, 0, 2.32)); if (!openDial) dial.add(at(mk(cyl(ri, 0.3, 64), 'brass'), 0, 0, 2.15));
+  const openDial = P.dial === 'open', dial = part('dial'), dg = square ? new THREE.ShapeGeometry(rrShape(dh, 2.4), 12) : openDial ? new THREE.RingGeometry(ri - 2.7, ri, 128) : new THREE.CircleGeometry(ri, 128), uv = dg.attributes.uv; // an open dial is only its chapter ring
+  if (square) { const ps = dg.attributes.position; for (let i = 0; i < uv.count; i++) uv.setXY(i, 0.5 + ps.getX(i) / (2 * R), 0.5 + ps.getY(i) / (2 * R)); }
+  else for (let i = 0; i < uv.count; i++) uv.setXY(i, 0.5 + (uv.getX(i) - 0.5) * ri / R, 0.5 + (uv.getY(i) - 0.5) * ri / R);
+  dial.add(at(mk(dg, 'face', { noEdges: true, real: { map: tex.real }, tech: { map: tex.tech } }), 0, 0, square ? 2.58 : 2.32)); /* a square dial is wider than the round opening in the case, so it sits just above the case top */ if (!square && !openDial) dial.add(at(mk(cyl(ri, 0.3, 64), 'brass'), 0, 0, 2.15));
   assembly(dial, 8);
   const hands = part('hands'), Lm = face.handLen, Lh = Lm * 0.64;
   const kite = (w, L) => { const k = new THREE.Shape(); k.moveTo(0, -1.3); k.lineTo(w / 2, L * 0.14); k.lineTo(0, L - 1.3); k.lineTo(-w / 2, L * 0.14); k.closePath(); return extr(k, 0.14).translate(0, 0, -0.07); };
@@ -127,7 +138,8 @@ export function buildProcedural(watch, face, tex) {
   if (P.hands === 'mercedes') { hHour.add(at(mk(cyl(1.75, 0.14, 28), 'white'), 0, Lh * 0.62, 0)); hChr.add(at(mk(cyl(0.8, 0.1, 18), 'white'), 0, Lm * 0.62, 0)); }
   hands.add(at(mk(cyl(0.95, 0.9, 20), CASE), 0, 0, 3.0));
   const subHand = (x, y) => { const p = hand(0.26, 4.2, 2.5); p.position.x = x; p.position.y = y; p.children[0].geometry.translate(0, -0.5, 0); return p; };
-  const hSec = chrono ? subHand(-sub, 0) : P.subSeconds === 6 ? subHand(0, -sub) : hChr; if (chrono) { subHand(sub, 0); subHand(0, -sub); }
+  const two = P.registers === 2; // two registers and no running seconds, as on the Calibre 11
+  const hSec = chrono ? (two ? new THREE.Group() : subHand(-sub, 0)) : P.subSeconds === 6 ? subHand(0, -sub) : hChr; if (chrono) { subHand(sub, 0); if (two) subHand(-sub, 0); else subHand(0, -sub); }
   if (P.subSeconds || P.noSeconds) hChr.visible = false;
   assembly(hands, 13);
 
@@ -258,15 +270,23 @@ export function buildProcedural(watch, face, tex) {
   cp.add(at(mk(extr(hullShape([[0, 0, 0.7], [-1.6, 5.6, 0.6]]), 0.2), 'steel', { edgeAngle: 40 }), 0, 0, 3.1)); layer(cp, 8);
   const mr = part('minute-recorder', mv); mobile(null, -sub, 0, { R: 2.2, n: 60, tooth: 0.14, z: 2.85, th: 0.18, spokes: 4, arbor: 0.01 }, mr); mr.position.set(0, 0, 0); layer(mr, 8);
   mr.userData.anchor = [-sub, 0, 3];
-  const cw = at(part('column-wheel', mv), -3.2, -9.6, 0);
+  const cw = at(part(P.cam ? 'cam' : 'column-wheel', mv), -3.2, -9.6, 0);
+  if (P.cam) { // cam switching: two stacked, lobed plates in place of a column wheel
+    cw.add(at(mk(extr(hullShape([[0, 0, 1.0], [1.5, 0.5, 0.55], [-0.9, 1.1, 0.5]]), 0.3), 'steelDark', { edgeAngle: 40 }), 0, 0, 2.5), at(mk(extr(hullShape([[0, 0, 0.8], [-1.3, -0.6, 0.5], [0.7, -1.2, 0.45]]), 0.3), 'steel', { edgeAngle: 40 }), 0, 0, 2.85), at(mk(cyl(0.3, 0.5, 12), 'steelDark'), 0, 0, 3.3));
+  } else {
   cw.add(at(mk(extr(gearShape(1.5, 18, 0.3, 0), 0.25), 'steelDark', { edgeAngle: 40 }), 0, 0, 2.5));
   for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3, p = mk(new THREE.BoxGeometry(0.5, 0.42, 0.75), 'steelDark'); p.position.set(1.05 * Math.cos(a), 1.05 * Math.sin(a), 3.1); p.rotation.z = a; cw.add(p); }
+  }
   layer(cw, 8);
   const hm = flat('hammer', [[-6.5, -7.5, 0.7], [-1.3, -1.7, 0.5], [-6.4, -2.1, 0.5]], 3.1, 0.2, 'steel'); layer(hm, 8);
   const cb = flat('chrono-bridge', [[0, 0, 1.25], [-sub, 0, 1.25], [-3.2, 6.8, 1.2]], 3.55, 0.4); layer(cb, 12);
   }
   /* winding rotor of an automatic: a half-disc weight on a central bearing, shown at rest */
-  if (P.rotor) {
+  if (P.rotor === 'micro') { // a small rotor set into the movement. In the real calibre it is buried under the chronograph works; it is shown on the surface so it can be seen
+    const rot = at(part('rotor', mv), 7.6, 7.6, 0), w = new THREE.Shape(); w.absarc(0, 0, 4.2, Math.PI * 0.75, Math.PI * 1.75, false); w.closePath();
+    rot.add(at(mk(extr(w, 0.55), 'steelDark', { edgeAngle: 40 }), 0, 0, 2.75), at(mk(cyl(4.3, 0.12, 40), 'steel'), 0, 0, 2.68), at(mk(cyl(0.8, 0.5, 16), 'steelDark'), 0, 0, 3.2));
+    rot.userData.anchor = [0, 0, 3.6]; layer(rot, 6);
+  } else if (P.rotor) {
     const rot = part('rotor', mv), w = new THREE.Shape(), web = new THREE.Shape(), ro = mvR - 0.5;
     w.absarc(0, 0, ro, Math.PI, Math.PI * 2, false); w.absarc(0, 0, ro - 3.2, Math.PI * 2, Math.PI, true); w.closePath();
     web.absarc(0, 0, ro - 3.2, Math.PI, Math.PI * 2, false); web.lineTo(1.6, 0); web.absarc(0, 0, 1.6, 0, Math.PI, false); web.closePath();

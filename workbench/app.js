@@ -38,11 +38,15 @@ function select(id, fromScene) {
   if (model) model.highlight(id);
   const c = byId[id];
   if (c && !fromScene && c.group !== 'Exterior' && state.view !== 'movement' && state.view !== 'exploded' && state.view !== 'blueprint') setView('movement');
-  if (c) { showPane('parts'); $('#pane-parts').scrollTop = 0; if (!fromScene && matchMedia('(max-width: 900px)').matches) $('#viewport').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  if (c) { setPane(true); showPane('parts'); $('#pane-parts').scrollTop = 0; if (!fromScene && matchMedia('(max-width: 900px)').matches) $('#viewport').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 }
 document.addEventListener('click', e => { const b = e.target.closest('[data-part]'); if (b && !b.classList.contains('lab')) select(b.dataset.part, !!b.closest('#blueprint')); });
 $('#pane-info .seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#pane-info .seg button').forEach(x => x.classList.toggle('on', x === b)); $('#specs').hidden = b.dataset.tab !== 'specs'; $('#history').hidden = b.dataset.tab !== 'history'; });
 $('#level-seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; state.level = b.dataset.level; $$('#level-seg button').forEach(x => x.classList.toggle('on', x === b)); renderDetail(); });
+/* On a desktop the side panel starts closed, so the watch has the whole bench; it opens from its button or when a part is chosen. */
+function setPane(open) { document.body.classList.toggle('pane-closed', !open); const b = $('#pane-tog'); b.setAttribute('aria-expanded', open); b.textContent = open ? 'Hide panel' : 'Parts and details'; }
+setPane(false);
+$('#pane-tog').addEventListener('click', () => setPane(document.body.classList.contains('pane-closed')));
 function showPane(p) { $$('.pane').forEach(x => x.classList.toggle('show', x.dataset.pane === p)); $$('.mtabs button').forEach(x => x.classList.toggle('on', x.dataset.show === p)); }
 $('.mtabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) showPane(b.dataset.show); });
 showPane('parts'); renderDetail();
