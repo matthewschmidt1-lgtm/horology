@@ -15,7 +15,21 @@ $('#w-title').innerHTML = `${watch.model} <em>${watch.reference}</em>`;
 $('#caveat').textContent = 'Approximate model, built from published dimensions.';
 $('#asset-note').textContent = watch.asset.note;
 document.title = `${watch.brand} ${watch.model} · The Workbench`;
-$('#picker').innerHTML = watches.length > 1 ? '<span class="pk-label">On the bench</span>' + watches.map(w => `<a href="?watch=${w.id}" class="${w === watch ? 'on' : ''}"${w === watch ? ' aria-current="true"' : ''}><span class="long">${w.short || w.model}</span><span class="short">${w.model}</span></a>`).join('') : '';
+/* One quiet line for choosing a watch: the name of the one on the bench, which opens the full set, and a step to the next or the last. */
+{
+  const n = watches.length, at = watches.indexOf(watch), prev = watches[(at + n - 1) % n], next = watches[(at + 1) % n], plates = window.WATCHES || [];
+  const thumb = w => { const pl = plates.find(x => x.id === w.archiveId); return pl && Draw ? Draw.front(pl, {}) : ''; };
+  $('#picker').innerHTML = n > 1 ? `<span class="pk-label">On the bench</span>
+    <button type="button" class="pk-cur" id="pk-cur" aria-expanded="false" aria-controls="pk-menu"><b>${watch.short || watch.model}</b><i>${at + 1} of ${n}</i></button>
+    <span class="pk-step"><a href="?watch=${prev.id}" aria-label="Previous watch: ${prev.short || prev.model}">\u2039</a><a href="?watch=${next.id}" aria-label="Next watch: ${next.short || next.model}">\u203A</a></span>
+    <div class="pk-menu" id="pk-menu" hidden>${watches.map(w => `<a href="?watch=${w.id}"${w === watch ? ' class="on" aria-current="true"' : ''}><span class="pk-art" aria-hidden="true">${thumb(w)}</span><span class="pk-txt"><b>${w.short || w.model}</b><em>${w.year}</em></span></a>`).join('')}</div>` : '';
+  const cur = $('#pk-cur'), menu = $('#pk-menu'), open = v => { menu.hidden = !v; cur.setAttribute('aria-expanded', v); };
+  if (cur) {
+    cur.addEventListener('click', e => { e.stopPropagation(); open(menu.hidden); });
+    document.addEventListener('click', e => { if (!menu.hidden && !e.target.closest('#pk-menu')) open(false); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menu.hidden) { open(false); cur.focus(); } });
+  }
+}
 $('#specs').innerHTML = `<table class="wspec">${watch.specs.map(([k, v, s]) => `<tr><th>${k}</th><td>${v}<i class="st ${s}" title="${ST[s]}"></i></td></tr>`).join('')}</table>`;
 $('#history').innerHTML = watch.history.map(h => `<section><h3>${h.h}<i class="st ${h.s}" title="${ST[h.s]}"></i></h3><p>${h.p}</p></section>`).join('');
 const groups = [...new Set(comps.map(c => c.group))];
@@ -50,7 +64,6 @@ $('#pane-tog').addEventListener('click', () => setPane(document.body.classList.c
 function showPane(p) { $$('.pane').forEach(x => x.classList.toggle('show', x.dataset.pane === p)); $$('.mtabs button').forEach(x => x.classList.toggle('on', x.dataset.show === p)); }
 $('.mtabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) showPane(b.dataset.show); });
 showPane('parts'); renderDetail();
-{ const on = $('#picker .on'), pk = $('#picker'); if (on) pk.scrollLeft = on.offsetLeft - (pk.clientWidth - on.offsetWidth) / 2; }
 
 /* ---------- blueprint sheet (2D, from the archive plate) ---------- */
 const LEG = { crystal: 'crystal', bezel: 'bezel', hands: 'hands', dial: 'dial', movement: 'plate', 'case middle': 'case', crown: 'crown', caseback: 'caseback' };
