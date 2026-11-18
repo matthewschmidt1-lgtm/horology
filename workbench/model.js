@@ -18,6 +18,7 @@ const KIND = {
   leather:  { real: { color: 0x2a2320, metalness: 0, roughness: 0.9 }, tech: 0xD9CEB9 },
   face:     { real: { color: 0xffffff, metalness: 0.15, roughness: 0.7 }, tech: 0xFFFFFF },
   coil:     { real: { color: 0x2f7a55, metalness: 0, roughness: 0.55 }, tech: 0xCFE0D2 },
+  blue:     { real: { color: 0x1f3f8a, metalness: 0.6, roughness: 0.25 }, tech: 0xB9C6D6 },
   acrylic:  { real: { color: 0xffffff, metalness: 0, roughness: 0.03, transparent: true, opacity: 0.14, depthWrite: false, side: THREE.DoubleSide }, tech: 0xFFFFFF, techOpacity: 0.1 }
 };
 const lineMat = new THREE.LineBasicMaterial({ color: INK });
@@ -35,11 +36,11 @@ function mk(geo, kind, x = {}) {
 const lathe = (pts, seg = 96) => new THREE.LatheGeometry(pts.map(p => new THREE.Vector2(Math.max(p[0], 0.0001), p[1])), seg).rotateX(Math.PI / 2);
 const cyl = (r, h, seg = 40) => new THREE.CylinderGeometry(r, r, h, seg).rotateX(Math.PI / 2);
 const at = (o, x, y, z) => { o.position.set(x, y, z); return o; };
-// A square with rounded corners, optionally with a round hole: used for square cases, their crystal and dial.
-function rrShape(h, r, hole) {
-  const s = new THREE.Shape(); s.moveTo(-h + r, -h); s.lineTo(h - r, -h); s.absarc(h - r, -h + r, r, -Math.PI / 2, 0, false); s.lineTo(h, h - r); s.absarc(h - r, h - r, r, 0, Math.PI / 2, false);
-  s.lineTo(-h + r, h); s.absarc(-h + r, h - r, r, Math.PI / 2, Math.PI, false); s.lineTo(-h, -h + r); s.absarc(-h + r, -h + r, r, Math.PI, Math.PI * 1.5, false);
-  if (hole) { const p = new THREE.Path(); if (hole.square) { const q = rrShape(hole.h, hole.r); p.setFromPoints(q.getPoints(12).reverse()); } else p.absarc(0, 0, hole.R, 0, Math.PI * 2, true); s.holes.push(p); }
+// A rectangle with rounded corners, optionally with a hole (round, or another rounded rectangle): used for flat-sided cases, their crystal and dial.
+function rrShape(w, h, r, hole) {
+  const s = new THREE.Shape(); s.moveTo(-w + r, -h); s.lineTo(w - r, -h); s.absarc(w - r, -h + r, r, -Math.PI / 2, 0, false); s.lineTo(w, h - r); s.absarc(w - r, h - r, r, 0, Math.PI / 2, false);
+  s.lineTo(-w + r, h); s.absarc(-w + r, h - r, r, Math.PI / 2, Math.PI, false); s.lineTo(-w, -h + r); s.absarc(-w + r, -h + r, r, Math.PI, Math.PI * 1.5, false);
+  if (hole) { const p = new THREE.Path(); if (hole.w) p.setFromPoints(rrShape(hole.w, hole.h, hole.r).getPoints(12).reverse()); else p.absarc(0, 0, hole.R, 0, Math.PI * 2, true); s.holes.push(p); }
   return s;
 }
 const extr = (shape, depth) => new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false, curveSegments: 10 });
@@ -82,7 +83,8 @@ export function buildProcedural(watch, face, tex) {
   const P = watch.asset.params, R = face.R, ri = P.bezel === 'octagon' ? face.dialR : face.bezelInner, // an octagonal bezel frames the round dial opening
      sub = (P.chrono === false && !P.subSeconds) ? 8 : face.inR * (P.subOffset || 0.5);
   const CASE = P.metal === 'gold' ? 'gold' : 'steel', inner = R - (P.wall || 3.25), HAND = P.handKind || (P.metal === 'gold' ? 'gold' : 'white');
-  const chrono = P.chrono !== false, mvR = (P.movementDiameter || 27) / 2, square = P.caseShape === 'square', dh = P.dialHalf || 15.4;
+  const chrono = P.chrono !== false, mvR = (P.movementDiameter || 27) / 2, tank = P.caseShape === 'tank', square = P.caseShape === 'square' || tank, dh = P.dialHalf || 15.4; /* 'square' covers any flat-sided case; a tank is a rectangle between two side bars */
+  const BW = tank ? (P.brancard || 2.7) : 0, CW = tank ? R - BW : R, CH = tank ? P.bodyHalfH : R, DW = tank ? P.dialHalfW : dh, DH = tank ? P.dialHalfH : dh, CR = tank ? 0.7 : 3.2, DR = tank ? 0.4 : 2.4;
   const root = new THREE.Group(), parts = {}, asm = [], layers = [];
   const part = (id, parent = root) => { const g = new THREE.Group(); g.userData.part = id; parent.add(g); parts[id] = g; return g; };
   const assembly = (g, ez, ex = 0, ey = 0) => asm.push({ g, ez, ex, ey, home: g.position.clone() });
@@ -91,16 +93,18 @@ export function buildProcedural(watch, face, tex) {
   /* ----- case, crown, pushers, strap ----- */
   const kase = part('case');
   const BAND = P.bezel === 'octagon' ? 'steelDark' : CASE; // a darker band lets the eight-sided bezel read against the round case beneath it
-  if (square) kase.add(at(mk(new THREE.ExtrudeGeometry(rrShape(R, 3.2, { R: inner }), { depth: 7.1, bevelEnabled: false, curveSegments: 16 }), CASE), 0, 0, -4.6));
+  if (square) kase.add(at(mk(new THREE.ExtrudeGeometry(rrShape(CW, CH, CR, { R: inner }), { depth: 7.1, bevelEnabled: false, curveSegments: 16 }), CASE), 0, 0, -4.6));
   else kase.add(mk(lathe([[inner, -4.6], [R - 1.45, -4.6], [R, -3.3], [R, 1.7], [R - 0.7, 2.5], [inner, 2.5], [inner, -4.6]]), BAND));
   const lugL = Math.max(5, P.lugToLug / 2 - R + 5.5), lugT = P.lugThick || 2.7;
-  if (P.integrated) { for (const sy of [-1, 1]) { const sh = mk(new THREE.BoxGeometry(P.lugWidth + 1.5, 7, 3.6), 'steelDark'); sh.position.set(0, sy * (R - 1.2), -1.6); sh.rotation.x = -sy * 0.2; kase.add(sh); } } // no separate lugs: the case runs straight into the bracelet
+  if (tank) { for (const sx of [-1, 1]) kase.add(at(mk(extr(rrShape(BW / 2, P.lugToLug / 2, 1.1), 8.2), CASE), sx * (R - BW / 2), 0, -4.5)); } // two side bars run the full length and carry the strap between their ends
+  else if (P.integrated) { for (const sy of [-1, 1]) { const sh = mk(new THREE.BoxGeometry(P.lugWidth + 1.5, 7, 3.6), 'steelDark'); sh.position.set(0, sy * (R - 1.2), -1.6); sh.rotation.x = -sy * 0.2; kase.add(sh); } } // no separate lugs: the case runs straight into the bracelet
   else for (const sx of [-1, 1]) for (const sy of [-1, 1]) { const lug = mk(new THREE.BoxGeometry(lugT, lugL, 3.4), CASE); lug.position.set(sx * (P.lugWidth / 2 + lugT / 2), sy * (P.lugToLug / 2 - lugL / 2 + 0.55), -2.0); lug.rotation.x = -sy * 0.28; kase.add(lug); }
   if (P.crownGuards) for (const sy of [-1, 1]) { const gd = mk(new THREE.BoxGeometry(3.2, 2.4, 3.4), CASE); gd.position.set(R + 0.7, sy * 3.9, -0.9); gd.rotation.z = -sy * 0.5; kase.add(gd); }
   const crown = part('crown');
   const cR = P.crownR || 2.9, cL = cR > 2.4 ? 3 : 2;
   const backCrown = P.crown === 'back'; // an Accutron 214 has no crown on the flank: it is set from the back
   if (!backCrown) crown.add(at(mk(new THREE.CylinderGeometry(cR, cR, cL, P.crownHex ? 6 : 28).rotateZ(Math.PI / 2), CASE, { edgeAngle: 10 }), R + 0.6 + cL / 2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.2, 16).rotateZ(Math.PI / 2), CASE), R + 0.3, 0, -0.9));
+  if (P.cabochon && !backCrown) crown.add(at(mk(new THREE.SphereGeometry(cR * 0.62, 16, 12), 'blue', { noEdges: true }), R + 0.6 + cL, 0, -0.9));
   if (P.crownLeft) crown.rotation.z = Math.PI; // the Calibre 11 watches carry the crown at nine
   const push = chrono ? part('pushers') : null;
   if (push) for (const a of [-1, 1]) { const g = new THREE.Group(); if (square) g.position.y = a * 7; else g.rotation.z = a * Math.PI / 6; /* on a square case the pushers stand straight out of the flank */ g.add(at(mk(new THREE.CylinderGeometry(1.9, 1.9, 2, 22).rotateZ(Math.PI / 2), 'steel'), R + 2.2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.6, 16).rotateZ(Math.PI / 2), 'steel'), R + 0.6, 0, -0.9)); push.add(g); }
@@ -110,7 +114,7 @@ export function buildProcedural(watch, face, tex) {
 
   /* ----- bezel, crystal, dial, hands ----- */
   const bezel = part('bezel');
-  if (square) bezel.add(at(mk(new THREE.ExtrudeGeometry(rrShape(R - 0.4, 3, { square: true, h: dh, r: 2.4 }), { depth: 1.4, bevelEnabled: false, curveSegments: 12 }), CASE), 0, 0, 2.5)); // no separate bezel: a flat frame around a square opening
+  if (square) bezel.add(at(mk(new THREE.ExtrudeGeometry(rrShape(CW - (tank ? 0 : 0.4), CH - (tank ? 0 : 0.4), CR, { w: DW, h: DH, r: DR }), { depth: 1.4, bevelEnabled: false, curveSegments: 12 }), CASE), 0, 0, 2.5)); // no separate bezel: a flat frame around a square opening
   else if (P.bezel === 'octagon') { // eight flat sides, a round opening, and a hexagonal bolt at each corner
     const o = new THREE.Shape(), hole = new THREE.Path(), A = k => (22.5 + 45 * k) * Math.PI / 180;
     for (let k = 0; k < 8; k++) (k ? o.lineTo(R * Math.cos(A(k)), R * Math.sin(A(k))) : o.moveTo(R * Math.cos(A(k)), R * Math.sin(A(k)))); o.closePath();
@@ -124,9 +128,9 @@ export function buildProcedural(watch, face, tex) {
   assembly(bezel, 21);
   const crystal = part('crystal'), dome = [];
   for (let i = 0; i <= 14; i++) { const a = i / 14 * Math.PI / 2; dome.push([ri * Math.cos(a), 3.95 + (P.dome || 3.3) * Math.sin(a)]); }
-  if (square) crystal.add(at(mk(extr(rrShape(dh + 0.25, 2.4), 1.5), 'acrylic', { edgeAngle: 80 }), 0, 0, 3.7)); else crystal.add(mk(lathe(dome), 'acrylic', { edgeAngle: 80 }));
+  if (square) crystal.add(at(mk(extr(rrShape(DW + 0.25, DH + 0.25, DR), tank ? 0.9 : 1.5), 'acrylic', { edgeAngle: 80 }), 0, 0, 3.7)); else crystal.add(mk(lathe(dome), 'acrylic', { edgeAngle: 80 }));
   assembly(crystal, 29);
-  const openDial = P.dial === 'open', dial = part('dial'), dg = square ? new THREE.ShapeGeometry(rrShape(dh, 2.4), 12) : openDial ? new THREE.RingGeometry(ri - 2.7, ri, 128) : new THREE.CircleGeometry(ri, 128), uv = dg.attributes.uv; // an open dial is only its chapter ring
+  const openDial = P.dial === 'open', dial = part('dial'), dg = square ? new THREE.ShapeGeometry(rrShape(DW, DH, DR), 12) : openDial ? new THREE.RingGeometry(ri - 2.7, ri, 128) : new THREE.CircleGeometry(ri, 128), uv = dg.attributes.uv; // an open dial is only its chapter ring
   if (square) { const ps = dg.attributes.position; for (let i = 0; i < uv.count; i++) uv.setXY(i, 0.5 + ps.getX(i) / (2 * R), 0.5 + ps.getY(i) / (2 * R)); }
   else for (let i = 0; i < uv.count; i++) uv.setXY(i, 0.5 + (uv.getX(i) - 0.5) * ri / R, 0.5 + (uv.getY(i) - 0.5) * ri / R);
   dial.add(at(mk(dg, 'face', { noEdges: true, real: { map: tex.real }, tech: { map: tex.tech } }), 0, 0, square ? 2.58 : 2.32)); /* a square dial is wider than the round opening in the case, so it sits just above the case top */ if (!square && !openDial) dial.add(at(mk(cyl(ri, 0.3, 64), 'brass'), 0, 0, 2.15));
@@ -146,7 +150,7 @@ export function buildProcedural(watch, face, tex) {
   /* ----- spacer ring, dust cover, caseback ----- */
   if (P.spacer !== false) { const spacer = part('spacer'); spacer.add(mk(lathe([[mvR + 0.05, -3.6], [inner - 0.1, -3.6], [inner - 0.1, 2.0], [mvR + 0.05, 2.0], [mvR + 0.05, -3.6]]), 'steelDark')); assembly(spacer, -7); }
   const dust = P.dustCover === false ? null : part('dustcover'); if (dust) { dust.add(at(mk(cyl(inner - 0.3, 0.25, 64), 'iron'), 0, 0, -4.3)); assembly(dust, -24); }
-  const back = part('caseback'); back.add(mk(lathe([[0, -6.4], [R - 6.85, -6.4], [R - 2.25, -5.4], [R - 1.45, -4.6], [0, -4.6]]), CASE)); assembly(back, -31);
+  const back = part('caseback'); if (tank) back.add(at(mk(extr(rrShape(CW, CH, CR), 1.2), CASE), 0, 0, -5.8)); else back.add(mk(lathe([[0, -6.4], [R - 6.85, -6.4], [R - 2.25, -5.4], [R - 1.45, -4.6], [0, -4.6]]), CASE)); assembly(back, -31);
 
   /* ----- tuning-fork movement (Bulova Accutron 214) -----
      The works of a 214 face the dial, which is why a Spaceview can do without one. So this movement is not
@@ -219,8 +223,9 @@ export function buildProcedural(watch, face, tex) {
   }
 
   /* ----- movement: local +Z points out of the back of the watch ----- */
-  const mv = new THREE.Group(); mv.position.z = 0.2; mv.rotation.y = Math.PI; if (P.subSeconds === 6) mv.rotation.z = -Math.PI / 2; /* puts the fourth wheel under the six o'clock register */ root.add(mv); assembly(mv, 0);
-  part('plate', mv).add(at(mk(cyl(mvR, 2, 72), P.plate || 'copper', { real: { color: P.plate === 'steel' ? 0x7f7f7c : 0x9a6649, roughness: 0.72 } }), 0, 0, -1)); /* matte and darker than the bridges, so they read against it */
+  const MK = mvR < 13 ? mvR / 13.5 : 1; /* the layout below is drawn for a movement about 27 mm across; a smaller one is the same layout, scaled */
+  const mv = new THREE.Group(); mv.position.z = 0.2; mv.rotation.y = Math.PI; mv.scale.set(MK, MK, 1); if (P.subSeconds === 6) mv.rotation.z = -Math.PI / 2; /* puts the fourth wheel under the six o'clock register */ root.add(mv); assembly(mv, 0);
+  part('plate', mv).add(at(mk(cyl(mvR / MK, 2, 72), P.plate || 'copper', { real: { color: P.plate === 'steel' ? 0x7f7f7c : 0x9a6649, roughness: 0.72 } }), 0, 0, -1)); /* matte and darker than the bridges, so they read against it */
   const spins = {};
   const mobile = (id, x, y, o, parent) => {
     const g = parent || at(part(id, mv), x, y, 0), sp = new THREE.Group(); if (parent) sp.position.set(x, y, 0); g.add(sp);

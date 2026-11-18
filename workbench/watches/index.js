@@ -7,5 +7,6 @@ import elPrimero from './el-primero-a386.js';
 import spaceview from './accutron-spaceview.js';
 import royalOak from './royal-oak-5402.js';
 import monaco from './monaco-1133b.js';
+import tank from './tank-louis-cartier.js';
 
-export const watches = [speedmaster, submariner, calatrava, elPrimero, spaceview, royalOak, monaco];
+export const watches = [speedmaster, submariner, calatrava, elPrimero, spaceview, royalOak, monaco, tank];

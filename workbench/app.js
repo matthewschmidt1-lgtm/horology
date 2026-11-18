@@ -10,7 +10,7 @@ const state = { view: 'front', style: 'real', level: 'beginner', sel: null, labe
 const cur = { explode: 0, open: 0, layers: 0 };
 
 /* ---------- panels ---------- */
-$('#w-kicker').textContent = `${watch.brand} · Ref. ${watch.reference} · ${watch.year}`;
+$('#w-kicker').textContent = `${watch.brand}${watch.noRef ? '' : ` · Ref. ${watch.reference}`} · ${watch.year}`;
 $('#w-title').innerHTML = `${watch.model} <em>${watch.reference}</em>`;
 $('#caveat').textContent = 'Approximate model, built from published dimensions.';
 $('#asset-note').textContent = watch.asset.note;
@@ -252,7 +252,7 @@ if (watches.length > 1) {
   const nx = watches[(watches.indexOf(watch) + 1) % watches.length], rest = watches.filter(w => w !== watch && w !== nx)
   const plate = (window.WATCHES || []).find(w => w.id === nx.archiveId)
   const html = `<aside class="wb-next" aria-label="More watches"><p class="kicker">Next on the bench</p>
-    <a class="wn-main" href="?watch=${nx.id}">${plate && Draw ? `<span class="wn-art" aria-hidden="true">${Draw.front(plate, {})}</span>` : ''}<span class="wn-txt"><b>${nx.brand} ${nx.model}</b><em>Ref. ${nx.reference} · ${nx.year}</em><i>Take it apart</i></span></a>
+    <a class="wn-main" href="?watch=${nx.id}">${plate && Draw ? `<span class="wn-art" aria-hidden="true">${Draw.front(plate, {})}</span>` : ''}<span class="wn-txt"><b>${nx.brand} ${nx.model}</b><em>${nx.noRef ? '' : `Ref. ${nx.reference} · `}${nx.year}</em><i>Take it apart</i></span></a>
     ${rest.length ? `<p class="wn-rest"><span>Or try</span>${rest.map(w => `<a href="?watch=${w.id}">${w.short || w.model}</a>`).join('')}</p>` : ''}</aside>`
   document.querySelectorAll('.pane').forEach(p => p.insertAdjacentHTML('beforeend', html))
   const A = { h: 304.3, m: 51.6, s: 216 } // the small drawing shows a fixed ten past ten
