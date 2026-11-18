@@ -91,7 +91,7 @@ main { max-width: 1240px; margin: 0 auto; padding: clamp(20px, 4vw, 44px) clamp(
 .exam-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--rule); }
 .marks { font-family: var(--mono); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
 .marks b { color: var(--ink); font-weight: 500; }
-.next { background: var(--ink); color: var(--paper); border: 1px solid var(--ink); padding: 12px 22px; font-size: 19px; cursor: pointer; }
+.next { background: var(--ink); color: var(--paper); border: 1px solid var(--ink); padding: 12px 22px; font-size: 21px; cursor: pointer; }
 .next:hover { background: #000; }
 .reveal-rule { display: flex; align-items: center; gap: 16px; margin: 48px 0 20px; font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--sienna); }
 .reveal-rule::before, .reveal-rule::after { content: ""; flex: 1; border-top: 1px solid var(--rule); }
@@ -240,7 +240,7 @@ a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation
   .q h2 { font-size: 27px; }
   .hint { display: none; }
   .opts { gap: 8px; margin-top: 14px; }
-  .opts button { padding: 10px 14px; font-size: 19px; }
+  .opts button { padding: 10px 14px; font-size: 21px; }
   .q + .q { margin-top: 20px; padding-top: 18px; }
   .sheet { padding: 14px; margin: 6px 4px; }
   .sheet-head { padding-bottom: 16px; margin-bottom: 18px; }

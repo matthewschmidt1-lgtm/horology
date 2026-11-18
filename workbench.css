@@ -194,7 +194,7 @@ span.st.I::before { border: 1.5px solid var(--gray); box-sizing: border-box; }
 .picker { display: flex; gap: 0; background: var(--parchment); border-bottom: 1px solid var(--charcoal); overflow-x: auto; scrollbar-width: none; }
 .picker:empty { display: none; }
 .picker::-webkit-scrollbar { display: none; }
-.picker a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; font-family: var(--serif); font-size: 19px; font-style: italic; color: var(--ink-2); text-decoration: none; border-right: 1px solid var(--rule); white-space: nowrap; }
+.picker a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; font-family: var(--serif); font-size: 21px; font-style: italic; color: var(--ink-2); text-decoration: none; border-right: 1px solid var(--rule); white-space: nowrap; }
 .picker a.on { background: var(--ivory); color: var(--charcoal); box-shadow: inset 0 -3px 0 var(--brass); }
 @media (hover: hover) { .picker a:hover:not(.on) { color: var(--charcoal); background: #e2d8c5; } }
 
@@ -245,7 +245,7 @@ span.st.I::before { border: 1.5px solid var(--gray); box-sizing: border-box; }
 }
 @media (max-width: 560px) {
   .pk-label { display: none; }
-  .picker a { flex: 1 1 0; justify-content: center; min-height: 48px; padding: 0 6px; font-size: 18px; }
+  .picker a { flex: 1 1 0; justify-content: center; min-height: 48px; padding: 0 6px; font-size: 20px; }
   .picker a:first-of-type { border-left: 0; }
   .picker a.on::before { margin-right: 7px; width: 7px; height: 7px; }
 }
@@ -265,7 +265,7 @@ span.st.I::before { border: 1.5px solid var(--gray); box-sizing: border-box; }
 
 @media (max-width: 560px) {
   /* four or more watches: tabs keep their natural width and the bar scrolls, with the current one centred */
-  .picker a { flex: 1 0 auto; padding: 0 14px; font-size: 17px; }
+  .picker a { flex: 1 0 auto; padding: 0 14px; font-size: 19px; }
 }
 
 /* ---------- simpler desk: one side panel, fewer controls ---------- */
