@@ -386,3 +386,17 @@ span.st { font-size: 11.5px; }
 @media (hover: hover) { .pk-menu a:hover { background: #172b47; } }
 @media (min-width: 901px) { .stage { grid-template-rows: auto auto minmax(0, 1fr) auto auto; } }
 @media (max-width: 900px) { .pk-cur b { overflow: visible; } .pk-cur i { display: inline !important; } }
+
+/* one bar, not two: the watch's name is the chooser, and the look and panel switches sit beside it */
+.stage-head { position: absolute !important; width: 1px; height: 1px; padding: 0 !important; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (min-width: 901px) { .stage { grid-template-rows: auto minmax(0, 1fr) auto auto; } }
+.bench-bar { min-height: 66px; gap: 8px 12px; padding-top: 6px; padding-bottom: 6px; }
+.pk-cur { flex-direction: column; align-items: flex-start; gap: 3px; flex: 0 1 auto; }
+.pk-name { display: inline-flex; align-items: center; gap: 12px; min-width: 0; max-width: 100%; }
+.pk-cur b { font-size: clamp(24px, 2.4vw, 32px); } .pk-cur b::after { content: none; }
+.pk-chev { flex: none; width: 9px; height: 9px; margin-top: -5px; border-right: 1.5px solid #dcc081; border-bottom: 1.5px solid #dcc081; transform: rotate(45deg); transition: transform .2s; }
+.pk-cur[aria-expanded="true"] .pk-chev { transform: rotate(225deg); margin-top: 5px; }
+.pk-cur i { font-size: 12px; letter-spacing: .12em; }
+.bench-bar .seg { margin-left: auto; flex: none; } .bench-bar .pk-step { margin-left: 0; }
+.bench-bar .pane-tog { background: #dcc081; color: #0d1a2e; border-color: #dcc081; flex: none; } .bench-bar .pane-tog[aria-expanded="true"] { background: transparent; color: #efe6d2; border-color: #dcc081; }
+@media (max-width: 900px) { .bench-bar { min-height: 60px; } .bench-bar .pk-step { display: none; } .pk-cur { min-width: 0; flex: 1 1 auto; } .pk-cur b { font-size: 22px; overflow: hidden; text-overflow: ellipsis; } .bench-bar .seg button { min-height: 40px; padding: 0 12px; } }
