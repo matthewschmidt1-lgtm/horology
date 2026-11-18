@@ -72,7 +72,8 @@ function hullShape(circles) {
 }
 
 export function buildProcedural(watch, face, tex) {
-  const P = watch.asset.params, R = face.R, ri = face.bezelInner, sub = (P.chrono === false && !P.subSeconds) ? 8 : face.inR * (P.subOffset || 0.5);
+  const P = watch.asset.params, R = face.R, ri = P.bezel === 'octagon' ? face.dialR : face.bezelInner, // an octagonal bezel frames the round dial opening
+     sub = (P.chrono === false && !P.subSeconds) ? 8 : face.inR * (P.subOffset || 0.5);
   const CASE = P.metal === 'gold' ? 'gold' : 'steel', inner = R - (P.wall || 3.25), HAND = P.handKind || (P.metal === 'gold' ? 'gold' : 'white');
   const chrono = P.chrono !== false, mvR = (P.movementDiameter || 27) / 2;
   const root = new THREE.Group(), parts = {}, asm = [], layers = [];
@@ -82,22 +83,32 @@ export function buildProcedural(watch, face, tex) {
 
   /* ----- case, crown, pushers, strap ----- */
   const kase = part('case');
-  kase.add(mk(lathe([[inner, -4.6], [R - 1.45, -4.6], [R, -3.3], [R, 1.7], [R - 0.7, 2.5], [inner, 2.5], [inner, -4.6]]), CASE));
+  const BAND = P.bezel === 'octagon' ? 'steelDark' : CASE; // a darker band lets the eight-sided bezel read against the round case beneath it
+  kase.add(mk(lathe([[inner, -4.6], [R - 1.45, -4.6], [R, -3.3], [R, 1.7], [R - 0.7, 2.5], [inner, 2.5], [inner, -4.6]]), BAND));
   const lugL = Math.max(5, P.lugToLug / 2 - R + 5.5), lugT = P.lugThick || 2.7;
-  for (const sx of [-1, 1]) for (const sy of [-1, 1]) { const lug = mk(new THREE.BoxGeometry(lugT, lugL, 3.4), CASE); lug.position.set(sx * (P.lugWidth / 2 + lugT / 2), sy * (P.lugToLug / 2 - lugL / 2 + 0.55), -2.0); lug.rotation.x = -sy * 0.28; kase.add(lug); }
+  if (P.integrated) { for (const sy of [-1, 1]) { const sh = mk(new THREE.BoxGeometry(P.lugWidth + 1.5, 7, 3.6), 'steelDark'); sh.position.set(0, sy * (R - 1.2), -1.6); sh.rotation.x = -sy * 0.2; kase.add(sh); } } // no separate lugs: the case runs straight into the bracelet
+  else for (const sx of [-1, 1]) for (const sy of [-1, 1]) { const lug = mk(new THREE.BoxGeometry(lugT, lugL, 3.4), CASE); lug.position.set(sx * (P.lugWidth / 2 + lugT / 2), sy * (P.lugToLug / 2 - lugL / 2 + 0.55), -2.0); lug.rotation.x = -sy * 0.28; kase.add(lug); }
   if (P.crownGuards) for (const sy of [-1, 1]) { const gd = mk(new THREE.BoxGeometry(3.2, 2.4, 3.4), CASE); gd.position.set(R + 0.7, sy * 3.9, -0.9); gd.rotation.z = -sy * 0.5; kase.add(gd); }
   const crown = part('crown');
   const cR = P.crownR || 2.9, cL = cR > 2.4 ? 3 : 2;
   const backCrown = P.crown === 'back'; // an Accutron 214 has no crown on the flank: it is set from the back
-  if (!backCrown) crown.add(at(mk(new THREE.CylinderGeometry(cR, cR, cL, 28).rotateZ(Math.PI / 2), CASE, { edgeAngle: 10 }), R + 0.6 + cL / 2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.2, 16).rotateZ(Math.PI / 2), CASE), R + 0.3, 0, -0.9));
+  if (!backCrown) crown.add(at(mk(new THREE.CylinderGeometry(cR, cR, cL, P.crownHex ? 6 : 28).rotateZ(Math.PI / 2), CASE, { edgeAngle: 10 }), R + 0.6 + cL / 2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.2, 16).rotateZ(Math.PI / 2), CASE), R + 0.3, 0, -0.9));
   const push = chrono ? part('pushers') : null;
   if (push) for (const a of [-1, 1]) { const g = new THREE.Group(); g.rotation.z = a * Math.PI / 6; g.add(at(mk(new THREE.CylinderGeometry(1.9, 1.9, 2, 22).rotateZ(Math.PI / 2), 'steel'), R + 2.2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.6, 16).rotateZ(Math.PI / 2), 'steel'), R + 0.6, 0, -0.9)); push.add(g); }
   const strap = part('strap');
-  for (const sy of [-1, 1]) { const s = mk(new THREE.BoxGeometry(P.lugWidth - 0.4, 13, 2.2), 'leather'); s.position.set(0, sy * (P.lugToLug / 2 + 2.6), -4.3); s.rotation.x = -sy * 0.5; strap.add(s); }
+  for (const sy of [-1, 1]) { const s = mk(new THREE.BoxGeometry(P.lugWidth - 0.4, 13, 2.2), P.integrated ? 'steelDark' : 'leather'); s.position.set(0, sy * (P.lugToLug / 2 + 2.6), P.integrated ? -3.2 : -4.3); s.rotation.x = -sy * (P.integrated ? 0.3 : 0.5); if (P.integrated) s.userData.real.roughness = 0.62; strap.add(s); }
   assembly(kase, -15); if (!backCrown) assembly(crown, -15, 9); if (push) assembly(push, -15, 5); assembly(strap, -15);
 
   /* ----- bezel, crystal, dial, hands ----- */
   const bezel = part('bezel');
+  if (P.bezel === 'octagon') { // eight flat sides, a round opening, and a hexagonal bolt at each corner
+    const o = new THREE.Shape(), hole = new THREE.Path(), A = k => (22.5 + 45 * k) * Math.PI / 180;
+    for (let k = 0; k < 8; k++) (k ? o.lineTo(R * Math.cos(A(k)), R * Math.sin(A(k))) : o.moveTo(R * Math.cos(A(k)), R * Math.sin(A(k)))); o.closePath();
+    hole.absarc(0, 0, ri, 0, Math.PI * 2, true); o.holes.push(hole);
+    bezel.add(at(mk(new THREE.ExtrudeGeometry(o, { depth: 1.45, bevelEnabled: false, curveSegments: 48 }), CASE), 0, 0, 2.5));
+    const br = ri + (R - ri) * 0.56;
+    for (let k = 0; k < 8; k++) bezel.add(at(mk(new THREE.CylinderGeometry(1.05, 1.05, 0.4, 6).rotateX(Math.PI / 2), 'white', { edgeAngle: 20 }), br * Math.cos(A(k)), br * Math.sin(A(k)), 4.05), at(mk(new THREE.BoxGeometry(1.5, 0.2, 0.1), 'iron', { noEdges: true }), br * Math.cos(A(k)), br * Math.sin(A(k)), 4.3));
+  } else
   bezel.add(mk(lathe([[ri, 2.5], [R, 2.5], [R - 0.3, 3.9], [ri, 3.95], [ri, 2.5]]), CASE));
   if (P.bezelInsert !== false) bezel.add(at(mk(new THREE.RingGeometry(ri + 0.05, R - 0.45, 128), 'face', { noEdges: true, real: { map: tex.real }, tech: { map: tex.tech } }), 0, 0, 3.97));
   assembly(bezel, 21);
@@ -117,7 +128,7 @@ export function buildProcedural(watch, face, tex) {
   hands.add(at(mk(cyl(0.95, 0.9, 20), CASE), 0, 0, 3.0));
   const subHand = (x, y) => { const p = hand(0.26, 4.2, 2.5); p.position.x = x; p.position.y = y; p.children[0].geometry.translate(0, -0.5, 0); return p; };
   const hSec = chrono ? subHand(-sub, 0) : P.subSeconds === 6 ? subHand(0, -sub) : hChr; if (chrono) { subHand(sub, 0); subHand(0, -sub); }
-  if (P.subSeconds) hChr.visible = false;
+  if (P.subSeconds || P.noSeconds) hChr.visible = false;
   assembly(hands, 13);
 
   /* ----- spacer ring, dust cover, caseback ----- */

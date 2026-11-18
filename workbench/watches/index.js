@@ -5,5 +5,6 @@ import submariner from './submariner-5513.js';
 import calatrava from './calatrava-96.js';
 import elPrimero from './el-primero-a386.js';
 import spaceview from './accutron-spaceview.js';
+import royalOak from './royal-oak-5402.js';
 
-export const watches = [speedmaster, submariner, calatrava, elPrimero, spaceview];
+export const watches = [speedmaster, submariner, calatrava, elPrimero, spaceview, royalOak];
