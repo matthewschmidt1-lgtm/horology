@@ -76,7 +76,7 @@ body.hx { padding-top: var(--mast-h, 77px); }
 .beat.in { transform: none; } .beat.on { opacity: 1; }
 .by { font-family: var(--mono); font-size: 14px; letter-spacing: .14em; color: var(--acc); margin-bottom: 8px; }
 .beat h3 { font-family: var(--serif); font-size: clamp(28px, 3vw, 42px); font-weight: 500; line-height: 1.08; margin: 4px 0 12px; text-wrap: balance; }
-.beat p { font-size: clamp(19px, 1.5vw, 22px); line-height: 1.45; }
+.beat p { font-size: clamp(21px, 1.5vw, 22px); line-height: 1.45; }
 .beat .go { justify-content: flex-start; }
 .cite { display: inline-block; margin-left: 4px; font-family: var(--mono); font-size: 10px; vertical-align: super; line-height: 1; color: var(--acc); text-decoration: none; border: 1px solid var(--acc); border-radius: 50%; min-width: 16px; height: 16px; text-align: center; padding-top: 2px; }
 .cite:hover { background: var(--acc); color: var(--bg); }
