@@ -78,7 +78,11 @@ function setPane(open) { document.body.classList.toggle('pane-closed', !open); c
 setPane(false);
 $('#pane-tog').addEventListener('click', () => setPane(document.body.classList.contains('pane-closed')));
 function showPane(p) { $$('.pane').forEach(x => x.classList.toggle('show', x.dataset.pane === p)); $$('.mtabs button').forEach(x => x.classList.toggle('on', x.dataset.show === p)); }
-$('.mtabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) showPane(b.dataset.show); });
+$('.mtabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b && b.dataset.show) showPane(b.dataset.show); });
+$('#pane-x').addEventListener('click', () => { setPane(false); $('#pk-dots') && $('#pk-dots').focus(); });
+// A click away from the open panel closes it. The watch itself is handled where parts are picked, and the view controls are left alone so a part can be read while the watch is turned or opened.
+document.addEventListener('click', e => { if (document.body.classList.contains('pane-closed')) return; if (e.target.closest('.pane, .mtabs, #picker, #gl, #labels, .hud, .tools, .toolbar, [data-part], #blueprint')) return; setPane(false); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.body.classList.contains('pane-closed') && $('#pk-opts') && $('#pk-opts').hidden && $('#pk-menu').hidden) setPane(false); });
 showPane('parts'); renderDetail();
 
 /* ---------- blueprint sheet (2D, from the archive plate) ---------- */
@@ -246,7 +250,7 @@ async function start3D() {
   buildLabels(); setStyle('real'); setView('front');
   let down = null;
   canvas.addEventListener('pointerdown', e => { down = [e.clientX, e.clientY]; });
-  canvas.addEventListener('pointerup', e => { if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6) return; const r = vp.getBoundingClientRect(), id = pickAt(e.clientX - r.left, e.clientY - r.top); if (id) select(id, true); });
+  canvas.addEventListener('pointerup', e => { if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6) return; const r = vp.getBoundingClientRect(), id = pickAt(e.clientX - r.left, e.clientY - r.top); if (id) select(id, true); else setPane(false); /* a tap on empty space beside the watch closes the side panel */ });
   canvas.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse' || e.buttons) return; const r = vp.getBoundingClientRect(); canvas.style.cursor = pickAt(e.clientX - r.left, e.clientY - r.top) ? 'pointer' : 'grab'; });
   const d0 = new Date(); tv = d0.getHours() * 3600 + d0.getMinutes() * 60 + d0.getSeconds() + d0.getMilliseconds() / 1000;
   window.__bench = { model, camera, state, cur, pickAt, select, setView };
