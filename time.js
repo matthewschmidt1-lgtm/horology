@@ -73,7 +73,7 @@ $('#metro').innerHTML = `<svg viewBox="-60 -122 120 160" class="inst"><path clas
 function metroFacts() {
   const beat = 60 / M.bpm, T = 2 * beat, L = 9.80665 * (T / (2 * Math.PI)) ** 2;
   $('#m-bpm').textContent = M.bpm; $('#m-w').setAttribute('y', f(-92 + (M.bpm - 40) / 260 * 78 - 4.5));
-  $('#m-facts').innerHTML = `<div><dt>One beat</dt><dd>${beat >= 1 ? beat.toFixed(2) + ' s' : Math.round(beat * 1000) + ' ms'}</dd></div><div><dt>Full swings</dt><dd>${(M.bpm / 120).toFixed(2)} a second</dd></div><div><dt>A plain pendulum at this tempo</dt><dd>${L >= 1 ? L.toFixed(2) + ' m' : (L * 100).toFixed(1) + ' cm'} long</dd></div>`;
+  $('#m-facts').innerHTML = `<div><dt>One beat</dt><dd>${beat >= 1 ? beat.toFixed(2) + ' s' : Math.round(beat * 1000) + ' ms'}</dd></div><div><dt>A plain pendulum at this tempo</dt><dd>${L >= 1 ? L.toFixed(2) + ' m' : (L * 100).toFixed(1) + ' cm'} long</dd></div>`;
 }
 function metroFrame(ms) {
   if (!M.on) return;
@@ -108,10 +108,7 @@ function anat(t) {
   $$('.i-step').forEach(s => s.classList.toggle('on', +s.dataset.i < Math.floor(steps + 0.001) || (+s.dataset.i === idx && e >= 1)));
   $('#a-ms').textContent = Math.round(t); $('#a-beat').textContent = `Beat ${idx + 1} of 5`;
   $('#a-energy').textContent = moving ? 'Flowing: one impulse' : 'Held back';
-  $('#a-balt').textContent =`${Math.abs(th).toFixed(0)}° ${th >= 0 ? 'clockwise' : 'anticlockwise'} of centre`;
   $('#a-esc').textContent = moving ? 'Unlocked: giving impulse' : 'Locked';
-  $('#a-train').textContent = `Escape wheel ${(steps * 12).toFixed(0)}° · fourth wheel ${(steps * 1.2).toFixed(1)}°`;
-  $('#a-hand').textContent = `${(steps * 1.2).toFixed(1)}° of 6°`;
   $$('#a-chain li').forEach((li, i) => li.classList.toggle('hot', moving ? i !== 1 : i === 1));
 }
 function anatFrame(ms) { if (!A.on) return; const dt = ms - A.last; A.last = ms; let t = A.t + dt / 14; if (t > 1000) t = 0; $('#a-t').value = t; anat(t); requestAnimationFrame(anatFrame); } // one second played over fourteen
@@ -201,7 +198,7 @@ function drawDay() {
   const mins = Math.round(mod(S.parts(date, loc.tz).h * 60 + S.parts(date, loc.tz).mi, 1440));
   if (document.activeElement !== $('#cd-t') || C.day == null) $('#cd-t').value = mins;
   $('#cd-lab').textContent = S.clock(date, loc.tz); $('#cd-now').disabled = C.day == null && !C.dayOn;
-  $('#c-day-t').textContent = `${S.clock(date, loc.tz)} at ${placeName()}: ${S.phase(ps.alt, ps.ha).toLowerCase()}. The dot is you, seen from above the ${sg > 0 ? 'North' : 'South'} Pole as the Earth turns ${sg > 0 ? 'anticlockwise' : 'clockwise'}. Today it spends ${Math.floor(ev.length / 60)} h ${pad(Math.round(ev.length) % 60)} min in the light.`;
+  $('#c-day-t').textContent = `The dot is you, seen from above the ${sg > 0 ? 'North' : 'South'} Pole. Today it spends ${Math.floor(ev.length / 60)} h ${pad(Math.round(ev.length) % 60)} min in the light.`;
 }
 
 /* The month: the moon as it faces this hemisphere, at any day of its cycle. */
@@ -211,7 +208,7 @@ function drawMoon() {
   $('#c-moon').innerHTML = `<svg viewBox="-50 -50 100 100" class="inst"><circle class="mo-dark" r="34"/><path class="mo-lit" transform="scale(${flip},1)" d="M0,-34A34,34 0 0 1 0,34A${rx},34 0 0 ${k < 0.25 ? 0 : 1} 0,-34Z"/><circle class="i-line" r="34"/><circle class="i-line faint" r="42"/></svg>`;
   if (document.activeElement !== $('#cm-t') || C.moon == null) $('#cm-t').value = age.toFixed(1);
   $('#cm-lab').textContent = `${age.toFixed(1)} of 29.5`; $('#cm-now').disabled = C.moon == null;
-  $('#c-moon-t').textContent = `${mn.name}: about ${Math.round(mn.lit * 100)}% lit.` + (C.moon == null ? ` Next full moon around ${dayMonth(cur.nextFull, loc.tz)}; next new moon around ${dayMonth(cur.nextNew, loc.tz)}.` : '') + ' Twelve lunations make 354 days, eleven short of a year, so months and years never line up.';
+  $('#c-moon-t').textContent = `${mn.name}: about ${Math.round(mn.lit * 100)}% lit.` + (C.moon == null ? ` Next full moon around ${dayMonth(cur.nextFull, loc.tz)}; next new moon around ${dayMonth(cur.nextNew, loc.tz)}.` : '') + ' Twelve lunations fall eleven days short of a year.';
 }
 
 /* The year: the Earth on its orbit, seen from above the north pole, travelling anticlockwise.
@@ -230,13 +227,13 @@ function drawYear() {
   if (document.activeElement !== $('#cy-t') || C.year == null) $('#cy-t').value = Math.round(doy);
   $('#cy-t').max = n; $('#cy-lab').textContent = dayMonth(date, 'UTC'); $('#cy-now').disabled = C.year == null && !C.yearOn;
   const season = (north ? ['spring', 'summer', 'autumn', 'winter'] : ['autumn', 'winter', 'spring', 'summer'])[Math.floor(mod(ps.lam, 360) / 90)];
-  $('#c-orbit-t').textContent = `${dayMonth(date, 'UTC')}: the sun stands overhead at latitude ${Math.abs(ps.decl).toFixed(1)}° ${ps.decl >= 0 ? 'north' : 'south'}, so it is ${season} at ${placeName()}. The short line is the Earth’s axis, tilted 23.4° and leaning the same way all year. That tilt makes the seasons, not distance: the Earth is closest to the sun in early January.`;
+  $('#c-orbit-t').textContent = `${dayMonth(date, 'UTC')}: ${season} at ${placeName()}. The short line is the Earth’s axis, tilted 23.4°. That tilt makes the seasons, not distance: the Earth is closest to the sun in early January.`;
 }
 function cycles() {
   drawDay(); drawMoon(); drawYear();
   const now = new Date(), north = loc.lat >= 0, names = ['March equinox', 'June solstice', 'September equinox', 'December solstice'];
   const mean = [north ? 'spring begins' : 'autumn begins', north ? 'the longest day' : 'the shortest day', north ? 'autumn begins' : 'spring begins', north ? 'the shortest day' : 'the longest day'];
-  $('#c-next').innerHTML = [0, 90, 180, 270].map((t, i) => ({ d: nextCross(t, now.getTime()), n: names[i], m: mean[i] })).sort((a, b) => a.d - b.d).map(x => `<li><b>${dayMonth(x.d, loc.tz)}</b><span>${x.n}: ${x.m}</span><em>about ${S.clock(x.d, loc.tz)}</em></li>`).join('');
+  $('#c-next').innerHTML = [0, 90, 180, 270].map((t, i) => ({ d: nextCross(t, now.getTime()), n: names[i], m: mean[i] })).sort((a, b) => a.d - b.d).map(x => `<li><b>${dayMonth(x.d, loc.tz)}</b><span>${x.n}: ${x.m}</span></li>`).join('');
 }
 function cycFrame(ms) { // a day turns in about twelve seconds, a year in about eighteen
   if (!C.dayOn && !C.yearOn) return; const dt = Math.min(100, ms - C.last); C.last = ms;
