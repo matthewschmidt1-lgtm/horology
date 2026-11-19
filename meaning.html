@@ -74,7 +74,13 @@
         <radialGradient id="mo-halo"><stop offset=".3" stop-color="#8fe0bd" stop-opacity=".42"/><stop offset=".62" stop-color="#5fbf9a" stop-opacity=".14"/><stop offset="1" stop-color="#5fbf9a" stop-opacity="0"/></radialGradient>
         <radialGradient id="mo-green" cx=".36" cy=".32" r=".82"><stop offset="0" stop-color="#b4ecd2"/><stop offset=".42" stop-color="#4fa884"/><stop offset="1" stop-color="#14402f"/></radialGradient>
         <radialGradient id="mo-body" cx=".36" cy=".32" r=".8"><stop offset="0" stop-color="#5f93cf"/><stop offset=".45" stop-color="#24487a"/><stop offset="1" stop-color="#081120"/></radialGradient>
-        <radialGradient id="mo-air"><stop offset=".72" stop-color="#6fb0ff" stop-opacity="0"/><stop offset=".86" stop-color="#6fb0ff" stop-opacity=".5"/><stop offset="1" stop-color="#6fb0ff" stop-opacity="0"/></radialGradient>
+        <radialGradient id="mo-air"><stop offset=".74" stop-color="#6fb0ff" stop-opacity="0"/><stop offset=".8" stop-color="#6fb0ff" stop-opacity=".34"/><stop offset="1" stop-color="#6fb0ff" stop-opacity="0"/></radialGradient>
+        <radialGradient id="mo-shade" cx=".34" cy=".3" r=".85"><stop offset="0" stop-color="#bfe0ff" stop-opacity=".2"/><stop offset=".4" stop-color="#0a1626" stop-opacity="0"/><stop offset=".78" stop-color="#050b15" stop-opacity=".62"/><stop offset="1" stop-color="#03070e" stop-opacity=".93"/></radialGradient>
+        <clipPath id="mo-clip"><circle r="70"/></clipPath>
+        <filter id="mo-light" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="0.009 0.05" numOctaves="4" seed="7"/><feColorMatrix values="0 0 0 0 .74  0 0 0 0 .87  0 0 0 0 1  2.6 0 0 0 -1.15"/></filter>
+        <filter id="mo-dark" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="0.013 0.07" numOctaves="4" seed="23"/><feColorMatrix values="0 0 0 0 .03  0 0 0 0 .07  0 0 0 0 .16  2.8 0 0 0 -1.2"/></filter>
+        <filter id="mo-grain" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="0.11" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .05  0 0 0 0 .1  0 0 0 0 .2  1.5 0 0 0 -.62"/></filter>
+        <filter id="mo-soft"><feGaussianBlur stdDeviation="2.2"/></filter>
         <g id="mo-moon"><circle r="30" fill="url(#mo-halo)"/><circle r="11" fill="url(#mo-green)"/></g>
       </defs>
       <g transform="translate(400 300) rotate(-16)">
@@ -108,8 +114,13 @@
         <g opacity="0"><animate attributeName="opacity" values="0;1" keyTimes="0;0.5" calcMode="discrete" dur="20s" begin="-19.925s" repeatCount="indefinite"/><g><animateMotion dur="20s" begin="-19.925s" repeatCount="indefinite" path="M185 0A185 58 0 1 1 -185 0A185 58 0 1 1 185 0"/><circle r="6.21" fill="#7fd6b0" opacity="0.389"/></g></g>
         <g opacity="0"><animate attributeName="opacity" values="0;1" keyTimes="0;0.5" calcMode="discrete" dur="20s" begin="0s" repeatCount="indefinite"/><g><animateMotion dur="20s" begin="0s" repeatCount="indefinite" path="M185 0A185 58 0 1 1 -185 0A185 58 0 1 1 185 0"/><use href="#mo-moon" transform="scale(.8)"/></g></g>
         <circle r="92" fill="url(#mo-air)"/>
-        <circle r="70" fill="url(#mo-body)"/>
-        <path class="mo-band" d="M-66 -18Q0 6 66 -18M-69 10Q0 34 69 10M-58 36Q0 56 58 36"/>
+        <g clip-path="url(#mo-clip)">
+          <circle r="70" fill="#2f5c98"/>
+          <g transform="rotate(9)"><rect x="-80" y="-80" width="160" height="160" filter="url(#mo-dark)"/><rect x="-80" y="-80" width="160" height="160" filter="url(#mo-light)" opacity=".8"/></g>
+          <rect x="-80" y="-80" width="160" height="160" filter="url(#mo-grain)" opacity=".7"/>
+          <g filter="url(#mo-soft)"><ellipse cx="24" cy="21" rx="15" ry="6.5" transform="rotate(8 24 21)" fill="#0b1a30" opacity=".6"/><ellipse cx="-30" cy="-27" rx="9" ry="3.6" fill="#cfe6ff" opacity=".4"/><ellipse cx="-8" cy="44" rx="11" ry="3" fill="#0b1a30" opacity=".45"/></g>
+          <circle r="70" fill="url(#mo-shade)"/>
+        </g>
         <g opacity="1"><animate attributeName="opacity" values="1;0" keyTimes="0;0.5" calcMode="discrete" dur="20s" begin="-18.050s" repeatCount="indefinite"/><g><animateMotion dur="20s" begin="-18.050s" repeatCount="indefinite" path="M185 0A185 58 0 1 1 -185 0A185 58 0 1 1 185 0"/><circle r="1.39" fill="#7fd6b0" opacity="0.001"/></g></g>
         <g opacity="1"><animate attributeName="opacity" values="1;0" keyTimes="0;0.5" calcMode="discrete" dur="20s" begin="-18.125s" repeatCount="indefinite"/><g><animateMotion dur="20s" begin="-18.125s" repeatCount="indefinite" path="M185 0A185 58 0 1 1 -185 0A185 58 0 1 1 185 0"/><circle r="1.59" fill="#7fd6b0" opacity="0.002"/></g></g>
         <g opacity="1"><animate attributeName="opacity" values="1;0" keyTimes="0;0.5" calcMode="discrete" dur="20s" begin="-18.200s" repeatCount="indefinite"/><g><animateMotion dur="20s" begin="-18.200s" repeatCount="indefinite" path="M185 0A185 58 0 1 1 -185 0A185 58 0 1 1 185 0"/><circle r="1.78" fill="#7fd6b0" opacity="0.005"/></g></g>
