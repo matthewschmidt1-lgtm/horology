@@ -104,6 +104,7 @@ function buildBlueprint() {
 buildBlueprint();
 function tick2d() {
   const n = new Date(), t = n.getSeconds() + n.getMilliseconds() / 1000, m = (n.getMinutes() + t / 60) * 6, h = ((n.getHours() % 12) + n.getMinutes() / 60) * 30;
+  $$('[data-date]').forEach(el => { if (el.textContent !== String(n.getDate())) el.textContent = n.getDate(); }); // date windows in the blueprint and the small drawings
   $$('[data-hand]').forEach(el => { const k = el.dataset.hand, b = +el.dataset.bps; el.setAttribute('transform', `rotate(${(k === 'h' ? h : k === 'm' ? m : (b ? Math.floor(t * b) / b : t) * 6).toFixed(2)})`); });
 }
 
