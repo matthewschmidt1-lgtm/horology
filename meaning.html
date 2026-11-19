@@ -65,6 +65,29 @@
     <p class="mn-turn rv">Each perspective brings us closer to understanding something that remains profoundly mysterious.</p>
   </section>
 
+  <!-- ============ a star in orbit: a picture only, no claim about any real system ============ -->
+  <section class="mn-orbit" aria-hidden="true">
+    <div class="mo-glow"></div>
+    <div class="mo-sky" id="sky-orbit"></div>
+    <svg id="mo-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" focusable="false">
+      <defs>
+        <radialGradient id="mo-halo"><stop offset="0" stop-color="#fff8e2"/><stop offset=".16" stop-color="#ffe9ad" stop-opacity=".85"/><stop offset=".45" stop-color="#dcc081" stop-opacity=".22"/><stop offset="1" stop-color="#dcc081" stop-opacity="0"/></radialGradient>
+        <radialGradient id="mo-body" cx=".36" cy=".32" r=".8"><stop offset="0" stop-color="#5f93cf"/><stop offset=".45" stop-color="#24487a"/><stop offset="1" stop-color="#081120"/></radialGradient>
+        <radialGradient id="mo-air"><stop offset=".72" stop-color="#6fb0ff" stop-opacity="0"/><stop offset=".86" stop-color="#6fb0ff" stop-opacity=".5"/><stop offset="1" stop-color="#6fb0ff" stop-opacity="0"/></radialGradient>
+        <g id="mo-star"><circle r="46" fill="url(#mo-halo)"/><path d="M0 -30L2.2 -2.2L30 0L2.2 2.2L0 30L-2.2 2.2L-30 0L-2.2 -2.2Z" fill="#fff8e2" opacity=".9"/><circle r="6.5" fill="#fffdf4"/></g>
+      </defs>
+      <g transform="translate(400 300) rotate(-16)">
+        <g class="mo-rings"><circle r="70"/><circle r="70"/><circle r="70"/></g>
+        <path class="mo-path" d="M300 0A300 92 0 1 1 -300 0A300 92 0 1 1 300 0"/>
+        <g opacity="0"><animate attributeName="opacity" values="0;1" keyTimes="0;0.5" calcMode="discrete" dur="26s" repeatCount="indefinite"/><g><animateMotion dur="26s" repeatCount="indefinite" path="M300 0A300 92 0 1 1 -300 0A300 92 0 1 1 300 0"/><use href="#mo-star" transform="scale(.72)"/></g></g>
+        <circle r="92" fill="url(#mo-air)"/>
+        <circle r="70" fill="url(#mo-body)"/>
+        <path class="mo-band" d="M-66 -18Q0 6 66 -18M-69 10Q0 34 69 10M-58 36Q0 56 58 36"/>
+        <g><animate attributeName="opacity" values="1;0" keyTimes="0;0.5" calcMode="discrete" dur="26s" repeatCount="indefinite"/><g><animateMotion dur="26s" repeatCount="indefinite" path="M300 0A300 92 0 1 1 -300 0A300 92 0 1 1 300 0"/><use href="#mo-star"/></g></g>
+      </g>
+    </svg>
+  </section>
+
   <!-- ============ a universe in motion ============ -->
   <section class="mn-universe" aria-labelledby="u-h">
     <div class="mn-wheel" id="sky-wheel" aria-hidden="true"></div>
