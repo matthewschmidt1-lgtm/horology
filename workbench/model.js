@@ -187,7 +187,7 @@ export function buildProcedural(watch, face, tex) {
     };
     spins.index = mobile('index-wheel', IX, IY, { R: 1.2, n: 300, tooth: 0.035, spokes: 0, z: 1.2, kind: 'steel', pin: 0.3, pinZ: 0.78 });
     spins.inter = mobile('train', -0.73, 2.86, { R: 2.2, n: 60, z: 0.55, pin: 0.35, pinZ: 1.28, spokes: 4 });
-    spins.sec = mobile('seconds-wheel', 0, 0, { R: 2.6, n: 72, z: 1.05, spokes: 4 });
+    spins.sec = mobile('seconds-wheel', 0, 0, { R: 2.6, n: 72, z: 0.93, spokes: 4 });
     // the index jewel rides on the left tine and pushes the wheel; the pawl jewel is fixed and stops it running back
     const ij = part('index-jewel', tines[0]);
     ij.add(at(mk(new THREE.BoxGeometry(1.7, 0.22, 0.22), 'steel'), 1.4, IY + 1.2 + 7.4, 1.3), at(mk(new THREE.BoxGeometry(0.34, 0.34, 0.34), 'ruby'), TX + IX, IY + 1.2 + 7.4, 1.3));
@@ -226,7 +226,7 @@ export function buildProcedural(watch, face, tex) {
   /* ----- movement: local +Z points out of the back of the watch ----- */
   const MK = mvR < 13 ? mvR / 13.5 : 1; /* the layout below is drawn for a movement about 27 mm across; a smaller one is the same layout, scaled */
   const mv = new THREE.Group(); mv.position.z = 0.2; mv.rotation.y = Math.PI; mv.scale.set(MK, MK, 1); if (P.subSeconds === 6) mv.rotation.z = -Math.PI / 2; /* puts the fourth wheel under the six o'clock register */ root.add(mv); assembly(mv, 0);
-  part('plate', mv).add(at(mk(cyl(mvR / MK, 2, 72), P.plate || 'copper', { real: { color: P.plate === 'steel' ? 0x7f7f7c : 0x9a6649, roughness: 0.72 } }), 0, 0, -1)); /* matte and darker than the bridges, so they read against it */
+  part('plate', mv).add(at(mk(cyl(mvR / MK, 1.78, 72), P.plate || 'copper', { real: { color: P.plate === 'steel' ? 0x7f7f7c : 0x9a6649, roughness: 0.72 } }), 0, 0, -0.89)); /* matte and darker than the bridges, so they read against it */
   const spins = {};
   const mobile = (id, x, y, o, parent) => {
     const g = parent || at(part(id, mv), x, y, 0), sp = new THREE.Group(); if (parent) sp.position.set(x, y, 0); g.add(sp);
@@ -263,7 +263,7 @@ export function buildProcedural(watch, face, tex) {
   const flat = (id, circles, z, th, kind = P.plate || 'copper') => { const g = part(id, mv), cx = circles[0][0], cy = circles[0][1]; g.position.set(cx, cy, 0); const m = at(mk(extr(hullShape(circles.map(c => [c[0] - cx, c[1] - cy, c[2]])), th), kind, { edgeAngle: 40 }), 0, 0, z); g.add(m); return g; };
   const bb = flat('barrel-bridge', [[bX, bY, 5.3], [bX - 2.5, bY + 3.5, 3.2]], 2.15, 0.5); layer(bb, 4);
   const tb = flat('train-bridge', [[tx, ty, 1.5], [sub, 0, 1.5], [eX, eY, 1.3], [sub + 3.2, 3.4, 1.4]], 2.15, 0.45); layer(tb, 4);
-  const n = Math.hypot(BX, BY), bc = flat('balance-cock', [[BX, BY, 1.3], [BX / n * 12.3, BY / n * 12.3, 1.6], [BX / n * 12.3 - 1.6, BY / n * 12.3 + 1.2, 1.3]], 3.3, 0.45); layer(bc, 4);
+  const n = Math.hypot(BX, BY), bc = flat('balance-cock', [[BX, BY, 1.3], [BX / n * 11.5, BY / n * 11.5, 1.6], [BX / n * 11.5 - 1.6, BY / n * 11.5 + 1.2, 1.3]], 3.3, 0.45); layer(bc, 4);
   const jw = part('jewels', mv), jewel = (x, y, z, host) => { const j = at(mk(cyl(0.36, 0.16, 16), 'ruby'), x, y, z); jw.add(j); layer(j, host); return j; };
   jewel(tx, ty, 2.66, 4); jewel(sub, 0, 2.66, 4); jewel(eX, eY, 2.66, 4); jewel(BX, BY, 3.82, 4); jewel(pmx, pmy, 1.3, 0);
 
@@ -271,8 +271,9 @@ export function buildProcedural(watch, face, tex) {
   if (chrono) {
   const run = part('chrono-runner', mv), runSpin = mobile(null, 0, 0, { R: 3.4, n: 150, tooth: 0.1, z: 2.85, th: 0.18, kind: 'steelDark', spokes: 4, arbor: 3.4 }, run);
   runSpin.add(at(mk(cyl(0.75, 0.3, 3), 'steelDark'), 0, 0, 3.2)); layer(run, 8);
-  const cp = at(part('coupling', mv), sub - 2.95, 0, 0);
-  spins.drive = mobile(null, 2.95, 0, { R: 1.7, n: 48, tooth: 0.12, z: 2.85, th: 0.18, spokes: 0, arbor: 0.01 }, cp);
+  const ix = (4.65 * 4.65 - 2.95 * 2.95 + sub * sub) / (2 * sub), iy = -Math.sqrt(Math.max(0, 4.65 * 4.65 - ix * ix)); /* 4.65 from the runner, 2.95 from the driving wheel: teeth meet, wheels do not cross */
+  const cp = at(part('coupling', mv), ix, iy, 0);
+  spins.drive = mobile(null, sub - ix, -iy, { R: 1.7, n: 48, tooth: 0.12, z: 2.85, th: 0.18, spokes: 0, arbor: 0.01 }, cp);
   spins.inter = mobile(null, 0, 0, { R: 1.25, n: 36, tooth: 0.12, z: 2.85, th: 0.18, spokes: 0, arbor: 0.01 }, cp);
   cp.add(at(mk(extr(hullShape([[0, 0, 0.7], [-1.6, 5.6, 0.6]]), 0.2), 'steel', { edgeAngle: 40 }), 0, 0, 3.1)); layer(cp, 8);
   const mr = part('minute-recorder', mv); mobile(null, -sub, 0, { R: 2.2, n: 60, tooth: 0.14, z: 2.85, th: 0.18, spokes: 4, arbor: 0.01 }, mr); mr.position.set(0, 0, 0); layer(mr, 8);
@@ -297,9 +298,9 @@ export function buildProcedural(watch, face, tex) {
     const rot = part('rotor', mv), w = new THREE.Shape(), web = new THREE.Shape(), ro = mvR - 0.5;
     w.absarc(0, 0, ro, Math.PI, Math.PI * 2, false); w.absarc(0, 0, ro - 3.2, Math.PI * 2, Math.PI, true); w.closePath();
     web.absarc(0, 0, ro - 3.2, Math.PI, Math.PI * 2, false); web.lineTo(1.6, 0); web.absarc(0, 0, 1.6, 0, Math.PI, false); web.closePath();
-    const rz = chrono ? 4.05 : 3.45; // an automatic chronograph carries its rotor above the chronograph works
-    rot.add(at(mk(extr(w, 0.9), 'steelDark', { edgeAngle: 40 }), 0, 0, rz), at(mk(extr(web, 0.16), 'steel', { edgeAngle: 40 }), 0, 0, rz), at(mk(cyl(1.1, 0.5, 20), 'steelDark'), 0, 0, rz + 0.3));
-    rot.userData.anchor = [0, -(ro - 1.6), rz + 0.85]; layer(rot, chrono ? 16 : 12);
+    const rz = chrono ? 4.0 : 3.95; // the rotor swings clear of the balance cock (and, on a chronograph, the chronograph works) and under the caseback
+    rot.add(at(mk(extr(w, 0.74), 'steelDark', { edgeAngle: 40 }), 0, 0, rz), at(mk(extr(web, 0.16), 'steel', { edgeAngle: 40 }), 0, 0, rz), at(mk(cyl(1.1, 0.5, 20), 'steelDark'), 0, 0, rz + 0.3));
+    rot.userData.anchor = [0, -(ro - 1.6), rz + 0.7]; layer(rot, chrono ? 16 : 12);
   }
 
   /* ----- behaviour ----- */
