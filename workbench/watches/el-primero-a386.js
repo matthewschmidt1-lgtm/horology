@@ -15,7 +15,7 @@ export default {
     type: 'procedural',
     builder: 'round-chronograph',
     note: 'Case, lugs and every internal part are simplified. The blue register is rendered grey. Not a factory model or scan.',
-    params: { thickness: 12.6, lugToLug: 46, lugWidth: 19, movementDiameter: 29.3, beatsPerHour: 36000, escapeTeeth: 21, rotor: true, dustCover: false, bezelInsert: false, plate: 'steel', handKind: 'steelDark', chronoHand: 'red', subOffset: 0.46, dome: 2.6 }
+    params: { thickness: 12.6, lugToLug: 46, lugWidth: 19, movementDiameter: 29.3, beatsPerHour: 36000, escapeTeeth: 21, rotor: true, dustCover: false, bezelInsert: false, plate: 'steel', handKind: 'ink', chronoHand: 'red', subOffset: 0.46, dome: 2.6 }
   },
   images: [],
 
@@ -47,7 +47,7 @@ export default {
     { h: 'Nearly lost', s: 'D', p: 'In 1975 Zenith’s American owners ordered mechanical production stopped and the tooling sold for scrap. A foreman, Charles Vermot, hid the presses, cams and plans in an attic of the factory instead. When demand for mechanical chronographs returned in the 1980s, production restarted from what he had saved.' },
     { h: 'Afterlife', s: 'D', p: 'From 1988 to 2000 Rolex used a modified El Primero in the Daytona, slowed to 28,800 A/h. The calibre has remained in production, in developed forms, ever since.' },
     { h: 'Notable variations', s: 'D', p: 'The A386 is the round steel model with the three-colour dial. Sister references launched with the same calibre, the A384 and A385, use an angular tonneau case and different dials.' },
-    { h: 'What is drawn here', s: 'I', p: 'The model’s registers are greys; the blue one is not coloured. The date window is empty. The movement is laid out so the train and chronograph can be followed, not to Zenith’s geometry, and the date mechanism and automatic winding gears are not modelled.' }
+    { h: 'What is drawn here', s: 'I', p: 'The model’s registers are greys; the blue one is not coloured. The movement is laid out so the train and chronograph can be followed, not to Zenith’s geometry, and the date mechanism and automatic winding gears are not modelled.' }
   ],
 
   components: [

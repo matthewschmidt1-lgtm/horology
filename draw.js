@@ -249,7 +249,7 @@ function subs(w, g, o = {}) {
   const rs = R0 * (d.subBig ? 0.31 : 0.235), off = R0 * (d.subBig ? 0.46 : 0.5);
   for (const [pos, role] of d.subs) {
     const [cx, cy] = P(pos * 30, off), tint = d.subTints ? d.subTints[pos] : null;
-    const cls = d.subDark ? 'tn2' : (d.dark ? 'tn' : 'p'), sty = tint != null ? `style="fill:var(--ink);fill-opacity:${tint}"` : '';
+    const cls = d.subDark ? 'tn2' : d.subLight ? 'p' : (d.dark ? 'tn' : 'p'), sty = tint != null ? `style="fill:var(--ink);fill-opacity:${tint}"` : '';
     s += d.subSquare ? RC(cx - rs, cy - rs, 2 * rs, 2 * rs, cls, 0.9) : C(rs, cx, cy, 'p') + C(rs, cx, cy, cls, sty);
     const n = role === 'min30' ? 30 : 12;
     if (!d.subSquare) for (let i = 0; i < n; i++) s += rad(i * 360 / n, rs - (i % (n / 6) ? 0.45 : 0.9), rs - 0.12, 't', cx, cy);

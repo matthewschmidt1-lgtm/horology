@@ -91,13 +91,13 @@ function buildBlueprint() {
   if (!archive) { $('#blueprint').innerHTML = '<p class="bp-note">No archive plate is linked to this watch.</p>'; return; }
   const ex = Draw.exploded(archive);
   $('#blueprint').innerHTML = `<div class="bp-sheet">
-    <p class="bp-title"><b>${watch.brand} ${watch.model}</b> · Ref. ${watch.reference} · dimensions in millimetres</p>
+    <p class="bp-title"><b>${watch.brand} ${watch.model}</b>${watch.noRef ? '' : ` · Ref. ${watch.reference}`} · dimensions in millimetres</p>
     <div class="bp-grid">
       <figure class="b1">${Draw.front(archive, { dims: true })}<figcaption>Fig. 1 · Front elevation</figcaption></figure>
       <figure class="b2">${Draw.side(archive)}<figcaption>Fig. 2 · Side elevation</figcaption></figure>
       <figure class="b3">${Draw.rear(archive)}<figcaption>Fig. 3 · Rear elevation</figcaption></figure>
       <figure class="b4">${ex.svg}<figcaption>Fig. 4 · Exploded assembly</figcaption><ol>${ex.parts.map(p => { const k = Object.keys(LEG).find(k => p.toLowerCase().includes(k)); return `<li>${k ? `<button type="button" data-part="${LEG[k]}">${p}</button>` : p}</li>`; }).join('')}</ol></figure>
-      <figure class="b5">${Draw.movement(archive)}<figcaption>Fig. 5 · Calibre ${watch.movement.replace(/^.*calibre /, '')}, schematic</figcaption></figure>
+      <figure class="b5">${Draw.movement(archive)}<figcaption>Fig. 5 · ${/^not /.test(archive.mv.cal) ? 'Movement' : 'Calibre ' + archive.mv.cal}, schematic</figcaption></figure>
     </div>
     <p class="bp-note">A modern interpretive drawing made from published specifications. Not a manufacturer’s document. “≈” marks an approximate figure.</p></div>`;
 }

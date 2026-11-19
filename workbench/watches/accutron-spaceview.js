@@ -6,6 +6,7 @@ export default {
   model: 'Accutron Spaceview',
   short: 'Bulova Accutron Spaceview',
   reference: '214',
+  noRef: true, // 214 is the calibre, not a case reference
   year: '1960',
   era: '1960s – 1970s',
   movement: 'Bulova Accutron calibre 214',
@@ -50,7 +51,7 @@ export default {
   components: [
     { id: 'crystal', name: 'Crystal', group: 'Exterior', status: 'E', anchor: [5, 7, 4.9], face: 1,
       beginner: 'The clear dome over the front. On this watch it is the window onto the movement itself.',
-      horologist: 'A domed crystal over an open movement. On some Spaceviews the minute track and name were printed on the underside of the crystal; here they are shown on a separate ring.',
+      horologist: 'A domed crystal over an open movement. On some Spaceviews the minute track and name were printed on the underside of the crystal; here the minute track is shown on a separate ring, and the name is not shown.',
       fn: 'Protects the hands and the exposed movement.', material: 'Not specified',
       significance: 'With no dial behind it, the crystal is the whole face of the watch.', related: ['bezel', 'dial'] },
     { id: 'bezel', name: 'Bezel', group: 'Exterior', status: 'E', anchor: [0, 16.3, 3.9], face: 1,

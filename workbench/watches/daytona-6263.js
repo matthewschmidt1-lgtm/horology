@@ -15,7 +15,7 @@ export default {
     type: 'procedural',
     builder: 'round-chronograph',
     note: 'Case, lugs, pushers and every internal part are simplified, and the movement is the bench’s generic chronograph layout. Not a factory model or scan.',
-    params: { thickness: 13, lugToLug: 44, lugWidth: 19, movementDiameter: 29.5, beatsPerHour: 21600, dustCover: false, screwPushers: true, plate: 'steel', handKind: 'steelDark', chronoHand: 'steelDark', dome: 2.8 }
+    params: { thickness: 13, lugToLug: 44, lugWidth: 19, movementDiameter: 29.5, beatsPerHour: 21600, dustCover: false, screwPushers: true, plate: 'steel', handKind: 'ink', chronoHand: 'ink', bracelet: true, dome: 2.8 }
   },
   images: [],
 
@@ -84,7 +84,7 @@ export default {
       significance: 'Sealing the pushers is what made this chronograph a true Oyster.', related: ['column-wheel', 'hammer', 'case'] },
     { id: 'strap', name: 'Bracelet', group: 'Exterior', status: 'I', anchor: [0, 26, -3], face: 0,
       beginner: 'What holds the watch on the wrist, shown here as a plain stub.',
-      horologist: 'The watch was sold on a steel Oyster bracelet. Only generic stubs are shown.',
+      horologist: 'The watch was sold on a steel Oyster bracelet. Only plain steel stubs are shown; the links are not modelled.',
       fn: 'Attaches the watch to the wrist.', material: 'Not modelled',
       significance: '', related: ['case'] },
     { id: 'caseback', name: 'Caseback', group: 'Exterior', status: 'D', anchor: [0, 0, -6.2], face: -1,

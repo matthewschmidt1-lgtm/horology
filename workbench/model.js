@@ -9,6 +9,7 @@ const KIND = {
   steel:    { real: { color: 0xcfcfcb, metalness: 1, roughness: 0.3 }, tech: 0xEDE6D8 },
   gold:     { real: { color: 0xd9b25c, metalness: 1, roughness: 0.24 }, tech: 0xEDE6D8 },
   steelDark:{ real: { color: 0x9c9c99, metalness: 1, roughness: 0.36 }, tech: 0xE1D8C4 },
+  ink:      { real: { color: 0x1f2022, metalness: 0, roughness: 0.55 }, tech: 0x55544e },
   iron:     { real: { color: 0x8e8e8a, metalness: 1, roughness: 0.5 }, tech: 0xE3DAC6 },
   copper:   { real: { color: 0xd39c7a, metalness: 1, roughness: 0.38 }, tech: 0xE8DFCB },
   brass:    { real: { color: 0xd2aa52, metalness: 1, roughness: 0.3 }, tech: 0xEDE6D8 },
@@ -109,7 +110,7 @@ export function buildProcedural(watch, face, tex) {
   const push = chrono ? part('pushers') : null;
   if (push) for (const a of [-1, 1]) { const g = new THREE.Group(); if (square) g.position.y = a * 7; else g.rotation.z = a * Math.PI / 6; /* on a square case the pushers stand straight out of the flank */ g.add(at(mk(new THREE.CylinderGeometry(1.9, 1.9, 2, 22).rotateZ(Math.PI / 2), 'steel'), R + 2.2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.6, 16).rotateZ(Math.PI / 2), 'steel'), R + 0.6, 0, -0.9)); if (P.screwPushers) g.add(at(mk(new THREE.CylinderGeometry(2.3, 2.3, 1.3, 20).rotateZ(Math.PI / 2), 'steelDark', { edgeAngle: 12 }), R + 0.95, 0, -0.9)); /* a knurled collar that screws down over each pusher */ push.add(g); }
   const strap = part('strap');
-  for (const sy of [-1, 1]) { const s = mk(new THREE.BoxGeometry(P.lugWidth - 0.4, 13, 2.2), P.integrated ? 'steelDark' : 'leather'); s.position.set(0, sy * (P.lugToLug / 2 + 2.6), P.integrated ? -3.2 : -4.3); s.rotation.x = -sy * (P.integrated ? 0.3 : 0.5); if (P.integrated) s.userData.real.roughness = 0.62; strap.add(s); }
+  for (const sy of [-1, 1]) { const s = mk(new THREE.BoxGeometry(P.lugWidth - 0.4, 13, 2.2), P.integrated || P.bracelet ? 'steelDark' : 'leather'); if (P.bracelet) s.userData.real.roughness = 0.62; s.position.set(0, sy * (P.lugToLug / 2 + 2.6), P.integrated ? -3.2 : -4.3); s.rotation.x = -sy * (P.integrated ? 0.3 : 0.5); if (P.integrated) s.userData.real.roughness = 0.62; strap.add(s); }
   assembly(kase, -15); if (!backCrown) assembly(crown, -15, P.crownLeft ? -9 : 9); if (push) assembly(push, -15, 5); assembly(strap, -15);
 
   /* ----- bezel, crystal, dial, hands ----- */
@@ -121,7 +122,7 @@ export function buildProcedural(watch, face, tex) {
     hole.absarc(0, 0, ri, 0, Math.PI * 2, true); o.holes.push(hole);
     bezel.add(at(mk(new THREE.ExtrudeGeometry(o, { depth: 1.45, bevelEnabled: false, curveSegments: 48 }), CASE), 0, 0, 2.5));
     const br = ri + (R - ri) * 0.56;
-    for (let k = 0; k < 8; k++) bezel.add(at(mk(new THREE.CylinderGeometry(1.05, 1.05, 0.4, 6).rotateX(Math.PI / 2), 'white', { edgeAngle: 20 }), br * Math.cos(A(k)), br * Math.sin(A(k)), 4.05), at(mk(new THREE.BoxGeometry(1.5, 0.2, 0.1), 'iron', { noEdges: true }), br * Math.cos(A(k)), br * Math.sin(A(k)), 4.3));
+    for (let k = 0; k < 8; k++) bezel.add(at(mk(new THREE.CylinderGeometry(1.05, 1.05, 0.4, 6).rotateX(Math.PI / 2), 'white', { edgeAngle: 20 }), br * Math.cos(A(k)), br * Math.sin(A(k)), 4.05), (sl => { sl.rotation.z = A(k) + Math.PI / 2; return sl; })(at(mk(new THREE.BoxGeometry(1.5, 0.2, 0.1), 'iron', { noEdges: true }), br * Math.cos(A(k)), br * Math.sin(A(k)), 4.3)));
   } else
   bezel.add(mk(lathe([[ri, 2.5], [R, 2.5], [R - 0.3, 3.9], [ri, 3.95], [ri, 2.5]]), CASE));
   if (P.bezelInsert !== false) bezel.add(at(mk(new THREE.RingGeometry(ri + 0.05, R - 0.45, 128), 'face', { noEdges: true, real: { map: tex.real }, tech: { map: tex.tech } }), 0, 0, 3.97));
@@ -139,9 +140,9 @@ export function buildProcedural(watch, face, tex) {
   const kite = (w, L) => { const k = new THREE.Shape(); k.moveTo(0, -1.3); k.lineTo(w / 2, L * 0.14); k.lineTo(0, L - 1.3); k.lineTo(-w / 2, L * 0.14); k.closePath(); return extr(k, 0.14).translate(0, 0, -0.07); };
   const hand = (w, L, z, kind = HAND) => { const p = new THREE.Group(); let g; if (P.hands === 'dauphine' && w > 0.5) g = kite(w * 1.25, L); else { g = new THREE.BoxGeometry(w, L, 0.14); g.translate(0, L / 2 - 1.3, 0); } p.add(mk(g, kind)); p.position.z = z; hands.add(p); return p; };
   const hHour = hand(1.5, Lh, 2.7), hMin = hand(1.15, Lm, 2.95), hChr = hand(0.28, Lm * 1.05, 3.2, P.chronoHand || HAND);
-  if (P.hands === 'mercedes') { hHour.add(at(mk(cyl(1.75, 0.14, 28), 'white'), 0, Lh * 0.62, 0)); hChr.add(at(mk(cyl(0.8, 0.1, 18), 'white'), 0, Lm * 0.62, 0)); }
+  if (P.hands === 'mercedes') { hHour.add(at(mk(cyl(1.75, 0.14, 28), 'white'), 0, Lh * 0.62, 0)); for (let k = 0; k < 3; k++) { const sp = mk(new THREE.BoxGeometry(0.2, 1.75, 0.05), 'ink', { noEdges: true }); const a = k * Math.PI * 2 / 3; sp.position.set(-Math.sin(a) * 0.875, Lh * 0.62 + Math.cos(a) * 0.875, 0.1); sp.rotation.z = a; hHour.add(sp); } hChr.add(at(mk(cyl(0.8, 0.1, 18), 'white'), 0, Lm * 0.62, 0)); }
   hands.add(at(mk(cyl(0.95, 0.9, 20), CASE), 0, 0, 3.0));
-  const subHand = (x, y) => { const p = hand(0.26, 4.2, 2.5); p.position.x = x; p.position.y = y; p.children[0].geometry.translate(0, -0.5, 0); return p; };
+  const subHand = (x, y) => { const p = hand(0.26, 4.2, square ? 2.66 : 2.5, P.subHandKind || HAND); p.position.x = x; p.position.y = y; p.children[0].geometry.translate(0, -0.5, 0); return p; };
   const two = P.registers === 2; // two registers and no running seconds, as on the Calibre 11
   const hSec = chrono ? (two ? new THREE.Group() : subHand(-sub, 0)) : P.subSeconds === 6 ? subHand(0, -sub) : hChr; if (chrono) { subHand(sub, 0); if (two) subHand(-sub, 0); else subHand(0, -sub); }
   if (P.subSeconds || P.noSeconds) hChr.visible = false;

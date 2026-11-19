@@ -15,7 +15,7 @@ export default {
     type: 'procedural',
     builder: 'round-chronograph',
     note: 'Case, pushers and every internal part are simplified, and the movement is not laid out as the Calibre 11 is. The blue dial is rendered dark. Not a factory model or scan.',
-    params: { thickness: 14.5, lugToLug: 46, lugWidth: 22, movementDiameter: 31, beatsPerHour: 19800, caseShape: 'square', crownLeft: true, registers: 2, cam: true, rotor: 'micro', dustCover: false, bezelInsert: false, chronoHand: 'red', plate: 'steel', crownR: 2.5 }
+    params: { thickness: 14.5, lugToLug: 46, lugWidth: 22, movementDiameter: 31, beatsPerHour: 19800, caseShape: 'square', crownLeft: true, registers: 2, cam: true, rotor: 'micro', dustCover: false, bezelInsert: false, chronoHand: 'red', subHandKind: 'ink', plate: 'steel', crownR: 2.5 }
   },
   images: [],
 
