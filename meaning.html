@@ -75,11 +75,13 @@
         <radialGradient id="mo-green" cx=".36" cy=".32" r=".82"><stop offset="0" stop-color="#b4ecd2"/><stop offset=".42" stop-color="#4fa884"/><stop offset="1" stop-color="#14402f"/></radialGradient>
         <radialGradient id="mo-body" cx=".36" cy=".32" r=".8"><stop offset="0" stop-color="#5f93cf"/><stop offset=".45" stop-color="#24487a"/><stop offset="1" stop-color="#081120"/></radialGradient>
         <radialGradient id="mo-air"><stop offset=".74" stop-color="#6fb0ff" stop-opacity="0"/><stop offset=".8" stop-color="#6fb0ff" stop-opacity=".34"/><stop offset="1" stop-color="#6fb0ff" stop-opacity="0"/></radialGradient>
-        <radialGradient id="mo-shade" cx=".34" cy=".3" r=".85"><stop offset="0" stop-color="#bfe0ff" stop-opacity=".2"/><stop offset=".4" stop-color="#0a1626" stop-opacity="0"/><stop offset=".78" stop-color="#050b15" stop-opacity=".62"/><stop offset="1" stop-color="#03070e" stop-opacity=".93"/></radialGradient>
+        <radialGradient id="mo-sea" cx=".32" cy=".3" r=".85"><stop offset="0" stop-color="#3f86c9"/><stop offset=".55" stop-color="#1c4f8e"/><stop offset="1" stop-color="#0c2a55"/></radialGradient>
+        <radialGradient id="mo-shade" cx=".27" cy=".25" r=".95"><stop offset="0" stop-color="#03070e" stop-opacity="0"/><stop offset=".42" stop-color="#03070e" stop-opacity="0"/><stop offset=".64" stop-color="#03070e" stop-opacity=".5"/><stop offset=".8" stop-color="#03070e" stop-opacity=".86"/><stop offset="1" stop-color="#02050a" stop-opacity=".97"/></radialGradient>
+        <radialGradient id="mo-rim" cx=".27" cy=".25" r=".95"><stop offset=".3" stop-color="#9fd0ff" stop-opacity=".95"/><stop offset=".62" stop-color="#6fb0ff" stop-opacity=".35"/><stop offset=".85" stop-color="#6fb0ff" stop-opacity="0"/></radialGradient>
         <clipPath id="mo-clip"><circle r="70"/></clipPath>
-        <filter id="mo-light" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="0.009 0.05" numOctaves="4" seed="7"/><feColorMatrix values="0 0 0 0 .74  0 0 0 0 .87  0 0 0 0 1  2.6 0 0 0 -1.15"/></filter>
-        <filter id="mo-dark" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="0.013 0.07" numOctaves="4" seed="23"/><feColorMatrix values="0 0 0 0 .03  0 0 0 0 .07  0 0 0 0 .16  2.8 0 0 0 -1.2"/></filter>
-        <filter id="mo-grain" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="0.11" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .05  0 0 0 0 .1  0 0 0 0 .2  1.5 0 0 0 -.62"/></filter>
+        <filter id="mo-land" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.017" numOctaves="5" seed="11" result="n"/><feColorMatrix in="n" values="0 0 0 0 .2  0 0 0 0 .46  0 0 0 0 .27  9 0 0 0 -4.75" result="green"/><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="4" seed="5" result="m"/><feColorMatrix in="m" values="0 0 0 0 .62  0 0 0 0 .52  0 0 0 0 .33  5 0 0 0 -2.7" result="dry"/><feComposite in="dry" in2="green" operator="in" result="dryland"/><feMerge><feMergeNode in="green"/><feMergeNode in="dryland"/></feMerge></filter>
+        <filter id="mo-cloud" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.016 0.042" numOctaves="5" seed="29"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  4.6 0 0 0 -2.5"/><feGaussianBlur stdDeviation=".5"/></filter>
+        <filter id="mo-grain" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency="0.11" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .03  0 0 0 0 .08  0 0 0 0 .18  1.5 0 0 0 -.62"/></filter>
         <filter id="mo-soft"><feGaussianBlur stdDeviation="2.2"/></filter>
         <g id="mo-moon"><circle r="30" fill="url(#mo-halo)"/><circle r="11" fill="url(#mo-green)"/></g>
       </defs>
@@ -113,13 +115,18 @@
         <g opacity="0"><animate attributeName="opacity" values="0;1" keyTimes="0;0.5" calcMode="discrete" dur="20s" begin="-19.850s" repeatCount="indefinite"/><g><animateMotion dur="20s" begin="-19.850s" repeatCount="indefinite" path="M185 0A185 58 0 1 1 -185 0A185 58 0 1 1 185 0"/><circle r="6.01" fill="#7fd6b0" opacity="0.360"/></g></g>
         <g opacity="0"><animate attributeName="opacity" values="0;1" keyTimes="0;0.5" calcMode="discrete" dur="20s" begin="-19.925s" repeatCount="indefinite"/><g><animateMotion dur="20s" begin="-19.925s" repeatCount="indefinite" path="M185 0A185 58 0 1 1 -185 0A185 58 0 1 1 185 0"/><circle r="6.21" fill="#7fd6b0" opacity="0.389"/></g></g>
         <g opacity="0"><animate attributeName="opacity" values="0;1" keyTimes="0;0.5" calcMode="discrete" dur="20s" begin="0s" repeatCount="indefinite"/><g><animateMotion dur="20s" begin="0s" repeatCount="indefinite" path="M185 0A185 58 0 1 1 -185 0A185 58 0 1 1 185 0"/><use href="#mo-moon" transform="scale(.8)"/></g></g>
+        <g transform="rotate(16)">
         <circle r="92" fill="url(#mo-air)"/>
         <g clip-path="url(#mo-clip)">
-          <circle r="70" fill="#2f5c98"/>
-          <g transform="rotate(9)"><rect x="-80" y="-80" width="160" height="160" filter="url(#mo-dark)"/><rect x="-80" y="-80" width="160" height="160" filter="url(#mo-light)" opacity=".8"/></g>
-          <rect x="-80" y="-80" width="160" height="160" filter="url(#mo-grain)" opacity=".7"/>
-          <g filter="url(#mo-soft)"><ellipse cx="24" cy="21" rx="15" ry="6.5" transform="rotate(8 24 21)" fill="#0b1a30" opacity=".6"/><ellipse cx="-30" cy="-27" rx="9" ry="3.6" fill="#cfe6ff" opacity=".4"/><ellipse cx="-8" cy="44" rx="11" ry="3" fill="#0b1a30" opacity=".45"/></g>
+          <circle r="70" fill="url(#mo-sea)"/>
+          <rect x="-80" y="-80" width="160" height="160" filter="url(#mo-land)"/>
+          <rect x="-80" y="-80" width="160" height="160" filter="url(#mo-grain)" opacity=".45"/>
+          <g filter="url(#mo-soft)" fill="#f4f9ff"><ellipse cx="6" cy="-71" rx="34" ry="8" opacity=".9"/><ellipse cx="-4" cy="72" rx="30" ry="7" opacity=".8"/></g>
+          <g transform="rotate(14)"><rect x="-80" y="-80" width="160" height="160" filter="url(#mo-cloud)" opacity=".88"/></g>
+          <ellipse cx="-27" cy="-25" rx="15" ry="10" transform="rotate(-38 -27 -25)" fill="#fff" opacity=".3" filter="url(#mo-soft)"/>
           <circle r="70" fill="url(#mo-shade)"/>
+        </g>
+        <circle r="70.6" fill="none" stroke="url(#mo-rim)" stroke-width="1.6"/>
         </g>
         <g opacity="1"><animate attributeName="opacity" values="1;0" keyTimes="0;0.5" calcMode="discrete" dur="20s" begin="-18.050s" repeatCount="indefinite"/><g><animateMotion dur="20s" begin="-18.050s" repeatCount="indefinite" path="M185 0A185 58 0 1 1 -185 0A185 58 0 1 1 185 0"/><circle r="1.39" fill="#7fd6b0" opacity="0.001"/></g></g>
         <g opacity="1"><animate attributeName="opacity" values="1;0" keyTimes="0;0.5" calcMode="discrete" dur="20s" begin="-18.125s" repeatCount="indefinite"/><g><animateMotion dur="20s" begin="-18.125s" repeatCount="indefinite" path="M185 0A185 58 0 1 1 -185 0A185 58 0 1 1 185 0"/><circle r="1.59" fill="#7fd6b0" opacity="0.002"/></g></g>
