@@ -17,16 +17,13 @@ function sky(el, n, seed, square) {
 }
 sky($('#sky-open'), 170, 31337); sky($('#sky-close'), 150, 2718); sky($('#sky-wheel'), 520, 16180, true);
 
-/* ---------- the star in orbit: shining stars placed in percent, so they stay round at any width ---------- */
+/* ---------- the stars behind the Earth: placed in percent, so they stay round at any width ---------- */
 (function () {
-  const el = $('#sky-orbit'), svg = $('#mo-svg'); if (!el || !svg) return;
+  const el = $('#sky-orbit'); if (!el) return;
   let x = 4242, c = ''; const rnd = () => (x = (x * 16807) % 2147483647) / 2147483647;
-  for (let i = 0; i < 64; i++) { const big = rnd() > 0.86, s = big ? 3 : rnd() > 0.5 ? 2 : 1.4;
-    c += `<i${big ? ' class="big"' : ''} style="left:${(rnd() * 100).toFixed(2)}%;top:${(rnd() * 100).toFixed(2)}%;width:${s}px;height:${s}px;--d:${(2.4 + rnd() * 4.2).toFixed(2)}s;--w:-${(rnd() * 6).toFixed(2)}s"></i>`; }
+  for (let i = 0; i < 54; i++) { const big = rnd() > 0.92, s = big ? 2.4 : rnd() > 0.5 ? 1.6 : 1.1;
+    c += `<i${big ? ' class="big"' : ''} style="left:${(rnd() * 100).toFixed(2)}%;top:${(rnd() * 100).toFixed(2)}%;width:${s}px;height:${s}px;--d:${(3.4 + rnd() * 5).toFixed(2)}s;--w:-${(rnd() * 6).toFixed(2)}s"></i>`; }
   el.innerHTML = c;
-  /* the orbit holds still when motion is unwelcome, and rests while it is off screen */
-  if (calm) { svg.pauseAnimations(); svg.setCurrentTime(3.2); return; }
-  if ('IntersectionObserver' in window) new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? svg.unpauseAnimations() : svg.pauseAnimations())).observe(svg);
 })();
 
 /* ---------- text arrives as it is reached ---------- */
