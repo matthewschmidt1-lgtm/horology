@@ -237,10 +237,11 @@ export function buildProcedural(watch, face, tex) {
   };
   // Going train. Each wheel meshes with the next mobile's pinion: centre distance = wheel radius + pinion radius.
   const bX = -5.6, bY = 1.5, barrel = at(part('barrel', mv), bX, bY, 0);
-  barrel.add(at(mk(cyl(4.9, 1.6, 48), 'brass'), 0, 0, 1.15), at(mk(extr(gearShape(5.2, 64, 0.25, 0), 0.3), 'brass', { edgeAngle: 40 }), 0, 0, 0.4));
-  const spring = []; for (let i = 0; i <= 260; i++) { const a = i / 260 * Math.PI * 2 * 7, r = 0.7 + i / 260 * 3.8; spring.push(new THREE.Vector3(r * Math.cos(a), r * Math.sin(a), 1.97)); }
+  /* the drum stays below the centre wheel (z 1.4), which passes over its lid as in a real movement */
+  barrel.add(at(mk(cyl(4.9, 0.8, 48), 'brass'), 0, 0, 0.75), at(mk(extr(gearShape(5.2, 64, 0.25, 0), 0.3), 'brass', { edgeAngle: 40 }), 0, 0, 0.4), at(mk(cyl(0.42, 2.1, 14), 'steelDark', { noEdges: true }), 0, 0, 1.05));
+  const spring = []; for (let i = 0; i <= 260; i++) { const a = i / 260 * Math.PI * 2 * 7, r = 0.7 + i / 260 * 3.8; spring.push(new THREE.Vector3(r * Math.cos(a), r * Math.sin(a), 1.165)); }
   const ms = new THREE.Line(new THREE.BufferGeometry().setFromPoints(spring), new THREE.LineBasicMaterial({ color: 0x3d4f6e })); ms.raycast = () => {}; barrel.add(ms);
-  const cover = at(mk(cyl(4.6, 0.12, 40), 'brass'), 0, 0, 2.02); barrel.add(cover); layer(cover, 4);
+  const cover = at(mk(cyl(4.6, 0.12, 40), 'brass'), 0, 0, 1.24); barrel.add(cover); layer(cover, 4);
   spins.centre = mobile('centre', 0, 0, { R: 4.0, n: 64, z: 1.4, pin: 0.6, pinZ: 0.45 });
   const tx = (4.5 * 4.5 - 4.25 * 4.25 + sub * sub) / (2 * sub), ty = Math.sqrt(4.5 * 4.5 - tx * tx);
   spins.third = mobile('third', tx, ty, { R: 3.75, n: 60, z: 0.8, pin: 0.5, pinZ: 1.4 });
