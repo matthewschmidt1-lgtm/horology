@@ -83,7 +83,7 @@ function moonRow(y) {
 
 /* ---------- the geometry: one sun, a tilted orbit, both kept in view ---------- */
 const rot = (v, g) => [v[0] * Math.cos(g) - v[1] * Math.sin(g), v[0] * Math.sin(g) + v[1] * Math.cos(g), v[2]];
-const TILT = 18 * Math.PI / 180, LEAN = 16 * Math.PI / 180, ORB = 3.1, RM = 0.27;
+const TILT = 18 * Math.PI / 180, LEAN = 16 * Math.PI / 180, ORB = 2.6, RM = 0.27;
 const E1 = rot([1, 0, 0], LEAN), E2 = rot([0, -Math.sin(TILT), Math.cos(TILT)], LEAN), NRM = rot([0, Math.cos(TILT), Math.sin(TILT)], LEAN);
 const L = (() => { const v = [0, 0, 0]; for (let k = 0; k < 3; k++) v[k] = -0.62 * E1[k] + 0.78 * E2[k] + 0.13 * NRM[k]; const n = Math.hypot(v[0], v[1], v[2]); return [v[0] / n, v[1] / n, v[2] / n]; })();
 const AX = -0.36; // the Earth's axis leans a little
@@ -92,7 +92,7 @@ let W = 0, H = 0, dpr = 1, R = 0, K = 0, S = 0, SM = 0, eImg, mImg, eCv, mCv, ha
 function setup() {
   const box = cv.parentNode.getBoundingClientRect(); W = Math.round(box.width); H = Math.round(box.height); if (!W || !H) return;
   dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = W * dpr; cv.height = H * dpr;
-  R = clamp(Math.min(W * 0.14, H * 0.19), 40, 122); const Rp = R * dpr; S = 2 * Math.ceil(Rp) + 4; const c = S / 2;
+  R = clamp(Math.min(W * 0.175, H * 0.23), 40, 150); const Rp = R * dpr; S = 2 * Math.ceil(Rp) + 4; const c = S / 2;
   eCv = document.createElement('canvas'); eCv.width = eCv.height = S; eImg = eCv.getContext('2d').createImageData(S, S);
   const n = S * S, PI4 = new Int32Array(n), U = new Float32Array(n), V = new Int32Array(n), NX = new Float32Array(n), NY = new Float32Array(n), NZ = new Float32Array(n), DIF = new Float32Array(n), DAY = new Float32Array(n), SPC = new Float32Array(n), RIM = new Float32Array(n), AAl = new Float32Array(n);
   const hl = Math.hypot(L[0], L[1], L[2] + 1), HX = L[0] / hl, HY = L[1] / hl, HZ = (L[2] + 1) / hl; K = 0;
@@ -145,7 +145,7 @@ function drawMoon(M) {
   mCv.getContext('2d').putImageData(mImg, 0, 0);
 }
 function frame(t) {
-  const th = 0.9 - TAU * t / 54, M = [0, 0, 0]; for (let k = 0; k < 3; k++) M[k] = ORB * (Math.cos(th) * E1[k] + Math.sin(th) * E2[k]);
+  const th = 0.9 - TAU * t / 36, M = [0, 0, 0]; for (let k = 0; k < 3; k++) M[k] = ORB * (Math.cos(th) * E1[k] + Math.sin(th) * E2[k]);
   drawEarth(t, M); drawMoon(M);
   const cx = W / 2, cy = H / 2, e = S / dpr, hs = halo.width / dpr, m = SM / dpr;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
