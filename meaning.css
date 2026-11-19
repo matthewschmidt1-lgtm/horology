@@ -50,7 +50,7 @@ body.mn { --night: #0a1019; --deep: #060a11; --navy: #14283f; --brass: #b8975a; 
 .mo-glow { background: radial-gradient(ellipse 56% 70% at 50% 50%, rgba(72, 146, 245, .78) 0%, rgba(40, 96, 190, .46) 32%, rgba(24, 52, 96, .2) 60%, transparent 80%); }
 .mo-sky i { position: absolute; border-radius: 50%; background: #eaf2ff; box-shadow: 0 0 6px 1px rgba(150, 195, 255, .7); }
 .mo-sky i.big { background: #fff; box-shadow: 0 0 10px 2px rgba(170, 210, 255, .9); }
-.mo-path { fill: none; stroke: rgba(220, 192, 129, .3); stroke-width: 1; stroke-dasharray: 2 7; }
+.mo-path { fill: none; stroke: rgba(143, 224, 189, .2); stroke-width: 1; stroke-dasharray: 2 7; }
 .mo-rings circle { fill: none; stroke: #7fb6ff; stroke-width: 1.2; opacity: 0; transform-box: fill-box; transform-origin: center; }
 .mo-band { fill: none; stroke: rgba(8, 17, 32, .28); stroke-width: 5; stroke-linecap: round; }
 @keyframes mo-breathe { 0%, 100% { opacity: .62; transform: scale(.94); } 50% { opacity: 1; transform: scale(1.06); } }
