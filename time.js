@@ -7,7 +7,6 @@ const pad = n => String(n).padStart(2, '0'), f = n => Math.round(n * 100) / 100,
 const hms = minutes => { const s = Math.floor(mod(minutes, 1440) * 60); return `${pad(Math.floor(s / 3600))}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`; };
 const dayMonth = (date, tz) => new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', timeZone: tz }).format(date);
 const COMPASS = ['north', 'north-east', 'east', 'south-east', 'south', 'south-west', 'west', 'north-west'];
-let browserTz = 'UTC'; try { browserTz = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) {}
 
 /* =================== 1. the living solar clock =================== */
 let loc = S.guess(), live = true, shown = new Date(), last = null, yearKey = '';
@@ -52,14 +51,6 @@ function setLoc(l, note) {
   yearKey = ''; render(); cycles();
 }
 sel.addEventListener('change', () => { const c = S.CITIES.find(x => x.name === sel.value); if (c) setLoc(c, 'A place you chose. Times are shown in that place’s own zone.'); });
-$('#geo').addEventListener('click', () => {
-  if (!navigator.geolocation) { $('#place-note').textContent = 'This browser cannot share a location. Choose a place from the list.'; return; }
-  $('#place-note').textContent = 'Asking your browser…';
-  navigator.geolocation.getCurrentPosition(
-    g => setLoc({ name: 'Your location', lat: g.coords.latitude, lon: g.coords.longitude, tz: browserTz }, 'Using the position your browser shared. It is used here and sent nowhere.'),
-    () => { $('#place-note').textContent = 'Location was not shared. Choose a place from the list instead.'; },
-    { timeout: 12000, maximumAge: 600000 });
-});
 $('#s-time').addEventListener('input', e => { const p = last.parts; live = false; shown = S.instant(p.y, p.m, p.d, +e.target.value, loc.tz); render(); });
 $('#s-date').addEventListener('input', e => { const p = last.parts, dt = new Date(Date.UTC(p.y, 0, +e.target.value)); live = false; shown = S.instant(p.y, dt.getUTCMonth() + 1, dt.getUTCDate(), p.h * 60 + p.mi, loc.tz); render(); });
 $('#now').addEventListener('click', () => { live = true; render(); });
@@ -162,7 +153,7 @@ $('#snd-stop').addEventListener('click', stopAll);
 /* =================== 6. the cycles of time: three small instruments =================== */
 /* Each keeps its own state: null means "follow the present". */
 const C = { day: null, moon: null, year: null, dayOn: false, yearOn: false, last: 0 };
-const placeName = () => loc.name === 'Your location' ? 'your location' : loc.name;
+const placeName = () => loc.name;
 function nextCross(target, from) { // when the sun next reaches this longitude on the ecliptic
   const dv = t => mod(S.sun(new Date(t)).lam - target + 180, 360) - 180; let a = from, b;
   for (let i = 0; i < 380; i++) { b = a + 86400000; if (dv(a) < 0 && dv(b) >= 0) break; a = b; }
@@ -250,7 +241,7 @@ function stars(el, n, seed) { // fixed positions from a small seeded generator, 
 stars($('.nt-hero'), 150, 20261); stars($('#universe'), 220, 4711);
 
 /* =================== start =================== */
-setLoc(loc, loc.rough ? 'Placed on the meridian your time zone implies. Choose a place or share your location for a true reading.' : 'Chosen from your time zone. Nothing about your position leaves this page.');
+setLoc(loc, loc.rough ? 'Placed on the meridian your time zone implies. Choose a place for a true reading.' : 'Chosen from your time zone. This page never asks for your position.');
 const present = () => { const n = new Date(); $('#pm-clock').textContent = `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`; };
 present();
 setInterval(() => { if (live) render(); present(); }, 1000);
