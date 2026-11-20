@@ -94,10 +94,19 @@ export function buildProcedural(watch, face, tex) {
   /* ----- case, crown, pushers, strap ----- */
   const kase = part('case');
   const BAND = P.bezel === 'octagon' ? 'steelDark' : CASE; // a darker band lets the eight-sided bezel read against the round case beneath it
-  if (square) kase.add(at(mk(new THREE.ExtrudeGeometry(rrShape(CW, CH, CR, { R: inner }), { depth: 7.1, bevelEnabled: false, curveSegments: 16 }), CASE), 0, 0, -4.6));
+  /* A Tank's movement can be wider than the body seen between the bars: the real case is a hollow box and the movement reaches under the brancards.
+     When that is so, the body below the dial is only its two ends and a thin wall each side, and the bars are solid only at their ends. */
+  const wideMv = tank && mvR + 0.3 > CW - 0.6, cavR = mvR + 0.3, cavY = wideMv ? Math.sqrt(cavR * cavR - CW * CW) : 0;
+  if (wideMv) {
+    kase.add(at(mk(new THREE.ExtrudeGeometry(rrShape(CW, CH, CR, { R: inner }), { depth: 0.5, bevelEnabled: false, curveSegments: 16 }), CASE), 0, 0, 2.0)); // the plate lies just under the dial, so the wide cavity runs up to there
+    const t0 = Math.atan2(cavY, CW);
+    for (const sy of [-1, 1]) { const cs = new THREE.Shape(); cs.moveTo(-CW, sy * CH); cs.lineTo(CW, sy * CH); cs.lineTo(CW, sy * cavY); cs.absarc(0, 0, cavR, sy * t0, sy * (Math.PI - t0), sy < 0); cs.closePath(); kase.add(at(mk(extr(cs, 6.6), CASE), 0, 0, -4.6)); }
+    for (const sx of [-1, 1]) kase.add(at(mk(new THREE.BoxGeometry(0.55, 2 * cavY + 1, 6.5), CASE), sx * (R - 0.275), 0, -1.25));
+  } else if (square) kase.add(at(mk(new THREE.ExtrudeGeometry(rrShape(CW, CH, CR, { R: inner }), { depth: 7.1, bevelEnabled: false, curveSegments: 16 }), CASE), 0, 0, -4.6));
   else kase.add(mk(lathe([[inner, -4.6], [R - 1.45, -4.6], [R, -3.3], [R, 1.7], [R - 0.7, 2.5], [inner, 2.5], [inner, -4.6]]), BAND));
   const lugL = Math.max(5, P.lugToLug / 2 - R + 5.5), lugT = P.lugThick || 2.7;
-  if (tank) { for (const sx of [-1, 1]) kase.add(at(mk(extr(rrShape(BW / 2, P.lugToLug / 2, 1.1), 8.2), CASE), sx * (R - BW / 2), 0, -4.5)); } // two side bars run the full length and carry the strap between their ends
+  if (tank && wideMv) { const L = P.lugToLug / 2, bl = L - cavY - 0.2; for (const sx of [-1, 1]) { kase.add(at(mk(extr(rrShape(BW / 2, L, 1.1), 1.7), CASE), sx * (R - BW / 2), 0, 2.0)); for (const sy of [-1, 1]) kase.add(at(mk(new THREE.BoxGeometry(BW, bl, 6.5), CASE), sx * (R - BW / 2), sy * (cavY + 0.2 + bl / 2), -1.25)); } }
+  else if (tank) { for (const sx of [-1, 1]) kase.add(at(mk(extr(rrShape(BW / 2, P.lugToLug / 2, 1.1), 8.2), CASE), sx * (R - BW / 2), 0, -4.5)); } // two side bars run the full length and carry the strap between their ends
   else if (P.integrated) { for (const sy of [-1, 1]) { const sh = mk(new THREE.BoxGeometry(P.lugWidth + 1.5, 7, 3.6), 'steelDark'); sh.position.set(0, sy * (R - 1.2), -1.6); sh.rotation.x = -sy * 0.2; kase.add(sh); } } // no separate lugs: the case runs straight into the bracelet
   else for (const sx of [-1, 1]) for (const sy of [-1, 1]) { const lug = mk(new THREE.BoxGeometry(lugT, lugL, 3.4), CASE); lug.position.set(sx * (P.lugWidth / 2 + lugT / 2), sy * (P.lugToLug / 2 - lugL / 2 + 0.55), -2.0); lug.rotation.x = -sy * 0.28; kase.add(lug); }
   if (P.crownGuards) for (const sy of [-1, 1]) { const gd = mk(new THREE.BoxGeometry(3.2, 2.4, 3.4), CASE); gd.position.set(R + 0.7, sy * 3.9, -0.9); gd.rotation.z = -sy * 0.5; kase.add(gd); }
@@ -149,9 +158,9 @@ export function buildProcedural(watch, face, tex) {
   assembly(hands, 13);
 
   /* ----- spacer ring, dust cover, caseback ----- */
-  if (P.spacer !== false) { const spacer = part('spacer'); spacer.add(mk(lathe([[mvR + 0.05, -3.6], [inner - 0.1, -3.6], [inner - 0.1, 2.0], [mvR + 0.05, 2.0], [mvR + 0.05, -3.6]]), 'steelDark')); assembly(spacer, -7); }
+  if (P.spacer !== false && !wideMv) { const spacer = part('spacer'); spacer.add(mk(lathe([[mvR + 0.05, -3.6], [inner - 0.1, -3.6], [inner - 0.1, 2.0], [mvR + 0.05, 2.0], [mvR + 0.05, -3.6]]), 'steelDark')); assembly(spacer, -7); }
   const dust = P.dustCover === false ? null : part('dustcover'); if (dust) { dust.add(at(mk(cyl(inner - 0.3, 0.25, 64), 'iron'), 0, 0, -4.3)); assembly(dust, -24); }
-  const back = part('caseback'); if (tank) back.add(at(mk(extr(rrShape(CW, CH, CR), 1.2), CASE), 0, 0, -5.8)); else back.add(mk(lathe([[0, -6.4], [R - 6.85, -6.4], [R - 2.25, -5.4], [R - 1.45, -4.6], [0, -4.6]]), CASE)); assembly(back, -31);
+  const back = part('caseback'); if (tank) back.add(at(mk(extr(rrShape(wideMv ? R - 0.05 : CW, CH, CR), 1.2), CASE), 0, 0, -5.8)); else back.add(mk(lathe([[0, -6.4], [R - 6.85, -6.4], [R - 2.25, -5.4], [R - 1.45, -4.6], [0, -4.6]]), CASE)); assembly(back, -31);
 
   /* ----- tuning-fork movement (Bulova Accutron 214) -----
      The works of a 214 face the dial, which is why a Spaceview can do without one. So this movement is not
@@ -590,6 +599,37 @@ export function buildProcedural(watch, face, tex) {
     layer(flat('pallet-cock', [[pmx, pmy, 0.7], [7.0, 6.6, 0.7]], 1.45, 0.24), 3);
     layer(flat('balance-cock', [[BX, BY, 1.4], [-5.15, 10.8, 1.3]], 3.3, 0.45), 4);
     jewel(0, 0, 2.86, 4); jewel(4.3, -2.05, 2.86, 4); jewel(7.68, 0, 2.86, 4); jewel(eX, eY, 2.86, 4); jewel(BX, BY, 3.82, 4); jewel(pmx, pmy, 1.3, 0);
+    Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1 });
+  } else if (P.calibre === '818') {
+    /* LeCoultre calibre 818. LeCoultre's own sheet gives the casing diameter 20.80 mm, the height 2.94 mm, 17 jewels, 18,000 vibrations an hour and a balance 8.54 mm across.
+       Positions of the barrel, the third and fourth wheels, the escape wheel and the balance are read off the two small photographs on that sheet, the bridge side and the
+       dial side, which agree with each other: good to about 0.6 mm. Seen from the back, the crown is towards -x. The bench draws every movement at the scale of a 27 mm one and
+       shrinks it to size, so the figures below are the measured ones times 13.5 / 10.4.
+       The pallets are placed between the escape wheel and the balance. Other sizes, heights, tooth counts and outlines are estimated; the winding wheels are left out. */
+    const bX = -3.05, bY = 6.23, barrel = at(part('barrel', mv), bX, bY, 0);
+    barrel.add(at(mk(cyl(5.25, 0.8, 56), 'brass'), 0, 0, 0.75), at(mk(extr(gearShape(5.6, 72, 0.25, 0), 0.3), 'brass', { edgeAngle: 40 }), 0, 0, 0.4), at(mk(cyl(0.42, 2.4, 14), 'steelDark', { noEdges: true }), 0, 0, 1.2));
+    const spring = []; for (let i = 0; i <= 300; i++) { const a = i / 300 * Math.PI * 2 * 8, r = 0.8 + i / 300 * 3.9; spring.push(new THREE.Vector3(r * Math.cos(a), r * Math.sin(a), 1.165)); }
+    const ms = new THREE.Line(new THREE.BufferGeometry().setFromPoints(spring), new THREE.LineBasicMaterial({ color: 0x3d4f6e })); ms.raycast = () => {}; barrel.add(ms);
+    const cover = at(mk(cyl(5.0, 0.12, 48), 'brass'), 0, 0, 1.24); barrel.add(cover); layer(cover, 4);
+    spins.centre = mobile('centre', 0, 0, { R: 4.5, n: 72, z: 1.4, pin: 1.34, pinZ: 0.45 });
+    spins.third = mobile('third', -2.6, -4.67, { R: 3.3, n: 60, z: 1.85, pin: 0.85, pinZ: 1.4 });
+    spins.fourth = mobile('fourth', 0, -7.79, { R: 2.7, n: 54, z: 1.35, pin: 0.76, pinZ: 1.85 });
+    const eX = 2.99, eY = -9.09;
+    spins.escape = mobile('escape', eX, eY, { shape: escapeShape(1.6, P.escapeTeeth || 15), z: 0.8, pin: 0.56, pinZ: 1.2, kind: 'steelDark', arbor: 1.75 });
+    const BX = 6.88, BY = -2.01, bal = at(part('balance', mv), BX, BY, 0), balSpin = new THREE.Group(); bal.add(balSpin);
+    balSpin.add(at(mk(new THREE.TorusGeometry(5.28, 0.26, 10, 72), 'brass', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(10.2, 0.36, 0.2), 'brass'), 0, 0, 2.3), at(mk(cyl(0.45, 0.3, 14), 'steelDark'), 0, 0, 1.9));
+    bal.add(at(mk(cyl(0.2, 3, 10), 'steelDark', { noEdges: true }), 0, 0, 1.6));
+    const hs = at(part('hairspring', mv), BX, BY, 2.72), HN = 240, hsPos = new Float32Array((HN + 1) * 3), hsGeo = new THREE.BufferGeometry();
+    hsGeo.setAttribute('position', new THREE.BufferAttribute(hsPos, 3));
+    const hsLine = new THREE.Line(hsGeo, new THREE.LineBasicMaterial({ color: 0x3d4f6e })); hsLine.userData.pickLine = true; hs.add(hsLine);
+    const pmx = 4.67, pmy = -6.23, pal = at(part('pallet', mv), pmx, pmy, 0), palRock = new THREE.Group();
+    pal.rotation.z = Math.atan2(BY - pmy, BX - pmx) - Math.PI / 2; pal.add(palRock);
+    palRock.add(at(mk(new THREE.BoxGeometry(0.45, 4.2, 0.2), 'steelDark'), 0, 1.0, 1.1), at(mk(new THREE.BoxGeometry(2.2, 0.4, 0.2), 'steelDark'), 0, -1.0, 1.1), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), -1.0, -1.2, 1.1), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), 1.0, -1.2, 1.1));
+    layer(flat('barrel-bridge', [[bX, bY, 5.0]], 2.35, 0.45), 4);
+    layer(flat('train-bridge', [[0, 0, 1.15], [-2.6, -4.67, 1.4], [0, -7.79, 1.2]], 2.35, 0.45), 4);
+    layer(flat('pallet-cock', [[pmx, pmy, 0.7], [eX, eY, 0.8]], 1.6, 0.24), 3);
+    layer(flat('balance-cock', [[BX, BY, 1.4], [9.6, 5.6, 1.3]], 3.3, 0.45), 4);
+    jewel(-2.6, -4.67, 2.86, 4); jewel(0, -7.79, 2.86, 4); jewel(eX, eY, 1.92, 3); jewel(BX, BY, 3.82, 4); jewel(pmx, pmy, 1.92, 3);
     Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1 });
   } else {
     // Going train. Each wheel meshes with the next mobile's pinion: centre distance = wheel radius + pinion radius.
