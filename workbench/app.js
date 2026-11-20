@@ -311,6 +311,11 @@ if (watches.length > 1) {
     <a class="wn-main" href="?watch=${nx.id}">${plate && Draw ? `<span class="wn-art" aria-hidden="true">${Draw.front(plate, {})}</span>` : ''}<span class="wn-txt"><b>${nx.brand} ${nx.model}</b><em>${nx.noRef ? '' : `Ref. ${nx.reference} · `}${nx.year}</em><i>Take it apart</i></span></a>
     ${rest.length ? `<div class="wn-rest"><span>Or try</span><div class="wn-tiles">${rest.map(tile).join('')}</div></div>` : ''}</aside>`
   document.querySelectorAll('.pane').forEach(p => p.insertAdjacentHTML('beforeend', html))
+  /* on a wide screen the panel may be closed, so the same tiles also run in a strip under the view buttons */
+  document.querySelector('.stage').insertAdjacentHTML('beforeend', `<nav class="wn-strip" aria-label="Other watches"><span>Or try</span>${watches.filter(w => w !== watch).map(tile).join('')}</nav>`)
   const A = { h: 304.3, m: 51.6, s: 216 } // the small drawing shows a fixed ten past ten
   document.querySelectorAll('.wn-art [data-hand], .wn-tile [data-hand]').forEach(el => el.setAttribute('transform', `rotate(${A[el.dataset.hand]})`))
 }
+
+/* phones: a thin strip under the sliders. It can be dragged to scroll the page (the watch and the sliders take drags for themselves) or tapped to bring up the rest of the controls */
+if ($('#more-strip')) $('#more-strip').addEventListener('click', () => $('.mtabs').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'end' }));
