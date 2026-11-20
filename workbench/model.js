@@ -484,6 +484,39 @@ export function buildProcedural(watch, face, tex) {
     cb.add(at(mk(cyl(0.5, 3.55, 14), 'steelDark', { noEdges: true }), -3.2, 5.5, 1.775), at(mk(cyl(0.5, 0.75, 14), 'steelDark', { noEdges: true }), -6.4, 4.6, 3.175)); layer(cb, 12); cb.userData.anchor = [-3.9, 0, 4];
     jewel(0, 0, 4.0, 12); jewel(-7.8, 0, 4.0, 12);
     Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 2.3 / 0.45 });
+  } else if (P.calibre === '2121') {
+    /* Audemars Piguet calibre 2121 (LeCoultre 920 base). No dimensioned drawing was available. Positions of the balance, the escape wheel, the pallets and the barrel's axis
+       (under its ratchet wheel) are measured off Audemars Piguet's own archive photographs of the movement, published on its AP Chronicles site, scaled to the catalogue's
+       28.40 mm, to about 0.5 mm; the balance and escape wheel agree between the photograph of the back and the photograph of the dial side. Seen from the back, the crown is towards -x.
+       The rotor hides the middle of the train in every photograph: the centre wheel is at the centre because the hands are, the fourth wheel is put at a jewel seen on the
+       dial side that lies the right distance from the escape wheel (an interpretation), and the third wheel is placed where it must sit to link the two.
+       Heights, sizes, tooth counts and outlines are estimated. The winding gears, the date ring, and the ring and four ruby rollers that carry the rotor's rim are left out. */
+    const bX = -6.6, bY = -0.1, barrel = at(part('barrel', mv), bX, bY, 0);
+    barrel.add(at(mk(cyl(4.85, 0.8, 56), 'brass'), 0, 0, 0.75), at(mk(extr(gearShape(5.2, 68, 0.25, 0), 0.3), 'brass', { edgeAngle: 40 }), 0, 0, 0.4), at(mk(cyl(0.42, 2.9, 14), 'steelDark', { noEdges: true }), 0, 0, 1.45),
+      at(mk(extr(gearShape(2.6, 48, 0.2, 0), 0.2), 'steel', { edgeAngle: 40 }), 0, 0, 2.85));
+    const spring = []; for (let i = 0; i <= 300; i++) { const a = i / 300 * Math.PI * 2 * 8, r = 0.8 + i / 300 * 3.6; spring.push(new THREE.Vector3(r * Math.cos(a), r * Math.sin(a), 1.165)); }
+    const ms = new THREE.Line(new THREE.BufferGeometry().setFromPoints(spring), new THREE.LineBasicMaterial({ color: 0x3d4f6e })); ms.raycast = () => {}; barrel.add(ms);
+    const cover = at(mk(cyl(4.6, 0.12, 48), 'brass'), 0, 0, 1.24); barrel.add(cover); layer(cover, 4);
+    spins.centre = mobile('centre', 0, 0, { R: 4.0, n: 72, z: 1.4, pin: 1.4, pinZ: 0.45 });
+    spins.third = mobile('third', 4.6, 0, { R: 2.9, n: 60, z: 1.85, pin: 0.6, pinZ: 1.4 });
+    spins.fourth = mobile('fourth', 6.22, -3.0, { R: 2.05, n: 48, z: 1.35, pin: 0.5, pinZ: 1.85 });
+    const eX = 4.9, eY = -5.2;
+    spins.escape = mobile('escape', eX, eY, { shape: escapeShape(1.5, P.escapeTeeth || 15), z: 0.8, pin: 0.5, pinZ: 1.2, kind: 'steelDark', arbor: 1.75 });
+    const BX = -0.7, BY = -6.74, bal = at(part('balance', mv), BX, BY, 0), balSpin = new THREE.Group(); bal.add(balSpin);
+    balSpin.add(at(mk(new THREE.TorusGeometry(4.02, 0.26, 10, 72), 'brass', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(7.7, 0.36, 0.2), 'brass'), 0, 0, 2.3), at(mk(cyl(0.45, 0.3, 14), 'steelDark'), 0, 0, 1.9));
+    bal.add(at(mk(cyl(0.2, 3, 10), 'steelDark', { noEdges: true }), 0, 0, 1.6));
+    const hs = at(part('hairspring', mv), BX, BY, 2.72), HN = 240, hsPos = new Float32Array((HN + 1) * 3), hsGeo = new THREE.BufferGeometry();
+    hsGeo.setAttribute('position', new THREE.BufferAttribute(hsPos, 3));
+    const hsLine = new THREE.Line(hsGeo, new THREE.LineBasicMaterial({ color: 0x3d4f6e })); hsLine.userData.pickLine = true; hs.add(hsLine);
+    const pmx = 2.3, pmy = -5.67, pal = at(part('pallet', mv), pmx, pmy, 0), palRock = new THREE.Group();
+    pal.rotation.z = Math.atan2(BY - pmy, BX - pmx) - Math.PI / 2; pal.add(palRock);
+    palRock.add(at(mk(new THREE.BoxGeometry(0.45, 3.2, 0.2), 'steelDark'), 0, 0.5, 1.1), at(mk(new THREE.BoxGeometry(2.0, 0.4, 0.2), 'steelDark'), 0, -0.9, 1.1), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), -0.9, -1.1, 1.1), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), 0.9, -1.1, 1.1));
+    layer(flat('barrel-bridge', [[bX, bY, 4.2]], 2.35, 0.45), 4);
+    layer(flat('train-bridge', [[0, 0, 1.5], [4.6, 0, 1.5], [6.22, -3.0, 1.3]], 2.35, 0.45), 4);
+    layer(flat('pallet-cock', [[pmx, pmy, 0.7], [eX, eY, 0.8]], 1.6, 0.24), 3);
+    layer(flat('balance-cock', [[BX, BY, 1.3], [-6.4, -6.7, 1.3]], 3.3, 0.45), 4);
+    jewel(4.6, 0, 2.86, 4); jewel(6.22, -3.0, 2.86, 4); jewel(eX, eY, 1.92, 3); jewel(BX, BY, 3.82, 4); jewel(pmx, pmy, 1.92, 3);
+    Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1 });
   } else {
     // Going train. Each wheel meshes with the next mobile's pinion: centre distance = wheel radius + pinion radius.
     const bX = -5.6, bY = 1.5, barrel = at(part('barrel', mv), bX, bY, 0);
@@ -551,6 +584,7 @@ export function buildProcedural(watch, face, tex) {
     const rz = chrono ? 4.0 : 3.95; // the rotor swings clear of the balance cock (and, on a chronograph, the chronograph works) and under the caseback
     rot.add(at(mk(extr(w, 0.74), 'steelDark', { edgeAngle: 40 }), 0, 0, rz), at(mk(extr(web, 0.16), 'steel', { edgeAngle: 40 }), 0, 0, rz), at(mk(cyl(1.1, 0.5, 20), 'steelDark'), 0, 0, rz + 0.3));
     rot.userData.anchor = [0, -(ro - 1.6), rz + 0.7]; layer(rot, chrono ? 16 : 12);
+    if (P.calibre === '2121') rot.rotation.z = Math.PI; // parked over the half away from the balance, as in the maker's repair-guide photograph
   }
 
   /* ----- behaviour ----- */
