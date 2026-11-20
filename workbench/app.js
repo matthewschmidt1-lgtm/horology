@@ -12,7 +12,7 @@ const cur = { explode: 0, open: 0, layers: 0 };
 /* ---------- panels ---------- */
 $('#w-kicker').textContent = `${watch.brand}${watch.noRef ? '' : ` · Ref. ${watch.reference}`} · ${watch.year}`;
 $('#w-title').innerHTML = `${watch.model} <em>${watch.reference}</em>`;
-$('#caveat').textContent = watch.asset.params.calibre === '2121' ? 'Approximate model. Balance, escapement and barrel placed from the maker’s photographs; the wheels between them are placed where they must work; sizes and shapes estimated.' : watch.asset.params.calibre === '11' ? 'Approximate model. Movement laid out from published photographs and the service manual’s drawings, not a dimensioned maker’s drawing; sizes and shapes estimated.' : watch.asset.params.calibre === '1530' ? 'Approximate model. Movement laid out from a watchmaker’s photographs, not a maker’s document; sizes and shapes estimated.' : watch.asset.params.calibre ? 'Approximate model. Movement laid out from the maker’s own documents; sizes and shapes estimated.' : 'Approximate model, built from published dimensions. The movement is a generic layout, not the maker’s own.';
+$('#caveat').textContent = 'Approximate model';
 $('#asset-note').textContent = watch.asset.note;
 document.title = `${watch.brand} ${watch.model} · The Workbench`;
 /* One quiet line for choosing a watch: the name of the one on the bench, which opens the full set, and a step to the next or the last. */
@@ -49,7 +49,13 @@ document.title = `${watch.brand} ${watch.model} · The Workbench`;
 $('#specs').innerHTML = `<table class="wspec">${watch.specs.map(([k, v, s]) => `<tr><th>${k}</th><td>${v}<i class="st ${s}" title="${ST[s]}"></i></td></tr>`).join('')}</table>`;
 $('#history').innerHTML = watch.history.map(h => `<section><h3>${h.h}<i class="st ${h.s}" title="${ST[h.s]}"></i></h3><p>${h.p}</p></section>`).join('');
 const groups = [...new Set(comps.map(c => c.group))];
-$('#parts').innerHTML = groups.map(g => `<h3>${g}</h3><ul>${comps.filter(c => c.group === g).map(c => `<li><button type="button" data-part="${c.id}">${c.name}</button></li>`).join('')}</ul>`).join('');
+const GI = { // one small line sketch per section: the cased watch, a wheel of the movement, a stopwatch
+  Exterior: '<path d="M10.5 6.2V2.5h7v3.7M10.5 21.8v3.7h7v-3.7"/><circle cx="14" cy="14" r="8"/><circle cx="14" cy="14" r="5.6"/><path d="M22 12.6h1.9v2.8H22M14 14V10.4M14 14l2.6 1.5"/>',
+  Movement: '<circle cx="14" cy="14" r="9.4" stroke-dasharray="1.5 1.45" stroke-width="2"/><circle cx="14" cy="14" r="8.3"/><circle cx="14" cy="14" r="5.6"/><circle cx="14" cy="14" r="1.5"/><path d="M14 12.5V7.6M15.3 14.75l4.2 2.45M12.7 14.75l-4.2 2.45"/>',
+  Chronograph: '<circle cx="14" cy="15.5" r="8"/><path d="M12 3h4M14 3v4.5M20.4 8.6l1.7-1.7M14 15.5V10M14 15.5l3.4 2"/><circle cx="14" cy="15.5" r="1"/>'
+};
+const foldParts = matchMedia('(max-width: 900px)').matches; // on a phone the sections start closed, so the list is three bars, not sixty rows
+$('#parts').innerHTML = groups.map(g => { const list = comps.filter(c => c.group === g); return `<details class="pg"${foldParts ? '' : ' open'}><summary><svg viewBox="0 0 28 28" aria-hidden="true">${GI[g] || GI.Movement}</svg><span>${g}</span><em>${list.length}</em></summary><ul>${list.map(c => `<li><button type="button" data-part="${c.id}">${c.name}</button></li>`).join('')}</ul></details>`; }).join('');
 
 function renderDetail() {
   const c = byId[state.sel];
@@ -63,7 +69,7 @@ function renderDetail() {
 }
 function select(id, fromScene) {
   state.sel = id; renderDetail();
-  $$('#parts button').forEach(b => b.classList.toggle('on', b.dataset.part === id));
+  $$('#parts button').forEach(b => { const on = b.dataset.part === id; b.classList.toggle('on', on); if (on) b.closest('details').open = true; });
   $$('#labels .lab').forEach(b => b.classList.toggle('on', b.dataset.part === id));
   if (model) model.highlight(id);
   const c = byId[id];
@@ -285,10 +291,26 @@ start3D().catch(err => { console.error(err); $('#fail').hidden = false; $$('#too
 if (watches.length > 1) {
   const nx = watches[(watches.indexOf(watch) + 1) % watches.length], rest = watches.filter(w => w !== watch && w !== nx)
   const plate = (window.WATCHES || []).find(w => w.id === nx.archiveId)
+  /* each tile takes its colours from the watch: ground (two stops), case metal, outline, dial, sub-dial, accent, and an optional texture */
+  const SKIN = {
+    sub5513: ['#0a1216', '#1d3038', '#d9dbd7', '#0b0d0e', '#14181a', '#262b2e', '#d8c58f', ''],
+    daytona6263: ['#151412', '#4a2a22', '#efe9da', '#131210', '#1c1c1a', '#1c1c1a', '#c8372b', ''],
+    speedy105003: ['#070b16', '#1d2740', '#d9dad6', '#0b0c0e', '#131416', '#24262a', '#e8e4d6', 'stars'],
+    a386: ['#1d2836', '#56606c', '#f1eee6', '#15181c', '#2b3a55', '#5b6068', '#c8372b', ''],
+    monaco: ['#0b2242', '#1f4a80', '#e1e3e2', '#0a1424', '#1b3a66', '#e9eaea', '#d8402e', ''],
+    royaloak: ['#172434', '#34495f', '#d5d8da', '#0d141c', '#27384c', '#31465d', '#e3e6e8', 'grid'],
+    '62mas': ['#0d1719', '#274044', '#d7d9d6', '#0a0d0e', '#1a2123', '#2a3336', '#e6dfc4', ''],
+    calatrava: ['#4b3c1e', '#9a8148', '#f4eddb', '#2a2212', '#e7dcbd', '#d8cba6', '#7a5f22', 'sun'],
+    tanklc: ['#3f0d15', '#7d1f2c', '#f1dfa8', '#2a1206', '#f6f1e4', '#e9e1cd', '#1f3a7a', ''],
+    spaceview: ['#0b2019', '#1f4f3e', '#dcdcd4', '#0a130f', '#1f4a3c', '#2b6050', '#d8c58f', 'grid']
+  }
+  const tile = w => { const pl = (window.WATCHES || []).find(x => x.id === w.archiveId), k = SKIN[w.archiveId], name = `${w.brand} ${w.model}`;
+    if (!pl || !Draw || !k) return `<a href="?watch=${w.id}">${w.short || w.model}</a>`;
+    return `<a class="wn-tile${k[7] ? ' tx-' + k[7] : ''}" href="?watch=${w.id}" aria-label="${name}" title="${name}" style="--g1:${k[0]};--g2:${k[1]};--paper:${k[2]};--ink:${k[3]};--tint:${k[4]};--tint-2:${k[5]};--sienna:${k[6]}">${Draw.front(pl, {})}</a>` }
   const html = `<aside class="wb-next" aria-label="More watches"><p class="kicker">Next on the bench</p>
     <a class="wn-main" href="?watch=${nx.id}">${plate && Draw ? `<span class="wn-art" aria-hidden="true">${Draw.front(plate, {})}</span>` : ''}<span class="wn-txt"><b>${nx.brand} ${nx.model}</b><em>${nx.noRef ? '' : `Ref. ${nx.reference} · `}${nx.year}</em><i>Take it apart</i></span></a>
-    ${rest.length ? `<p class="wn-rest"><span>Or try</span>${rest.map(w => `<a href="?watch=${w.id}">${w.short || w.model}</a>`).join('')}</p>` : ''}</aside>`
+    ${rest.length ? `<div class="wn-rest"><span>Or try</span><div class="wn-tiles">${rest.map(tile).join('')}</div></div>` : ''}</aside>`
   document.querySelectorAll('.pane').forEach(p => p.insertAdjacentHTML('beforeend', html))
   const A = { h: 304.3, m: 51.6, s: 216 } // the small drawing shows a fixed ten past ten
-  document.querySelectorAll('.wn-art [data-hand]').forEach(el => el.setAttribute('transform', `rotate(${A[el.dataset.hand]})`))
+  document.querySelectorAll('.wn-art [data-hand], .wn-tile [data-hand]').forEach(el => el.setAttribute('transform', `rotate(${A[el.dataset.hand]})`))
 }
