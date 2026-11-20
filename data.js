@@ -73,7 +73,7 @@ window.WATCHES = [
   c:{shape:'tank', w:23, h:30, da:'a', t:[6.5,'n'], lug:null},
   dial:{dark:false, markers:'roman', text:['CARTIER']},
   hands:'epee', sec:'none', crown:{pos:3, cabochon:true}, strap:'leather',
-  mv:{cal:'not specified', type:'manual', vph:18000, wind:'Manual', note:'Early movements were supplied through the European Watch & Clock Co., Cartier’s venture with Edmond Jaeger and LeCoultre. No single calibre is given here; the beat rate is assumed for drawing.'},
+  mv:{cal:'not specified', type:'manual', vph:18000, wind:'Manual', note:'Early movements were supplied through the European Watch & Clock Co., Cartier’s venture with Edmond Jaeger and LeCoultre. Many calibres followed, so none is named as the Tank’s. The Workbench shows one real example: LeCoultre’s calibre 818 (20.80 mm, 18,000 A/h), which dealers describe in Paris-made Tanks of the late 1960s. The schematic here is not that calibre’s layout.'},
   back:{type:'plainrect', note:'Detail not verified; shown plain.'},
   specs:[['Case','Precious metal; brancards with rounded corners'],['Dial','Roman numerals, chemin-de-fer minute track'],['Crown','Set with a sapphire cabochon'],['Hands','Blued steel, sword-shaped']],
   notes:['Louis Cartier’s refinement of the 1917 Tank: softer brancards, the strap flowing straight out of the case.','The plan is traditionally said to follow a First World War tank seen from above, the brancards being the tracks.','Sizes varied across a century of production. The dimensions here are representative, not definitive.'],
