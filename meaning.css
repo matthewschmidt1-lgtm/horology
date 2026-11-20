@@ -105,3 +105,8 @@ button.mn-cue::after { display: none; }
 /* the closing line of "The human experience": set apart from the paragraphs above by space and a short rule, and a size larger */
 .mn-human .mn-col p + .mn-em { margin-top: 2.5em; font-size: 1.4em !important; line-height: 1.3 !important; }
 .mn-human .mn-em::before { content: ""; display: block; width: 64px; height: 2px; margin-bottom: .9em; background: #8a6d2f; }
+
+/* a ring where "The human experience" meets "The present moment": one band, open in the middle, each half taking the colour of the section on the other side */
+.mn-human::after, .mn-present::before { content: ""; position: absolute; left: 50%; width: clamp(76px, 9vw, 124px); aspect-ratio: 1; border-radius: 50%; border: clamp(8px, 1vw, 13px) solid; box-sizing: border-box; pointer-events: none; }
+.mn-human::after { bottom: 0; transform: translate(-50%, 50%); border-color: #1a2a40; }
+.mn-present::before { top: 0; transform: translate(-50%, -50%); border-color: #dacba9; }
