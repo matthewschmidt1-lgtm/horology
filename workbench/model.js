@@ -377,6 +377,57 @@ export function buildProcedural(watch, face, tex) {
     sdSpin.add(at(mk(extr(gearShape(4.0, 80, 0.14, 5), 0.18), 'brass', { edgeAngle: 40 }), 0, 0, 2.95));
     sd.add(at(mk(cyl(0.45, 0.3, 12), 'steelDark'), 2.55, 3.65, 3.04)); layer(sd, 8); sd.userData.anchor = [0, 0, 3.2];
     Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1, extra: sdSpin });
+  } else if (P.calibre === '72') {
+    /* Rolex calibre 727, on the Valjoux 72. Positions of the barrel, the going train, the pallets and the balance are measured off the photograph of the plate in Valjoux's
+       own sheet for calibres 23 and 72 (1976), to about 0.3 mm; the chronograph wheels and the column wheel are measured off the photograph of the assembled movement in
+       Rolex's parts sheet for calibre 727, to about 0.5 mm. The Valjoux sheet states the escape wheel diameter (5.75), the balance diameter (12.00), the inside of the barrel
+       drum (11.95) and the distances escape wheel to pallets (3.30) and pallets to balance (4.50); the measured positions agree with those two distances to 0.2 mm.
+       Seen from the back, the crown is towards -x. Heights, tooth counts, pinion sizes, the other wheel sizes and every outline are estimated; the hour counter, on the dial side, is left out. */
+    const bX = -3.5, bY = -6.62, barrel = at(part('barrel', mv), bX, bY, 0);
+    barrel.add(at(mk(cyl(6.2, 0.8, 56), 'brass'), 0, 0, 0.75), at(mk(extr(gearShape(6.6, 80, 0.25, 0), 0.3), 'brass', { edgeAngle: 40 }), 0, 0, 0.4), at(mk(cyl(0.42, 2.4, 14), 'steelDark', { noEdges: true }), 0, 0, 1.2));
+    const spring = []; for (let i = 0; i <= 300; i++) { const a = i / 300 * Math.PI * 2 * 8, r = 0.8 + i / 300 * 4.9; spring.push(new THREE.Vector3(r * Math.cos(a), r * Math.sin(a), 1.165)); }
+    const ms = new THREE.Line(new THREE.BufferGeometry().setFromPoints(spring), new THREE.LineBasicMaterial({ color: 0x3d4f6e })); ms.raycast = () => {}; barrel.add(ms);
+    const cover = at(mk(cyl(5.95, 0.12, 48), 'brass'), 0, 0, 1.24); barrel.add(cover); layer(cover, 4);
+    spins.centre = mobile('centre', 0, 0, { R: 4.8, n: 72, z: 1.4, pin: 0.88, pinZ: 0.45 });
+    spins.third = mobile('third', 4.92, -2.63, { R: 3.5, n: 64, z: 1.85, pin: 0.76, pinZ: 1.4 });
+    spins.fourth = mobile('fourth', 8.05, 0, { R: 3.15, n: 56, z: 1.35, pin: 0.57, pinZ: 1.85, arbor: 3.35 });
+    const eX = 7.6, eY = 3.79;
+    spins.escape = mobile('escape', eX, eY, { shape: escapeShape(2.85, P.escapeTeeth || 15), z: 0.8, pin: 0.66, pinZ: 1.35, kind: 'steelDark' });
+    const BX = 0.85, BY = 8.0, bal = at(part('balance', mv), BX, BY, 0), balSpin = new THREE.Group(); bal.add(balSpin);
+    balSpin.add(at(mk(new THREE.TorusGeometry(5.64, 0.26, 10, 80), 'brass', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(10.9, 0.36, 0.2), 'brass'), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(0.36, 10.9, 0.2), 'brass'), 0, 0, 2.3), at(mk(cyl(0.45, 0.3, 14), 'steelDark'), 0, 0, 1.9));
+    bal.add(at(mk(cyl(0.2, 3, 10), 'steelDark', { noEdges: true }), 0, 0, 1.6));
+    const hs = at(part('hairspring', mv), BX, BY, 2.72), HN = 240, hsPos = new Float32Array((HN + 1) * 3), hsGeo = new THREE.BufferGeometry();
+    hsGeo.setAttribute('position', new THREE.BufferAttribute(hsPos, 3));
+    const hsLine = new THREE.Line(hsGeo, new THREE.LineBasicMaterial({ color: 0x3d4f6e })); hsLine.userData.pickLine = true; hs.add(hsLine);
+    const pmx = 4.6, pmy = 5.6, pal = at(part('pallet', mv), pmx, pmy, 0), palRock = new THREE.Group();
+    pal.rotation.z = Math.atan2(BY - pmy, BX - pmx) - Math.PI / 2; pal.add(palRock);
+    palRock.add(at(mk(new THREE.BoxGeometry(0.45, 4.6, 0.2), 'steelDark'), 0, 1.2, 1.1), at(mk(new THREE.BoxGeometry(3.4, 0.4, 0.2), 'steelDark'), 0, -0.9, 1.1), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), -1.55, -1.1, 1.1), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), 1.55, -1.1, 1.1));
+    /* bridges: placed over the measured pivots, with simplified outlines */
+    layer(flat('barrel-bridge', [[bX, bY, 5.8], [0, 0, 1.7]], 2.35, 0.45), 4);
+    layer(flat('train-bridge', [[4.92, -2.63, 1.5], [8.05, 0, 1.5], [eX, eY, 1.2]], 2.35, 0.45), 4);
+    layer(flat('pallet-cock', [[pmx, pmy, 0.7], [6.4, 7.4, 0.7]], 1.45, 0.24), 3);
+    layer(flat('balance-cock', [[BX, BY, 1.4], [-5.8, 11.6, 1.4]], 3.3, 0.45), 4);
+    jewel(4.92, -2.63, 2.86, 4); jewel(eX, eY, 2.86, 4); jewel(BX, BY, 3.82, 4); jewel(pmx, pmy, 1.3, 0);
+    /* chronograph works */
+    const run = part('chrono-runner', mv), runSpin = mobile(null, 0, 0, { R: 3.45, n: 160, tooth: 0.1, z: 3.0, th: 0.18, kind: 'steelDark', spokes: 4, arbor: 3.5 }, run);
+    runSpin.add(at(mk(cyl(0.6, 0.25, 3), 'steelDark'), 0, 0, 3.32)); layer(run, 8);
+    /* the coupling wheel is put where it meshes with the driving wheel and stands just clear of the runner; that is within 0.6 mm of where the photograph shows it */
+    const cpx = 4.24, cpy = -4.25, cp = at(part('coupling', mv), cpx, cpy, 0);
+    spins.drive = mobile(null, 8.05 - cpx, -cpy, { R: 3.3, n: 120, tooth: 0.1, z: 3.0, th: 0.18, spokes: 5, arbor: 0.01 }, cp);
+    spins.inter = mobile(null, 0, 0, { R: 2.4, n: 88, tooth: 0.1, z: 3.0, th: 0.18, spokes: 0, arbor: 0.01 }, cp);
+    cp.add(at(mk(extr(hullShape([[0, 0, 0.75], [2.0, -6.5, 0.6]]), 0.2), 'steel', { edgeAngle: 40 }), 0, 0, 3.3)); layer(cp, 8);
+    const mr = part('minute-recorder', mv), mrSpin = mobile(null, -7.85, 0, { R: 1.9, n: 40, tooth: 0.2, z: 3.0, th: 0.18, spokes: 4, arbor: 0.01 }, mr);
+    mrSpin.add(at(mk(cyl(0.45, 0.25, 3), 'steelDark'), 0, 0, 3.32), at(mk(cyl(0.2, 3.5, 10), 'steelDark', { noEdges: true }), 0, 0, 1.75)); layer(mr, 8); mr.userData.anchor = [-7.85, 0, 3.3];
+    const sg = at(part('sliding-gear', mv), -4.7, -1.4, 0); sg.add(at(mk(extr(gearShape(0.9, 20, 0.16, 0), 0.18), 'brass', { edgeAngle: 40 }), 0, 0, 3.0), at(mk(cyl(0.5, 0.1, 14), 'steel'), 0, 0, 3.23)); layer(sg, 8); sg.userData.anchor = [0, 0, 3.3];
+    const cw = at(part('column-wheel', mv), -2.3, -10.0, 0); cw.add(at(mk(extr(gearShape(2.0, 18, 0.3, 0), 0.25), 'steelDark', { edgeAngle: 40 }), 0, 0, 2.95));
+    for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3, pl = mk(new THREE.BoxGeometry(0.5, 0.42, 0.7), 'steelDark'); pl.position.set(1.25 * Math.cos(a), 1.25 * Math.sin(a), 3.55); pl.rotation.z = a; cw.add(pl); }
+    layer(cw, 8);
+    layer(multi('hammer', [[[-4.8, -6.2, 0.7], [-0.7, -1.5, 0.45]], [[-4.8, -6.2, 0.7], [-6.5, -1.5, 0.45]]], 3.3, 0.2, 'steel'), 8);
+    layer(flat('operating-lever', [[-11.5, -4.0, 0.6], [-5.2, -10.6, 0.5]], 3.3, 0.2, 'steel'), 8);
+    const cb = multi('chrono-bridge', [[[0, 0, 1.15], [-7.85, 0, 1.05]], [[-3.9, 0, 1.0], [-6.2, 5.3, 0.9]], [[-3.9, 0, 1.0], [-3.7, -2.8, 0.9]]], 3.55, 0.4, P.plate || 'copper');
+    cb.add(at(mk(cyl(0.5, 3.55, 14), 'steelDark', { noEdges: true }), -6.2, 5.3, 1.775), at(mk(cyl(0.5, 0.75, 14), 'steelDark', { noEdges: true }), -3.7, -2.8, 3.175)); layer(cb, 12); cb.userData.anchor = [-3.9, 0, 4];
+    jewel(0, 0, 4.0, 12); jewel(-7.85, 0, 4.0, 12);
+    Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 3.3 / 2.4 });
   } else {
     // Going train. Each wheel meshes with the next mobile's pinion: centre distance = wheel radius + pinion radius.
     const bX = -5.6, bY = 1.5, barrel = at(part('barrel', mv), bX, bY, 0);
