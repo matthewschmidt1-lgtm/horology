@@ -548,6 +548,40 @@ export function buildProcedural(watch, face, tex) {
     layer(flat('balance-cock', [[BX, BY, 1.3], [7.3, -7.5, 1.3]], 3.3, 0.45), 4);
     jewel(-2.8, -3.1, 3.11, 4); jewel(eX, eY, 3.11, 4); jewel(0, 0, 3.11, 4); jewel(BX, BY, 3.82, 4); jewel(pmx, pmy, 1.75, 3);
     Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1 });
+  } else if (P.calibre === '12120') {
+    /* Patek Philippe calibre 12-120. No Patek document was available. Every pivot of this calibre shows as a jewel in its own bridge, so the positions of the centre, third,
+       fourth and escape wheels, the balance and the barrel arbor are measured off two straight-on photographs of the movement published by Revolution: an archival one, on which
+       that article marks each wheel of the train, and a modern one. The two agree to about 0.5 mm; the scale is the roughly 27 mm usually given for the calibre.
+       The whole movement is turned a quarter turn by the bench so that the fourth wheel lies under the six o'clock register; within it the fourth wheel is on +x.
+       The pallets are placed from the modern photograph, less surely. Heights, sizes, tooth counts and every outline are estimated; the winding wheels and the regulator are left out. */
+    const bX = -6.4, bY = -3.1, barrel = at(part('barrel', mv), bX, bY, 0);
+    barrel.add(at(mk(cyl(5.55, 0.8, 56), 'brass'), 0, 0, 0.75), at(mk(extr(gearShape(5.9, 76, 0.25, 0), 0.3), 'brass', { edgeAngle: 40 }), 0, 0, 0.4), at(mk(cyl(0.42, 2.4, 14), 'steelDark', { noEdges: true }), 0, 0, 1.2));
+    const spring = []; for (let i = 0; i <= 300; i++) { const a = i / 300 * Math.PI * 2 * 8, r = 0.8 + i / 300 * 4.2; spring.push(new THREE.Vector3(r * Math.cos(a), r * Math.sin(a), 1.165)); }
+    const ms = new THREE.Line(new THREE.BufferGeometry().setFromPoints(spring), new THREE.LineBasicMaterial({ color: 0x3d4f6e })); ms.raycast = () => {}; barrel.add(ms);
+    const cover = at(mk(cyl(5.3, 0.12, 48), 'brass'), 0, 0, 1.24); barrel.add(cover); layer(cover, 4);
+    spins.centre = mobile('centre', 0, 0, { R: 4.05, n: 72, z: 1.4, pin: 1.2, pinZ: 0.45 });
+    spins.third = mobile('third', 4.3, -2.05, { R: 3.3, n: 64, z: 1.85, pin: 0.7, pinZ: 1.4 });
+    spins.fourth = mobile('fourth', 7.68, 0, { R: 3.15, n: 60, z: 1.35, pin: 0.65, pinZ: 1.85 });
+    const eX = 7.5, eY = 3.9;
+    spins.escape = mobile('escape', eX, eY, { shape: escapeShape(2.2, P.escapeTeeth || 15), z: 0.8, pin: 0.75, pinZ: 1.35, kind: 'steelDark' });
+    const BX = 1.35, BY = 7.4, bal = at(part('balance', mv), BX, BY, 0), balSpin = new THREE.Group(); bal.add(balSpin);
+    balSpin.add(at(mk(new THREE.TorusGeometry(5.44, 0.26, 10, 80), 'brass', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(10.5, 0.36, 0.2), 'brass'), 0, 0, 2.3), at(mk(cyl(0.45, 0.3, 14), 'steelDark'), 0, 0, 1.9));
+    bal.add(at(mk(cyl(0.2, 3, 10), 'steelDark', { noEdges: true }), 0, 0, 1.6));
+    const hs = at(part('hairspring', mv), BX, BY, 2.72), HN = 240, hsPos = new Float32Array((HN + 1) * 3), hsGeo = new THREE.BufferGeometry();
+    hsGeo.setAttribute('position', new THREE.BufferAttribute(hsPos, 3));
+    const hsLine = new THREE.Line(hsGeo, new THREE.LineBasicMaterial({ color: 0x3d4f6e })); hsLine.userData.pickLine = true; hs.add(hsLine);
+    const pmx = 5.15, pmy = 5.1, pal = at(part('pallet', mv), pmx, pmy, 0), palRock = new THREE.Group();
+    pal.rotation.z = Math.atan2(BY - pmy, BX - pmx) - Math.PI / 2; pal.add(palRock);
+    palRock.add(at(mk(new THREE.BoxGeometry(0.45, 4.2, 0.2), 'steelDark'), 0, 1.0, 1.1), at(mk(new THREE.BoxGeometry(2.6, 0.4, 0.2), 'steelDark'), 0, -1.0, 1.1), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), -1.2, -1.2, 1.1), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), 1.2, -1.2, 1.1));
+    /* bridges, as the photographs show them: a full bridge over the barrel, one curved bridge for the centre and third wheels, and a finger bridge each for the fourth and escape wheels */
+    layer(flat('barrel-bridge', [[bX, bY, 5.4]], 2.35, 0.45), 4);
+    layer(flat('train-bridge', [[0, 0, 1.5], [4.3, -2.05, 1.4], [9.6, -7.2, 1.1]], 2.35, 0.45), 4);
+    layer(flat('fourth-cock', [[7.68, 0, 1.15], [11.6, -3.0, 1.0]], 2.35, 0.45), 4);
+    layer(flat('escape-cock', [[eX, eY, 1.0], [11.4, 2.3, 0.9]], 2.35, 0.45), 4);
+    layer(flat('pallet-cock', [[pmx, pmy, 0.7], [7.0, 6.6, 0.7]], 1.45, 0.24), 3);
+    layer(flat('balance-cock', [[BX, BY, 1.4], [-5.15, 10.8, 1.3]], 3.3, 0.45), 4);
+    jewel(0, 0, 2.86, 4); jewel(4.3, -2.05, 2.86, 4); jewel(7.68, 0, 2.86, 4); jewel(eX, eY, 2.86, 4); jewel(BX, BY, 3.82, 4); jewel(pmx, pmy, 1.3, 0);
+    Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1 });
   } else {
     // Going train. Each wheel meshes with the next mobile's pinion: centre distance = wheel radius + pinion radius.
     const bX = -5.6, bY = 1.5, barrel = at(part('barrel', mv), bX, bY, 0);
