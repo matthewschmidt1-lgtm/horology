@@ -517,6 +517,37 @@ export function buildProcedural(watch, face, tex) {
     layer(flat('balance-cock', [[BX, BY, 1.3], [-6.4, -6.7, 1.3]], 3.3, 0.45), 4);
     jewel(4.6, 0, 2.86, 4); jewel(6.22, -3.0, 2.86, 4); jewel(eX, eY, 1.92, 3); jewel(BX, BY, 3.82, 4); jewel(pmx, pmy, 1.92, 3);
     Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1 });
+  } else if (P.calibre === '6217') {
+    /* Seiko calibre 6217A. Seiko's parts list for it gives 27.60 mm, 5.35 mm, 17 jewels and 18,000 vibrations an hour. Positions of the barrel, the third wheel, the sweep second
+       (fourth) wheel, the escape wheel and the balance are measured off the stage-by-stage photographs in Seiko's service manual for the sister calibre 6218A, which are small:
+       good to about 0.5 mm. The manual shows the centre wheel under its own bridge with the sweep second wheel above it on the same axis, and one bridge over the barrel and the train.
+       Seen from the back, the crown is towards -x. The escape wheel is drawn 0.8 mm nearer the centre than measured so that it meshes; the pallets and both cock feet are placed
+       by eye. Heights, tooth counts, sizes and outlines are estimated; the automatic winding work, the centre wheel bridge and the date work are left out. */
+    const bX = -2.04, bY = 6.65, barrel = at(part('barrel', mv), bX, bY, 0);
+    barrel.add(at(mk(cyl(5.25, 0.8, 56), 'brass'), 0, 0, 0.75), at(mk(extr(gearShape(5.6, 72, 0.25, 0), 0.3), 'brass', { edgeAngle: 40 }), 0, 0, 0.4), at(mk(cyl(0.42, 2.7, 14), 'steelDark', { noEdges: true }), 0, 0, 1.35));
+    const spring = []; for (let i = 0; i <= 300; i++) { const a = i / 300 * Math.PI * 2 * 8, r = 0.8 + i / 300 * 3.9; spring.push(new THREE.Vector3(r * Math.cos(a), r * Math.sin(a), 1.165)); }
+    const ms = new THREE.Line(new THREE.BufferGeometry().setFromPoints(spring), new THREE.LineBasicMaterial({ color: 0x3d4f6e })); ms.raycast = () => {}; barrel.add(ms);
+    const cover = at(mk(cyl(5.0, 0.12, 48), 'brass'), 0, 0, 1.24); barrel.add(cover); layer(cover, 4);
+    /* the centre wheel and the sweep second wheel share the centre: the centre wheel below, the sweep second wheel above the third wheel */
+    spins.centre = mobile('centre', 0, 0, { R: 3.4, n: 64, z: 1.4, pin: 1.36, pinZ: 0.45, arbor: 1.9 });
+    spins.third = mobile('third', -2.8, -3.1, { R: 3.2, n: 60, z: 1.85, pin: 0.78, pinZ: 1.4, arbor: 2.7 });
+    spins.fourth = mobile('fourth', 0, 0, { R: 3.75, n: 70, z: 2.3, pin: 0.98, pinZ: 1.85, arbor: 2.7 });
+    const eX = 3.72, eY = -2.37;
+    spins.escape = mobile('escape', eX, eY, { shape: escapeShape(1.4, P.escapeTeeth || 15), z: 0.8, pin: 0.65, pinZ: 2.2, kind: 'steelDark', arbor: 2.7 });
+    const BX = 9.8, BY = 2.1, bal = at(part('balance', mv), BX, BY, 0), balSpin = new THREE.Group(); bal.add(balSpin);
+    balSpin.add(at(mk(new THREE.TorusGeometry(3.44, 0.26, 10, 64), 'brass', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(6.6, 0.36, 0.2), 'brass'), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(0.36, 6.6, 0.2), 'brass'), 0, 0, 2.3), at(mk(cyl(0.45, 0.3, 14), 'steelDark'), 0, 0, 1.9));
+    bal.add(at(mk(cyl(0.2, 3, 10), 'steelDark', { noEdges: true }), 0, 0, 1.6));
+    const hs = at(part('hairspring', mv), BX, BY, 2.72), HN = 240, hsPos = new Float32Array((HN + 1) * 3), hsGeo = new THREE.BufferGeometry();
+    hsGeo.setAttribute('position', new THREE.BufferAttribute(hsPos, 3));
+    const hsLine = new THREE.Line(hsGeo, new THREE.LineBasicMaterial({ color: 0x3d4f6e })); hsLine.userData.pickLine = true; hs.add(hsLine);
+    const pmx = 6.15, pmy = -0.57, pal = at(part('pallet', mv), pmx, pmy, 0), palRock = new THREE.Group();
+    pal.rotation.z = Math.atan2(BY - pmy, BX - pmx) - Math.PI / 2; pal.add(palRock);
+    palRock.add(at(mk(new THREE.BoxGeometry(0.45, 4.2, 0.2), 'steelDark'), 0, 0.9, 1.1), at(mk(new THREE.BoxGeometry(2.0, 0.4, 0.2), 'steelDark'), 0, -1.2, 1.1), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), -0.9, -1.4, 1.1), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), 0.9, -1.4, 1.1));
+    layer(flat('train-bridge', [[bX, bY, 4.6], [0, 0, 1.6], [-2.8, -3.1, 1.5], [eX, eY, 1.2]], 2.6, 0.45), 4);
+    layer(flat('pallet-cock', [[pmx, pmy, 0.7], [6.9, -2.2, 0.7]], 1.45, 0.24), 3);
+    layer(flat('balance-cock', [[BX, BY, 1.3], [7.3, -7.5, 1.3]], 3.3, 0.45), 4);
+    jewel(-2.8, -3.1, 3.11, 4); jewel(eX, eY, 3.11, 4); jewel(0, 0, 3.11, 4); jewel(BX, BY, 3.82, 4); jewel(pmx, pmy, 1.75, 3);
+    Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1 });
   } else {
     // Going train. Each wheel meshes with the next mobile's pinion: centre distance = wheel radius + pinion radius.
     const bX = -5.6, bY = 1.5, barrel = at(part('barrel', mv), bX, bY, 0);
