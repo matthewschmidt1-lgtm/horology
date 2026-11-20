@@ -156,10 +156,18 @@ export function buildProcedural(watch, face, tex) {
   /* ----- tuning-fork movement (Bulova Accutron 214) -----
      The works of a 214 face the dial, which is why a Spaceview can do without one. So this movement is not
      turned over like the others: local +Z points out of the front, and "opening" the watch lifts the
-     crystal, chapter ring and hands away. The layout is a simplified interpretation, not the calibre's. */
+     crystal, chapter ring and hands away, and drops the back as well.
+     Which side each thing is on, the three openings in the plate and the place of the index wheel follow the plan drawings in Bulova's
+     "Accutron Service Manual, Series 214", scaled to 29 mm: the coils show from both sides at twelve, the fork and the electronics face the dial,
+     and the index wheel, its two jewels, the gear train and the power cell are on the back. The manual gives the index wheel as 2.40 mm across
+     with 300 teeth. Positions are read off small drawings, to about 0.7 mm; the shape of the fork, the two-stage train and all heights are simplified. */
   if (P.oscillator === 'fork') {
     const mv = new THREE.Group(); mv.position.z = -0.4; root.add(mv); assembly(mv, 0);
-    part('plate', mv).add(at(mk(cyl(mvR, 1, 72), 'steel', { real: { color: 0x7f7f7c, roughness: 0.72 } }), 0, 0, -0.5));
+    /* the pillar plate: a ring and a central island, with a long opening for the two coils at twelve and a round opening each side, one for the power cell and one for the electronics */
+    const CELL = [-7.8, -1.6], ELEC = [8.5, -2.0], plateS = new THREE.Shape(); plateS.absarc(0, 0, mvR, 0, Math.PI * 2, false);
+    const slot = new THREE.Path(); slot.absarc(5.0, 7.8, 3.35, -Math.PI / 2, Math.PI / 2, false); slot.absarc(-5.4, 7.8, 3.35, Math.PI / 2, Math.PI * 1.5, false); slot.closePath(); plateS.holes.push(slot);
+    for (const [c, r] of [[CELL, 5.5], [ELEC, 4.6]]) { const h = new THREE.Path(); h.absarc(c[0], c[1], r, 0, Math.PI * 2, true); plateS.holes.push(h); }
+    part('plate', mv).add(at(mk(extr(plateS, 1), 'steel', { real: { color: 0x7f7f7c, roughness: 0.72 }, edgeAngle: 40 }), 0, 0, -1));
     // the fork: a U with its foot at six o'clock and a cup magnet on the tip of each tine
     const TX = 4.7, fork = part('fork', mv), tines = [];
     fork.add(at(mk(new THREE.BoxGeometry(2 * TX + 1.1, 2.2, 0.9), 'steelDark'), 0, -8.4, 0.75), at(mk(cyl(0.7, 1.3, 16), 'steel'), 0, -8.4, 0.9));
@@ -174,34 +182,34 @@ export function buildProcedural(watch, face, tex) {
     for (const sx of [-1, 1]) coils.add(at(mk(new THREE.CylinderGeometry(0.85, 0.85, 3.0, 24).rotateZ(Math.PI / 2), 'coil', { edgeAngle: 20 }), sx * (TX + 2.9), 8.0, 1.3), at(mk(new THREE.BoxGeometry(1.2, 1.6, 0.5), 'steel'), sx * (TX + 4.0), 8.0, 0.25));
     coils.userData.anchor = [TX + 2.9, 8, 2.2];
     const circuit = part('circuit', mv);
-    circuit.add(at(mk(new THREE.BoxGeometry(5.2, 2.4, 0.3), 'coil'), 0, 10.6, 0.15), at(mk(cyl(0.8, 1.1, 18), 'steelDark'), -1.3, 10.6, 0.85), at(mk(new THREE.BoxGeometry(1.5, 0.7, 0.7), 'copper'), 1.2, 11.0, 0.65), at(mk(cyl(0.42, 0.8, 12), 'brass'), 1.2, 10.1, 0.7));
-    circuit.userData.anchor = [0, 10.6, 1.5];
-    // index wheel and the short train to the seconds hand. Wheel and pinion centres are set so the teeth meet.
-    const spins = {}, IX = -2.6, IY = 1.2;
+    circuit.add(at(mk(new THREE.BoxGeometry(2.6, 5.0, 0.3), 'coil'), ELEC[0] + 1.6, ELEC[1], -0.35), at(mk(cyl(0.8, 1.1, 18), 'steelDark'), ELEC[0] + 1.6, ELEC[1] + 1.3, 0.35), at(mk(new THREE.BoxGeometry(0.7, 1.5, 0.7), 'copper'), ELEC[0] + 1.9, ELEC[1] - 0.9, 0.15), at(mk(cyl(0.42, 0.8, 12), 'brass'), ELEC[0] + 1.0, ELEC[1] - 1.1, 0.2));
+    circuit.userData.anchor = [ELEC[0] + 1.6, ELEC[1], 1.0];
+    // index wheel and the short train to the seconds hand: on the back of the movement, so everything here sits below the plate (negative z)
+    const spins = {}, IX = 5.4, IY = 3.3, TRX = 2.4, TRY = 2.19;
     const mobile = (id, x, y, o) => {
       const g = at(part(id, mv), x, y, 0), sp = new THREE.Group(); g.add(sp);
       sp.add(at(mk(extr(gearShape(o.R, o.n, o.tooth || 0.2, o.spokes), 0.2), o.kind || 'brass', { edgeAngle: 40 }), 0, 0, o.z));
       if (o.pin) sp.add(at(mk(cyl(o.pin, 0.45, 12), 'steelDark'), 0, 0, o.pinZ));
-      sp.add(at(mk(cyl(0.16, 2.0, 10), 'steelDark', { noEdges: true }), 0, 0, 1.0));
-      g.userData.anchor = [0, 0, 1.9]; return sp;
+      sp.add(at(mk(cyl(0.16, 1.9, 10), 'steelDark', { noEdges: true }), 0, 0, -1.95));
+      g.userData.anchor = [0, 0, -3.1]; return sp;
     };
-    spins.index = mobile('index-wheel', IX, IY, { R: 1.2, n: 300, tooth: 0.035, spokes: 0, z: 1.2, kind: 'steel', pin: 0.3, pinZ: 0.78 });
-    spins.inter = mobile('train', -0.73, 2.86, { R: 2.2, n: 60, z: 0.55, pin: 0.35, pinZ: 1.28, spokes: 4 });
-    spins.sec = mobile('seconds-wheel', 0, 0, { R: 2.6, n: 72, z: 0.93, spokes: 4 });
-    // the index jewel rides on the left tine and pushes the wheel; the pawl jewel is fixed and stops it running back
-    const ij = part('index-jewel', tines[0]);
-    ij.add(at(mk(new THREE.BoxGeometry(1.7, 0.22, 0.22), 'steel'), 1.4, IY + 1.2 + 7.4, 1.3), at(mk(new THREE.BoxGeometry(0.34, 0.34, 0.34), 'ruby'), TX + IX, IY + 1.2 + 7.4, 1.3));
-    ij.userData.anchor = [TX + IX, IY + 1.2 + 7.4, 1.6];
-    const pawl = part('pawl', mv);
-    pawl.add(at(mk(new THREE.BoxGeometry(0.22, 1.9, 0.22), 'steel'), IX, IY - 2.2, 1.3), at(mk(new THREE.BoxGeometry(0.34, 0.34, 0.34), 'ruby'), IX, IY - 1.22, 1.3), at(mk(cyl(0.35, 1.3, 12), 'steel'), IX, IY - 3.2, 0.65));
-    pawl.userData.anchor = [IX, IY - 2.2, 1.6];
+    spins.index = mobile('index-wheel', IX, IY, { R: 1.2, n: 300, tooth: 0.035, spokes: 0, z: -2.7, kind: 'steel', pin: 0.3, pinZ: -1.9 });
+    spins.inter = mobile('train', TRX, TRY, { R: 2.9, n: 72, z: -2.0, pin: 0.35, pinZ: -1.4, spokes: 4 });
+    spins.sec = mobile('seconds-wheel', 0, 0, { R: 2.9, n: 72, z: -1.5, spokes: 4 });
+    // the index jewel is carried by a finger from the tine beside the wheel and pushes it; the pawl jewel is fixed and stops it running back
+    const ij = part('index-jewel', tines[1]), jx = IX - 1.2 - 0.11 - TX, jy = IY + 7.4;
+    ij.add(at(mk(new THREE.BoxGeometry(0.22, 2.7, 0.22), 'steel'), jx, jy + 1.35, -2.6), at(mk(new THREE.BoxGeometry(0.34, 0.34, 0.34), 'ruby'), jx + 0.11, jy, -2.6), at(mk(cyl(0.2, 3.6, 10), 'steel'), jx, jy + 2.7, -0.95));
+    ij.userData.anchor = [jx, jy, -3.0];
+    const pawl = part('pawl', mv), px = IX + 1.2 + 0.11;
+    pawl.add(at(mk(new THREE.BoxGeometry(0.22, 0.9, 0.22), 'steel'), px, IY + 0.45, -2.6), at(mk(new THREE.BoxGeometry(0.34, 0.34, 0.34), 'ruby'), px - 0.11, IY, -2.6), at(mk(cyl(0.35, 1.7, 12), 'steel'), px, IY + 0.9, -1.85));
+    pawl.userData.anchor = [px, IY + 0.45, -3.0];
     const bridge = part('train-bridge', mv);
-    bridge.add(at(mk(extr(hullShape([[-0.73, 2.86, 0.9], [0, 0, 0.9], [3.0, 2.6, 1.0]]), 0.35), 'steel', { edgeAngle: 40 }), 0, 0, 1.75), at(mk(cyl(0.34, 0.14, 14), 'ruby'), -0.73, 2.86, 2.12));
-    bridge.userData.anchor = [2.6, 2.4, 2.2]; layer(bridge, 5);
+    bridge.add(at(mk(extr(hullShape([[TRX, TRY, 0.9], [0, 0, 0.9], [1.6, -3.2, 1.0]]), 0.35), 'steel', { edgeAngle: 40 }), 0, 0, -3.5), at(mk(cyl(0.34, 0.14, 14), 'ruby'), TRX, TRY, -3.52), at(mk(cyl(0.45, 2.5, 12), 'steel', { noEdges: true }), 1.6, -3.2, -2.25));
+    bridge.userData.anchor = [1.0, -1.6, -3.7]; layer(bridge, -5);
     // the cell sits behind the plate, under a hatch in the back; the setting handle is on the back too
-    const cell = part('battery', mv); cell.add(at(mk(cyl(4.4, 2.6, 40), 'steel'), 0, -4.6, -2.4), at(mk(cyl(3.6, 0.2, 32), 'brass'), 0, -4.6, -3.8));
-    cell.userData.anchor = [0, -4.6, -3.9]; assembly(cell, -8);
-    const hatch = part('hatch', back); hatch.add(at(mk(cyl(4.8, 0.3, 40), CASE), 0, -4.6, -6.5), at(mk(new THREE.BoxGeometry(5, 0.5, 0.2), 'steelDark'), 0, -4.6, -6.7));
+    const cell = part('battery', mv); cell.add(at(mk(cyl(4.4, 2.6, 40), 'steel'), CELL[0], CELL[1], -2.4), at(mk(cyl(3.6, 0.2, 32), 'brass'), CELL[0], CELL[1], -3.8));
+    cell.userData.anchor = [CELL[0], CELL[1], -3.9]; assembly(cell, -8);
+    const hatch = part('hatch', back); hatch.add(at(mk(cyl(4.8, 0.3, 40), CASE), CELL[0], CELL[1], -6.5), at(mk(new THREE.BoxGeometry(5, 0.5, 0.2), 'steelDark'), CELL[0], CELL[1], -6.7));
     back.add(crown); crown.add(at(mk(cyl(2.4, 0.5, 28), CASE), 0, 6.0, -6.6), at(mk(new THREE.TorusGeometry(1.7, 0.22, 8, 24, Math.PI), CASE), 0, 6.0, -6.95));
 
     const TAU = Math.PI * 2;
@@ -213,8 +221,9 @@ export function buildProcedural(watch, face, tex) {
       hMin.rotation.z = -m * TAU / 60; hHour.rotation.z = -h * TAU / 12;
     }
     const setExplode = v => asm.forEach(a => a.g.position.set(a.home.x + a.ex * v, a.home.y + a.ey * v, a.home.z + a.ez * v));
-    function setOpen(v) { // lift the crystal and bezel, then the chapter ring and hands, and set them aside
+    function setOpen(v) { // lift the crystal and bezel, then the chapter ring and hands, and set them aside; the back drops away too, since the index wheel and the train are on that side
       const u = Math.min(1, v * 2), s = Math.max(0, v * 2 - 1);
+      back.position.z -= 6 * u; back.position.y -= 46 * s;
       for (const g of [bezel, crystal]) { g.position.z += 5 * u; g.position.x += -46 * s; }
       for (const g of [dial, hands]) { g.position.z += 3 * u; g.position.x += 46 * s; }
     }
