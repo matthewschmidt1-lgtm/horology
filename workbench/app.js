@@ -12,7 +12,7 @@ const cur = { explode: 0, open: 0, layers: 0 };
 /* ---------- panels ---------- */
 $('#w-kicker').textContent = `${watch.brand}${watch.noRef ? '' : ` · Ref. ${watch.reference}`} · ${watch.year}`;
 $('#w-title').innerHTML = `${watch.model} <em>${watch.reference}</em>`;
-$('#caveat').textContent = watch.asset.params.calibre === '1530' ? 'Approximate model. Movement laid out from a watchmaker’s photographs, not a maker’s document; sizes and shapes estimated.' : watch.asset.params.calibre ? 'Approximate model. Movement laid out from the maker’s own documents; sizes and shapes estimated.' : 'Approximate model, built from published dimensions. The movement is a generic layout, not the maker’s own.';
+$('#caveat').textContent = watch.asset.params.calibre === '11' ? 'Approximate model. Movement laid out from published photographs and the service manual’s drawings, not a dimensioned maker’s drawing; sizes and shapes estimated.' : watch.asset.params.calibre === '1530' ? 'Approximate model. Movement laid out from a watchmaker’s photographs, not a maker’s document; sizes and shapes estimated.' : watch.asset.params.calibre ? 'Approximate model. Movement laid out from the maker’s own documents; sizes and shapes estimated.' : 'Approximate model, built from published dimensions. The movement is a generic layout, not the maker’s own.';
 $('#asset-note').textContent = watch.asset.note;
 document.title = `${watch.brand} ${watch.model} · The Workbench`;
 /* One quiet line for choosing a watch: the name of the one on the bench, which opens the full set, and a step to the next or the last. */

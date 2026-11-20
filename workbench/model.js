@@ -428,6 +428,62 @@ export function buildProcedural(watch, face, tex) {
     cb.add(at(mk(cyl(0.5, 3.55, 14), 'steelDark', { noEdges: true }), -6.2, 5.3, 1.775), at(mk(cyl(0.5, 0.75, 14), 'steelDark', { noEdges: true }), -3.7, -2.8, 3.175)); layer(cb, 12); cb.userData.anchor = [-3.9, 0, 4];
     jewel(0, 0, 4.0, 12); jewel(-7.85, 0, 4.0, 12);
     Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 3.3 / 2.4 });
+  } else if (P.calibre === '11') {
+    /* Heuer Calibre 11 (Buren micro-rotor base, Dubois Depraz chronograph module). No dimensioned maker's drawing was available. Positions of the barrel, the large driving
+       wheel, the third and fourth wheels, the balance, the micro-rotor and the two recorders are measured off overhead photographs of the base movement and of the assembled calibre
+       printed in a 1982 journal article (AFAHA), scaled to 31 mm, to about 0.5 mm. Which wheel is which is read from the service manual's exploded views and a watchmaker's
+       step-by-step photographs. The crown is at nine on this calibre, so seen from the back it is towards +x.
+       The escape wheel and the pallets could not be seen and are placed between the fourth wheel and the balance. The oscillating pinion is placed where it must sit to work.
+       Heights, sizes, tooth counts and every outline are estimated; the winding gears, the date work, the chronograph plate and most levers are left out. */
+    const bX = 4.5, bY = -7.7, barrel = at(part('barrel', mv), bX, bY, 0);
+    barrel.add(at(mk(cyl(5.7, 0.8, 56), 'brass'), 0, 0, 0.75), at(mk(extr(gearShape(6.1, 76, 0.25, 0), 0.3), 'brass', { edgeAngle: 40 }), 0, 0, 0.4), at(mk(cyl(0.42, 2.4, 14), 'steelDark', { noEdges: true }), 0, 0, 1.2));
+    const spring = []; for (let i = 0; i <= 300; i++) { const a = i / 300 * Math.PI * 2 * 8, r = 0.8 + i / 300 * 4.3; spring.push(new THREE.Vector3(r * Math.cos(a), r * Math.sin(a), 1.165)); }
+    const ms = new THREE.Line(new THREE.BufferGeometry().setFromPoints(spring), new THREE.LineBasicMaterial({ color: 0x3d4f6e })); ms.raycast = () => {}; barrel.add(ms);
+    const cover = at(mk(cyl(5.45, 0.12, 48), 'brass'), 0, 0, 1.24); barrel.add(cover); layer(cover, 4);
+    /* the wheel the barrel drives is not at the centre: the centre is left free for the chronograph, and the hands are driven from the side */
+    spins.centre = mobile('centre', 3.55, -0.85, { R: 3.35, n: 64, z: 1.4, pin: 0.75, pinZ: 0.45 });
+    spins.third = mobile('third', 2.4, 3.1, { R: 2.55, n: 54, z: 1.85, pin: 0.72, pinZ: 1.4 });
+    spins.fourth = mobile('fourth', 6.0, 3.9, { R: 2.8, n: 56, z: 1.0, pin: 1.1, pinZ: 1.85, arbor: 3.35 });
+    const eX = 5.4, eY = 7.2;
+    spins.escape = mobile('escape', eX, eY, { shape: escapeShape(1.7, P.escapeTeeth || 15), z: 0.5, pin: 0.5, pinZ: 1.0, kind: 'steelDark', arbor: 1.6 });
+    const BX = 0.4, BY = 10.25, bal = at(part('balance', mv), BX, BY, 0), balSpin = new THREE.Group(); bal.add(balSpin);
+    balSpin.add(at(mk(new THREE.TorusGeometry(4.6, 0.26, 10, 72), 'brass', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(8.8, 0.36, 0.2), 'brass'), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(0.36, 8.8, 0.2), 'brass'), 0, 0, 2.3), at(mk(cyl(0.45, 0.3, 14), 'steelDark'), 0, 0, 1.9));
+    bal.add(at(mk(cyl(0.2, 3, 10), 'steelDark', { noEdges: true }), 0, 0, 1.6));
+    const hs = at(part('hairspring', mv), BX, BY, 2.72), HN = 240, hsPos = new Float32Array((HN + 1) * 3), hsGeo = new THREE.BufferGeometry();
+    hsGeo.setAttribute('position', new THREE.BufferAttribute(hsPos, 3));
+    const hsLine = new THREE.Line(hsGeo, new THREE.LineBasicMaterial({ color: 0x3d4f6e })); hsLine.userData.pickLine = true; hs.add(hsLine);
+    const pmx = 3.1, pmy = 8.5, pal = at(part('pallet', mv), pmx, pmy, 0), palRock = new THREE.Group();
+    pal.rotation.z = Math.atan2(BY - pmy, BX - pmx) - Math.PI / 2; pal.add(palRock);
+    palRock.add(at(mk(new THREE.BoxGeometry(0.45, 3.2, 0.2), 'steelDark'), 0, 0.5, 0.85), at(mk(new THREE.BoxGeometry(2.2, 0.4, 0.2), 'steelDark'), 0, -0.8, 0.85), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), -1.0, -1.0, 0.85), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), 1.0, -1.0, 0.85));
+    layer(flat('barrel-bridge', [[bX, bY, 5.2]], 2.35, 0.45), 4);
+    layer(flat('train-bridge', [[3.55, -0.85, 1.4], [2.4, 3.1, 1.3], [6.0, 3.9, 1.5]], 2.35, 0.45), 4);
+    layer(flat('pallet-cock', [[pmx, pmy, 0.7], [eX, eY, 0.8]], 1.45, 0.24), 3);
+    layer(flat('balance-cock', [[BX, BY, 1.4], [-8.2, 10.3, 1.4]], 3.3, 0.45), 4);
+    jewel(3.55, -0.85, 2.86, 4); jewel(2.4, 3.1, 2.86, 4); jewel(BX, BY, 3.82, 4); jewel(pmx, pmy, 1.3, 0);
+    /* the micro-rotor lies inside the base movement, beside the train and under the chronograph: its swept circle is measured from the photograph */
+    const rot = at(part('rotor', mv), -8.3, -0.1, 0), rw = new THREE.Shape(); rw.absarc(0, 0, 7.0, Math.PI * 0.5, Math.PI * 1.5, false); rw.closePath();
+    rot.add(at(mk(extr(rw, 1.2), 'steelDark', { edgeAngle: 40 }), 0, 0, 0.9), at(mk(cyl(7.0, 0.12, 48), 'steel'), 0, 0, 0.84), at(mk(cyl(0.9, 1.5, 16), 'steelDark'), 0, 0, 1.5));
+    rot.userData.anchor = [-2, 0, 2.3]; layer(rot, 4);
+    /* chronograph module, above the base movement */
+    const run = part('chrono-runner', mv), runSpin = mobile(null, 0, 0, { R: 3.8, n: 160, tooth: 0.1, z: 3.0, th: 0.18, kind: 'steelDark', spokes: 4, arbor: 3.5 }, run);
+    runSpin.add(at(mk(cyl(0.6, 0.25, 3), 'steelDark'), 0, 0, 3.32)); layer(run, 8);
+    /* the driving wheel rides on the fourth wheel's long pivot; the oscillating pinion stands between it and the runner */
+    const opx = 3.70, opy = 2.40, cp = at(part('coupling', mv), opx, opy, 0);
+    spins.drive = mobile(null, 6.0 - opx, 3.9 - opy, { R: 2.3, n: 90, tooth: 0.1, z: 3.0, th: 0.18, spokes: 5, arbor: 0.01 }, cp);
+    spins.inter = mobile(null, 0, 0, { R: 0.45, n: 10, tooth: 0.12, z: 2.85, th: 0.5, spokes: 0, arbor: 0.01, kind: 'steelDark' }, cp);
+    cp.add(at(mk(cyl(0.16, 0.7, 10), 'steelDark', { noEdges: true }), 0, 0, 3.21)); layer(cp, 8); cp.userData.anchor = [0, 0, 3.6];
+    const mr = part('minute-recorder', mv), mrSpin = mobile(null, -7.8, 0, { R: 1.9, n: 40, tooth: 0.2, z: 3.0, th: 0.18, spokes: 4, arbor: 0.01 }, mr);
+    mrSpin.add(at(mk(cyl(0.45, 0.25, 3), 'steelDark'), 0, 0, 3.32), at(mk(cyl(0.2, 1.0, 10), 'steelDark', { noEdges: true }), 0, 0, 3.0)); layer(mr, 8); mr.userData.anchor = [-7.8, 0, 3.3];
+    const hr = part('hour-recorder', mv), hrSpin = mobile(null, 8.35, 0.1, { R: 1.9, n: 40, tooth: 0.2, z: 3.0, th: 0.18, spokes: 4, arbor: 0.01 }, hr);
+    hrSpin.add(at(mk(cyl(0.45, 0.25, 3), 'steelDark'), 0, 0, 3.32), at(mk(cyl(0.2, 1.0, 10), 'steelDark', { noEdges: true }), 0, 0, 3.0));
+    hr.add(at(mk(extr(hullShape([[8.35, 0.1, 1.0], [12.6, 0.2, 0.9], [7.8, -4.1, 0.9]]), 0.4), P.plate || 'copper', { edgeAngle: 40 }), 0, 0, 3.55)); layer(hr, 8); hr.userData.anchor = [8.35, 0.1, 4];
+    const cw = at(part('cam', mv), -10.0, -6.5, 0);
+    cw.add(at(mk(extr(hullShape([[0, 0, 1.0], [1.5, 0.5, 0.55], [-0.9, 1.1, 0.5]]), 0.3), 'steelDark', { edgeAngle: 40 }), 0, 0, 2.6), at(mk(extr(hullShape([[0, 0, 0.8], [-1.3, -0.6, 0.5], [0.7, -1.2, 0.45]]), 0.3), 'steel', { edgeAngle: 40 }), 0, 0, 2.95), at(mk(cyl(0.3, 0.5, 12), 'steelDark'), 0, 0, 3.4)); layer(cw, 8);
+    layer(multi('hammer', [[[-5.5, -6.0, 0.7], [-1.2, -1.6, 0.45]], [[-5.5, -6.0, 0.7], [-6.9, -1.9, 0.45]]], 3.3, 0.2, 'steel'), 8);
+    const cb = multi('chrono-bridge', [[[0, 0, 1.15], [-7.8, 0, 1.05]], [[-3.9, 0, 1.0], [-3.2, 5.5, 0.9]], [[-3.9, 0, 1.0], [-6.4, 4.6, 0.9]]], 3.55, 0.4, P.plate || 'copper');
+    cb.add(at(mk(cyl(0.5, 3.55, 14), 'steelDark', { noEdges: true }), -3.2, 5.5, 1.775), at(mk(cyl(0.5, 0.75, 14), 'steelDark', { noEdges: true }), -6.4, 4.6, 3.175)); layer(cb, 12); cb.userData.anchor = [-3.9, 0, 4];
+    jewel(0, 0, 4.0, 12); jewel(-7.8, 0, 4.0, 12);
+    Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 2.3 / 0.45 });
   } else {
     // Going train. Each wheel meshes with the next mobile's pinion: centre distance = wheel radius + pinion radius.
     const bX = -5.6, bY = 1.5, barrel = at(part('barrel', mv), bX, bY, 0);
@@ -484,7 +540,7 @@ export function buildProcedural(watch, face, tex) {
     Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1.7 / 1.25 });
   }
   /* winding rotor of an automatic: a half-disc weight on a central bearing, shown at rest */
-  if (P.rotor === 'micro') { // a small rotor set into the movement. In the real calibre it is buried under the chronograph works; it is shown on the surface so it can be seen
+  if (P.calibre === '11') { /* the Calibre 11's micro-rotor is built with its movement, above */ } else if (P.rotor === 'micro') { // a small rotor set into the movement. In the real calibre it is buried under the chronograph works; it is shown on the surface so it can be seen
     const rot = at(part('rotor', mv), 7.6, 7.6, 0), w = new THREE.Shape(); w.absarc(0, 0, 4.2, Math.PI * 0.75, Math.PI * 1.75, false); w.closePath();
     rot.add(at(mk(extr(w, 0.55), 'steelDark', { edgeAngle: 40 }), 0, 0, 2.75), at(mk(cyl(4.3, 0.12, 40), 'steel'), 0, 0, 2.68), at(mk(cyl(0.8, 0.5, 16), 'steelDark'), 0, 0, 3.2));
     rot.userData.anchor = [0, 0, 3.6]; layer(rot, 6);
