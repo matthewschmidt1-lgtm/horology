@@ -101,3 +101,7 @@ button.mn-cue { background: none; border: 0; cursor: pointer; padding: 14px 0 0;
 button.mn-cue { bottom: 34px; padding: 0 26px; min-height: 48px; border: 1px solid var(--brass); font-size: 13px; transition: background .2s, color .2s; }
 button.mn-cue::after { display: none; }
 @media (hover: hover) { button.mn-cue:hover { background: var(--brass); color: var(--night); } }
+
+/* the closing line of "The human experience": set apart from the paragraphs above by space and a short rule, and a size larger */
+.mn-human .mn-col p + .mn-em { margin-top: 2.5em; font-size: 1.4em !important; line-height: 1.3 !important; }
+.mn-human .mn-em::before { content: ""; display: block; width: 64px; height: 2px; margin-bottom: .9em; background: #8a6d2f; }
