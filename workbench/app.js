@@ -106,7 +106,7 @@ function buildBlueprint() {
       <figure class="b2">${Draw.side(archive)}<figcaption>Fig. 2 · Side elevation</figcaption></figure>
       <figure class="b3">${Draw.rear(archive)}<figcaption>Fig. 3 · Rear elevation</figcaption></figure>
       <figure class="b4">${ex.svg}<figcaption>Fig. 4 · Exploded assembly</figcaption><ol>${ex.parts.map(p => { const k = Object.keys(LEG).find(k => p.toLowerCase().includes(k)); return `<li>${k ? `<button type="button" data-part="${LEG[k]}">${p}</button>` : p}</li>`; }).join('')}</ol></figure>
-      <figure class="b5">${Draw.movement(archive)}<figcaption>Fig. 5 · ${/^not /.test(archive.mv.cal) ? 'Movement' : 'Calibre ' + archive.mv.cal}, schematic</figcaption></figure>
+      <figure class="b5">${Draw.movement(archive)}<figcaption>Fig. 5 · ${Draw.plan && Draw.plan(archive.id) ? 'Calibre ' + Draw.plan(archive.id).cal + ', in plan from the ' + (Draw.plan(archive.id).fork ? 'dial side' : 'back') : (/^not /.test(archive.mv.cal) ? 'Movement' : 'Calibre ' + archive.mv.cal) + ', schematic'}</figcaption></figure>
     </div>
     <p class="bp-note">A modern interpretive drawing made from published specifications. Not a manufacturer’s document. “≈” marks an approximate figure.</p></div>`;
 }

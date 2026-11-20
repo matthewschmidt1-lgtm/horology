@@ -67,7 +67,7 @@ function sheet(w) {
     <figure class="f2">${box(D.side(w))}<figcaption><b>Fig. 2</b> Profile${w.crown.pos === 9 ? ', seen from the pusher flank; the crown is on the far side' : w.crown.pos ? ', crown side' : '. No crown on the flank'}.</figcaption></figure>
     <figure class="f3">${box(D.rear(w))}<figcaption><b>Fig. 3</b> Caseback. ${w.back.note}</figcaption></figure>
     <figure class="f4">${box(ex.svg)}<figcaption><b>Fig. 4</b> Exploded assembly.</figcaption><ol class="parts">${ex.parts.map(p => `<li>${p}</li>`).join('')}</ol></figure>
-    <figure class="f5">${box(D.movement(w))}<figcaption><b>Fig. 5</b> Movement, ${/^not /.test(w.mv.cal) ? 'calibre ' + w.mv.cal : 'cal. ' + w.mv.cal}. Schematic of the principal organs only.${w.mv.note ? ' ' + w.mv.note : ''}</figcaption></figure>
+    <figure class="f5">${box(D.movement(w))}<figcaption><b>Fig. 5</b> ${D.plan(w.id) ? `Movement, cal. ${D.plan(w.id).cal}, in plan from the ${D.plan(w.id).fork ? 'dial side' : 'back'}. Laid out as on the Workbench, where its sources are given; sizes are estimated.` : `Movement, ${/^not /.test(w.mv.cal) ? 'calibre ' + w.mv.cal : 'cal. ' + w.mv.cal}. Schematic of the principal organs only.`}${w.mv.note ? ' ' + w.mv.note : ''}</figcaption></figure>
   </div>
   <div class="sheet-text">
     <table class="spec"><caption>Particulars</caption>${rows}</table>

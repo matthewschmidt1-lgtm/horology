@@ -454,7 +454,88 @@ function balance(cx, cy, r, w, extra = '') {
   const b = bps(w), per = b ? f(2 / b) : 0.4;
   return `<g transform="translate(${cx},${cy})"><path class="hair2" d="${sp}"/><g class="bal" style="animation-duration:${per}s">${C(r, 0, 0, 'l')}${C(r - 0.5, 0, 0, 't')}${L(-r + 0.5, 0, r - 0.5, 0, 't')}${L(0, -r + 0.5, 0, r - 0.5, 't')}${extra}</g>${C(0.4, 0, 0, 'k')}</g>`;
 }
+/* The ten watches on the Workbench have a movement laid out from a source (see each watch's History there). These are the same positions, in the same units
+   as workbench/model.js (millimetres, at the scale of a 27 mm movement; x and y as seen from the back, crown to the left unless noted), so Fig. 5 shows the same plan.
+   pr: plate radius in those units. Each wheel is [x, y, radius]; bridges are lists of [x, y, r] circles whose outline is drawn. Keep in step with the model. */
+const PLAN = {
+  speedy105003: { cal: '321', pr: 13.5, barrel: [-3.3, -6.7, 5.85], centre: [0, 0, 3.95], third: [3.95, -2.05, 3.15], fourth: [6.95, 0, 2.92], esc: [6.9, 3.3, 1.75], pal: [4.6, 5.3], bal: [2.1, 7.6, 5.16],
+    tq: { r: 13.2, open: 6.5, bay: 2.5 }, bridges: [[[6.9, 3.3, 1.0], [9.6, 4.6, 0.9]]], cock: [[2.1, 7.6, 1.4], [-4.25, 11.0, 1.5]],
+    chrono: { run: 3.1, drive: [6.95, 0, 2.9], coup: [3.9, -4.0, 2.15], rec: [[-7.1, 0, 1.9]], cw: [-1.05, -8.85], small: [[-5.0, -2.0, 0.9]], bridge: [[[0, 0, 1.15], [-7.1, 0, 1.05]], [[-3.5, 0, 1.0], [-4.6, 5.4, 1.0]], [[-3.5, 0, 1.0], [-4.0, -5.6, 1.0]]] } },
+  a386: { cal: '3019 PHC', pr: 14.65, barrel: [-3.0, -7.3, 6.6], centre: [0, 0, 3.5], third: [3.5, -2.1, 3.3], fourth: [6.85, 0, 3.2], esc: [8.6, 3.3, 1.6], pal: [8.3, 5.3], bal: [5.7, 6.3, 4.31],
+    bridges: [[[-3.0, -7.3, 5.6]], [[0, 0, 1.6], [3.5, -2.1, 1.5], [6.85, 0, 1.5]], [[8.6, 3.3, 1.0], [11.2, 2.4, 0.9]]], cock: [[5.7, 6.3, 1.3], [2.0, 13.0, 1.3]], rotor: 0,
+    chrono: { run: 2.8, drive: [6.85, 0, 2.9], coup: [3.5, -4.4, 2.63], rec: [[-6.8, 0, 1.9]], cw: [-1.0, -8.5], bridge: [[[0, 0, 1.15], [-6.8, 0, 1.05]], [[0, 0, 1.0], [0.4, -5.6, 0.9]], [[-3.4, 0, 1.0], [-4.2, 5.0, 0.9]]] } },
+  sub5513: { cal: '1530', pr: 14.25, barrel: [-1.93, 7.12, 5.75], centre: [0, 0, 3.95], third: [-2.55, -3.65, 3.0], fourth: [-1.46, -6.94, 2.7], esc: [1.64, -6.88, 1.7], pal: [4.0, -4.5], bal: [7.84, -2.43, 5.56],
+    bridges: [[[-1.93, 7.12, 5.2]], [[0, 0, 1.5], [-2.55, -3.65, 1.5], [-1.46, -6.94, 1.4], [1.64, -6.88, 1.3]]], cock: [[7.84, -2.43, 1.4], [10.2, 5.0, 1.4]], over: [[-2.55, -3.65, 4.0]], rotor: 0 },
+  daytona6263: { cal: '727', pr: 14.75, barrel: [-3.5, -6.62, 6.6], centre: [0, 0, 4.8], third: [4.92, -2.63, 3.5], fourth: [8.05, 0, 3.15], esc: [7.6, 3.79, 2.85], pal: [4.6, 5.6], bal: [0.85, 8.0, 5.9],
+    bridges: [[[-3.5, -6.62, 5.8], [0, 0, 1.7]], [[4.92, -2.63, 1.5], [8.05, 0, 1.5], [7.6, 3.79, 1.2]]], cock: [[0.85, 8.0, 1.4], [-5.8, 11.6, 1.4]],
+    chrono: { run: 3.45, drive: [8.05, 0, 3.3], coup: [4.24, -4.25, 2.4], rec: [[-7.85, 0, 1.9]], cw: [-2.3, -10.0], small: [[-4.7, -1.4, 0.9]], bridge: [[[0, 0, 1.15], [-7.85, 0, 1.05]], [[-3.9, 0, 1.0], [-6.2, 5.3, 0.9]], [[-3.9, 0, 1.0], [-3.7, -2.8, 0.9]]] } },
+  monaco: { cal: '11', pr: 15.5, crown: 1, barrel: [4.5, -7.7, 6.1], centre: [3.55, -0.85, 3.35], third: [2.4, 3.1, 2.55], fourth: [6.0, 3.9, 2.8], esc: [5.4, 7.2, 1.7], pal: [3.1, 8.5], bal: [0.4, 10.25, 4.86],
+    bridges: [[[4.5, -7.7, 5.2]], [[3.55, -0.85, 1.4], [2.4, 3.1, 1.3], [6.0, 3.9, 1.5]]], cock: [[0.4, 10.25, 1.4], [-8.2, 10.3, 1.4]], micro: [-8.3, -0.1, 7.0],
+    chrono: { run: 3.8, drive: [6.0, 3.9, 2.3], coup: [3.7, 2.4, 0.45], rec: [[-7.8, 0, 1.9], [8.35, 0.1, 1.9]], cam: [-10.0, -6.5], bridge: [[[0, 0, 1.15], [-7.8, 0, 1.05]], [[-3.9, 0, 1.0], [-3.2, 5.5, 0.9]], [[-3.9, 0, 1.0], [-6.4, 4.6, 0.9]]] } },
+  royaloak: { cal: '2121', pr: 14.2, barrel: [-6.6, -0.1, 5.2], centre: [0, 0, 4.0], third: [4.6, 0, 2.9], fourth: [6.22, -3.0, 2.05], esc: [4.9, -5.2, 1.5], pal: [2.3, -5.67], bal: [-0.7, -6.74, 4.28],
+    bridges: [[[-6.6, -0.1, 4.2]], [[0, 0, 1.5], [4.6, 0, 1.5], [6.22, -3.0, 1.3]]], cock: [[-0.7, -6.74, 1.3], [-6.4, -6.7, 1.3]], rotor: 180 },
+  '62mas': { cal: '6217A', pr: 13.8, barrel: [-2.04, 6.65, 5.6], centre: [0, 0, 3.4], third: [-2.8, -3.1, 3.2], fourth: [0, 0, 3.75], esc: [3.72, -2.37, 1.4], pal: [6.15, -0.57], bal: [9.8, 2.1, 3.7],
+    bridges: [[[-2.04, 6.65, 4.6], [0, 0, 1.6], [-2.8, -3.1, 1.5], [3.72, -2.37, 1.2]]], cock: [[9.8, 2.1, 1.3], [7.3, -7.5, 1.3]], rotor: 0 },
+  calatrava: { cal: '12‴-120', pr: 13.5, turn: 1, barrel: [-6.4, -3.1, 5.9], centre: [0, 0, 4.05], third: [4.3, -2.05, 3.3], fourth: [7.68, 0, 3.15], esc: [7.5, 3.9, 2.2], pal: [5.15, 5.1], bal: [1.35, 7.4, 5.7],
+    bridges: [[[-6.4, -3.1, 5.4]], [[0, 0, 1.5], [4.3, -2.05, 1.4], [9.6, -7.2, 1.1]], [[7.68, 0, 1.15], [11.6, -3.0, 1.0]], [[7.5, 3.9, 1.0], [11.4, 2.3, 0.9]]], cock: [[1.35, 7.4, 1.4], [-5.15, 10.8, 1.3]] },
+  tanklc: { cal: 'LeCoultre 818', pr: 13.5, barrel: [-3.05, 6.23, 5.6], centre: [0, 0, 4.5], third: [-2.6, -4.67, 3.3], fourth: [0, -7.79, 2.7], esc: [2.99, -9.09, 1.6], pal: [4.67, -6.23], bal: [6.88, -2.01, 5.54],
+    bridges: [[[-3.05, 6.23, 5.0]], [[0, 0, 1.15], [-2.6, -4.67, 1.4], [0, -7.79, 1.2]]], cock: [[6.88, -2.01, 1.4], [9.6, 5.6, 1.3]] },
+  spaceview: { cal: '214', fork: 1, pr: 14.5 }
+};
+function planMovement(w, pl) {
+  const k = 15 / pl.pr, X = q => (pl.turn ? [q[1] * k, q[0] * k] : [q[0] * k, -q[1] * k]); // to drawing units; y runs down the page. A "turned" movement (the Calatrava) is drawn a quarter turn round, as the bench mounts it
+  const hull = cs => { // outline round a set of circles
+    const pts = []; cs.forEach(c => { const [x, y] = X(c), r = c[2] * k; for (let i = 0; i < 28; i++) pts.push([x + r * Math.cos(i * Math.PI / 14), y + r * Math.sin(i * Math.PI / 14)]); });
+    pts.sort((a, b) => a[0] - b[0] || a[1] - b[1]); const cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]), lo = [], up = [];
+    for (const q of pts) { while (lo.length > 1 && cr(lo[lo.length - 2], lo[lo.length - 1], q) <= 0) lo.pop(); lo.push(q); }
+    for (const q of pts.slice().reverse()) { while (up.length > 1 && cr(up[up.length - 2], up[up.length - 1], q) <= 0) up.pop(); up.push(q); }
+    return polyD(lo.slice(0, -1).concat(up.slice(0, -1)).map(q => [f(q[0]), f(q[1])]));
+  };
+  const G = (c, r) => { const [x, y] = X(c); return gear((r || c[2]) * k, x, y); }, J = c => jewel(...X(c));
+  const sx = pl.crown ? 1 : -1; let s = RC(sx > 0 ? 14.6 : -18.8, -0.5, 4.2, 1) + RC(sx > 0 ? 17.6 : -19, -1.2, 1.4, 2.4, 'p', 0.3) + C(15, 0, 0, 'p') + C(14.3, 0, 0, 't');
+  if (pl.fork) return svg('-20 -20 40 40', C(15, 0, 0, 'p') + C(14.3, 0, 0, 't') + forkPlan(k), 'fig mvt', `${w.brand} ${w.model}, movement plan`);
+  if (pl.micro) { const [x, y] = X(pl.micro), r = pl.micro[2] * k; s += C(r, x, y, 't') + Pa(`M${f(x)},${f(y - r)}A${f(r)},${f(r)} 0 0 0 ${f(x)},${f(y + r)}Z`, 'tn') + C(0.8, x, y, 'p'); }
+  s += G(pl.barrel) + C(pl.barrel[2] * k * 0.34, ...X(pl.barrel), 't') + G(pl.centre) + G(pl.third) + G(pl.fourth) + G(pl.esc);
+  const [px, py] = X(pl.pal), [ex, ey] = X(pl.esc), [bx, by] = X(pl.bal);
+  s += L(px, py, px + (ex - px) * 0.55, py + (ey - py) * 0.55, 'hd') + L(px, py, px + (bx - px) * 0.6, py + (by - py) * 0.6, 'hd') + C(0.45, px, py, 'k');
+  if (pl.tq) { // the Speedmaster's three-quarter plate: a disc, opened round the balance, with a bay for the escape wheel
+    const R = pl.tq.r, B = pl.bal, E = pl.esc, cut = a => { const dx = E[0] - B[0], dy = E[1] - B[1], bq = dx * Math.cos(a) + dy * Math.sin(a), dq = bq * bq - (dx * dx + dy * dy - pl.tq.bay * pl.tq.bay); return Math.max(pl.tq.open, dq > 0 ? bq + Math.sqrt(dq) : 0); };
+    const inC = (x, y) => Math.hypot(x - B[0], y - B[1]) < cut(Math.atan2(y - B[1], x - B[0])), tc = Math.atan2(B[1], B[0]), pts = [];
+    for (let i = 0; i < 180; i++) { const a = tc + i / 180 * Math.PI * 2, x = R * Math.cos(a), y = R * Math.sin(a); if (!inC(x, y)) pts.push(X([x, y])); }
+    for (let i = 0; i < 180; i++) { const a = tc - i / 180 * Math.PI * 2, r = cut(a), x = B[0] + r * Math.cos(a), y = B[1] + r * Math.sin(a); if (Math.hypot(x, y) < R) pts.push(X([x, y])); }
+    s += Pa(polyD(pts.map(q => [f(q[0]), f(q[1])])), 'l');
+  }
+  (pl.bridges || []).forEach(b => { s += Pa(hull(b), 'l'); });
+  s += J(pl.third) + J(pl.fourth) + J(pl.esc) + (pl.chrono || pl.rotor != null ? '' : J(pl.centre));
+  (pl.over || []).forEach(c => { s += G(c); }); // a wheel riding above the bridge (the Submariner's seconds drive)
+  s += balance(f(bx), f(by), f(pl.bal[2] * k), w) + Pa(hull(pl.cock), 'l') + J(pl.bal);
+  if (pl.chrono) { const c = pl.chrono;
+    s += G([0, 0], c.run) + G(c.drive) + G(c.coup); c.rec.forEach(r => { s += G(r); }); (c.small || []).forEach(r => { s += G(r); });
+    if (c.cw) { const [x, y] = X(c.cw); s += C(1.6, x, y, 'p'); for (let i = 0; i < 6; i++) { const q = P(i * 60, 1.6, x, y); s += RC(q[0] - 0.3, q[1] - 0.3, 0.6, 0.6, 'k'); } }
+    if (c.cam) { const [x, y] = X(c.cam); s += Pa(hull([[c.cam[0], c.cam[1], 1.0], [c.cam[0] + 1.5, c.cam[1] + 0.5, 0.55], [c.cam[0] - 0.9, c.cam[1] + 1.1, 0.5]]), 'tn') + C(0.3, x, y, 'k'); }
+    c.bridge.forEach(b => { s += Pa(hull(b), 't', 'stroke-dasharray=".6 .4"'); });
+  }
+  if (pl.rotor != null) { // a full rotor, drawn over half the movement and see-through, as at rest
+    s += `<g transform="rotate(${pl.rotor})">` + Pa(`M${P(270, 14)}A14,14 0 0 0 ${P(90, 14)}L${P(90, 10.6)}A10.6,10.6 0 0 1 ${P(270, 10.6)}Z`, 'rot') + L(-10.6, 0, -1.6, 0, 'l') + L(1.6, 0, 10.6, 0, 'l') + '</g>' + C(1.6, 0, 0, 'p') + C(0.5, 0, 0, 'k');
+  }
+  return svg('-20 -20 40 40', s, 'fig mvt', `${w.brand} ${w.model}, movement plan`);
+}
+/* The Accutron from the dial side, as Bulova draws it: a plate with three openings, the coils at twelve, the fork, the electronics. The wheels behind the plate are dashed. */
+function forkPlan(k) {
+  const Y = y => -y * k, Xx = x => x * k, dash = 'stroke-dasharray=".5 .4"'; let s = '';
+  s += RC(Xx(-8.75), Y(11.15), 17.1 * k, 6.7 * k, 'tn', 3.35 * k) + C(5.5 * k, Xx(-7.8), Y(-1.6), 'tn') + C(4.6 * k, Xx(8.5), Y(-2.0), 'tn');
+  s += C(4.4 * k, Xx(-7.8), Y(-1.6), 'p') + T('+', Xx(-7.8), Y(-1.6) + 1, 3, 'tx');
+  s += RC(Xx(9.0), Y(0.5), 2.6 * k, 5 * k, 'p') + C(0.8 * k, Xx(10.1), Y(-0.7), 'k') + RC(Xx(9.9), Y(-2.2), 0.8 * k, 1.5 * k, 'k');
+  s += C(2.9 * k, 0, 0, 't', dash) + C(2.9 * k, Xx(2.4), Y(2.19), 't', dash) + C(1.2 * k, Xx(5.4), Y(3.3), 't', dash) + C(0.3, 0, 0, 'k');
+  s += RC(Xx(-5.25), Y(-7.3), 10.5 * k, 2.2 * k, 'p', 0.4);
+  for (const sx of [-1, 1]) {
+    s += RC(Xx(sx * 4.7) - 0.55 * k, Y(7.2), 1.1 * k, 14.6 * k, 'p');
+    s += RC(Xx(sx * 5.6) - 1.25 * k, Y(9.25), 2.5 * k, 2.5 * k, 'tn2', 0.3) + RC(Xx(sx * 7.6) - 1.5 * k, Y(8.85), 3.0 * k, 1.7 * k, 'k', 0.3);
+  }
+  return s;
+}
 function movement(w) {
+  if (PLAN[w.id]) return planMovement(w, PLAN[w.id]);
   const mv = w.mv, t = mv.type, R = 15; let s = '';
   const chr = /chrono/.test(t), micro = /micro/.test(t), rot = t === 'auto' || t === 'autochrono';
   if (t === 'fork') s = C(R, 0, 0, 'p') + C(R - 0.7, 0, 0, 't') + forkWorks();
@@ -509,5 +590,5 @@ function face(w, real) {
   return { svg: `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="${-R} ${-R} ${2 * R} ${2 * R}">${dated}<style>.dt{fill:#1a1a1a}</style></svg>`, R, dialR: g.dialR, inR: g.inR, bezelInner: R - (w.bezel ? w.bezel.w : 0), handLen: g.hl };
 }
 
-window.Draw = { front, side, rear, exploded, movement, bps, face };
+window.Draw = { front, side, rear, exploded, movement, bps, face, plan: id => PLAN[id] || null };
 })();
