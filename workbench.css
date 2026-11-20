@@ -431,7 +431,8 @@ span.st { font-size: 11.5px; }
   .pane { order: 2; }
   .wb-foot { margin-bottom: env(safe-area-inset-bottom); }
 }
-@media (max-width: 560px) { .viewport { height: max(280px, calc(100svh - 388px)); } }
+/* the first screen on a phone is the header, the watch and the two sliders; Loupe, Slow and the view buttons follow below */
+@media (max-width: 560px) { .viewport { height: max(280px, calc(100svh - 231px)); } }
 
 /* part sections: a bar with a sketch, a name and a count; folded on phones, open on wide screens */
 #parts .pg { border: 1px solid var(--charcoal); background: var(--ivory); } #parts .pg + .pg { margin-top: 10px; }
