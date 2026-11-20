@@ -34,6 +34,9 @@ document.title = `${watch.brand} ${watch.model} · The Workbench`;
     $('#pk-menu').insertAdjacentHTML('afterend', `<div class="pk-opts" id="pk-opts" hidden><p class="pk-opt-l">Look</p><p class="pk-opt-l" id="pk-opt-show">Show</p></div>`);
     const opts = $('#pk-opts'), dots = $('#pk-dots'), openOpts = v => { opts.hidden = !v; dots.setAttribute('aria-expanded', v); };
     opts.firstElementChild.after($('#style-seg')); opts.append($('#t-labels'), $('#pane-tog'));
+    /* Loupe and Slow motion live in the same menu, so the space under the watch is the two sliders and the view buttons */
+    opts.append(...document.querySelectorAll('.tools .togs .tog'), $('#pane-tog')); const togs = document.querySelector('.tools .togs'); if (togs) togs.remove();
+    $('#t-loupe').addEventListener('change', () => openOpts(false));
     dots.addEventListener('click', e => { e.stopPropagation(); openOpts(opts.hidden); });
     $('#pane-tog').addEventListener('click', () => openOpts(false));
     document.addEventListener('click', e => { if (!opts.hidden && !e.target.closest('#pk-opts')) openOpts(false); });
@@ -305,8 +308,8 @@ if (watches.length > 1) {
     spaceview: ['#0b2019', '#1f4f3e', '#dcdcd4', '#0a130f', '#1f4a3c', '#2b6050', '#d8c58f', 'grid']
   }
   const tile = w => { const pl = (window.WATCHES || []).find(x => x.id === w.archiveId), k = SKIN[w.archiveId], name = `${w.brand} ${w.model}`;
-    if (!pl || !Draw || !k) return `<a href="?watch=${w.id}">${w.short || w.model}</a>`;
-    return `<a class="wn-tile${k[7] ? ' tx-' + k[7] : ''}" href="?watch=${w.id}" aria-label="${name}" title="${name}" style="--g1:${k[0]};--g2:${k[1]};--paper:${k[2]};--ink:${k[3]};--tint:${k[4]};--tint-2:${k[5]};--sienna:${k[6]}">${Draw.front(pl, {})}</a>` }
+    if (!k) return `<a href="?watch=${w.id}">${w.short || w.model}</a>`;
+    return `<a class="wn-tile${k[7] ? ' tx-' + k[7] : ''}" href="?watch=${w.id}" aria-label="${name}" title="${name}" style="--g1:${k[0]};--g2:${k[1]};--paper:${k[2]};--ink:${k[3]};--tint:${k[4]};--tint-2:${k[5]};--sienna:${k[6]}"><img src="workbench/thumbs/${w.id}.webp" alt="" width="360" height="480" loading="lazy" decoding="async"></a>` } // the picture is the Studio view of that watch from the front, rendered once and kept as a small image
   const html = `<aside class="wb-next" aria-label="More watches"><p class="kicker">Next on the bench</p>
     <a class="wn-main" href="?watch=${nx.id}">${plate && Draw ? `<span class="wn-art" aria-hidden="true">${Draw.front(plate, {})}</span>` : ''}<span class="wn-txt"><b>${nx.brand} ${nx.model}</b><em>${nx.noRef ? '' : `Ref. ${nx.reference} · `}${nx.year}</em><i>Take it apart</i></span></a>
     ${rest.length ? `<div class="wn-rest"><span>Or try</span><div class="wn-tiles">${rest.map(tile).join('')}</div></div>` : ''}</aside>`

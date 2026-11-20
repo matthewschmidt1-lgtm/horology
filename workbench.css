@@ -478,3 +478,14 @@ span.st { font-size: 11.5px; }
   .wn-strip a.wn-tile { flex: 0 0 62px; text-decoration: none; padding: 6px 5px 6px; }
   .wn-strip a.wn-tile:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
 }
+
+/* Loupe and Slow motion inside the three-dots menu */
+.pk-opts .tog { display: flex; width: 100%; } .pk-opts .tog b.short { display: none !important; } .pk-opts .tog b.long { display: inline !important; }
+.pk-opts .tog span { flex: 1; justify-content: flex-start; gap: 10px; min-height: 44px; padding: 0 14px; border: 1px solid rgba(220, 192, 129, .55); font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #efe6d2; }
+.pk-opts .tog span::before { border-color: #dcc081; }
+.pk-opts .tog input:checked + span { background: #dcc081; color: #0d1a2e; border-color: #dcc081; } .pk-opts .tog input:checked + span::before { background: #0d1a2e; border-color: #0d1a2e; }
+@media (max-width: 900px) { .more-strip { border-bottom: 0; } }
+
+/* the tiles now carry a small Studio render of each watch */
+.wn-tile img { position: relative; display: block; width: 100%; height: auto; filter: drop-shadow(0 3px 3px rgba(0, 0, 0, .5)); }
+.wn-rest a.wn-tile, .wn-strip a.wn-tile { padding: 6px 4px 8px; }
