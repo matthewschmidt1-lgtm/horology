@@ -424,3 +424,11 @@ span.st { font-size: 11.5px; }
 @media (min-width: 901px) { .mtabs .pane-x { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 48px; min-height: 48px; padding: 0 0 3px; font-size: 26px; font-weight: 400; line-height: 1; letter-spacing: 0; color: var(--charcoal); border-left: 1px solid var(--charcoal); background: var(--ivory); cursor: pointer; }
   .mtabs .pane-x:focus-visible { outline: 2px solid var(--brass); outline-offset: -3px; } }
 @media (min-width: 901px) and (hover: hover) { .mtabs .pane-x:hover { background: var(--charcoal); color: var(--ivory); } }
+
+/* phones and tablets: the Parts / About tabs sit in the page under the view controls, not pinned to the bottom of the screen, so the watch gets the height */
+@media (max-width: 900px) {
+  .mtabs { position: sticky; top: var(--mast-off, 57px); transition: top .32s ease; bottom: auto; order: 1; z-index: 20; padding-bottom: 0; border-bottom: 1px solid var(--charcoal); }
+  .pane { order: 2; }
+  .wb-foot { margin-bottom: env(safe-area-inset-bottom); }
+}
+@media (max-width: 560px) { .viewport { height: max(280px, calc(100svh - 388px)); } }
