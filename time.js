@@ -55,29 +55,13 @@ $('#s-time').addEventListener('input', e => { const p = last.parts; live = false
 $('#s-date').addEventListener('input', e => { const p = last.parts, dt = new Date(Date.UTC(p.y, 0, +e.target.value)); live = false; shown = S.instant(p.y, dt.getUTCMonth() + 1, dt.getUTCDate(), p.h * 60 + p.mi, loc.tz); render(); });
 $('#now').addEventListener('click', () => { live = true; render(); });
 
-/* ---- the dial explains itself: tap a part, or one of the buttons under it, and that part lights up with a line on what it is ---- */
+/* a click anywhere on the dial opens a short guide to its parts */
 {
-  const host = $('#dial'), text = $('#dg-text');
-  host.insertAdjacentHTML('beforeend', '<svg class="dial-hi" viewBox="-121 -121 242 242" aria-hidden="true"><g id="dg-hi"></g></svg>');
-  const hi = $('#dg-hi'), south = () => loc.lat < 0;
-  const Z = {
-    ring: { t: 'The ring is one whole day.', d: () => 'Midnight is at the bottom and midday at the top. Its colour shows the light at each hour: gold for daylight, then the twilights, then dark blue for night.', s: () => '<circle class="hi-band" r="90" stroke-width="15"/>' },
-    now: { t: 'The small circle on the ring is now.', d: () => `It travels once round the ring each day. The time in the middle, ${S.clock(shown, loc.tz)}, is the same moment.`, s: () => { const c = host.querySelector('.sol-sun-ring'); return c ? `<circle class="hi-spot" cx="${c.getAttribute('cx')}" cy="${c.getAttribute('cy')}" r="10"/>` : ''; } },
-    marks: { t: 'Rise, noon and set.', d: () => last && last.ev.rise && last.ev.set ? `Three lines mark today’s sunrise (${S.clock(last.ev.rise, loc.tz)}), the sun’s highest point (${S.clock(last.ev.noon, loc.tz)}) and sunset (${S.clock(last.ev.set, loc.tz)}). The gold part of the ring lies between the first and the last.` : 'Lines mark sunrise, the sun’s highest point and sunset. Today, here, the sun does not cross the horizon.', s: () => '<circle class="hi-band" r="110" stroke-width="15"/>' },
-    hours: { t: 'The hours, on a 24-hour clock.', d: () => 'One turn is a whole day, not twelve hours: 00 at the bottom, 06 on the left, 12 at the top, 18 on the right.', s: () => '<circle class="hi-band" r="72.7" stroke-width="19.5"/>' },
-    sky: { t: 'The middle is the sky.', d: () => `You are facing ${south() ? 'north' : 'south'}, with ${south() ? 'west on your left and east' : 'east on your left and west'} on your right. The curve is the sun’s path across the sky today, and the dot is where the sun is at the time shown: bright when it is up, hollow when it has set.`, s: () => '<path class="hi-area" d="M-62.2,10A63,63 0 0 1 62.2,10Z"/>' },
-    ground: { t: 'Below the line, the sun is out of sight.', d: () => 'The straight line is the horizon. The dotted part of the curve is the sun’s path while it is below it, which is the night.', s: () => '<path class="hi-area" d="M-62.2,10A63,63 0 0 0 62.2,10Z"/>' }
-  };
-  let cur = null;
-  const show = z => { cur = z; const o = Z[z]; text.innerHTML = `<b>${o.t}</b> ${o.d()}`; hi.innerHTML = o.s(); $$('#dial-guide button').forEach(b => b.setAttribute('aria-pressed', b.dataset.z === z)); host.classList.add('guided'); };
-  const near = (sel, x, y, r) => { const c = host.querySelector(sel); return c && Math.hypot(x - c.getAttribute('cx'), y - c.getAttribute('cy')) < r; };
-  host.addEventListener('click', e => {
-    const svg = host.querySelector('svg.sol'), b = svg.getBoundingClientRect(), x = (e.clientX - b.left) / b.width * 242 - 121, y = (e.clientY - b.top) / b.height * 242 - 121, r = Math.hypot(x, y);
-    if (r > 121) return;
-    show(near('.sol-sun-ring', x, y, 9) ? 'now' : r > 97.5 ? 'marks' : r > 82.5 ? 'ring' : r > 63 ? 'hours' : y < 10 ? 'sky' : 'ground');
-  });
-  $('#dial-guide').addEventListener('click', e => { const b = e.target.closest('button'); if (b) show(b.dataset.z); });
-  setInterval(() => { if (cur === 'now') hi.innerHTML = Z.now.s(); }, 1000); // the marker moves; keep its highlight on it
+  const pop = $('#dial-pop'), host = $('#dial'), open = () => { if (pop.showModal) pop.showModal(); else pop.setAttribute('open', ''); };
+  host.addEventListener('click', open);
+  host.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  $('#dp-x').addEventListener('click', () => pop.close());
+  pop.addEventListener('click', e => { if (e.target === pop) pop.close(); }); // a click on the dimmed page behind closes it
 }
 
 /* =================== 2. the rhythm of time: a metronome =================== */
