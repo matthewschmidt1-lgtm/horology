@@ -321,3 +321,6 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 
 /* room round the ring between "The Sound of Time" and "The Cycles of Time" */
 .s-sound { padding-bottom: clamp(104px, 14vw, 180px); } .s-cycles { padding-top: clamp(104px, 13vw, 170px); }
+
+/* the sound boxes carry a name only */
+.sounds button { min-height: 76px; } .sounds b { align-self: center; grid-row: 1; grid-column: 2; } .sounds .snd-ico { grid-row: 1; }
