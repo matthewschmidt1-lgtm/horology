@@ -318,3 +318,6 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
   --band: clamp(8px, 1vw, 13px); background: linear-gradient(#0f1826 50%, #ded4ba 50%);
   -webkit-mask: radial-gradient(circle closest-side, transparent calc(100% - var(--band) - .5px), #000 calc(100% - var(--band)), #000 calc(100% - .5px), transparent 100%);
   mask: radial-gradient(circle closest-side, transparent calc(100% - var(--band) - .5px), #000 calc(100% - var(--band)), #000 calc(100% - .5px), transparent 100%); }
+
+/* room round the ring between "The Sound of Time" and "The Cycles of Time" */
+.s-sound { padding-bottom: clamp(104px, 14vw, 180px); } .s-cycles { padding-top: clamp(104px, 13vw, 170px); }
