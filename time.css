@@ -335,3 +335,19 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 #anat .i-esc { fill: #f6f0e1; }
 /* the seconds wheel sits over the escape wheel: a soft tint and lighter lines keep it behind the escapement visually */
 #anat .i-wheel { fill: var(--acc); fill-opacity: .1; stroke-opacity: .5; } #a-four .i-line { opacity: .3; } #a-four .i-rod { stroke: var(--acc); }
+
+/* the solar clock's guide: tap a part of the dial, or a button, to see what it is */
+#dial { position: relative; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.dial-hi { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.hi-band { fill: none; stroke: #fff; stroke-opacity: .2; } .hi-area { fill: #fff; fill-opacity: .14; stroke: #fff; stroke-opacity: .5; stroke-width: .5; } .hi-spot { fill: #fff; fill-opacity: .16; stroke: #fff; stroke-width: .7; }
+#dg-hi > * { animation: dg-in .35s ease-out; } @keyframes dg-in { from { opacity: 0; } }
+.dial-guide { max-width: 620px; margin: 16px auto 0; text-align: center; }
+.dg-text { margin: 0 !important; min-height: 4.4em; font-family: var(--serif); font-size: 20px; line-height: 1.4; color: #cfc6b1; max-width: none !important; } .dg-text b { color: var(--cream); font-weight: 600; }
+.dg-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; }
+.dg-chips button { min-height: 40px; padding: 0 13px; background: transparent; color: #d9d0ba; border: 1px solid #56607c; font-family: var(--mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.dg-chips button[aria-pressed="true"] { background: var(--brass); border-color: var(--brass); color: var(--night); }
+.dg-chips button:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+@media (hover: hover) { .dg-chips button:hover { border-color: var(--brass); color: var(--cream); } }
+@media (max-width: 560px) { .dg-text { font-size: 18.5px; min-height: 5.8em; } .dg-chips { gap: 6px; } .dg-chips button { padding: 0 10px; font-size: 11px; } }
+@media (prefers-reduced-motion: reduce) { #dg-hi > * { animation: none; } }
+.hi-area { fill-opacity: .2; stroke: #dcc081; stroke-opacity: 1; stroke-width: .9; } .hi-band { stroke-opacity: .26; } .hi-spot { stroke: #dcc081; stroke-width: 1; }

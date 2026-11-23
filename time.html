@@ -49,6 +49,10 @@
     <div class="solar-stage">
       <div class="dial-wrap">
         <div id="dial"></div>
+        <div class="dial-guide" id="dial-guide">
+          <p class="dg-text" id="dg-text" aria-live="polite"><b>Tap any part of the clock</b> to see what it is.</p>
+          <div class="dg-chips" role="group" aria-label="Parts of the clock"><button type="button" data-z="ring">The ring</button><button type="button" data-z="now">Now</button><button type="button" data-z="marks">Rise, noon, set</button><button type="button" data-z="hours">The hours</button><button type="button" data-z="sky">The sky</button><button type="button" data-z="ground">Below the horizon</button></div>
+        </div>
         <ul class="dial-key" aria-label="Key to the ring"><li class="k-day">Daylight</li><li class="k-civ">Civil twilight</li><li class="k-nau">Nautical</li><li class="k-ast">Astronomical</li><li class="k-night">Night</li></ul>
       </div>
       <dl class="sun-trio">
