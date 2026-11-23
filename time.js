@@ -32,10 +32,6 @@ function render() {
   $('#r-phase').textContent = r.phase;
   $('#r-alt').textContent = `${Math.abs(ps.alt).toFixed(1)}° ${ps.alt >= 0 ? 'above' : 'below'} the horizon`;
   $('#r-az').textContent = `${ps.az.toFixed(0)}°, ${COMPASS[Math.round(ps.az / 45) % 8]}`;
-  $('#c-civil').textContent = S.clock(shown, loc.tz, true);
-  $('#c-mean').textContent = hms(ps.mean); $('#c-app').textContent = hms(ps.tst);
-  const e = Math.abs(ps.eot), es = Math.round(e * 60);
-  $('#c-eot').textContent = `${Math.floor(es / 60)} min ${pad(es % 60)} s, sundial ${ps.eot >= 0 ? 'ahead' : 'behind'}`;
   const mins = p.h * 60 + p.mi, doy = doyOf(p), k = [loc.lat, loc.lon, p.y].join('|');
   if (k !== yearKey) { yearKey = k; buildYear(p.y); $('#s-date').max = daysIn(p.y); }
   if (document.activeElement !== $('#s-time') || live) $('#s-time').value = mins;
