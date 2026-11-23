@@ -333,3 +333,5 @@ body.nt { --night: #0f1826; --night-2: #18243a; --navy: #14283f; --brass: #b8975
 @media (max-width: 560px) { #anat .i-lab { font-size: 5.6px; letter-spacing: .08em; } .anat-now { font-size: 19px; } }
 .i-wheel { fill: none; stroke: var(--ink); stroke-width: .5; stroke-linejoin: round; } .i-pinion { fill: var(--acc); stroke: var(--acc); stroke-width: .4; stroke-linejoin: round; } .i-dotp { fill: var(--paper); }
 #anat .i-esc { fill: #f6f0e1; }
+/* the seconds wheel sits over the escape wheel: a soft tint and lighter lines keep it behind the escapement visually */
+#anat .i-wheel { fill: var(--acc); fill-opacity: .1; stroke-opacity: .5; } #a-four .i-line { opacity: .3; } #a-four .i-rod { stroke: var(--acc); }
