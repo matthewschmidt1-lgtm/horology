@@ -82,25 +82,31 @@ metroFacts();
 /* =================== 3. the anatomy of a second =================== */
 const A = { t: 0, on: false, last: 0 };
 (function buildAnat() {
-  let teeth = ''; for (let i = 0; i < 15; i++) { const a = i * 24 * R, a2 = (i * 24 + 9) * R, a3 = (i * 24 + 15) * R; teeth += `${i ? 'L' : 'M'}${f(13 * Math.cos(a))},${f(13 * Math.sin(a))}L${f(20 * Math.cos(a2))},${f(20 * Math.sin(a2))}L${f(13.6 * Math.cos(a3))},${f(13.6 * Math.sin(a3))}`; }
-  let sp = 'M0,0'; for (let th = 0; th <= 30; th += 0.3) sp += `L${f((1 + th * 0.62) * Math.cos(th))},${f((1 + th * 0.62) * Math.sin(th))}`;
-  let cog = ''; for (let i = 0; i < 48; i++) { const a = i * 7.5 * R; cog += `<line x1="${f(22 * Math.cos(a))}" y1="${f(22 * Math.sin(a))}" x2="${f(25 * Math.cos(a))}" y2="${f(25 * Math.sin(a))}"/>`; }
-  $('#anat').innerHTML = `<svg viewBox="-104 -64 208 142" class="inst">
-    <g transform="translate(-72,6)"><circle class="i-line" r="22"/><g class="i-cog">${cog}</g><g id="a-four"><line class="i-rod" x1="0" y1="0" x2="0" y2="-20"/><circle class="i-dot" r="1.6"/></g><text class="i-lab" y="38">FOURTH WHEEL</text></g>
-    <g transform="translate(-22,14)"><g id="a-escw"><path class="i-esc" d="${teeth}Z"/><circle class="i-line" r="5"/></g><circle class="i-dot" r="1.4"/><text class="i-lab" y="34">ESCAPE WHEEL</text></g>
-    <g transform="translate(14,-14)"><g id="a-pal"><path class="i-fork" d="M0,0L26,-11M-16,10L0,0L-2,20M-18,8L-14,13M-5,21L1,19"/></g><circle class="i-dot" r="1.6"/><text class="i-lab" x="-4" y="-12">PALLET FORK</text></g>
-    <g transform="translate(62,-22)"><path class="i-hair" d="${sp}"/><g id="a-bal"><circle class="i-bal" r="30"/><line class="i-rod" x1="-30" y1="0" x2="30" y2="0"/><circle class="i-pin" cx="-22" cy="9" r="1.8"/></g><circle class="i-dot" r="1.8"/><text class="i-lab" y="44">BALANCE WHEEL</text></g>
-    <g transform="translate(-90,66)"><text class="i-lab left" y="-5">SECONDS HAND · ONE SECOND IN FIVE STEPS</text>${[0, 1, 2, 3, 4].map(i => `<rect class="i-step" data-i="${i}" x="${i * 36.4}" y="0" width="34" height="6"/>`).join('')}</g></svg>`;
+  /* Drawn to work, not just to look right. The fork's pivot sits where lines from the two pallets are tangent to the escape wheel, so each pallet moves straight in and out of the teeth;
+     the pallets span two and a half teeth; the pin on the balance sits in the fork's slot; and the seconds wheel (80 teeth) meshes with an 8-leaf pinion on the escape wheel, which is the
+     ratio that turns five ticks into one second. Parts are laid out in their own frame and mirrored, so that the seconds wheel turns clockwise. */
+  const cogs = (n, r, h, ph) => { let d = ''; const p = 360 / n; for (let k = 0; k < n; k++) { const c = ph + k * p; [[-0.3, -h], [-0.17, h], [0.17, h], [0.3, -h]].forEach((q, m) => { const a = (c + q[0] * p) * R; d += `${k || m ? 'L' : 'M'}${f((r + q[1]) * Math.cos(a))},${f((r + q[1]) * Math.sin(a))}`; }); } return d + 'Z'; };
+  let teeth = ''; for (let k = 0; k < 15; k++) { const a = (-132 + k * 24) * R, a0 = (-132 + k * 24 - 15) * R, a1 = (-132 + k * 24 - 2) * R; teeth += `${k ? 'L' : 'M'}${f(13.4 * Math.cos(a0))},${f(13.4 * Math.sin(a0))}L${f(20 * Math.cos(a))},${f(20 * Math.sin(a))}L${f(13.4 * Math.cos(a1))},${f(13.4 * Math.sin(a1))}`; }
+  let sp = 'M0,0'; for (let th = 0; th <= 30; th += 0.3) sp += `L${f((1 + th * 0.5) * Math.cos(th))},${f((1 + th * 0.5) * Math.sin(th))}`;
+  $('#anat').innerHTML = `<svg viewBox="-54 -43 144 138" class="inst">
+    <g transform="translate(20,0) scale(-1,1)">
+      <g transform="translate(0,30)"><g id="a-escw"><path class="i-esc" d="${teeth}Z"/></g></g>
+      <g transform="translate(-33,30)"><g id="a-four"><path class="i-wheel" d="${cogs(80, 30, 0.55, 2.25)}"/><circle class="i-line" r="26"/><path class="i-line" d="M-26,0H-4M4,0H26M0,-26V-4M0,4V26"/><circle class="i-line" r="4"/><line class="i-rod" x1="0" y1="0" x2="0" y2="-23"/></g><circle class="i-dot" r="1.6"/></g>
+      <g transform="translate(0,30)"><g id="a-pin"><path class="i-pinion" d="${cogs(8, 3, 0.55, 0)}"/></g><circle class="i-dotp" r="0.9"/></g>
+      <g transform="translate(0,-19.1)"><path class="i-hair" d="${sp}"/><g id="a-bal"><circle class="i-bal" r="20"/><line class="i-rod" x1="-20" y1="0" x2="20" y2="0"/><circle class="i-esc" r="6.4"/><circle class="i-pin" cx="0" cy="5" r="1.25"/></g><circle class="i-dot" r="1.5"/></g>
+      <g transform="translate(0,6.9)"><g id="a-pal"><path class="i-fork" d="M0,0V-17M-2.4,-22V-17H2.4V-22M-11.2,3.6L0,0L11.2,3.6"/><path class="i-stone" d="M-9.65,6.39L-11.75,2.75M9.65,6.39L11.75,2.75"/></g><circle class="i-dot" r="1.4"/></g>
+    </g>
+    <text class="i-lab end" x="-5" y="-17.6">BALANCE</text><text class="i-lab end" x="5" y="4">FORK</text><text class="i-lab end" x="-5" y="31.5">ESCAPE WHEEL</text><text class="i-lab" x="53" y="69">SECONDS WHEEL</text>
+    <g transform="translate(-50,87)"><text class="i-lab left" y="-4">ONE SECOND · FIVE TICKS</text>${[0, 1, 2, 3, 4].map(i => `<rect class="i-step" data-i="${i}" x="${f(i * 27.2)}" y="0" width="26" height="6"/>`).join('')}</g></svg>`;
 })();
 function anat(t) {
   A.t = t; const b = t / 200, idx = Math.min(4, Math.floor(b)), fr = b - idx, e = Math.min(1, fr / 0.14), steps = idx + e, th = 135 * Math.sin(Math.PI * b), moving = e < 1 && t < 1000;
-  $('#a-bal').setAttribute('transform', `rotate(${f(th)})`); $('#a-pal').setAttribute('transform', `rotate(${f(7 * Math.tanh(7 * Math.sin(Math.PI * b)))})`);
-  $('#a-escw').setAttribute('transform', `rotate(${f(steps * 12)})`); $('#a-four').setAttribute('transform', `rotate(${f(steps * 1.2)})`);
+  const push = Math.abs(th) > 90 ? Math.sign(th) : Math.sin(th * R), fk = -Math.asin(Math.max(-0.125, Math.min(0.125, 5 * push / 21))) / R; // the pin carries the fork across; then the fork rests against its stop
+  $('#a-bal').setAttribute('transform', `rotate(${f(th)})`); $('#a-pal').setAttribute('transform', `rotate(${f(fk)})`);
+  $('#a-escw').setAttribute('transform', `rotate(${f(steps * 12)})`); $('#a-pin').setAttribute('transform', `rotate(${f(steps * 12)})`); $('#a-four').setAttribute('transform', `rotate(${f(-steps * 1.2)})`);
   $$('.i-step').forEach(s => s.classList.toggle('on', +s.dataset.i < Math.floor(steps + 0.001) || (+s.dataset.i === idx && e >= 1)));
-  $('#a-ms').textContent = Math.round(t); $('#a-beat').textContent = `Beat ${idx + 1} of 5`;
-  $('#a-energy').textContent = moving ? 'Flowing: one impulse' : 'Held back';
-  $('#a-esc').textContent = moving ? 'Unlocked: giving impulse' : 'Locked';
-  $$('#a-chain li').forEach((li, i) => li.classList.toggle('hot', moving ? i !== 1 : i === 1));
+  $('#a-ms').textContent = Math.round(t); $('#a-beat').textContent = `Tick ${idx + 1} of 5`;
+  const now = $('#a-now'); now.textContent = moving ? 'Tick. One tooth slips past and nudges the balance.' : 'Locked. The wheels wait while the balance swings.'; now.classList.toggle('hot', moving);
 }
 function anatFrame(ms) { if (!A.on) return; const dt = ms - A.last; A.last = ms; let t = A.t + dt / 14; if (t > 1000) t = 0; $('#a-t').value = t; anat(t); requestAnimationFrame(anatFrame); } // one second played over fourteen
 $('#a-t').addEventListener('input', e => anat(+e.target.value));
