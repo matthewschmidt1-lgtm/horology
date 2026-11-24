@@ -454,7 +454,7 @@ function balance(cx, cy, r, w, extra = '') {
   const b = bps(w), per = b ? f(2 / b) : 0.4;
   return `<g transform="translate(${cx},${cy})"><path class="hair2" d="${sp}"/><g class="bal" style="animation-duration:${per}s">${C(r, 0, 0, 'l')}${C(r - 0.5, 0, 0, 't')}${L(-r + 0.5, 0, r - 0.5, 0, 't')}${L(0, -r + 0.5, 0, r - 0.5, 't')}${extra}</g>${C(0.4, 0, 0, 'k')}</g>`;
 }
-/* The ten watches on the Workbench have a movement laid out from a source (see each watch's History there). These are the same positions, in the same units
+/* The watches on the Workbench have a movement laid out from a source (see each watch's History there). These are the same positions, in the same units
    as workbench/model.js (millimetres, at the scale of a 27 mm movement; x and y as seen from the back, crown to the left unless noted), so Fig. 5 shows the same plan.
    pr: plate radius in those units. Each wheel is [x, y, radius]; bridges are lists of [x, y, r] circles whose outline is drawn. Keep in step with the model. */
 const PLAN = {
@@ -482,6 +482,7 @@ const PLAN = {
     bridges: [[[-3.05, 6.23, 5.0]], [[0, 0, 1.15], [-2.6, -4.67, 1.4], [0, -7.79, 1.2]]], cock: [[6.88, -2.01, 1.4], [9.6, 5.6, 1.3]] },
   spaceview: { cal: '214', fork: 1, pr: 14.5 }
 };
+PLAN.carrera = Object.assign({}, PLAN.daytona6263, { cal: 'Valjoux 72' }); // the Carrera 2447 uses the same calibre as the Daytona's 727, so it shares that layout
 function planMovement(w, pl) {
   const k = 15 / pl.pr, X = q => (pl.turn ? [q[1] * k, q[0] * k] : [q[0] * k, -q[1] * k]); // to drawing units; y runs down the page. A "turned" movement (the Calatrava) is drawn a quarter turn round, as the bench mounts it
   const hull = cs => { // outline round a set of circles
