@@ -36,6 +36,16 @@
      drops anything after a ? when it tidies "workbench.html" into "/workbench". */
   const here = (location.pathname.split('/').pop() || 'index').replace(/\.html$/, '');
   const link = (page, end) => here === page.replace(/\.html$/, '') ? end : page + end.replace(/^\?/, '#');
+  /* Each row of the History menu is dressed like its era on the History page: that era's background, colours and lettering. Those typefaces are only loaded by the
+     History page, so on any other page they are fetched the first time the pointer reaches the header. The colours and fonts are repeated in styles.css from history.css. */
+  let fonts = here === 'history';
+  const eraFonts = () => {
+    if (fonts) return; fonts = true;
+    const l = document.createElement('link'); l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;600&family=Orbitron:wght@700&family=Playfair+Display:wght@900&family=Poiret+One&family=Stardos+Stencil:wght@700&family=UnifrakturCook:wght@700&display=swap';
+    document.head.appendChild(l);
+  };
+  nav.addEventListener('mouseenter', eraFonts, { once: true });
   const place = () => {
     const r = cur.getBoundingClientRect(), m = document.querySelector('.mast').getBoundingClientRect();
     const top = Math.max(r.bottom + 4, m.bottom);
@@ -49,7 +59,8 @@
     if (cur) cur.setAttribute('aria-expanded', 'false');
     cur = a; since = Date.now();
     const page = a.dataset.menu;
-    panel.innerHTML = MENUS[page].map(i => `<a href="${link(page, i[1])}">${i[2] ? `<small>${i[2]}</small>` : ''}<span>${i[0]}</span></a>`).join('');
+    if (page === 'history.html') eraFonts();
+    panel.innerHTML = MENUS[page].map(i => `<a href="${link(page, i[1])}"${i[2] ? ` class="d-era d-${i[1].slice(1)}"` : ''}>${i[2] ? `<small>${i[2]}</small>` : ''}<span>${i[0]}</span></a>`).join('');
     panel.hidden = false; a.setAttribute('aria-expanded', 'true'); place();
   };
   const close = () => { clearTimeout(timer); if (!cur) return; cur.setAttribute('aria-expanded', 'false'); cur = null; panel.hidden = true; };
