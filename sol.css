@@ -36,7 +36,7 @@
 .dial-pop li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; align-items: start; padding: 13px 0; border-top: 1px solid #2c3a55; }
 .dial-pop p { margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 19px; line-height: 1.38; color: #cfc6b1; } .dial-pop b { color: #efe6d2; font-weight: 600; }
 .dial-pop i { width: 34px; height: 34px; margin-top: 2px; border-radius: 50%; box-sizing: border-box; position: relative; }
-.dp-ring { background: conic-gradient(from 180deg, #141d33 0 25%, #c08a55 25% 29%, #ead9a4 29% 71%, #c08a55 71% 75%, #141d33 75%); -webkit-mask: radial-gradient(circle closest-side, transparent 62%, #000 64%); mask: radial-gradient(circle closest-side, transparent 62%, #000 64%); }
+.dp-ring { background: conic-gradient(from 180deg, #3d4f82 0 25%, #c08a55 25% 29%, #ead9a4 29% 71%, #c08a55 71% 75%, #3d4f82 75%); -webkit-mask: radial-gradient(circle closest-side, transparent 62%, #000 64%); mask: radial-gradient(circle closest-side, transparent 62%, #000 64%); }
 .dp-now { border: 5px solid #ead9a4; } .dp-now::after { content: ""; position: absolute; right: -6px; top: 1px; width: 11px; height: 11px; border-radius: 50%; border: 2px solid #efe6d2; background: #0f1826; }
 .dp-marks { border: 1px solid #b8975a; } .dp-marks::before, .dp-marks::after { content: ""; position: absolute; left: 50%; top: 50%; width: 1.5px; height: 20px; background: #efe6d2; transform-origin: 50% 0; }
 .dp-marks::before { transform: rotate(118deg); box-shadow: 0 0 0 0 transparent; } .dp-marks::after { transform: rotate(-118deg); }
