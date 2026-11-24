@@ -216,7 +216,7 @@ function renderHome() {
   </div>
 
   <div class="h-time">
-    <a class="h-time-dial" id="home-dial" href="time.html" aria-label="Open the living solar clock"></a>
+    <div class="h-time-dial" id="home-dial"></div>
     <div class="h-time-txt">
       <p class="h-eyebrow">The Nature of Time</p>
       <p class="h-time-pre">Beyond the measurement of time.</p>
@@ -251,7 +251,7 @@ function renderHome() {
     <a class="h-btn" href="meaning.html">Consider the meaning of time</a>
   </div>
 </section>`;
-  if (window.Sol) { homeLoc = Sol.guess(); homeDial = Sol.mount(document.getElementById('home-dial')); homeSun(new Date()); }
+  if (window.Sol) { homeLoc = Sol.guess(); homeDial = Sol.mount(document.getElementById('home-dial')); Sol.guide(document.getElementById('home-dial')); homeSun(new Date()); }
   // a still field of stars behind the Nature of Time band, as on that page: fixed positions, no motion
   const band = document.querySelector('.h-time'); if (band) { let x = 20261, c = ''; const rnd = () => (x = (x * 16807) % 2147483647) / 2147483647; for (let i = 0; i < 130; i++) { const r = rnd(); c += `<circle cx="${(rnd() * 100).toFixed(2)}%" cy="${(rnd() * 100).toFixed(2)}%" r="${r > 0.95 ? 1.3 : r > 0.7 ? 0.9 : 0.6}" opacity="${(0.18 + rnd() * 0.5).toFixed(2)}"/>`; } band.insertAdjacentHTML('afterbegin', `<svg class="h-stars" aria-hidden="true">${c}</svg>`); }
   refresh();

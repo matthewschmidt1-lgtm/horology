@@ -26,3 +26,20 @@
 @media (max-width: 900px) { .sol-num { font-size: 5.6px; } .sol-card { font-size: 5.6px; } .sol-evt { font-size: 5.4px; } .sol-phase { font-size: 5.6px; } }
 @container (max-width: 520px) { .sol-num { font-size: 7px; } .sol-card { font-size: 7px; } .sol-evt { font-size: 6.8px; letter-spacing: .14em; } .sol-phase { font-size: 6.6px; letter-spacing: .08em; } }
 @container (max-width: 380px) { .sol-num { font-size: 8.6px; } .sol-card { font-size: 8.4px; } .sol-evt { font-size: 8.4px; letter-spacing: .12em; } .sol-phase { font-size: 7.6px; letter-spacing: .06em; } }
+
+/* the solar clock: click it for a short guide to its parts */
+.dial-btn { cursor: pointer; -webkit-tap-highlight-color: transparent; } .dial-btn:focus-visible { outline: 2px solid #b8975a; outline-offset: 6px; border-radius: 50%; }
+.dial-pop { width: min(440px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 26px 26px 22px; background: #0f1826; color: #efe6d2; border: 1px solid #b8975a; box-shadow: 0 24px 60px rgba(0, 0, 0, .55); }
+.dial-pop::backdrop { background: rgba(6, 10, 17, .72); }
+.dial-pop h3 { margin: 0 34px 16px 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 27px; font-weight: 500; line-height: 1.1; color: #efe6d2; }
+.dial-pop ul { list-style: none; margin: 0; padding: 0; }
+.dial-pop li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; align-items: start; padding: 13px 0; border-top: 1px solid #2c3a55; }
+.dial-pop p { margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 19px; line-height: 1.38; color: #cfc6b1; } .dial-pop b { color: #efe6d2; font-weight: 600; }
+.dial-pop i { width: 34px; height: 34px; margin-top: 2px; border-radius: 50%; box-sizing: border-box; position: relative; }
+.dp-ring { background: conic-gradient(from 180deg, #141d33 0 25%, #c08a55 25% 29%, #ead9a4 29% 71%, #c08a55 71% 75%, #141d33 75%); -webkit-mask: radial-gradient(circle closest-side, transparent 62%, #000 64%); mask: radial-gradient(circle closest-side, transparent 62%, #000 64%); }
+.dp-now { border: 5px solid #ead9a4; } .dp-now::after { content: ""; position: absolute; right: -6px; top: 1px; width: 11px; height: 11px; border-radius: 50%; border: 2px solid #efe6d2; background: #0f1826; }
+.dp-marks { border: 1px solid #b8975a; } .dp-marks::before, .dp-marks::after { content: ""; position: absolute; left: 50%; top: 50%; width: 1.5px; height: 20px; background: #efe6d2; transform-origin: 50% 0; }
+.dp-marks::before { transform: rotate(118deg); box-shadow: 0 0 0 0 transparent; } .dp-marks::after { transform: rotate(-118deg); }
+.dp-sky { border: 1px solid #b8975a; background: linear-gradient(transparent 58%, #060a11 58%), radial-gradient(circle at 50% 78%, transparent 0 9px, #ead9a4 9px 10.5px, transparent 10.5px); overflow: hidden; } .dp-sky::after { content: ""; position: absolute; left: 0; right: 0; top: 58%; border-top: 1px solid #efe6d2; }
+.dp-x { position: absolute; right: 8px; top: 8px; width: 44px; height: 44px; background: none; border: 0; color: #efe6d2; font-size: 30px; line-height: 1; cursor: pointer; } .dp-x:focus-visible { outline: 2px solid #b8975a; outline-offset: -4px; }
+@media (max-width: 560px) { .dial-pop { padding: 22px 20px 16px; } .dial-pop h3 { font-size: 24px; } .dial-pop p { font-size: 18px; } }

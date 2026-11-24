@@ -51,14 +51,7 @@ $('#s-time').addEventListener('input', e => { const p = last.parts; live = false
 $('#s-date').addEventListener('input', e => { const p = last.parts, dt = new Date(Date.UTC(p.y, 0, +e.target.value)); live = false; shown = S.instant(p.y, dt.getUTCMonth() + 1, dt.getUTCDate(), p.h * 60 + p.mi, loc.tz); render(); });
 $('#now').addEventListener('click', () => { live = true; render(); });
 
-/* a click anywhere on the dial opens a short guide to its parts */
-{
-  const pop = $('#dial-pop'), host = $('#dial'), open = () => { if (pop.showModal) pop.showModal(); else pop.setAttribute('open', ''); };
-  host.addEventListener('click', open);
-  host.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
-  $('#dp-x').addEventListener('click', () => pop.close());
-  pop.addEventListener('click', e => { if (e.target === pop) pop.close(); }); // a click on the dimmed page behind closes it
-}
+S.guide($('#dial')); // a click anywhere on the dial opens a short guide to its parts
 
 /* =================== 2. the rhythm of time: a metronome =================== */
 const M = { bpm: 60, on: false, t0: 0, beat: -1 };

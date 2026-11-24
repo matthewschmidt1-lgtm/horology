@@ -135,5 +135,19 @@ function mount(el, opt = {}) {
   };
 }
 
-window.Sol = { CITIES, parts, instant, tzOffset, clock, hm, sun, position, day, phase, sidereal, moon, guess, mount, SYNODIC };
+/* A click (or Enter) on a dial opens a short guide to its parts. One dialog is shared by every dial on the page. */
+function guide(el) {
+  let pop = document.getElementById('dial-pop');
+  if (!pop) {
+    document.body.insertAdjacentHTML('beforeend', `<dialog class="dial-pop" id="dial-pop" aria-labelledby="dp-h"><button type="button" class="dp-x" id="dp-x" aria-label="Close">×</button><h3 id="dp-h">How to read this clock</h3><ul><li><i class="dp-ring"></i><p><b>The ring is one day.</b> Midnight at the bottom, midday at the top. Gold is daylight, dark blue is night.</p></li><li><i class="dp-now"></i><p><b>The small circle is now.</b> It goes once round the ring every 24 hours.</p></li><li><i class="dp-marks"></i><p><b>Rise, noon and set</b> mark today’s sunrise, the sun’s highest point and sunset.</p></li><li><i class="dp-sky"></i><p><b>The middle is the sky.</b> The curve is the sun’s path today. The line across is the horizon, and the dot is the sun.</p></li></ul></dialog>`);
+    pop = document.getElementById('dial-pop');
+    pop.querySelector('#dp-x').addEventListener('click', () => pop.close());
+    pop.addEventListener('click', e => { if (e.target === pop) pop.close(); }); // a click on the dimmed page behind closes it
+  }
+  const open = () => { if (pop.showModal) pop.showModal(); else pop.setAttribute('open', ''); };
+  el.setAttribute('role', 'button'); el.setAttribute('tabindex', '0'); el.setAttribute('aria-haspopup', 'dialog'); el.setAttribute('aria-controls', 'dial-pop'); el.setAttribute('title', 'How to read this clock'); el.classList.add('dial-btn');
+  el.addEventListener('click', e => { e.preventDefault(); open(); });
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+}
+window.Sol = { CITIES, parts, instant, tzOffset, clock, hm, sun, position, day, phase, sidereal, moon, guess, mount, guide, SYNODIC };
 })();
