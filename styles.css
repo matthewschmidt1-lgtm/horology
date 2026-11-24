@@ -530,16 +530,3 @@ figcaption { font-size: 17px; } figcaption b { font-size: 12px; }
 .nav-drop a:hover, .nav-drop a:focus-visible { background: #b8975a; color: #14283f; outline: 0; } .nav-drop a:hover small, .nav-drop a:focus-visible small { color: #14283f; }
 .nav-touch .nav-drop a { min-height: 46px; }
 .nav-touch .nav a.has-drop.on::after { content: ""; flex: none; margin-left: 4px; border: 3.5px solid transparent; border-top: 4.5px solid currentColor; border-bottom: 0; }
-/* the History menu: each row wears its era's background, colours and lettering (values repeated from history.css) */
-.nav-drop a.d-era { background: var(--b); color: var(--f); border-top: 0; padding: 10px 20px 11px; gap: 4px; text-transform: none; letter-spacing: 0; }
-.nav-drop a.d-era small { color: var(--a); font-size: 13px; letter-spacing: .06em; } .nav-drop a.d-era span { font-size: 19px; line-height: 1.1; }
-.nav-drop a.d-era:hover, .nav-drop a.d-era:focus-visible { background: var(--b); color: var(--f); box-shadow: inset 5px 0 0 var(--a); } .nav-drop a.d-era:hover small, .nav-drop a.d-era:focus-visible small { color: var(--a); }
-.d-e1 { --b: #15100b; --f: #ecdcb4; --a: #d0a857; } .d-e1 span { font-family: "UnifrakturCook", "Cormorant Garamond", Georgia, serif; font-weight: 700; font-size: 22px !important; }
-.d-e1 small, .d-e2 small { font-family: "Cormorant Garamond", Georgia, serif; font-size: 15px !important; font-weight: 500; text-transform: none; font-variant-numeric: lining-nums; }
-.d-e2 { --b: #f4ecdb; --f: #1c2f4f; --a: #7f5e14; } .d-e2 span { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-weight: 500; font-size: 21px !important; }
-.d-e3 { --b: #e8e2d2; --f: #151515; --a: #151515; } .d-e3 span, .d-e3 small { font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif; font-weight: 900; } .d-e3 span { text-transform: uppercase; font-size: 15px !important; letter-spacing: -.01em; }
-.d-e4 { --b: #0e0e0f; --f: #f0e8d4; --a: #c9a44c; } .d-e4 span, .d-e4 small { font-family: "Poiret One", sans-serif; text-transform: uppercase; letter-spacing: .09em !important; } .d-e4 span { font-size: 15px !important; }
-.d-e5 { --b: #383e2e; --f: #ece8d2; --a: #f0b24a; } .d-e5 span, .d-e5 small { font-family: "Stardos Stencil", "IBM Plex Mono", monospace; font-weight: 700; text-transform: uppercase; letter-spacing: .03em !important; } .d-e5 span { font-size: 16px !important; }
-.d-e6 { --b: #050507; --f: #d9dbe3; --a: #ff3b30; } .d-e6 small { font-family: "Orbitron", "IBM Plex Mono", monospace; font-weight: 700; font-size: 12px !important; text-shadow: 0 0 10px rgba(255, 59, 48, .6); } .d-e6 span { font-family: "Inter", sans-serif; font-weight: 600; letter-spacing: -.02em; font-size: 16px !important; }
-.d-e7 { --b: #f8f8f5; --f: #191919; --a: #191919; } .d-e7 small { font-family: "Inter", sans-serif; font-weight: 300; letter-spacing: -.02em !important; font-size: 13.5px !important; } .d-e7 span { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-weight: 400; font-size: 21px !important; }
-.nav-drop:has(.d-era) { padding: 0; }
