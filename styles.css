@@ -522,11 +522,11 @@ figcaption { font-size: 17px; } figcaption b { font-size: 12px; }
 @media (hover: hover) { .sf-nav a:hover { background: #101d33; } }
 
 /* header drop-down menus: the sections of each page (built by menu.js) */
-.nav-drop { position: fixed; z-index: 70; display: flex; flex-direction: column; max-width: calc(100vw - 16px); overflow-y: auto; overscroll-behavior: contain; padding: 6px 0; background: #f2ead7; color: #1d1a16; border: 1px solid #1d1a16; box-shadow: 0 14px 34px rgba(0, 0, 0, .28); font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+.nav-drop { position: fixed; z-index: 70; display: flex; flex-direction: column; max-width: calc(100vw - 16px); overflow-y: auto; overscroll-behavior: contain; padding: 6px 0; background: #14283f; color: #efe6d2; border: 1px solid #b8975a; box-shadow: 0 14px 34px rgba(0, 0, 0, .28); font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
 .nav-drop[hidden] { display: none; }
-.nav-drop a { display: flex; flex-direction: column; justify-content: center; gap: 2px; min-height: 40px; padding: 7px 18px; color: #1d1a16; text-decoration: none; white-space: nowrap; }
-.nav-drop a + a { border-top: 1px solid #d9cfb6; }
-.nav-drop small { font-size: 10px; letter-spacing: .12em; color: #6b6353; }
-.nav-drop a:hover, .nav-drop a:focus-visible { background: #1d1a16; color: #f2ead7; outline: 0; } .nav-drop a:hover small, .nav-drop a:focus-visible small { color: #cfc6b1; }
+.nav-drop a { display: flex; flex-direction: column; justify-content: center; gap: 2px; min-height: 40px; padding: 7px 18px; color: #efe6d2; text-decoration: none; white-space: nowrap; }
+.nav-drop a + a { border-top: 1px solid #2c4160; }
+.nav-drop small { font-size: 10px; letter-spacing: .12em; color: #b8975a; }
+.nav-drop a:hover, .nav-drop a:focus-visible { background: #b8975a; color: #14283f; outline: 0; } .nav-drop a:hover small, .nav-drop a:focus-visible small { color: #14283f; }
 .nav-touch .nav-drop a { min-height: 46px; }
 .nav-touch .nav a.has-drop.on::after { content: ""; flex: none; margin-left: 4px; border: 3.5px solid transparent; border-top: 4.5px solid currentColor; border-bottom: 0; }
