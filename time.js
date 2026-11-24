@@ -86,7 +86,7 @@ const A = { t: 0, on: false, last: 0, n: 0 }; // n counts the seconds already pl
   const cogs = (n, r, h, ph) => { let d = ''; const p = 360 / n; for (let k = 0; k < n; k++) { const c = ph + k * p; [[-0.3, -h], [-0.17, h], [0.17, h], [0.3, -h]].forEach((q, m) => { const a = (c + q[0] * p) * R; d += `${k || m ? 'L' : 'M'}${f((r + q[1]) * Math.cos(a))},${f((r + q[1]) * Math.sin(a))}`; }); } return d + 'Z'; };
   let teeth = ''; for (let k = 0; k < 15; k++) { const a = (-132 + k * 24) * R, a0 = (-132 + k * 24 - 15) * R, a1 = (-132 + k * 24 - 2) * R; teeth += `${k ? 'L' : 'M'}${f(13.4 * Math.cos(a0))},${f(13.4 * Math.sin(a0))}L${f(20 * Math.cos(a))},${f(20 * Math.sin(a))}L${f(13.4 * Math.cos(a1))},${f(13.4 * Math.sin(a1))}`; }
   let sp = 'M0,0'; for (let th = 0; th <= 30; th += 0.3) sp += `L${f((1 + th * 0.5) * Math.cos(th))},${f((1 + th * 0.5) * Math.sin(th))}`;
-  $('#anat').innerHTML = `<svg viewBox="-54 -43 144 138" class="inst">
+  $('#anat').innerHTML = `<svg viewBox="-54 -43 144 117" class="inst">
     <g transform="translate(20,0) scale(-1,1)">
       <g transform="translate(0,30)"><g id="a-escw"><path class="i-esc" d="${teeth}Z"/></g></g>
       <g transform="translate(-33,30)"><g id="a-four"><path class="i-wheel" d="${cogs(80, 30, 0.55, 2.25)}"/><circle class="i-line" r="26"/><path class="i-line" d="M-26,0H-4M4,0H26M0,-26V-4M0,4V26"/><circle class="i-line" r="4"/><line class="i-rod" x1="0" y1="0" x2="0" y2="-23"/></g><circle class="i-dot" r="1.6"/></g>
@@ -94,8 +94,7 @@ const A = { t: 0, on: false, last: 0, n: 0 }; // n counts the seconds already pl
       <g transform="translate(0,-19.1)"><path class="i-hair" d="${sp}"/><g id="a-bal"><circle class="i-bal" r="20"/><line class="i-rod" x1="-20" y1="0" x2="20" y2="0"/><circle class="i-esc" r="6.4"/><circle class="i-pin" cx="0" cy="5" r="1.25"/></g><circle class="i-dot" r="1.5"/></g>
       <g transform="translate(0,6.9)"><g id="a-pal"><path class="i-fork" d="M0,0V-17M-2.4,-22V-17H2.4V-22M-11.2,3.6L0,0L11.2,3.6"/><path class="i-stone" d="M-9.65,6.39L-11.75,2.75M9.65,6.39L11.75,2.75"/></g><circle class="i-dot" r="1.4"/></g>
     </g>
-    <text class="i-lab end" x="-5" y="-17.6">BALANCE</text><text class="i-lab end" x="5" y="4">FORK</text><text class="i-lab end" x="-5" y="31.5">ESCAPE WHEEL</text><text class="i-lab" x="53" y="69">SECONDS WHEEL</text>
-    <g transform="translate(-50,87)"><text class="i-lab left" y="-4">ONE SECOND · FIVE TICKS</text>${[0, 1, 2, 3, 4].map(i => `<rect class="i-step" data-i="${i}" x="${f(i * 27.2)}" y="0" width="26" height="6"/>`).join('')}</g></svg>`;
+    <text class="i-lab end" x="-5" y="-17.6">BALANCE</text><text class="i-lab end" x="5" y="4">FORK</text><text class="i-lab end" x="-5" y="31.5">ESCAPE WHEEL</text><text class="i-lab" x="53" y="69">SECONDS WHEEL</text></svg>`;
 })();
 function anat(t) {
   /* Each swing starts with the balance at rest at the end of its travel. It is fastest in the middle, and that is where the tick happens: the pin enters the fork's slot,
@@ -106,19 +105,15 @@ function anat(t) {
   const push = Math.abs(th) > 90 ? Math.sign(th) : Math.sin(th * R), fk = -Math.asin(Math.max(-0.125, Math.min(0.125, 5 * push / 21))) / R; // the pin carries the fork across; then the fork rests against its stop
   $('#a-bal').setAttribute('transform', `rotate(${f(th)})`); $('#a-pal').setAttribute('transform', `rotate(${f(fk)})`);
   $('#a-escw').setAttribute('transform', `rotate(${f(steps * 12)})`); $('#a-pin').setAttribute('transform', `rotate(${f(steps * 12)})`); $('#a-four').setAttribute('transform', `rotate(${f(-steps * 1.2)})`);
-  $$('.i-step').forEach(s => s.classList.toggle('on', +s.dataset.i < Math.floor(done + 0.001)));
-  $('#a-ms').textContent = Math.round(t);
   const now = $('#a-now'); now.textContent = moving ? 'Tick. One tooth slips past and nudges the balance.' : 'Locked. The wheels wait while the balance swings.'; now.classList.toggle('hot', moving);
 }
-function anatFrame(ms) { if (!A.on) return; const dt = ms - A.last; A.last = ms; let t = A.t + dt / 14; if (t > 1000) { t -= 1000; A.n = (A.n + 1) % 60; } $('#a-t').value = t; anat(t); requestAnimationFrame(anatFrame); } // one second played over fourteen
-/* It plays by itself, slowly and on a loop, while it is on screen. Dragging the slider holds it still so a moment can be studied; it carries on a few seconds after the slider is let go.
-   For anyone who has asked their device for less motion it stays still, and the slider does the work. */
+function anatFrame(ms) { if (!A.on) return; const dt = ms - A.last; A.last = ms; let t = A.t + dt / 14; if (t > 1000) { t -= 1000; A.n = (A.n + 1) % 60; } anat(t); requestAnimationFrame(anatFrame); } // one second played over fourteen
+/* It plays by itself, slowly and on a loop, while it is on screen. For anyone who has asked their device for less motion it stays still. */
 {
-  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches; let seen = false, hold = 0;
-  const sync = () => { const go = seen && !hold && !calm; if (go && !A.on) { A.on = true; A.last = performance.now(); requestAnimationFrame(anatFrame); } else if (!go) A.on = false; };
-  $('#a-t').addEventListener('input', e => { clearTimeout(hold); hold = setTimeout(() => { hold = 0; sync(); }, 4000); sync(); anat(+e.target.value); });
-  if ('IntersectionObserver' in window) new IntersectionObserver(en => { seen = en[0].isIntersecting; sync(); }, { threshold: 0.25 }).observe($('#anat'));
-  else { seen = true; sync(); }
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const run = seen => { const go = seen && !calm; if (go && !A.on) { A.on = true; A.last = performance.now(); requestAnimationFrame(anatFrame); } else if (!go) A.on = false; };
+  if ('IntersectionObserver' in window) new IntersectionObserver(en => run(en[0].isIntersecting), { threshold: 0.25 }).observe($('#anat'));
+  else run(true);
 }
 anat(0);
 
