@@ -78,7 +78,7 @@ $$('.presets button').forEach(b => b.addEventListener('click', () => { M.bpm = +
 metroFacts();
 
 /* =================== 3. the anatomy of a second =================== */
-const A = { t: 0, on: false, last: 0 };
+const A = { t: 0, on: false, last: 0, n: 0 }; // n counts the seconds already played, so the wheels carry on from where they were
 (function buildAnat() {
   /* Drawn to work, not just to look right. The fork's pivot sits where lines from the two pallets are tangent to the escape wheel, so each pallet moves straight in and out of the teeth;
      the pallets span two and a half teeth; the pin on the balance sits in the fork's slot; and the seconds wheel (80 teeth) meshes with an 8-leaf pinion on the escape wheel, which is the
@@ -98,15 +98,19 @@ const A = { t: 0, on: false, last: 0 };
     <g transform="translate(-50,87)"><text class="i-lab left" y="-4">ONE SECOND · FIVE TICKS</text>${[0, 1, 2, 3, 4].map(i => `<rect class="i-step" data-i="${i}" x="${f(i * 27.2)}" y="0" width="26" height="6"/>`).join('')}</g></svg>`;
 })();
 function anat(t) {
-  A.t = t; const b = t / 200, idx = Math.min(4, Math.floor(b)), fr = b - idx, e = Math.min(1, fr / 0.14), steps = idx + e, th = 135 * Math.sin(Math.PI * b), moving = e < 1 && t < 1000;
+  /* Each swing starts with the balance at rest at the end of its travel. It is fastest in the middle, and that is where the tick happens: the pin enters the fork's slot,
+     carries the fork across, and only while the fork is crossing does a tooth get past. So the five ticks fall at 100, 300, 500, 700 and 900 ms. A second is five swings,
+     an odd number, so the next second starts from the other side. */
+  A.t = t; const b = t / 200, idx = Math.min(4, Math.floor(b)), x = b - Math.floor(b) - 0.5, e = Math.max(0, Math.min(1, (x + 0.055) / 0.135)), done = Math.floor(b) + e, steps = A.n * 5 + done;
+  const th = (A.n % 2 ? 135 : -135) * Math.cos(Math.PI * b), moving = e > 0 && e < 1;
   const push = Math.abs(th) > 90 ? Math.sign(th) : Math.sin(th * R), fk = -Math.asin(Math.max(-0.125, Math.min(0.125, 5 * push / 21))) / R; // the pin carries the fork across; then the fork rests against its stop
   $('#a-bal').setAttribute('transform', `rotate(${f(th)})`); $('#a-pal').setAttribute('transform', `rotate(${f(fk)})`);
   $('#a-escw').setAttribute('transform', `rotate(${f(steps * 12)})`); $('#a-pin').setAttribute('transform', `rotate(${f(steps * 12)})`); $('#a-four').setAttribute('transform', `rotate(${f(-steps * 1.2)})`);
-  $$('.i-step').forEach(s => s.classList.toggle('on', +s.dataset.i < Math.floor(steps + 0.001) || (+s.dataset.i === idx && e >= 1)));
+  $$('.i-step').forEach(s => s.classList.toggle('on', +s.dataset.i < Math.floor(done + 0.001)));
   $('#a-ms').textContent = Math.round(t); $('#a-beat').textContent = `Tick ${idx + 1} of 5`;
   const now = $('#a-now'); now.textContent = moving ? 'Tick. One tooth slips past and nudges the balance.' : 'Locked. The wheels wait while the balance swings.'; now.classList.toggle('hot', moving);
 }
-function anatFrame(ms) { if (!A.on) return; const dt = ms - A.last; A.last = ms; let t = A.t + dt / 14; if (t > 1000) t = 0; $('#a-t').value = t; anat(t); requestAnimationFrame(anatFrame); } // one second played over fourteen
+function anatFrame(ms) { if (!A.on) return; const dt = ms - A.last; A.last = ms; let t = A.t + dt / 14; if (t > 1000) { t -= 1000; A.n = (A.n + 1) % 60; } $('#a-t').value = t; anat(t); requestAnimationFrame(anatFrame); } // one second played over fourteen
 $('#a-t').addEventListener('input', e => anat(+e.target.value));
 $('#a-go').addEventListener('click', e => { A.on = !A.on; e.currentTarget.textContent = A.on ? 'Pause' : 'Play slowly'; e.currentTarget.setAttribute('aria-pressed', A.on); if (A.on) { A.last = performance.now(); requestAnimationFrame(anatFrame); } });
 anat(0);
