@@ -599,3 +599,5 @@ figcaption { font-size: 17px; } figcaption b { font-size: 12px; }
 /* home buttons: a quiet, dark edge in place of the bright outline */
 .h-card.c1 { --bl: rgba(20, 5, 8, .7); } .h-card.c2 { --bl: rgba(4, 14, 11, .7); } .h-card.c3 { --bl: rgba(5, 8, 26, .7); }
 
+/* plates: marks and figures on a dark register are drawn in the paper colour so they show */
+.fig .t.dkr, .fig .hair.dkr { stroke: var(--paper); } .fig .tx.dkr { fill: var(--paper); }

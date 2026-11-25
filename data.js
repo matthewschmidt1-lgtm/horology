@@ -126,11 +126,11 @@ window.WATCHES = [
 {
   id:'a386', brand:'Zenith', model:'El Primero', ref:'A386', year:'1969', span:'1969 – early 1970s', kind:'Chronograph',
   c:{shape:'round', d:38, t:[12.5,'n'], lug:[19,'n']},
-  bezel:{type:'plain', w:1.4}, dial:{dark:false, markers:'baton', flange:'tachy', date:4.5, subs:[[3,'min30'],[6,'hr12'],[9,'sec']], subBig:true, subTints:{3:.34,6:.6,9:.12}, subFills:{3:['#0f2452',1],6:['#16171a',1],9:['#a2a3a0',0]}, text:['ZENITH','El Primero']},
+  bezel:{type:'plain', w:1.4}, dial:{dark:false, markers:'a386', flange:'a386', date:4.5, subs:[[9,'sec'],[3,'min30'],[6,'hr12']], subBig:true, subNums:true, subRings:true, set:{star:-0.6, lines:[['ZENITH',-0.47,0.085,1],['CHRONOGRAPH',-0.405,0.045,1],['AUTOMATIC',-0.35,0.045,1],['El Primero',-0.275,0.068,2]]}, subTints:{3:.34,6:.6,9:.12}, subFills:{3:['#0f2452',1],6:['#16171a',1],9:['#a2a3a0',0]}, text:['ZENITH','El Primero']},
   hands:'baton', sec:'sub', chrono:true, crown:{pos:3}, pushers:'pump', strap:'leather',
   mv:{cal:'3019 PHC', type:'autochrono', vph:36000, jewels:31, wind:'Automatic, full rotor', size:'13 lignes', note:'Integrated automatic chronograph with column wheel, dividing the second into tenths.'},
   back:{type:'screw', note:'Detail not verified; shown plain.'},
-  specs:[['Dial','Three overlapping registers: light grey, blue, anthracite'],['Complication','Date between 4 and 5'],['Scale','Tachymeter and decimal on the flange']],
+  specs:[['Dial','Three overlapping registers: light grey, blue, anthracite'],['Complication','Date between 4 and 5'],['Scale','Tachymeter on the outer ring, hundredths of a minute on the black ring inside it']],
   notes:['Announced in January 1969: an integrated, automatic, high-frequency chronograph.','At ten beats a second the seconds hand moves in tenths. Watch the hand on the register at nine.'],
   q:{t:'How fast does the El Primero beat?', a:'36,000 vibrations per hour', w:['18,000 vibrations per hour','21,600 vibrations per hour','28,800 vibrations per hour']}
 },

@@ -34,7 +34,7 @@ function geo(w) {
     g.hw = R; g.hh = cu ? R * 1.12 : R; g.bezR = cu ? R * 0.9 : R; g.dialR = g.bezR - bw - 0.5;
     g.outline = cu ? rrD(R, g.hh, R * 0.6) : circD(R); g.dial = circD(g.dialR);
     g.lugW = c.lug ? c.lug[0] : 20; g.l2l = cu ? g.hh * 2 : c.d * 1.2;
-    let fl = 0; if (w.dial.flange) fl = 1.7; if (w.dial.sliderule) fl = w.dial.sliderule === '806' ? 6.3 : 4.6;
+    let fl = 0; if (w.dial.flange) fl = w.dial.flange === 'a386' ? 3.3 : 1.7; if (w.dial.sliderule) fl = w.dial.sliderule === '806' ? 6.3 : 4.6;
     g.inR = g.dialR - fl; g.edge = () => g.inR; g.hl = g.inR * 0.9; g.lugs = !cu; g.cwh = g.hh; g.dw = g.dialR;
   } else if (c.shape === 'tank') {
     g.hw = c.w / 2; g.hh = c.h / 2; g.bw = 2.7; g.bodyH = g.hh * 0.8;
@@ -221,6 +221,7 @@ function markers(w, g, skip) {
     case 'carrera': // the first Carrera's dial, from OnTheDash's photographs of a 2447 S: no printed track, since the scale is on the ring under the crystal; long applied steel bars, a wider one at twelve, short ones beside the registers, and a luminous dot at the outer end of each
       for (let h = 0; h < 12; h++) { const q = h && h % 3 === 0, wd = h ? 0.75 : 1.5, r = E(h * 30); s += bat(h, q ? 1.3 : 3.7, wd, 'p ap', 1.0); (h ? [0] : [-0.42, 0.42]).forEach(dx => { s += `<circle class="p" r="0.2" cx="${dx}" cy="${f(-r + 0.62)}" transform="rotate(${h * 30})"/>`; }); }
       break;
+    case 'a386': s += ticks(0.6, 0.2); each(h => bat(h, 2.9, 0.8, 'p ap', 0.9) + bat(h, 2.5, 0.3, 'p', 1.1)); break; // applied steel bars, each with a luminous strip down it; a single bar at twelve, none at the registers
     case 'baton': s += ticks(); each(h => h === 0 ? dbl(2.6, 0.8) : bat(h, 2.6, 0.8)); break;
     case 'block': s += ticks(); each(h => h === 0 ? dbl(2.8, 1.3) : bat(h, 2.6, 1.7)); break;
     case 'sm300': s += ticks(); each(h => h % 3 === 0 ? num(h, h || 12, R0 * 0.25, R0 * 0.7) + bat(h, 1, 1) : bat(h, 3.6, 1.1)); break;
@@ -327,16 +328,17 @@ function subs(w, g, o = {}) {
   for (const [pos, role] of d.subs) {
     if (CAL_ROLES.includes(role)) { s += calSub(w, g, pos, role, o); continue; }
     const [cx, cy] = P(pos * 30, off), tint = d.subTints ? d.subTints[pos] : null;
+    const dr = tint != null && tint >= 0.3 ? ' dkr' : ''; // on the plates, marks on a dark register are drawn pale
     const cls = d.subDark ? 'tn2' : d.subLight ? 'p' : (d.dark ? 'tn' : 'p'), sty = tint != null ? `style="fill:var(--sf${pos}, var(--ink));fill-opacity:var(--so, ${tint})"` : ''; // the Workbench's dial picture can give each register its true colour; elsewhere it is a tint of the ink
     s += d.subSquare ? RC(cx - rs, cy - rs, 2 * rs, 2 * rs, cls, 0.9) : C(rs, cx, cy, 'p') + C(rs, cx, cy, cls, sty);
     const n = role === 'min30' ? 30 : 12;
-    if (!d.subSquare) for (let i = 0; i < n; i++) s += rad(i * 360 / n, rs - (i % (n / 6) ? 0.45 : 0.9), rs - 0.12, 't sk' + pos, cx, cy);
+    if (!d.subSquare) for (let i = 0; i < n; i++) s += rad(i * 360 / n, rs - (i % (n / 6) ? 0.45 : 0.9), rs - 0.12, 't sk' + pos + dr, cx, cy);
     if (d.subRings) for (const k of [0.12, 0.2, 0.28, 0.36]) { // the fine circles turned into each register, a few of them, kept inside the figures; in the register at six they break for the word printed there
       if (d.subWord && pos === 6 && k > 0.15) { const r = rs * k, g0 = 55 * Math.PI / 180, x = r * Math.sin(g0), y = r * Math.cos(g0); s += Pa(`M${f(cx + x)},${f(cy + y)}A${f(r)},${f(r)} 0 1 0 ${f(cx - x)},${f(cy + y)}`, 'hair'); }
-      else s += C(rs * k, cx, cy, 'hair'); }
+      else s += C(rs * k, cx, cy, 'hair sk' + pos + dr); }
     if (d.subWord && pos === 6) s += T(d.subWord, cx, cy + rs * 0.3, rs * 0.14, 'tx dl', 'style="font-family:Helvetica,Arial,sans-serif"');
     if (d.subNums === 'all' && !d.subSquare) { const n2 = role === 'hr12' ? 12 : 6, st = role === 'hr12' ? 1 : role === 'min30' ? 5 : 10; for (let i = 0; i < n2; i++) { const p = P(i * 360 / n2, rs * 0.6, cx, cy), z = rs * 0.21; s += T(i ? i * st : n2 * st, p[0], p[1] + z * 0.36, z, 'tx sn', 'style="font-family:Helvetica,Arial,sans-serif"'); } } // a figure at every step, as on the Navitimer
-    else if (d.subNums && !d.subSquare) (role === 'hr12' ? [[0, 12], [90, 3], [180, 6], [270, 9]] : role === 'min30' ? [[0, 30], [120, 10], [240, 20]] : [[0, 60], [120, 20], [240, 40]]).forEach(q => { const p = P(q[0], rs * 0.56, cx, cy), z = rs * 0.3; s += T(q[1], p[0], p[1] + z * 0.36, z, 'tx sn', 'style="font-family:Helvetica,Arial,sans-serif"'); }); // the figures printed in each register
+    else if (d.subNums && !d.subSquare) (role === 'hr12' ? [[0, 12], [90, 3], [180, 6], [270, 9]] : role === 'min30' ? [[0, 30], [120, 10], [240, 20]] : [[0, 60], [120, 20], [240, 40]]).forEach(q => { const p = P(q[0], rs * 0.56, cx, cy), z = rs * 0.3; s += T(q[1], p[0], p[1] + z * 0.36, z, 'tx sn sn' + pos + dr, 'style="font-family:Helvetica,Arial,sans-serif"'); }); // the figures printed in each register
     if (!o.noHands) s += `<g transform="translate(${cx},${cy})"><g ${role === 'sec' ? `data-hand="s" data-bps="${b}"` : `data-chr="${role === 'min30' ? 'm' : 'h'}"`}>${L(0, 0.8, 0, -rs * 0.82, 'hd')}</g>${C(0.32, 0, 0, 'k')}</g>`;
   }
   return s;
@@ -362,6 +364,7 @@ function dtext(w, g, o) {
       for (const sx of [-1, 1]) s += Pa(`M${f(sx * u * 0.12)},${f(y0)}Q${f(sx * u * 0.5)},${f(y0 - u * 0.34)} ${f(sx * u)},${f(y0 - u * 0.2)}Q${f(sx * u * 0.8)},${f(y0 + u * 0.02)} ${f(sx * u * 0.55)},${f(y0 + u * 0.02)}Q${f(sx * u * 0.4)},${f(y0 + u * 0.14)} ${f(sx * u * 0.12)},${f(y0 + u * 0.1)}Z`, 'p wg');
       s += Pa(polyD([[f(-u * 0.14), f(y0 - u * 0.12)], [f(u * 0.14), f(y0 - u * 0.12)], [f(u * 0.14), f(y0 + u * 0.08)], [0, f(y0 + u * 0.2)], [f(-u * 0.14), f(y0 + u * 0.08)]]), 'p wg'); }
     if (q.split) q.split.forEach((t, i) => { const p = P(180 + (i ? -13 : 13), (g.inR || R0) - 1.0); s += T(t, p[0], p[1], R0 * 0.04, 'tx dl', `${sans} transform="rotate(${i ? -13 : 13} ${f(p[0])} ${f(p[1])})"`); }); // two words at the foot, one each side of the lower register
+    if (q.star != null) s += star(0, R0 * q.star, R0 * 0.05);
     if (q.crown != null) { const u = R0 * 0.075, y0 = R0 * q.crown; s += Pa(polyD([[-.55, 0], [-.95, -.7], [-.45, -.32], [-.5, -.98], [-.12, -.38], [0, -1.12], [.12, -.38], [.5, -.98], [.45, -.32], [.95, -.7], [.55, 0]].map(p => [f(p[0] * u), f(y0 + p[1] * u)])), 'k dl') + [[-.95, -.7], [-.5, -.98], [0, -1.12], [.5, -.98], [.95, -.7]].map(p => C(u * 0.1, p[0] * u, y0 + p[1] * u, 'k dl')).join('') + RC(-0.55 * u, y0 + 0.08 * u, 1.1 * u, 0.12 * u, 'k dl'); }
     q.lines.forEach(l => { s += T(l[0].replace(/&/g, '&amp;'), 0, R0 * l[1], R0 * l[2], 'tx dl', l[3] === 2 ? 'style="font-style:italic"' : l[3] ? sans : 'letter-spacing=".06em"'); }); // 2: a script line, approximated in italic
     if (q.foot) s += T(q.foot, 0, R0 - 0.12, R0 * 0.042, 'tx dl', sans);
@@ -424,7 +427,19 @@ function dial(w, g, o) {
   if (d.tapisserie) { const id = 'u' + (++uid); s += `<defs><pattern id="${id}" width="1.15" height="1.15" patternUnits="userSpaceOnUse"><path class="hair" d="M0,0H1.15M0,0V1.15"/></pattern></defs><path d="${g.dial}" fill="url(#${id})" stroke="none"/>`; }
   if (d.flange) {
     const r = g.inR; s += C(r, 0, 0, 'l');
-    if (d.flange === 'fifths') for (let i = 0; i < 300; i++) s += rad(i * 1.2, r + 0.2, r + (i % 5 ? 0.75 : 1.35), i % 5 ? 'hair' : 't');
+    if (d.flange === 'a386') { /* the two rings round the El Primero A386's dial, read from Phillips' photograph of an example of about 1969. Outside, a pale ring with the tachymeter:
+         60 at twelve, the word TACHYMETRE, then these figures, each at 3600 divided by its value, in seconds. Inside it, a black ring dividing the minute into hundredths, with a
+         figure at every five and 100 at twelve. Figures in the lower half are turned to read upright, as on the watch. The words at the foot are abbreviated to fit. */
+      const Rd = g.dialR, rb = Rd - 1.65, ring = q => `M${f(q)},0A${f(q)},${f(q)} 0 1 0 ${f(-q)},0A${f(q)},${f(q)} 0 1 0 ${f(q)},0Z`, sn = 'style="font-family:Helvetica,Arial,sans-serif"';
+      const put = (t, a, rr, sz, cls) => { const low = a > 90 && a < 270; return T(t, 0, 0, sz, cls, `${sn} transform="rotate(${f(low ? a + 180 : a)}) translate(0,${f(low ? rr + sz * 0.36 : -rr + sz * 0.36)})"`); };
+      s += `<path class="tn dk" fill-rule="evenodd" d="${ring(rb)}${ring(r)}"/>`;
+      [500, 400, 300, 250, 220, 200, 180, 160, 150, 140, 130, 120, 110, 100, 90, 80, 75, 70, 65, 60].forEach(v => { const a = 21600 / v % 360; s += put(v, a, rb + 0.82, 0.74, 'tx') + rad(a, rb, rb + 0.28, 't'); });
+      [...'TACHYMETRE'].forEach((ch, i) => { s += put(ch, 7 + i * 3.2, rb + 0.82, 0.7, 'tx'); });
+      for (let i = 0; i < 100; i++) s += rad(i * 3.6, r + 0.08, r + (i % 5 ? 0.3 : 0.48), 't dks');
+      for (let v = 5; v <= 100; v += 5) s += put(v, v * 3.6 % 360, r + 1.0, 0.74, 'tx dkt');
+      s += put('SWISS', 190.5, rb - 0.2, 0.34, 'tx dkt') + put('MADE - T', 168, rb - 0.2, 0.34, 'tx dkt');
+    }
+    else if (d.flange === 'fifths') for (let i = 0; i < 300; i++) s += rad(i * 1.2, r + 0.2, r + (i % 5 ? 0.75 : 1.35), i % 5 ? 'hair' : 't');
     else if (d.flange === 'tachy') { for (let i = 0; i < 60; i++) s += rad(i * 6, r + 0.15, r + 0.55, 't'); [200, 150, 120, 100, 90, 80, 70, 60].forEach(v => { s += T(v, 0, 0, 0.95, 'tx bz', `transform="rotate(${f(21600 / v)}) translate(0,${f(-r - 0.65)})"`); }); }
     else for (let i = 0; i < 60; i++) s += rad(i * 6, r + 0.2, r + (i % 5 ? 0.8 : 1.4), 't');
   }
@@ -747,9 +762,9 @@ function face(w, real) {
   const mixed = real && !w.dial.dark ? `${w.bezel && w.bezel.dark ? '.bzd .tn{fill:#121212;stroke:#2b2b2b}.bzd text{fill:#f0ede2}.bzd .t,.bzd .hair{stroke:#e9e6da}.bzd .bar{stroke:#e9e6da}.bzd .k{fill:#e9e6da}' : ''}${w.dial.subDark ? '.tn2{fill:#161616;stroke:#2b2b2b}' : ''}` : '';
   const gold = real && w.dial.gold ? '.nm,.cal,.dl{fill:#cfa13a}.hc{fill:#cfa13a;stroke:#4a3c16}.mw{fill:#1b2a55;stroke:#cfa13a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}.t,.hair{stroke:#b08a34}.k{fill:#cfa13a}' : '';
   const gilt = real && w.dial.gilt ? '.dl{fill:#c9a45c}.gt .t{stroke:#c9a45c}' : ''; // printing in gilt, as on the early glossy dials
-  const ap = real && !w.dial.dark ? '.ap{fill:#a7a8a4}' : ''; // applied steel bars on a pale dial
+  const ap = real && !w.dial.dark ? '.ap{fill:#a7a8a4}.dk{fill:#131313;stroke:#2b2b2b}.dkt{fill:#f1efe7}.dks{stroke:#f1efe7}' : ''; // applied steel bars on a pale dial
   const wg = real && w.dial.goldNums ? '.nm,.wg{fill:#c8ad74}.wg{stroke:#4a3c16;stroke-width:.05}' : ''; // applied gilt figures and emblem
-  const sf = real && w.dial.subFills ? 'svg{--so:1;' + Object.entries(w.dial.subFills).map(q => `--sf${q[0]}:${q[1][0]}`).join(';') + '}' + Object.entries(w.dial.subFills).filter(q => q[1][1]).map(q => `.sk${q[0]}{stroke:#ecece8}`).join('') : ''; // each register's colour, and pale marks on the dark ones
+  const sf = real && w.dial.subFills ? 'svg{--so:1;' + Object.entries(w.dial.subFills).map(q => `--sf${q[0]}:${q[1][0]}`).join(';') + '}' + Object.entries(w.dial.subFills).filter(q => q[1][1]).map(q => `.sk${q[0]}{stroke:#ecece8}.sn${q[0]}{fill:#ecece8}`).join('') : ''; // each register's colour, and pale marks on the dark ones
   const pinkHands = real && w.dial.goldHands ? '.hc{fill:#cf9a78;stroke:#5a3b2a}.mw{fill:#1b2a55;stroke:#5a3b2a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}' : '';
   const g3 = real && w.dial.custom === 'gyro3' ? '.g3-base{fill:#050506;stroke:none}.g3-met{fill:#5d5f63;stroke:#2f3033;stroke-width:.08}.g3-streak{stroke:#9a9c9f;stroke-width:.07}.g3-rim{fill:#c98d6b;stroke:#5a3b2a;stroke-width:.06}.g3-hole{fill:#09090a}.g3-blue{fill:#0a1340;stroke:#c98d6b;stroke-width:.06}.g3-white{fill:#f2f0e9;stroke:#8a8a86;stroke-width:.05}.g3-ink{stroke:#1a1a1a}.g3-inkf{fill:#1a1a1a;font-family:Helvetica,Arial,sans-serif}.g3-gold{fill:#dba886;stroke:#5a3b2a;stroke-width:.04}.g3-star{fill:#d5dcff}.g3-day{fill:#e3e1da;stroke:none}.g3-steel{fill:#b9bbbd;stroke:#4a4c4f;stroke-width:.07}.g3-screw{fill:#2a55a8;stroke:#0d1f45;stroke-width:.06}.g3-teeth{stroke:#c9cbcd;stroke-width:.09}.g3-sun{fill:#dba886;stroke:none}.g3-ray{stroke:#b98a64;stroke-width:.06}.g3-wt{stroke:#eef0ff}.g3-txt{fill:#e6e6e6}' : '';
   const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}${gilt}${ap}${wg}${pinkHands}${g3}${sf}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });

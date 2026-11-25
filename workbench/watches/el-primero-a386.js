@@ -48,13 +48,13 @@ export default {
     { h: 'Afterlife', s: 'D', p: 'From 1988 to 2000 Rolex used a modified El Primero in the Daytona, slowed to 28,800 A/h. The calibre has remained in production, in developed forms, ever since.' },
     { h: 'Notable variations', s: 'D', p: 'The A386 is the round steel model with the three-colour dial. Sister references launched with the same calibre, the A384 and A385, use an angular tonneau case and different dials.' },
     { h: 'How the movement was laid out', s: 'E', p: 'The positions of the barrel, the centre, third and fourth wheels, the balance, the column wheel and the chronograph wheels are measured from Zenith’s booklet “3019 PHC, Informations techniques No 16”, which photographs the movement at each stage of assembly. Each position is good to about 0.4 mm.' },
-    { h: 'What is estimated or left out', s: 'I', p: 'The escape wheel and the pallets could not be read from the photographs, so they are placed between the fourth wheel and the balance where they must work. Tooth counts, wheel diameters, pinion sizes and the height of each part are estimates, and every bridge and lever is a simplified outline. The automatic winding gears, the date ring and its mechanism, the hour counter, the springs and most of the chronograph levers are not modelled. The model’s registers are greys; the blue one is not coloured.' }
+    { h: 'What is estimated or left out', s: 'I', p: 'The escape wheel and the pallets could not be read from the photographs, so they are placed between the fourth wheel and the balance where they must work. Tooth counts, wheel diameters, pinion sizes and the height of each part are estimates, and every bridge and lever is a simplified outline. The automatic winding gears, the date ring and its mechanism, the hour counter, the springs and most of the chronograph levers are not modelled. On the dial, the lettering and both rings follow Phillips’ photograph of an example of about 1969, but the typefaces and the star are approximations, the words at the foot are abbreviated, the date window is a plain rectangle where the real one is slanted, and the hands are drawn dark so that they show: the real hour and minute hands are white with black tips, and the red chronograph hand carries a small luminous paddle that is not modelled.' }
   ],
 
   components: [
     { id: 'crystal', name: 'Crystal', group: 'Exterior', status: 'D', anchor: [7, 8, 5.8], face: 1,
       beginner: 'The clear dome over the dial, made of tough plastic.',
-      horologist: 'Domed acrylic crystal. The tachymeter scale sits on the dial’s outer flange beneath it, not on a bezel.',
+      horologist: 'Domed acrylic crystal. The tachymeter scale sits on the dial’s outer ring beneath it, not on a bezel.',
       fn: 'Protects the dial and hands.', material: 'Acrylic', location: 'Top of the case.',
       significance: '', related: ['bezel', 'dial'] },
     { id: 'bezel', name: 'Bezel', group: 'Exterior', status: 'D', anchor: [0, 18, 4.1], face: 1,
@@ -64,7 +64,7 @@ export default {
       significance: 'The opposite choice from the Speedmaster, which puts its scale out on a wide bezel.', related: ['crystal', 'dial'] },
     { id: 'dial', name: 'Dial and registers', group: 'Exterior', status: 'D', anchor: [-8, -1, 2.4], face: 1,
       beginner: 'The white face with three small overlapping dials: running seconds on the left, stopwatch minutes on the right, stopwatch hours at the bottom.',
-      horologist: 'White lacquered dial with three overlapping registers in light grey (running seconds, 9), blue (30 minutes, 3) and anthracite (12 hours, 6), a date between 4 and 5 and a tachymeter on the flange. The model shows them in those colours, with white hands on the two dark registers; the exact shades are judged from photographs.',
+      horologist: 'White lacquered dial with three overlapping registers in light grey (running seconds, 9), blue (30 minutes, 3) and anthracite (12 hours, 6), a date between 4 and 5, and two rings round the edge: a pale one with the tachymeter, lettered TACHYMETRE, and a black one inside it that divides the minute into hundredths. Above the centre are an applied star, ZENITH, CHRONOGRAPH, AUTOMATIC and El Primero in script. Applied steel bars mark the hours, a single one at twelve and none at the registers. The register at six lies over the other two. The model shows them in those colours, with white hands on the two dark registers; the exact shades are judged from photographs.',
       fn: 'Displays the time, the date and the chronograph’s elapsed minutes and hours.', material: 'Lacquered metal', location: 'Under the crystal, fixed to the movement.',
       significance: 'The three-colour overlap became Zenith’s signature and is still used on its chronographs.', related: ['hands', 'fourth', 'minute-recorder'] },
     { id: 'hands', name: 'Hands', group: 'Exterior', status: 'D', anchor: [3, 9, 3.1], face: 1,
