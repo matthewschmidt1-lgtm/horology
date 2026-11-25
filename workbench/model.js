@@ -259,7 +259,7 @@ export function buildProcedural(watch, face, tex) {
 
   /* ----- movement: local +Z points out of the back of the watch ----- */
   const MK = mvR < 13 ? mvR / 13.5 : 1; /* the layout below is drawn for a movement about 27 mm across; a smaller one is the same layout, scaled */
-  const mv = new THREE.Group(); mv.position.z = 0.2; mv.rotation.y = Math.PI; mv.scale.set(MK, MK, 1); if (P.subSeconds === 6 && P.calibre !== 'L1902') mv.rotation.z = -Math.PI / 2; /* the L1902 is laid out as photographed, with its crown where the case has it */ /* puts the fourth wheel under the six o'clock register */ root.add(mv); assembly(mv, 0);
+  const mv = new THREE.Group(); mv.position.z = 0.2; mv.rotation.y = Math.PI; mv.scale.set(MK, MK, 1); if (P.calibre === 'R27') mv.rotation.z = Math.PI / 2; /* the R 27 layout below was first read with the crown a quarter turn out; an auction photograph that shows the crown put it right, and the whole layout is turned here to match */ if (P.subSeconds === 6 && P.calibre !== 'L1902') mv.rotation.z = -Math.PI / 2; /* the L1902 is laid out as photographed, with its crown where the case has it */ /* puts the fourth wheel under the six o'clock register */ root.add(mv); assembly(mv, 0);
   part('plate', mv).add(G3 ? at(mk(extr(holed(mvR, [-G3.tb[0], G3.tb[1], G3.tb[2] + 0.6]), 1.78), P.plate || 'copper', { real: { color: P.plate === 'steel' ? 0x7f7f7c : 0x9a6649, roughness: 0.72 } }), 0, 0, -1.78) : at(mk(cyl(mvR / MK, 1.78, 72), P.plate || 'copper', { real: { color: P.plate === 'steel' ? 0x7f7f7c : 0x9a6649, roughness: 0.72 } }), 0, 0, -0.89)); /* matte and darker than the bridges, so they read against it */
   const spins = {};
   const mobile = (id, x, y, o, parent) => {
@@ -534,7 +534,7 @@ export function buildProcedural(watch, face, tex) {
     palRock.add(at(mk(new THREE.BoxGeometry(0.4, 2.6, 0.2), 'steelDark'), 0, 0.4, 1.1), at(mk(new THREE.BoxGeometry(1.8, 0.36, 0.2), 'steelDark'), 0, -0.8, 1.1), at(mk(new THREE.BoxGeometry(0.28, 0.45, 0.3), 'ruby'), -0.8, -1.0, 1.1), at(mk(new THREE.BoxGeometry(0.28, 0.45, 0.3), 'ruby'), 0.8, -1.0, 1.1));
     /* bridges: plain outlines laid over the jewels that the photograph shows */
     layer(flat('main-bridge', [[3.2, 7.4, 4.2], [-3.8, 7.8, 3.5], [-8.6, 6.6, 1.6]], 2.35, 0.45, 'rhodium'), 4); // bright and silvery, as the photographs show them
-    layer(flat('repeater-bridge', [[6.0, -6.2, 3.2], [6.4, -8.3, 2.4]], 2.35, 0.45, 'rhodium'), 4);
+    layer(flat('repeater-bridge', [[6.0, -6.2, 3.2], [6.4, -8.3, 2.4]], 2.35, 0.45, 'steel'), 4); // polished steel in the auction photograph, unlike the other bridges
     layer(flat('escape-cock', [[eX, eY, 1.0], [-10.9, -1.0, 1.1]], 2.35, 0.45, 'rhodium'), 4);
     layer(flat('pallet-cock', [[pmx, pmy, 0.6], [-9.3, -5.3, 0.6]], 1.45, 0.24, 'rhodium'), 3);
     layer(flat('balance-cock', [[BX, BY, 1.3], [-9.6, -6.9, 1.2]], 3.3, 0.45, 'rhodium'), 4);
@@ -551,7 +551,7 @@ export function buildProcedural(watch, face, tex) {
     gov.add(at(mk(cyl(0.24, 0.12, 12), 'ruby'), 0, 0, 2.5));
     layer(gov, 5); gov.userData.anchor = [0, 0, 2.6];
     /* the two hammers, at the edge of the movement, and the two wire gongs that run round it */
-    layer(multi('hammers', [[[1.16, -9.97, 0.8], [2.5, -8.9, 0.5]], [[3.48, -8.81, 0.8], [4.9, -8.0, 0.5]]], 2.85, 0.4, 'steel'), 7);
+    layer(multi('hammers', [[[-0.6, -9.3, 0.9], [1.0, -10.5, 0.5]], [[3.48, -8.81, 0.8], [4.9, -8.0, 0.5]]], 2.85, 0.4, 'steel'), 7); // the first is moved to a steel piece that the auction photograph shows here
     const gongs = part('gongs', mv);
     for (let k = 0; k < 2; k++) { const g = mk(new THREE.TorusGeometry(mvR - 0.45, 0.16, 8, 160, Math.PI * 2 * 0.93), 'steelDark', { noEdges: true }); g.position.z = 0.45 + k * 0.5; g.rotation.z = -1.35; gongs.add(g); }
     gongs.userData.anchor = [0, mvR - 0.45, 0.8]; layer(gongs, 2);
