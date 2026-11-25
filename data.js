@@ -104,7 +104,7 @@ window.WATCHES = [
 {
   id:'carrera', brand:'Heuer', model:'Carrera', ref:'2447', year:'1963', span:'1963 – c. 1970', kind:'Chronograph',
   c:{shape:'round', d:36, t:[13,'n'], lug:[18,'v'], straight:true},
-  bezel:{type:'plain', w:1.5}, dial:{dark:false, markers:'baton', flange:'fifths', subs:[[3,'min30'],[6,'hr12'],[9,'sec']], text:['CARRERA','HEUER']},
+  bezel:{type:'plain', w:1.5}, dial:{dark:false, markers:'carrera', flange:'fifths', subBig:true, subNums:true, subRings:true, subWord:'SWISS', subs:[[3,'min30'],[6,'hr12'],[9,'sec']], text:['CARRERA','HEUER'], set:{lines:[['CARRERA',-0.4,0.078,1]], shield:-0.36}},
   hands:'baton', sec:'sub', chrono:true, crown:{pos:3}, pushers:'pump', strap:'leather',
   mv:{cal:'Valjoux 72', type:'chrono', vph:18000, wind:'Manual', size:'13 lignes (≈ 29.5 mm)', note:'Three-register column-wheel chronograph.'},
   back:{type:'screw', note:'Screw back. Engraving omitted.'},

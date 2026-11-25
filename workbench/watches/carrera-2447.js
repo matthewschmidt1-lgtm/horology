@@ -16,7 +16,7 @@ export default {
     type: 'procedural',
     builder: 'round-chronograph',
     note: 'Case, lugs and pushers are simplified. The movement is laid out from Valjoux’s own sheet for calibres 23 and 72: the going train is measured from its photograph of the plate and a few sizes are stated in its table. The chronograph wheels are placed from Rolex’s photograph of its calibre 727, which is the same calibre with a faster balance. The other sizes, the heights, the tooth counts and every outline are estimated. Not a factory model or scan.',
-    params: { thickness: 13, lugToLug: 44, lugWidth: 18, movementDiameter: 29.5, beatsPerHour: 18000, calibre: '72', dustCover: false, spacer: false, wall: 3.05, bezelInsert: false, plate: 'steel', handKind: 'ink', chronoHand: 'ink', dome: 2.6 }
+    params: { thickness: 13, lugToLug: 44, lugWidth: 18, movementDiameter: 29.5, beatsPerHour: 18000, calibre: '72', dustCover: false, spacer: false, wall: 3.05, bezelInsert: false, plate: 'steel', handKind: 'steelDark', chronoHand: 'ink', dome: 2.6 }
   },
   images: [],
 
@@ -62,12 +62,12 @@ export default {
       significance: '', related: ['crystal', 'case'] },
     { id: 'dial', name: 'Dial and registers', group: 'Exterior', status: 'D', anchor: [-8, -1, 2.4], face: 1,
       beginner: 'A silver dial with three small circles. The left one shows running seconds; the right and bottom ones count minutes and hours while the stopwatch runs.',
-      horologist: 'Three registers: 30 minutes at 3, 12 hours at 6, running seconds at 9. The model shows the 2447 S, with a silver dial and silver registers; black dials and dials with contrasting registers were also made.',
+      horologist: 'CARRERA is printed above Heuer’s shield, and SWISS inside the register at six. Long applied steel bars mark the hours, a wider one at twelve and short ones beside the registers, each with a luminous dot at its outer end. The dial has no printed track of its own. The lettering and marks are placed from OnTheDash’s photographs of a first 2447 S; the shield is a plain outline and the typefaces are approximations. Three registers: 30 minutes at 3, 12 hours at 6, running seconds at 9. The model shows the 2447 S, with a silver dial and silver registers; black dials and dials with contrasting registers were also made.',
       fn: 'Displays the time and elapsed time.', material: 'Metal dial',
       significance: '', related: ['hands', 'minute-recorder', 'fourth'] },
     { id: 'hands', name: 'Hands', group: 'Exterior', status: 'D', anchor: [3, 9, 3.1], face: 1,
       beginner: 'Hour and minute hands, a long thin stopwatch hand that rests at twelve, and a small hand in each circle.',
-      horologist: 'Baton hands with a central chronograph seconds hand and a hand in each register. The small seconds at 9 runs all the time. The hands are drawn dark so that they show against the silver dial.',
+      horologist: 'Thin polished steel hands with luminous inserts, a thin black chronograph seconds hand at the centre and a black hand in each register. The small seconds at 9 runs all the time. The steel hands are shown a shade darker than polished steel so that they show against the silver dial, and their luminous inserts are not modelled.',
       fn: 'Indicate the time and elapsed time.', material: 'Steel',
       significance: '', related: ['dial', 'chrono-runner'] },
     { id: 'case', name: 'Case and lugs', group: 'Exterior', status: 'D', anchor: [-15, 17, 0], face: 0,
