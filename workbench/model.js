@@ -553,6 +553,14 @@ export function buildProcedural(watch, face, tex) {
     const rot = at(part('rotor', mv), -4.48, -0.46, 0), rw = new THREE.Shape(); rw.absarc(0, 0, 7.9, -Math.PI / 4, Math.PI * 3 / 4, false); rw.closePath();
     rot.add(at(mk(extr(rw, 0.55), 'gold', { edgeAngle: 40 }), 0, 0, 3.95), at(mk(cyl(1.1, 0.7, 20), 'steel'), 0, 0, 4.3), at(mk(cyl(0.7, 3.95, 16), 'steelDark', { noEdges: true }), 0, 0, 1.975));
     rot.userData.anchor = [2.5, 2.5, 4.6]; layer(rot, 12);
+    /* From a second photograph, of a rose gold 3974 (Watch Collecting Lifestyle, 2016), fitted to this layout by the governor and the rotor's pivot: two steel winding wheels
+       in mesh, one on the rotor's axis and one beside it, and a large capped jewel in the main bridge. The same photograph puts a jewel within 0.5 mm of the one taken above to
+       be the escape wheel's. Good to about 1 mm; sizes are estimates. */
+    const ww = part('winding-wheels', mv);
+    rot.add(at(mk(extr(gearShape(2.7, 40, 0.22, 0), 0.22), 'steel', { edgeAngle: 40 }), 0, 0, 3.0)); // the wheel on the rotor's own axis is built with the rotor
+    ww.add(at(mk(extr(gearShape(2.2, 32, 0.22, 0), 0.22), 'steel', { edgeAngle: 40 }), -7.55, 3.39, 3.0), at(mk(cyl(0.9, 0.3, 16), 'steelDark'), -7.55, 3.39, 3.25), at(mk(cyl(0.2, 3.0, 10), 'steelDark', { noEdges: true }), -7.55, 3.39, 1.5));
+    ww.userData.anchor = [-7.55, 3.39, 3.5]; layer(ww, 9);
+    jewel(4.05, 4.14, 2.86, 4); jw.add((c => { layer(c, 4); return c; })(at(mk(new THREE.TorusGeometry(0.75, 0.16, 8, 28), 'steel', { noEdges: true }), 4.05, 4.14, 2.98))); // the polished setting round the large jewel
     Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1 });
   } else if (P.calibre === 'bare') {
     /* A movement of which nothing could be placed from a source. Only the plate is shown; no wheel, bridge or balance is invented for it. */
