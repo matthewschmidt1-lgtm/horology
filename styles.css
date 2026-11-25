@@ -596,3 +596,6 @@ figcaption { font-size: 17px; } figcaption b { font-size: 12px; }
 .h-art.eras b { writing-mode: vertical-rl; text-orientation: upright; transform: none; font-size: clamp(19px, 1.6vw, 23px); line-height: 1; letter-spacing: -.04em; font-variant-numeric: lining-nums; }
 .h-art.eras i { padding-bottom: 16px; }
 
+/* home buttons: a quiet, dark edge in place of the bright outline */
+.h-card.c1 { --bl: rgba(20, 5, 8, .7); } .h-card.c2 { --bl: rgba(4, 14, 11, .7); } .h-card.c3 { --bl: rgba(5, 8, 26, .7); }
+
