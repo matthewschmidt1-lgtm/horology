@@ -16,7 +16,7 @@ window.WATCHES = [
 {
   id:'daytona6263', brand:'Rolex', model:'Cosmograph Daytona', ref:'6263', year:'c. 1970', span:'c. 1970 – 1988', kind:'Chronograph',
   c:{shape:'round', d:37, t:[13,'n'], lug:[19,'v']},
-  bezel:{type:'tachy', w:3.1, dark:true}, dial:{dark:false, markers:'baton', subs:[[3,'min30'],[6,'hr12'],[9,'sec']], subDark:true, text:['ROLEX','COSMOGRAPH']},
+  bezel:{type:'tachy', w:3.1, dark:true, scale:'6263'}, dial:{dark:false, markers:'daytona', subs:[[3,'min30'],[6,'hr12'],[9,'sec']], subDark:true, subNums:true, subRings:true, text:['ROLEX','COSMOGRAPH'], set:{crown:-0.55, lines:[['ROLEX',-0.43,0.1,0],['OYSTER',-0.365,0.05,1],['COSMOGRAPH',-0.305,0.05,1]], foot:'T SWISS T', footY:0.87}},
   hands:'baton', sec:'sub', chrono:true, crown:{pos:3}, pushers:'screw', strap:'oyster',
   mv:{cal:'727 (Valjoux 72 base)', type:'chrono', vph:21600, wind:'Manual', note:'Rolex calibre built on the Valjoux 72, a column-wheel chronograph.'},
   back:{type:'fluted', note:'Screw-down Oyster back with fluted edge.'},
