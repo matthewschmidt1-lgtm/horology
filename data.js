@@ -115,12 +115,12 @@ window.WATCHES = [
 {
   id:'navitimer', brand:'Breitling', model:'Navitimer', ref:'806', year:'c. 1954', span:'c. 1954 – 1970s', kind:'Pilot’s chronograph',
   c:{shape:'round', d:40.5, da:'a', t:[13.5,'n'], lug:[22,'v']},
-  bezel:{type:'slide', w:1.8}, dial:{dark:true, markers:'arabic', sliderule:true, subs:[[3,'min30'],[6,'hr12'],[9,'sec']], text:['BREITLING','NAVITIMER']},
+  bezel:{type:'slide', w:1.8, beads:93}, dial:{dark:true, markers:'arabic', sliderule:'806', goldNums:true, subNums:'all', subRings:true, subs:[[3,'min30'],[6,'hr12'],[9,'sec']], text:['BREITLING','NAVITIMER'], set:{lines:[['BREITLING',-0.47,0.065,1],['NAVITIMER',0.2,0.065,1]], wings:-0.34, split:['SWISS','MADE']}},
   hands:'pencil', sec:'sub', chrono:true, crown:{pos:3}, pushers:'pump', strap:'leather',
   mv:{cal:'Venus 178', type:'chrono', vph:18000, wind:'Manual', note:'Column-wheel chronograph. Some of the earliest examples used the Valjoux 72.'},
   back:{type:'snap', note:'Detail not verified; shown plain.'},
   specs:[['Bezel','Beaded, bidirectional; drives the outer slide-rule scale'],['Scale','Logarithmic circular slide rule'],['Registers','30 min at 3 · 12 h at 6 · seconds at 9']],
-  notes:['Developed with the Aircraft Owners and Pilots Association; its name joins “navigation” and “timer”.','The slide rule computes fuel burn, ground speed, climb rate and unit conversions.','The scale drawn here is a true logarithmic one, simplified to its principal figures.'],
+  notes:['Developed with the Aircraft Owners and Pilots Association; its name joins “navigation” and “timer”.','The slide rule computes fuel burn, ground speed, climb rate and unit conversions.','The scales drawn here are true logarithmic ones, laid out as on an example of 1959, with the finer divisions left out.'],
   q:{t:'What is the Navitimer’s rotating scale?', a:'A circular slide rule for flight calculations', w:['A decompression table','A second time zone','A tide indicator']}
 },
 {

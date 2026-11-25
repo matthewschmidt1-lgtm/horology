@@ -34,7 +34,7 @@ function geo(w) {
     g.hw = R; g.hh = cu ? R * 1.12 : R; g.bezR = cu ? R * 0.9 : R; g.dialR = g.bezR - bw - 0.5;
     g.outline = cu ? rrD(R, g.hh, R * 0.6) : circD(R); g.dial = circD(g.dialR);
     g.lugW = c.lug ? c.lug[0] : 20; g.l2l = cu ? g.hh * 2 : c.d * 1.2;
-    let fl = 0; if (w.dial.flange) fl = 1.7; if (w.dial.sliderule) fl = 4.6;
+    let fl = 0; if (w.dial.flange) fl = 1.7; if (w.dial.sliderule) fl = w.dial.sliderule === '806' ? 6.3 : 4.6;
     g.inR = g.dialR - fl; g.edge = () => g.inR; g.hl = g.inR * 0.9; g.lugs = !cu; g.cwh = g.hh; g.dw = g.dialR;
   } else if (c.shape === 'tank') {
     g.hw = c.w / 2; g.hh = c.h / 2; g.bw = 2.7; g.bodyH = g.hh * 0.8;
@@ -182,7 +182,7 @@ function bezel(w, g) {
     TACHY.forEach(v => { const a = 21600 / v; s += T(v, 0, 0, sz, 'tx bz', `transform="rotate(${f(a)}) translate(0,${f(-rm + sz * 0.36)})"`); });
     for (let i = 0; i < 60; i++) { const p = P(i * 6 + 3, ri + 0.3); s += C(0.09, p[0], p[1], 'k'); }
   } else if (b.type === 'slide') {
-    for (let i = 0; i < 96; i++) { const p = P(i * 3.75, R - 0.55); s += C(0.45, p[0], p[1], 'p'); }
+    for (let i = 0, n = b.beads || 96; i < n; i++) { const p = P(i * 360 / n, R - 0.55); s += C(0.45, p[0], p[1], 'p'); }
     s += C(ri, 0, 0, 'l');
   } else s += C(ri, 0, 0, 'l');
   return s;
@@ -335,7 +335,8 @@ function subs(w, g, o = {}) {
       if (d.subWord && pos === 6 && k > 0.15) { const r = rs * k, g0 = 55 * Math.PI / 180, x = r * Math.sin(g0), y = r * Math.cos(g0); s += Pa(`M${f(cx + x)},${f(cy + y)}A${f(r)},${f(r)} 0 1 0 ${f(cx - x)},${f(cy + y)}`, 'hair'); }
       else s += C(rs * k, cx, cy, 'hair'); }
     if (d.subWord && pos === 6) s += T(d.subWord, cx, cy + rs * 0.3, rs * 0.14, 'tx dl', 'style="font-family:Helvetica,Arial,sans-serif"');
-    if (d.subNums && !d.subSquare) (role === 'hr12' ? [[0, 12], [90, 3], [180, 6], [270, 9]] : role === 'min30' ? [[0, 30], [120, 10], [240, 20]] : [[0, 60], [120, 20], [240, 40]]).forEach(q => { const p = P(q[0], rs * 0.56, cx, cy), z = rs * 0.3; s += T(q[1], p[0], p[1] + z * 0.36, z, 'tx sn', 'style="font-family:Helvetica,Arial,sans-serif"'); }); // the figures printed in each register
+    if (d.subNums === 'all' && !d.subSquare) { const n2 = role === 'hr12' ? 12 : 6, st = role === 'hr12' ? 1 : role === 'min30' ? 5 : 10; for (let i = 0; i < n2; i++) { const p = P(i * 360 / n2, rs * 0.6, cx, cy), z = rs * 0.21; s += T(i ? i * st : n2 * st, p[0], p[1] + z * 0.36, z, 'tx sn', 'style="font-family:Helvetica,Arial,sans-serif"'); } } // a figure at every step, as on the Navitimer
+    else if (d.subNums && !d.subSquare) (role === 'hr12' ? [[0, 12], [90, 3], [180, 6], [270, 9]] : role === 'min30' ? [[0, 30], [120, 10], [240, 20]] : [[0, 60], [120, 20], [240, 40]]).forEach(q => { const p = P(q[0], rs * 0.56, cx, cy), z = rs * 0.3; s += T(q[1], p[0], p[1] + z * 0.36, z, 'tx sn', 'style="font-family:Helvetica,Arial,sans-serif"'); }); // the figures printed in each register
     if (!o.noHands) s += `<g transform="translate(${cx},${cy})"><g ${role === 'sec' ? `data-hand="s" data-bps="${b}"` : `data-chr="${role === 'min30' ? 'm' : 'h'}"`}>${L(0, 0.8, 0, -rs * 0.82, 'hd')}</g>${C(0.32, 0, 0, 'k')}</g>`;
   }
   return s;
@@ -357,6 +358,10 @@ function dtext(w, g, o) {
     const q = d.set, sans = 'style="font-family:Helvetica,Arial,sans-serif" letter-spacing=".03em"';
     if (q.omega != null) s += T('Ω', 0, R0 * q.omega, R0 * 0.13, 'tx om', 'style="font-family:Helvetica,Arial,sans-serif"'); // the applied metal emblem, shown as the letter
     if (q.shield != null) { const W = R0 * 0.3, H = R0 * 0.15, y0 = R0 * q.shield; s += Pa(polyD([[f(-W / 2), f(y0)], [f(W / 2), f(y0)], [f(W / 2 - W * 0.06), f(y0 + H * 0.6)], [0, f(y0 + H)], [f(-W / 2 + W * 0.06), f(y0 + H * 0.6)]]), 't') + T('HEUER', 0, y0 + H * 0.56, H * 0.48, 'tx dl', 'style="font-family:Helvetica,Arial,sans-serif;font-weight:bold"'); } // Heuer's printed shield, as a plain five-sided outline
+    if (q.wings != null) { const y0 = R0 * q.wings, u = R0 * 0.26; // the applied winged emblem, as a plain pair of wings about a small shield; not the maker's drawing
+      for (const sx of [-1, 1]) s += Pa(`M${f(sx * u * 0.12)},${f(y0)}Q${f(sx * u * 0.5)},${f(y0 - u * 0.34)} ${f(sx * u)},${f(y0 - u * 0.2)}Q${f(sx * u * 0.8)},${f(y0 + u * 0.02)} ${f(sx * u * 0.55)},${f(y0 + u * 0.02)}Q${f(sx * u * 0.4)},${f(y0 + u * 0.14)} ${f(sx * u * 0.12)},${f(y0 + u * 0.1)}Z`, 'p wg');
+      s += Pa(polyD([[f(-u * 0.14), f(y0 - u * 0.12)], [f(u * 0.14), f(y0 - u * 0.12)], [f(u * 0.14), f(y0 + u * 0.08)], [0, f(y0 + u * 0.2)], [f(-u * 0.14), f(y0 + u * 0.08)]]), 'p wg'); }
+    if (q.split) q.split.forEach((t, i) => { const p = P(180 + (i ? -13 : 13), (g.inR || R0) - 1.0); s += T(t, p[0], p[1], R0 * 0.04, 'tx dl', `${sans} transform="rotate(${i ? -13 : 13} ${f(p[0])} ${f(p[1])})"`); }); // two words at the foot, one each side of the lower register
     if (q.crown != null) { const u = R0 * 0.075, y0 = R0 * q.crown; s += Pa(polyD([[-.55, 0], [-.95, -.7], [-.45, -.32], [-.5, -.98], [-.12, -.38], [0, -1.12], [.12, -.38], [.5, -.98], [.45, -.32], [.95, -.7], [.55, 0]].map(p => [f(p[0] * u), f(y0 + p[1] * u)])), 'k dl') + [[-.95, -.7], [-.5, -.98], [0, -1.12], [.5, -.98], [.95, -.7]].map(p => C(u * 0.1, p[0] * u, y0 + p[1] * u, 'k dl')).join('') + RC(-0.55 * u, y0 + 0.08 * u, 1.1 * u, 0.12 * u, 'k dl'); }
     q.lines.forEach(l => { s += T(l[0].replace(/&/g, '&amp;'), 0, R0 * l[1], R0 * l[2], 'tx dl', l[3] === 2 ? 'style="font-style:italic"' : l[3] ? sans : 'letter-spacing=".06em"'); }); // 2: a script line, approximated in italic
     if (q.foot) s += T(q.foot, 0, R0 - 0.12, R0 * 0.042, 'tx dl', sans);
@@ -423,7 +428,21 @@ function dial(w, g, o) {
     else if (d.flange === 'tachy') { for (let i = 0; i < 60; i++) s += rad(i * 6, r + 0.15, r + 0.55, 't'); [200, 150, 120, 100, 90, 80, 70, 60].forEach(v => { s += T(v, 0, 0, 0.95, 'tx bz', `transform="rotate(${f(21600 / v)}) translate(0,${f(-r - 0.65)})"`); }); }
     else for (let i = 0; i < 60; i++) s += rad(i * 6, r + 0.2, r + (i % 5 ? 0.8 : 1.4), 't');
   }
-  if (d.sliderule) {
+  if (d.sliderule === '806') {
+    /* The Navitimer 806's slide rule, laid out from Watch Club's photographs of an example of 1959. From the outside in: the white ring that turns with the bezel, with black figures;
+       the fixed scale on the black dial, with 60 at twelve under an arrow marked MPH and 70, 80 and 90 written 7, 8 and 9; and a scale of hours and minutes beneath it, on which
+       1:10 stands under 7 and 9:00 under 54. Both logarithmic scales are true: a value x stands at 360 x log10(x / 60) degrees. The marks KM, STAT and NAUT are placed by arithmetic
+       from the lengths of the mile, the nautical mile and the kilometre. The finer divisions and the small minute figures inside the scales are left out. */
+    const Rd = g.dialR, r1 = Rd - 1.75, r2 = Rd - 3.5, ang = x => ((360 * Math.log10(x / 60)) % 360 + 360) % 360, dk = 'style="stroke:#161616"', dkf = 'style="fill:#161616;font-family:Helvetica,Arial,sans-serif"', sn = 'style="font-family:Helvetica,Arial,sans-serif"';
+    s += C(Rd, 0, 0, 'p') + C(r1, 0, 0, 'tn') + C(r2, 0, 0, 'hair') + C(g.inR, 0, 0, 'hair');
+    for (let x = 10; x < 100; x++) { const a = ang(x), big = x % 5 === 0; s += `<g ${dk}>${rad(a, r1, r1 + (big ? 0.6 : 0.36), 't')}</g>` + rad(a, r1 - (big ? 0.6 : 0.36), r1, 't'); }
+    const outer = [], inner = []; for (let x = 10; x <= 25; x++) { outer.push([x, x]); inner.push([x, x]); } for (let x = 30; x <= 95; x += 5) { outer.push([x, x]); if (x < 60) inner.push([x, x]); } inner.push([70, 7], [80, 8], [90, 9]);
+    outer.forEach(q => { s += T(q[1], 0, 0, 0.82, 'tx', `${dkf} transform="rotate(${f(ang(q[0]))}) translate(0,${f(-r1 - 0.78)})"`); });
+    inner.forEach(q => { s += T(q[1], 0, 0, 0.82, 'tx', `${sn} transform="rotate(${f(ang(q[0]))}) translate(0,${f(-r1 + 1.5)})"`); });
+    s += Pa(polyD([[-0.42, f(-r2 - 0.1)], [0.42, f(-r2 - 0.1)], [0, f(-r1 + 0.05)]]), 'p') + RC(-1.05, -r2 + 0.08, 2.1, 0.92, 't') + T('MPH', 0, -r2 + 0.78, 0.72, 'tx', sn);
+    [['KM', 100 / 1.609344], ['STAT', 38.62], ['NAUT', 33.53]].forEach(q => { const a = ang(q[1]); s += `<g transform="rotate(${f(a)})">${Pa(polyD([[-0.2, f(-r1 + 0.75)], [0.2, f(-r1 + 0.75)], [0, f(-r1 + 0.1)]]), 'k')}${T(q[0], 0, -r1 + 1.45, 0.55, 'tx', sn)}</g>`; });
+    [[70, '1:10'], [80, '1:20'], [90, '1:30'], [100, '1:40'], [110, '1:50'], [120, '2:00'], [150, '2:30'], [180, '3:00'], [210, '3:30'], [240, '4:00'], [270, '4:30'], [300, '5:00'], [360, '6:00'], [420, '7:00'], [480, '8:00'], [540, '9:00']].forEach(q => { const a = ang(q[0]); s += rad(a, r2 - 0.4, r2, 't') + T(q[1], 0, 0, 0.8, 'tx', `${sn} transform="rotate(${f(a)}) translate(0,${f(-r2 + 1.25)})"`); });
+  } else if (d.sliderule) {
     const rb = g.dialR - 2.3; s += C(rb, 0, 0, 'l') + C(g.inR, 0, 0, 'l');
     for (let x = 10; x < 100; x++) { const a = 360 * Math.log10(x / 10); s += rad(a, rb - (x % 5 ? 0.45 : 0.9), rb + (x % 5 ? 0.45 : 0.9), 't'); }
     SLIDE.forEach(v => { const a = f(360 * Math.log10(v / 10)); s += T(v, 0, 0, 1.05, 'tx bz', `transform="rotate(${a}) translate(0,${f(-g.dialR + 1.15)})"`) + T(v, 0, 0, 1.05, 'tx bz', `transform="rotate(${a}) translate(0,${f(-g.inR - 0.35)})"`); });
@@ -729,10 +748,11 @@ function face(w, real) {
   const gold = real && w.dial.gold ? '.nm,.cal,.dl{fill:#cfa13a}.hc{fill:#cfa13a;stroke:#4a3c16}.mw{fill:#1b2a55;stroke:#cfa13a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}.t,.hair{stroke:#b08a34}.k{fill:#cfa13a}' : '';
   const gilt = real && w.dial.gilt ? '.dl{fill:#c9a45c}.gt .t{stroke:#c9a45c}' : ''; // printing in gilt, as on the early glossy dials
   const ap = real && !w.dial.dark ? '.ap{fill:#a7a8a4}' : ''; // applied steel bars on a pale dial
+  const wg = real && w.dial.goldNums ? '.nm,.wg{fill:#c8ad74}.wg{stroke:#4a3c16;stroke-width:.05}' : ''; // applied gilt figures and emblem
   const sf = real && w.dial.subFills ? 'svg{--so:1;' + Object.entries(w.dial.subFills).map(q => `--sf${q[0]}:${q[1][0]}`).join(';') + '}' + Object.entries(w.dial.subFills).filter(q => q[1][1]).map(q => `.sk${q[0]}{stroke:#ecece8}`).join('') : ''; // each register's colour, and pale marks on the dark ones
   const pinkHands = real && w.dial.goldHands ? '.hc{fill:#cf9a78;stroke:#5a3b2a}.mw{fill:#1b2a55;stroke:#5a3b2a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}' : '';
   const g3 = real && w.dial.custom === 'gyro3' ? '.g3-base{fill:#050506;stroke:none}.g3-met{fill:#5d5f63;stroke:#2f3033;stroke-width:.08}.g3-streak{stroke:#9a9c9f;stroke-width:.07}.g3-rim{fill:#c98d6b;stroke:#5a3b2a;stroke-width:.06}.g3-hole{fill:#09090a}.g3-blue{fill:#0a1340;stroke:#c98d6b;stroke-width:.06}.g3-white{fill:#f2f0e9;stroke:#8a8a86;stroke-width:.05}.g3-ink{stroke:#1a1a1a}.g3-inkf{fill:#1a1a1a;font-family:Helvetica,Arial,sans-serif}.g3-gold{fill:#dba886;stroke:#5a3b2a;stroke-width:.04}.g3-star{fill:#d5dcff}.g3-day{fill:#e3e1da;stroke:none}.g3-steel{fill:#b9bbbd;stroke:#4a4c4f;stroke-width:.07}.g3-screw{fill:#2a55a8;stroke:#0d1f45;stroke-width:.06}.g3-teeth{stroke:#c9cbcd;stroke-width:.09}.g3-sun{fill:#dba886;stroke:none}.g3-ray{stroke:#b98a64;stroke-width:.06}.g3-wt{stroke:#eef0ff}.g3-txt{fill:#e6e6e6}' : '';
-  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}${gilt}${ap}${pinkHands}${g3}${sf}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
+  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}${gilt}${ap}${wg}${pinkHands}${g3}${sf}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
   // The dial is drawn once as a picture, so the date window is filled here with today's date; on the plates it is filled live.
   const today = new Date(), DAYS3 = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const dated = s.replace(new RegExp('(data-date=""[^>]*>)', 'g'), `$1${today.getDate()}`).replace(new RegExp('(data-daydate=""[^>]*>)', 'g'), `$1${DAYS3[today.getDay()]} ${today.getDate()}`);
