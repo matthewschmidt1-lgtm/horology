@@ -1,5 +1,5 @@
 // Registry of Workbench watches. Add a record file beside this one and list it here.
-// The first record is the one the page opens on.
+// They are shown in alphabetical order, by maker and then by model. The page opens on `first`.
 import speedmaster from './speedmaster-105003.js';
 import submariner from './submariner-5513.js';
 import calatrava from './calatrava-96.js';
@@ -16,4 +16,6 @@ import navitimer from './navitimer-806.js';
 import patek3974 from './patek-3974.js';
 import gyro3 from './jlc-gyrotourbillon-3.js';
 
-export const watches = [speedmaster, submariner, calatrava, elPrimero, spaceview, royalOak, monaco, tank, daytona, seiko62mas, carrera, explorer, navitimer, patek3974, gyro3];
+const all = [speedmaster, submariner, calatrava, elPrimero, spaceview, royalOak, monaco, tank, daytona, seiko62mas, carrera, explorer, navitimer, patek3974, gyro3];
+export const watches = all.slice().sort((a, b) => (a.brand + ' ' + a.model).localeCompare(b.brand + ' ' + b.model));
+export const first = speedmaster; // the Speedmaster, whose movement is laid out from the fullest source, stays the watch the Workbench opens on

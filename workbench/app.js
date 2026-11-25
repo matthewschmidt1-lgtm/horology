@@ -1,9 +1,9 @@
 /* The Interactive Watch Workbench: interface and 3D viewport.
    Watch records live in ./watches/. Models are built or loaded by ./model.js. */
-import { watches } from './watches/index.js';
+import { watches, first } from './watches/index.js';
 
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
-const want = new URLSearchParams(location.search).get('watch') || new URLSearchParams(location.hash.slice(1)).get('watch'), watch = watches.find(w => w.id === want) || watches[0], comps = watch.components, byId = Object.fromEntries(comps.map(c => [c.id, c]));
+const want = new URLSearchParams(location.search).get('watch') || new URLSearchParams(location.hash.slice(1)).get('watch'), watch = watches.find(w => w.id === want) || first || watches[0], comps = watch.components, byId = Object.fromEntries(comps.map(c => [c.id, c]));
 const plateOf = w => (window.WATCHES || []).find(x => x.id === w.archiveId) || w.plate || null; // a watch that is not in the Archive brings its own drawing data
 const archive = plateOf(watch), Draw = window.Draw;
 const ST = { D: 'Documented', E: 'Estimated', I: 'Interpretation' };

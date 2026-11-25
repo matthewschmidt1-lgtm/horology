@@ -223,3 +223,5 @@ window.WATCHES = [
   q:{t:'What regulates the Accutron?', a:'A tuning fork vibrating at 360 Hz', w:['A quartz crystal','A balance wheel at 36,000 A/h','A pendulum']}
 }
 ];
+/* The Archive is shown in alphabetical order, by maker and then by model, whatever order the plates are written in above. */
+window.WATCHES.sort((a, b) => (a.brand + ' ' + a.model).localeCompare(b.brand + ' ' + b.model));

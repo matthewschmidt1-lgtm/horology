@@ -10,7 +10,7 @@
     'workbench.html': [
       ['Omega Speedmaster', '?watch=speedmaster-105003'], ['Rolex Submariner', '?watch=submariner-5513'], ['Patek Philippe Calatrava', '?watch=calatrava-96'],
       ['Zenith El Primero', '?watch=el-primero-a386'], ['Bulova Accutron', '?watch=accutron-spaceview'], ['Audemars Piguet Royal Oak', '?watch=royal-oak-5402'],
-      ['Heuer Monaco', '?watch=monaco-1133b'], ['Cartier Tank', '?watch=tank-louis-cartier'], ['Rolex Daytona', '?watch=daytona-6263'], ['Seiko 62MAS', '?watch=seiko-62mas'], ['Heuer Carrera', '?watch=carrera-2447'], ['Rolex Explorer', '?watch=explorer-1016'], ['Breitling Navitimer', '?watch=navitimer-806'], ['Patek Philippe 3974', '?watch=patek-3974'], ['JLC Gyrotourbillon 3', '?watch=jlc-gyrotourbillon-3']
+      ['Heuer Monaco', '?watch=monaco-1133b'], ['Cartier Tank', '?watch=tank-louis-cartier'], ['Rolex Daytona', '?watch=daytona-6263'], ['Seiko 62MAS', '?watch=seiko-62mas'], ['Heuer Carrera', '?watch=carrera-2447'], ['Rolex Explorer', '?watch=explorer-1016'], ['Breitling Navitimer', '?watch=navitimer-806'], ['Patek Philippe 3974', '?watch=patek-3974'], ['Jaeger-LeCoultre Gyrotourbillon', '?watch=jlc-gyrotourbillon-3']
     ],
     'time.html': [
       ['The living solar clock', '#solar'], ['The rhythm of time', '#rhythm'], ['The anatomy of a second', '#second'], ['The sound of time', '#sound'],
@@ -25,6 +25,7 @@
       ['The mechanical renaissance', '#e7', '1990s – today']
     ]
   };
+  MENUS['workbench.html'].sort((a, b) => a[0].localeCompare(b[0])); // alphabetical, like the Workbench itself
   const touch = matchMedia('(hover: none)').matches || navigator.maxTouchPoints > 0;
   if (touch) document.documentElement.classList.add('nav-touch');
   const panel = document.createElement('div');
