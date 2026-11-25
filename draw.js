@@ -102,9 +102,11 @@ function pushers(w, g) {
   if (!w.pushers) return '';
   const scr = w.pushers === 'screw';
   const one = x => { let s = RC(x - 0.6, -0.75, 1.8, 1.5) + RC(x + 1, scr ? -1.6 : -1.3, scr ? 2.1 : 1.5, scr ? 3.2 : 2.6, 'p', 0.35); if (scr) for (let y = -1.2; y < 1.5; y += 0.5) s += L(x + 1.2, y, x + 3, y, 't'); return s; };
-  if (g.shape === 'square') return [-8.5, 8.5].map(y => `<g transform="translate(0,${y})">${one(g.hw)}</g>`).join('');
+  /* each pusher is marked with its job and given a larger unseen area to press, so that a page can make it work */
+  const hit = x => `<rect class="hit" x="${f(x - 1.5)}" y="-4" width="8" height="8" fill="transparent" stroke="none"/>`;
+  if (g.shape === 'square') return [-8.5, 8.5].map(y => `<g transform="translate(0,${y})" data-push="${y < 0 ? 'start' : 'reset'}">${one(g.hw)}${hit(g.hw)}</g>`).join('');
   const r = g.shape === 'cushion' ? g.hw + 0.9 : g.hw - 0.2;
-  return [60, 120].map(a => `<g transform="rotate(${a - 90})">${one(r)}</g>`).join('');
+  return [60, 120].map(a => `<g transform="rotate(${a - 90})" data-push="${a === 60 ? 'start' : 'reset'}">${one(r)}${hit(r)}</g>`).join('');
 }
 
 function base(w, g) {
@@ -310,7 +312,7 @@ function subs(w, g, o = {}) {
     s += d.subSquare ? RC(cx - rs, cy - rs, 2 * rs, 2 * rs, cls, 0.9) : C(rs, cx, cy, 'p') + C(rs, cx, cy, cls, sty);
     const n = role === 'min30' ? 30 : 12;
     if (!d.subSquare) for (let i = 0; i < n; i++) s += rad(i * 360 / n, rs - (i % (n / 6) ? 0.45 : 0.9), rs - 0.12, 't sk' + pos, cx, cy);
-    if (!o.noHands) s += `<g transform="translate(${cx},${cy})"><g ${role === 'sec' ? `data-hand="s" data-bps="${b}"` : ''}>${L(0, 0.8, 0, -rs * 0.82, 'hd')}</g>${C(0.32, 0, 0, 'k')}</g>`;
+    if (!o.noHands) s += `<g transform="translate(${cx},${cy})"><g ${role === 'sec' ? `data-hand="s" data-bps="${b}"` : `data-chr="${role === 'min30' ? 'm' : 'h'}"`}>${L(0, 0.8, 0, -rs * 0.82, 'hd')}</g>${C(0.32, 0, 0, 'k')}</g>`;
   }
   return s;
 }
@@ -412,7 +414,7 @@ function hands(w, g) {
   else if (st === 'pencil') { hp = Pa(pen(Lh, 0.62), 'p'); mp = Pa(pen(Lm, 0.48), 'p'); }
   else { hp = Pa(pen(Lh, 0.8), 'p'); mp = Pa(pen(Lm, 0.62), 'p'); }
   let s = `<g data-hand="h">${hp}</g><g data-hand="m">${mp}</g>`;
-  if (w.chrono) s += `<g>${L(0, 3.2, 0, -Lm * 1.04, 'hd')}${Pa(polyD([[-0.5, f(-Lm * 0.9)], [0.5, f(-Lm * 0.9)], [0, f(-Lm * 1.04)]]), 'k')}</g>`;
+  if (w.chrono) s += `<g data-chr="s" data-bps="${b}">${L(0, 3.2, 0, -Lm * 1.04, 'hd')}${Pa(polyD([[-0.5, f(-Lm * 0.9)], [0.5, f(-Lm * 0.9)], [0, f(-Lm * 1.04)]]), 'k')}</g>`;
   else if (w.sec === 'center') s += `<g data-hand="s" data-bps="${b}">${L(0, 3.4, 0, -Lm * 1.02, 'hd')}${st === 'mercedes' ? C(0.75, 0, -Lm * 0.62, 'p') : ''}${RC(-0.35, 1.6, 0.7, 1.8, 'k')}</g>`;
   return s + C(0.95, 0, 0, 'p') + C(0.3, 0, 0, 'k');
 }

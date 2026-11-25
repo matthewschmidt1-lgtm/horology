@@ -10,6 +10,16 @@ const pad = n => String(n).padStart(2, '0');
 /* ---------- the clock: every hand on the page follows the visitor's system time ---------- */
 let lastSec = -1;
 const ARRIVED = performance.now();
+/* The home page's watch is a chronograph, and its two pushers work: the upper starts and stops it, the lower sets it back to zero once it is stopped. */
+const CHR = { on: false, t0: 0, acc: 0 };
+function push(g) {
+  if (g.dataset.push === 'start') { if (CHR.on) { CHR.acc += performance.now() - CHR.t0; CHR.on = false; } else { CHR.t0 = performance.now(); CHR.on = true; } }
+  else if (!CHR.on) CHR.acc = 0;
+  g.classList.add('in'); setTimeout(() => g.classList.remove('in'), 160);
+  const say = document.getElementById('chr-say'); if (say) say.textContent = CHR.on ? 'Stopwatch running.' : CHR.acc ? 'Stopwatch stopped.' : 'Stopwatch at zero.';
+}
+document.addEventListener('click', e => { const g = e.target.closest && e.target.closest('.h-watch [data-push]'); if (g) push(g); });
+document.addEventListener('keydown', e => { const g = e.target.closest && e.target.closest('.h-watch [data-push]'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); push(g); } });
 function tick() {
   const now = new Date(), ms = now.getMilliseconds(), s = now.getSeconds(), m = now.getMinutes(), h = now.getHours();
   const t = s + ms / 1000, mA = (m + t / 60) * 6, hA = ((h % 12) + m / 60 + t / 3600) * 30;
@@ -18,6 +28,13 @@ function tick() {
     if (k === 'h') a = hA; else if (k === 'm') a = mA;
     else { const b = +el.dataset.bps; a = (b ? Math.floor(t * b) / b : t) * 6; }
     el.setAttribute('transform', `rotate(${a.toFixed(2)})`);
+  });
+  /* the stopwatch on the home page's watch: its hands follow the time that has run on it */
+  const el = (CHR.acc + (CHR.on ? performance.now() - CHR.t0 : 0)) / 1000;
+  document.querySelectorAll('.h-watch [data-chr]').forEach(h => {
+    const k = h.dataset.chr, b = +h.dataset.bps || 5;
+    const a = k === 's' ? Math.floor(el * b) / b * 6 : k === 'm' ? Math.floor(el / 60) * 12 : el / 3600 * 30; // seconds in beats; minutes a step at a time, on a 30-minute dial; hours creeping, on a 12-hour dial
+    h.setAttribute('transform', `rotate(${(a % 360).toFixed(2)})`);
   });
   if (s !== lastSec) {
     lastSec = s;
@@ -206,7 +223,7 @@ function renderHome() {
       <p class="h-motto">Look closer. Understand more.</p>
       <a class="h-btn h-hero-btn" href="workbench.html">Explore the workbench</a>
     </div>
-    <figure class="h-watch">${D.front(omega, {})}<figcaption>Omega Speedmaster, ref. 105.003, 1964.</figcaption></figure>
+    <figure class="h-watch">${D.front(omega, {})}<figcaption>Omega Speedmaster, ref. 105.003, 1964. <span class="h-press">Its buttons work: press the top one.</span><span class="sr" id="chr-say" aria-live="polite"></span></figcaption></figure>
   </div>
 
   <div class="h-now" aria-label="Your time today">
@@ -268,6 +285,7 @@ function route() {
   const h = location.hash.replace(/^#\/?/, '') || 'home', [a, b] = h.split('/');
   document.querySelectorAll('.nav a').forEach(el => el.classList.toggle('on', el.dataset.r === (a === 'plate' ? 'archive' : a)));
   if (a === 'archive') renderArchive(); else if (a === 'plate') renderPlate(b); else if (a === 'exam') renderExam(); else renderHome();
+  document.querySelectorAll('.h-watch [data-push]').forEach(g => { g.setAttribute('role', 'button'); g.setAttribute('tabindex', '0'); g.setAttribute('aria-label', g.dataset.push === 'start' ? 'Start or stop the stopwatch' : 'Set the stopwatch back to zero'); }); // the home page's pushers can be reached and pressed from the keyboard
   window.scrollTo(0, 0);
 }
 /* ---------- figure viewer ---------- */
