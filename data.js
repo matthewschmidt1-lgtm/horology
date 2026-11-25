@@ -159,7 +159,7 @@ window.WATCHES = [
 {
   id:'royaloak', brand:'Audemars Piguet', model:'Royal Oak', ref:'5402', year:'1972', span:'1972 – c. 1990', kind:'Luxury sports watch',
   c:{shape:'octagon', d:39, t:[7,'v'], lug:null},
-  dial:{dark:true, markers:'baton', tapisserie:true, date:3, text:['AUDEMARS PIGUET','AUTOMATIC']},
+  dial:{dark:true, blue:'#0f1c33', markers:'royaloak', tapisserie:true, date:3, text:['AUDEMARS PIGUET','AUTOMATIC'], set:{lines:[['AUDEMARS PIGUET',-0.24,0.062,1],['AUTOMATIC',-0.165,0.04,1]], mono:['AP',0.5], foot:'SWISS'}},
   hands:'baton', sec:'none', crown:{pos:3, hex:true}, strap:'integrated',
   mv:{cal:'2121', type:'auto', vph:19800, wind:'Automatic, full rotor', size:'28.4 mm × 3.05 mm', note:'Extra-thin automatic derived from the Jaeger-LeCoultre cal. 920.'},
   back:{type:'bolts', note:'Eight nuts receive the bolts that pass down through bezel, gasket and case.'},

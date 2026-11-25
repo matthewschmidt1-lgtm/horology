@@ -61,7 +61,7 @@ export default {
       significance: 'Leaving the fixings on show, and making them the decoration, was the design’s boldest idea.', related: ['crystal', 'case', 'caseback'] },
     { id: 'dial', name: 'Dial', group: 'Exterior', status: 'D', anchor: [-6, 4, 2.4], face: 1,
       beginner: 'The dark dial with baton markers and a date window. On the real watch its surface is covered in a grid of tiny raised squares.',
-      horologist: 'A “petite tapisserie” dial: a guilloché pattern of small squares cut by machine, with applied baton markers and a date at 3. The model shows the pattern only as a flat texture.',
+      horologist: 'A “petite tapisserie” dial in a dark blue-grey: a guilloché pattern of small squares cut by machine, about thirty across the dial. AUDEMARS PIGUET and AUTOMATIC are printed above the centre, the applied AP monogram stands above six, where the first series carried it, and SWISS is at the foot. Long slim applied bars with rounded ends mark the hours, two at twelve and none at three, where the date shows on a white disc. The lettering and marks are placed from Audemars Piguet’s own photographs; the monogram is shown as two plain letters, the typefaces are approximations, and the blue is judged from photographs. The model shows the pattern only as a flat texture.',
       fn: 'Displays hours, minutes and date.', material: 'Metal dial, applied markers',
       significance: 'The pattern catches light the way the brushed steel does, so the dial and case read as one object.', related: ['hands'] },
     { id: 'hands', name: 'Hands', group: 'Exterior', status: 'D', anchor: [3, 7, 3.0], face: 1,

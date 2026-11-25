@@ -234,6 +234,9 @@ function markers(w, g, skip) {
       for (let i = 0; i < 300; i++) { const a = i * 1.2, r = E(a) - 0.2; s += i % 5 ? rad(a, r - 0.45, r, 'hair') : rad(a, r - 0.8, r, 't'); }
       for (let h = 1; h < 12; h++) { const p = P(h * 30, E(h * 30) - 1.35); s += C(0.22, p[0], p[1], 'p'); if (h % 3) s += bat(h, 2.7, 0.7, 'p ap', 1.85); }
       break;
+    case 'royaloak': { // the first Royal Oak's dial, from Audemars Piguet's own photographs: long slim applied bars with rounded ends, two side by side at twelve, and none at three, where the date is
+      s += ticks(0.7, 0.2); const rb = (h, dx) => `<rect class="p" x="${f(dx - 0.3)}" y="${f(-R0 + 0.95)}" width="0.6" height="4.3" rx="0.3" transform="rotate(${h * 30})"/>`;
+      each(h => h ? rb(h, 0) : rb(0, -0.45) + rb(0, 0.45)); break; }
     case 'baton': s += ticks(); each(h => h === 0 ? dbl(2.6, 0.8) : bat(h, 2.6, 0.8)); break;
     case 'block': s += ticks(); each(h => h === 0 ? dbl(2.8, 1.3) : bat(h, 2.6, 1.7)); break;
     case 'sm300': { // the early dial of the Seamaster 300 165.024, from photographs: a long printed mark at every minute, eight long luminous bars that taper a little toward the centre, and at 12, 3, 6 and 9 a figure with a small luminous block outside it
@@ -386,6 +389,7 @@ function dtext(w, g, o) {
       s += Pa(polyD([[f(-u * 0.14), f(y0 - u * 0.12)], [f(u * 0.14), f(y0 - u * 0.12)], [f(u * 0.14), f(y0 + u * 0.08)], [0, f(y0 + u * 0.2)], [f(-u * 0.14), f(y0 + u * 0.08)]]), 'p wg'); }
     if (q.split) q.split.forEach((t, i) => { const p = P(180 + (i ? -13 : 13), (g.inR || R0) - 1.0); s += T(t, p[0], p[1], R0 * 0.04, 'tx dl', `${sans} transform="rotate(${i ? -13 : 13} ${f(p[0])} ${f(p[1])})"`); }); // two words at the foot, one each side of the lower register
     if (q.star != null) s += star(0, R0 * q.star, R0 * 0.05);
+    if (q.mono) s += T(q.mono[0], 0, R0 * q.mono[1], R0 * 0.16, 'tx nm', 'style="font-family:Georgia,serif;font-weight:bold" letter-spacing="-.12em"'); // an applied monogram, shown as its two letters set close; the real one interlocks them
     if (q.crown != null) { const u = R0 * 0.075, y0 = R0 * q.crown; s += Pa(polyD([[-.55, 0], [-.95, -.7], [-.45, -.32], [-.5, -.98], [-.12, -.38], [0, -1.12], [.12, -.38], [.5, -.98], [.45, -.32], [.95, -.7], [.55, 0]].map(p => [f(p[0] * u), f(y0 + p[1] * u)])), 'k dl') + [[-.95, -.7], [-.5, -.98], [0, -1.12], [.5, -.98], [.95, -.7]].map(p => C(u * 0.1, p[0] * u, y0 + p[1] * u, 'k dl')).join('') + RC(-0.55 * u, y0 + 0.08 * u, 1.1 * u, 0.12 * u, 'k dl'); }
     q.lines.forEach(l => { s += T(l[0].replace(/&/g, '&amp;'), 0, R0 * l[1], R0 * l[2], 'tx dl', l[3] === 2 ? 'style="font-style:italic"' : l[3] ? sans : 'letter-spacing=".06em"'); }); // 2: a script line, approximated in italic
     if (q.foot) s += T(q.foot, 0, q.footY ? R0 * q.footY : R0 - 0.12, R0 * 0.042, 'tx dl', sans);
@@ -445,7 +449,7 @@ const handsAt = (w, g) => w.dial.handsAt ? `<g transform="translate(${w.dial.han
 function dial(w, g, o) {
   if (w.dial.custom === 'gyro3') return gyro3(w, g, o);
   const d = w.dial; let s = Pa(g.dial, d.dark ? 'tn db' : 'p');
-  if (d.tapisserie) { const id = 'u' + (++uid); s += `<defs><pattern id="${id}" width="1.15" height="1.15" patternUnits="userSpaceOnUse"><path class="hair" d="M0,0H1.15M0,0V1.15"/></pattern></defs><path d="${g.dial}" fill="url(#${id})" stroke="none"/>`; }
+  if (d.tapisserie) { const id = 'u' + (++uid); s += `<defs><pattern id="${id}" width="0.9" height="0.9" patternUnits="userSpaceOnUse"><path class="hair" d="M0,0H0.9M0,0V0.9"/></pattern></defs><path d="${g.dial}" fill="url(#${id})" stroke="none"/>`; }
   if (d.flange) {
     const r = g.inR; s += C(r, 0, 0, 'l');
     if (d.flange === 'a386') { /* the two rings round the El Primero A386's dial, read from Phillips' photograph of an example of about 1969. Outside, a pale ring with the tachymeter:
