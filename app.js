@@ -247,17 +247,17 @@ function renderHome() {
   <div class="h-previews">
     <article class="h-card c1">
       <a class="h-art mv" href="workbench.html" aria-label="Explore the workbench">${D.movement(omega)}</a>
-      <div class="h-txt"><h3>Examine the details.</h3><p>Take a movement apart, part by part.</p>
+      <div class="h-txt"><h3>Examine the details.</h3>
         <p class="h-links"><a class="h-go" href="workbench.html">Explore the workbench</a></p></div>
     </article>
     <article class="h-card c2">
       <a class="h-art four" href="#/archive" aria-label="Browse the plates">${['tanklc', 'royaloak', 'ventura', 'spaceview'].map(id => D.front(by(id), {})).join('')}</a>
-      <div class="h-txt"><h3>Explore the archive.</h3><p>Specifications, features and history for twenty landmark watches.</p>
+      <div class="h-txt"><h3>Explore the archive.</h3>
         <p class="h-links"><a class="h-go" href="#/archive">Browse the plates</a></p></div>
     </article>
     <article class="h-card c3">
       <a class="h-art eras" href="history.html" aria-label="Explore the history">${ERAS.map(e => `<i style="background:${e[1]};color:${e[2]}"><b>${e[0]}</b></i>`).join('')}</a>
-      <div class="h-txt"><h3>Understand the history.</h3><p>Five centuries of inventions, designs and the people behind them.</p>
+      <div class="h-txt"><h3>Understand the history.</h3>
         <p class="h-links"><a class="h-go" href="history.html">Explore the history</a></p></div>
     </article>
   </div>
