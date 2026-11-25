@@ -261,9 +261,13 @@ function markers(w, g, skip) {
       each(h => { if (h % 3) return wedge(h, 4.3, 1.9, 1.35); const p = P(h * 30, R0 * 0.66), z = R0 * 0.2; return wedge(h, 1.5, 1.8, 1.55) + T(h || 12, p[0], p[1] + z * 0.36, z, 'tx nm', 'style="font-family:Helvetica,Arial,sans-serif"'); });
       break; }
     case 'pie': {
-      s += ticks(0.6); each(h => bat(h, 2.6, 0.7, 'k'));
-      const pts = []; for (let k = 0; k < 12; k++) { pts.push(P(15 + 30 * k, R0 * 0.7)); s += rad(15 + 30 * k, R0 * 0.7, R0, 't'); }
-      s += Pa(polyD(pts), 't'); break;
+      /* the pie-pan dial, from a dealer's photograph of a 168.005: a flat twelve-sided centre whose corners lie at the hours, so each sloping facet runs from one hour to the next;
+         the minute marks printed on the flat, just inside its edge; and slim applied bars on the slope, each with a black strip down it, their inner ends at the corners.
+         The bar at twelve is wider, and a short stub stands outside the date window at three. */
+      const ri = R0 * 0.72, pts = []; for (let k = 0; k < 12; k++) pts.push(P(30 * k, ri));
+      s += Pa(polyD(pts), 't'); for (let i = 0; i < 60; i++) if (i % 5) s += rad(i * 6, ri - 1.25, ri - 0.75, 't');
+      const pb = (h, len, wd) => bat(h, len, wd, 'p', 0.3) + rad(h * 30, R0 - 0.3 - len + 0.2, R0 - 0.5, 't');
+      each(h => pb(h, R0 - 0.3 - ri, h ? 0.6 : 1.0)); if (skip.has(3)) s += pb(3, 1.2, 0.6); break;
     }
     case 'calatrava':
       for (let i = 0; i < 60; i++) { const p = P(i * 6, R0 - 0.5); s += C(0.15, p[0], p[1], 'k'); } // sixty small raised dots for the minutes

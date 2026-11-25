@@ -60,12 +60,12 @@ window.WATCHES = [
 {
   id:'constellation', brand:'Omega', model:'Constellation “Pie Pan”', ref:'168.005', year:'c. 1962', span:'Pie-pan dials c. 1952 – late 1960s', kind:'Chronometer',
   c:{shape:'round', d:34.5, da:'a', t:[11.5,'n'], lug:[18,'a']},
-  bezel:{type:'plain', w:1.6}, dial:{dark:false, markers:'pie', date:3, text:['OMEGA','Constellation'], star:true},
+  bezel:{type:'plain', w:1.6}, dial:{dark:false, markers:'pie', date:3, text:['OMEGA','Constellation'], set:{omega:-0.5, lines:[['OMEGA',-0.42,0.075,1],['AUTOMATIC',-0.35,0.04,1],['CHRONOMETER',-0.3,0.04,1],['OFFICIALLY CERTIFIED',-0.25,0.04,1],['Constellation',0.36,0.085,2]], star:0.47, split:['SWISS','MADE']}},
   hands:'dauphine', sec:'center', crown:{pos:3, small:true}, strap:'leather',
   mv:{cal:'561', type:'auto', vph:19800, jewels:24, wind:'Automatic, full rotor', note:'Chronometer-rated, with date.'},
   back:{type:'screw', obs:true, note:'Medallion of the Geneva Observatory beneath eight stars.'},
-  specs:[['Dial','Twelve-sided raised centre, sloping “pie-pan” border'],['Certification','Chronometer'],['Complication','Date at 3']],
-  notes:['Named for its dial, which rises in the centre and falls away in twelve facets like an upturned pie tin.','The eight stars on the caseback commemorate Omega’s observatory chronometry records.'],
+  specs:[['Dial','Twelve-sided raised centre, sloping “pie-pan” border'],['Certification','Chronometer'],['Complication','Date at 3'],['Lugs','Sharply faceted “dog-leg” lugs']],
+  notes:['Named for its dial, which rises in the centre and falls away in twelve facets like an upturned pie tin.','The eight stars on the caseback commemorate Omega’s observatory chronometry records.','The dial is read from a dealer’s photograph of a 168.005 of 1966: the corners of the centre lie at the hours, the minute marks are printed on the flat, and the star sits beneath the name. The 168.005 carried the calibre 561 and, from about 1965, the 564, whose date sets quickly. The lugs are drawn plain.'],
   q:{t:'What is pictured on the Constellation’s caseback medallion?', a:'An observatory beneath eight stars', w:['A seahorse','A trident and waves','A five-pointed crown']}
 },
 {
@@ -192,12 +192,12 @@ window.WATCHES = [
 {
   id:'challenge', brand:'Citizen', model:'Challenge Diver 150 m', ref:'52-0110', year:'1977', span:'1970s – early 1980s', kind:'Dive watch',
   c:{shape:'round', d:40, t:[13,'n'], lug:[20,'v']},
-  bezel:{type:'dive', w:3.7}, dial:{dark:true, markers:'dive', date:3, text:['CITIZEN','150m']},
-  hands:'sword', sec:'center', crown:{pos:3, big:true}, strap:'tropic',
-  mv:{cal:'not verified', type:'auto', vph:21600, wind:'Automatic', note:'The original calibre could not be verified and is omitted. Beat rate assumed for drawing.'},
+  bezel:{type:'dive', w:3.7, pearl:true, dots:true}, dial:{dark:true, markers:'mas62', date:3, text:['CITIZEN','150M'], set:{lines:[['CITIZEN',-0.42,0.115,0],['AUTOMATIC',-0.335,0.05,1],['21 JEWELS',0.3,0.045,1],['WATER RESISTANT',0.37,0.045,1],['150M',0.47,0.085,1]]}},
+  hands:'mercedes', sec:'center', crown:{pos:3, big:true}, strap:'tropic',
+  mv:{cal:'8210A', type:'auto', vph:21600, jewels:21, wind:'Automatic, full rotor', note:'Calibre 8210A, with a date that sets quickly; reported by Worn & Wound from an example taken apart.'},
   back:{type:'screw', note:'Screw back. Engraving omitted.'},
   specs:[['Water resistance','150 m'],['Crown','Large, screw-down'],['Complication','Date at 3']],
-  notes:['In 1983 an example was found on Long Reef beach in Australia, encrusted with barnacles and still running.','That watch gave the model its Japanese nickname, “Fujitsubo”: barnacle.','Dial and hand details here are representative; several variants exist.'],
+  notes:['In 1983 an example was found on Long Reef beach in Australia, encrusted with barnacles and still running.','That watch gave the model its Japanese nickname, “Fujitsubo”: barnacle.','The dial, hands and bezel are read from photographs of a 52-0110: framed luminous blocks at every hour, a date with no day, and a dot at every minute on the bezel. The 1977 dials have the name in separate raised letters; from 1978 the letters are joined.'],
   q:{t:'What made one Challenge Diver famous in 1983?', a:'It washed up covered in barnacles, still running', w:['It reached the bottom of the Mariana Trench','It was worn on the Space Shuttle','It survived an Everest ascent']}
 },
 {
