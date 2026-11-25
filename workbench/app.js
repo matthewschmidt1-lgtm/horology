@@ -127,11 +127,11 @@ const VIEWS = {
 };
 
 function texture(real) {
-  const c = document.createElement('canvas'); c.width = c.height = 1024;
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  const c = document.createElement('canvas'); c.width = c.height = 2048; // large enough for small lettering to stay sharp when the view is zoomed in
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 16;
   if (!archive) return t;
   const img = new Image(), url = URL.createObjectURL(new Blob([Draw.face(archive, real).svg], { type: 'image/svg+xml' }));
-  img.onload = () => { c.getContext('2d').drawImage(img, 0, 0, 1024, 1024); t.needsUpdate = true; URL.revokeObjectURL(url); };
+  img.onload = () => { c.getContext('2d').drawImage(img, 0, 0, 2048, 2048); t.needsUpdate = true; URL.revokeObjectURL(url); };
   img.src = url; return t;
 }
 const baseDist = () => { const f = model.fit, a = vp.clientWidth / Math.max(1, vp.clientHeight); return Math.max(f.h, f.w / a) / Math.tan(camera.fov * Math.PI / 360); };

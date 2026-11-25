@@ -270,28 +270,28 @@ function calSub(w, g, pos, role, o = {}) {
     return `<defs><clipPath id="${id}"><path d="${win}"/></clipPath></defs>` + Pa(win, 'tn mw') + `<g clip-path="url(#${id})">${star(cx - rm * 0.55, wy - rm * 0.72, rm * 0.13, 'k mn')}${star(cx + rm * 0.5, wy - rm * 0.8, rm * 0.1, 'k mn')}${C(rm * 0.42, cx - rm * 1.4 + ph * rm * 2.8, wy - rm * 0.42, 'p mn')}</g>` + Pa(win, 't');
   };
   if (role === 'dayde') {
-    DAYS_DE.forEach((t, i) => { s += lab(t, i * 360 / 7, rs - 0.35, rs * 0.21); });
+    DAYS_DE.forEach((t, i) => { s += lab(t, i * 360 / 7, rs * 0.79, rs * 0.2); });
     s += C(rs * 0.52, cx, cy, 'hair') + hand(now.getDay() * 360 / 7, rs * 0.72);
   } else if (role === 'date31') {
-    for (let d = 1; d <= 31; d++) { const a = (d - 1) * 360 / 31; s += d % 2 ? lab(d, a, rs - 0.3, rs * 0.17) : (p => C(0.08, p[0], p[1], 'k'))(P(a, rs - 0.75, cx, cy)); }
-    s += C(rs * 0.52, cx, cy, 'hair') + hand((now.getDate() - 1) * 360 / 31, rs * 0.74);
+    for (let d = 1; d <= 31; d++) { const a = (d - 1) * 360 / 31; s += d % 2 ? lab(d, a, rs * 0.81, rs * 0.17) : (p => C(0.08, p[0], p[1], 'k'))(P(a, rs * 0.81, cx, cy)); }
+    s += C(rs * 0.52, cx, cy, 'hair') + hand((now.getDate() - 1) * 360 / 31, rs * 0.68);
   } else if (role === 'moonsec') { // running seconds round the edge, the moon above the centre, and the scale of fifths for the flying seconds
     for (let i = 0; i < 60; i++) s += rad(i * 6, rs - (i % 5 ? 0.4 : 0.75), rs - 0.12, 't', cx, cy);
     [5, 1, 2, 3, 4].forEach((n, i) => { s += lab(n, i * 72, rs * 0.74, rs * 0.19); });
     s += moon(rs * 0.5, cy - rs * 0.06);
     if (!o.noHands) s += `<g transform="translate(${cx},${cy})"><g data-hand="s" data-bps="${bps(w)}">${L(0, 0.8, 0, -rs * 0.86, 'hd')}</g></g>`;
   } else if (role === 'day24') {
-    DAYS.forEach((t, i) => { s += lab(t, i * 360 / 7, rs - 0.3, rs * 0.2); });
-    s += C(rs * 0.6, cx, cy, 'hair'); [[12, 0], [18, 90], [24, 180], [6, 270]].forEach(q => { s += lab(q[0], q[1], rs * 0.56, rs * 0.2); });
+    DAYS.forEach((t, i) => { s += lab(t, i * 360 / 7, rs * 0.79, rs * 0.2); });
+    s += C(rs * 0.6, cx, cy, 'hair'); [[12, 0], [18, 90], [24, 180], [6, 270]].forEach(q => { s += lab(q[0], q[1], rs * 0.4, rs * 0.19); });
     s += hand((now.getHours() + now.getMinutes() / 60 - 12) * 15, rs * 0.42, 0.22) + hand(now.getDay() * 360 / 7, rs * 0.72);
   } else if (role === 'monthleap') {
-    MONTHS.forEach((t, i) => { s += i % 2 ? rad(i * 30, rs - 0.75, rs - 0.3, 't', cx, cy) : lab(t, i * 30, rs - 0.3, rs * 0.2); });
-    s += C(rs * 0.6, cx, cy, 'hair'); [1, 2, 3, 4].forEach(n => { s += lab(n, n * 90 - 45, rs * 0.56, rs * 0.2); });
+    MONTHS.forEach((t, i) => { s += i % 2 ? rad(i * 30, rs * 0.72, rs * 0.86, 't', cx, cy) : lab(t, i * 30, rs * 0.79, rs * 0.2); });
+    s += C(rs * 0.6, cx, cy, 'hair'); [1, 2, 3, 4].forEach(n => { s += lab(n, n * 90 - 45, rs * 0.38, rs * 0.19); });
     s += L(cx - rs * 0.6, cy, cx + rs * 0.6, cy, 'hair') + L(cx, cy - rs * 0.6, cx, cy + rs * 0.6, 'hair');
     const yc = (now.getFullYear() + 3) % 4; // 0, 1, 2 for the three ordinary years; 3 for the leap year, which is quarter "4"
     s += hand(yc * 90 + (now.getMonth() + 0.5) * 7.5, rs * 0.42, 0.22) + hand(now.getMonth() * 30, rs * 0.72);
   } else {
-    for (let d = 1; d <= 31; d++) { const a = (d - 1) * 360 / 31; s += d % 2 ? lab(d, a, rs - 0.3, rs * 0.17) : (p => C(0.08, p[0], p[1], 'k'))(P(a, rs - 0.75, cx, cy)); }
+    for (let d = 1; d <= 31; d++) { const a = (d - 1) * 360 / 31; s += d % 2 ? lab(d, a, rs * 0.83, rs * 0.15) : (p => C(0.08, p[0], p[1], 'k'))(P(a, rs * 0.83, cx, cy)); }
     const rm = rs * 0.5, id = 'u' + (++uid), wy = cy - rs * 0.04, ph = ((Date.now() / 86400000 - 10962.76) % 29.530588853 + 29.530588853) % 29.530588853 / 29.530588853; // 0 new moon, 0.5 full
     const win = `M${f(cx - rm)},${f(wy)}A${f(rm)},${f(rm)} 0 0 1 ${f(cx + rm)},${f(wy)}Z`;
     s += `<defs><clipPath id="${id}"><path d="${win}"/></clipPath></defs>` + Pa(win, 'tn mw') + `<g clip-path="url(#${id})">${star(cx - rm * 0.55, wy - rm * 0.72, rm * 0.13, 'k mn')}${star(cx + rm * 0.5, wy - rm * 0.8, rm * 0.1, 'k mn')}${C(rm * 0.42, cx - rm * 1.4 + ph * rm * 2.8, wy - rm * 0.42, 'p mn')}</g>` + Pa(win, 't');
@@ -693,7 +693,7 @@ function face(w, real) {
   // The dial is drawn once as a picture, so the date window is filled here with today's date; on the plates it is filled live.
   const today = new Date(), DAYS3 = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const dated = s.replace(new RegExp('(data-date=""[^>]*>)', 'g'), `$1${today.getDate()}`).replace(new RegExp('(data-daydate=""[^>]*>)', 'g'), `$1${DAYS3[today.getDay()]} ${today.getDate()}`);
-  return { svg: `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="${-R} ${-R} ${2 * R} ${2 * R}">${dated}<style>.dt{fill:#1a1a1a}</style></svg>`, R, dialR: g.dialR, inR: g.inR, bezelInner: R - (w.bezel ? w.bezel.w : 0), handLen: g.hl };
+  return { svg: `<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="2048" viewBox="${-R} ${-R} ${2 * R} ${2 * R}">${dated}<style>.dt{fill:#1a1a1a}</style></svg>`, R, dialR: g.dialR, inR: g.inR, bezelInner: R - (w.bezel ? w.bezel.w : 0), handLen: g.hl };
 }
 
 window.Draw = { front, side, rear, exploded, movement, bps, face, G3, plan: id => PLAN[id] || null };
