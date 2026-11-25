@@ -258,9 +258,15 @@ function markers(w, g, skip) {
       for (let i = 0; i < 60; i++) { const p = P(i * 6, R0 - 0.5); s += C(0.12, p[0], p[1], 'k'); }
       each(h => bat(h, 2.8, 0.9, 'p', 1.2) + rad(h * 30, R0 - 4, R0 - 1.2, 't')); break;
     case 'polerouter':
-      for (let i = 0; i < 120; i++) s += rad(i * 3, R0 * 0.76, R0 - 0.15, 'hair');
-      s += C(R0 * 0.76, 0, 0, 'l') + L(-R0 * 0.76, 0, R0 * 0.76, 0, 't') + L(0, -R0 * 0.76, 0, R0 * 0.76, 't');
-      each(h => bat(h, R0 * 0.24 - 0.3, 0.55, 'k', 0.3)); break;
+      { /* the Polerouter's dial, from a dealer's photograph of a reference 20357: a narrow sloping outer ring, turned in fine circles, with a plain polished bar at each hour and a wider one at
+           twelve; and a flat centre with short minute marks at its edge, a luminous dot at each hour, two at twelve, and a crosshair right across it. */
+        const ri = R0 * 0.84;
+        s += C(ri, 0, 0, 'l'); for (const k of [0.88, 0.92, 0.96]) s += C(R0 * k, 0, 0, 'hair');
+        for (let h = 0; h < 12; h++) { const wd = h ? 1.1 : 1.9; s += `<rect class="p" x="${f(-wd / 2)}" y="${f(-R0 + 0.12)}" width="${wd}" height="${f(R0 - ri - 0.2)}" transform="rotate(${h * 30})"/>`; }
+        for (let i = 0; i < 60; i++) if (i % 5) s += rad(i * 6, ri - 0.75, ri - 0.2, 't');
+        for (let h = 1; h < 12; h++) { const p = P(h * 30, ri - 0.55); s += C(0.28, p[0], p[1], 'p'); } s += C(0.28, -0.55, -(ri - 0.55), 'p') + C(0.28, 0.55, -(ri - 0.55), 'p');
+        s += L(-(ri - 1.1), 0, ri - 1.1, 0, 'hair') + L(0, -(ri - 1.1), 0, ri - 1.1, 'hair');
+      } break;
     case 'arabic': s += ticks(); for (let h = 1; h <= 12; h++) if (!skip.has(h % 12)) s += num(h % 12, h, 2.5, R0 - 2.1); break;
     case 'breguet': { // applied numerals where there is room, dots elsewhere, and a fine dotted minute track
       for (let i = 0; i < 60; i++) if (i % 5) { const p = P(i * 6, R0 - 0.45); s += C(0.07, p[0], p[1], 'k'); }
@@ -402,6 +408,7 @@ function dtext(w, g, o) {
     if (q.split) q.split.forEach((t, i) => { const p = P(180 + (i ? -13 : 13), (g.inR || R0) - 1.0); s += T(t, p[0], p[1], R0 * 0.04, 'tx dl', `${sans} transform="rotate(${i ? -13 : 13} ${f(p[0])} ${f(p[1])})"`); }); // two words at the foot, one each side of the lower register
     if (q.star != null) s += star(0, R0 * q.star, R0 * 0.05);
     if (q.mono) s += T(q.mono[0], 0, R0 * q.mono[1], R0 * 0.16, 'tx nm', 'style="font-family:Georgia,serif;font-weight:bold" letter-spacing="-.12em"'); // an applied monogram, shown as its two letters set close; the real one interlocks them
+    if (q.ushield != null) { const u = R0 * 0.075, y0 = R0 * q.ushield; s += Pa(`M${f(-u)},${f(y0 - u)}H${f(u)}V${f(y0 + u * 0.35)}Q${f(u)},${f(y0 + u * 1.1)} 0,${f(y0 + u * 1.1)}Q${f(-u)},${f(y0 + u * 1.1)} ${f(-u)},${f(y0 + u * 0.35)}Z`, 'p') + T('U', 0, y0 + u * 0.62, u * 1.5, 'tx', 'style="font-family:Helvetica,Arial,sans-serif;font-weight:bold"'); } // the applied shield with its letter U, as a plain outline
     if (q.crown != null) { const u = R0 * 0.075, y0 = R0 * q.crown; s += Pa(polyD([[-.55, 0], [-.95, -.7], [-.45, -.32], [-.5, -.98], [-.12, -.38], [0, -1.12], [.12, -.38], [.5, -.98], [.45, -.32], [.95, -.7], [.55, 0]].map(p => [f(p[0] * u), f(y0 + p[1] * u)])), 'k dl') + [[-.95, -.7], [-.5, -.98], [0, -1.12], [.5, -.98], [.95, -.7]].map(p => C(u * 0.1, p[0] * u, y0 + p[1] * u, 'k dl')).join('') + RC(-0.55 * u, y0 + 0.08 * u, 1.1 * u, 0.12 * u, 'k dl'); }
     q.lines.forEach(l => { s += T(l[0].replace(/&/g, '&amp;'), R0 * (l[4] || 0), R0 * l[1], R0 * l[2], 'tx dl', l[3] === 2 ? 'style="font-style:italic"' : l[3] ? sans : 'letter-spacing=".06em"'); }); // 2: a script line, approximated in italic
     if (q.foot) s += T(q.foot, 0, q.footY ? R0 * q.footY : g.dhh ? g.dhh - 0.3 : R0 - 0.12, R0 * (g.dhh ? 0.07 : 0.042), 'tx dl', sans); // on a rectangular dial the word sits just inside the lower edge

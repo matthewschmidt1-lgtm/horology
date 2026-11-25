@@ -137,12 +137,12 @@ window.WATCHES = [
 {
   id:'polerouter', brand:'Universal Genève', model:'Polerouter', ref:'-', year:'1954', span:'1954 – 1969', kind:'Dress / travel watch',
   c:{shape:'round', d:35, da:'a', t:[10,'n'], lug:[18,'n'], lyre:true},
-  bezel:{type:'plain', w:1.3}, dial:{dark:true, markers:'polerouter', text:['UNIVERSAL GENÈVE','POLEROUTER']},
+  bezel:{type:'plain', w:1.3}, dial:{dark:true, markers:'polerouter', text:['UNIVERSAL GENÈVE','POLEROUTER'], set:{ushield:-0.56, lines:[['UNIVERSAL',-0.39,0.085,1],['GENÈVE',-0.315,0.058,1],['POLEROUTER',-0.235,0.066,2],['AUTOMATIC',0.4,0.05,1],['MICROTOR',0.475,0.05,1]]}},
   hands:'dauphine', sec:'center', crown:{pos:3, small:true}, strap:'leather',
   mv:{cal:'215 “Microtor”', type:'micro', vph:18000, wind:'Automatic, micro-rotor', note:'The first Polerouters used the bumper cal. 138 SS; the micro-rotor cal. 215 followed in 1955.'},
   back:{type:'screw', note:'Detail not verified; shown plain.'},
-  specs:[['Design','Gérald Genta'],['Case','Twisted “lyre” lugs'],['Dial','Raised outer ring carrying the indices; crosshair']],
-  notes:['Commissioned to mark SAS’s polar route between Copenhagen and Los Angeles; first called the Polarouter.','An early work by Gérald Genta, then in his early twenties.','The micro-rotor sits within the movement’s thickness, so the watch stays slim.'],
+  specs:[['Design','Gérald Genta'],['Case','Twisted “lyre” lugs'],['Dial','Sloping outer ring, turned in fine circles, carrying the hour bars; crosshair']],
+  notes:['Commissioned to mark SAS’s polar route between Copenhagen and Los Angeles; first called the Polarouter.','An early work by Gérald Genta, then in his early twenties.','The micro-rotor sits within the movement’s thickness, so the watch stays slim.','Drawn as a micro-rotor Polerouter of about 1956 to 1958, with the lettering of a reference 20357 read from a dealer’s photograph. Both silver and black centres were made; black is shown. The typefaces and the shield are approximations.'],
   q:{t:'Which airline’s polar route gave the Polerouter its name?', a:'SAS', w:['Pan Am','BOAC','KLM']}
 },
 {
