@@ -25,7 +25,7 @@ export default {
     type: 'procedural',
     builder: 'round-chronograph',
     note: 'A partial model. Patek Philippe publishes no drawing of this movement, and most of it cannot be seen. What shows from the back is placed from two photographs: the gold rotor and the winding wheels beneath it, the repeater’s governor, the balance, the hammers and the jewels in the bridges. The barrel, the going train, the repeating work and the calendar work are hidden, and they are left out of the model so that nothing is invented. Case, lugs and bezel are simplified. Not a factory model or scan.',
-    params: { thickness: 12, lugToLug: 43, lugWidth: 19, movementDiameter: 28, beatsPerHour: 21600, calibre: 'R27', chrono: false, noSeconds: true, dustCover: false, metal: 'gold', hands: 'dauphine', plate: 'steel', bezelInsert: false, slide: true, spacerKind: 'gold', strapKind: 'ink', crownR: 2.2, dome: 1.6, wall: 3.0, lugThick: 2.2 }
+    params: { thickness: 12, lugToLug: 43, lugWidth: 19, movementDiameter: 28, beatsPerHour: 21600, calibre: 'R27', chrono: false, noSeconds: true, dustCover: false, metal: 'gold', hands: 'dauphine', plate: 'steel', bezelInsert: false, slide: true, crownCross: true, spacerKind: 'gold', strapKind: 'ink', crownR: 2.2, dome: 1.6, wall: 3.0, lugThick: 2.2 }
   },
   images: [],
 
@@ -89,12 +89,12 @@ export default {
       significance: 'The case of a repeater is part of the instrument: its metal and its fit change the sound.', related: ['bezel', 'caseback', 'crown', 'slide'] },
     { id: 'slide', name: 'Repeater slide', group: 'Exterior', status: 'D', anchor: [-19.5, -2, -1], face: 0,
       beginner: 'The sliding piece on the left of the case. Push it along and the watch chimes the time.',
-      horologist: 'Pushing the slide all the way up winds a small spring that powers the chime, so the repeater takes nothing from the mainspring. The maker warns that the chime must be left to finish before the slide is pushed again, and that the slot for the slide means the watch is not protected against water. Shown as a plain rail and thumb-piece on the flank opposite the crown; it does not move.',
+      horologist: 'Pushing the slide all the way up winds a small spring that powers the chime, so the repeater takes nothing from the mainspring. The maker warns that the chime must be left to finish before the slide is pushed again, and that the slot for the slide means the watch is not protected against water. Shown as a slim band that follows the curve of the case on the flank opposite the crown, with a small lip at one end for the thumb, as photographs of the watch show; its exact length and section are estimates, and it does not move.',
       fn: 'Winds and releases the repeating work.', material: 'Gold',
       significance: 'The force of the wearer’s thumb is the repeater’s whole power supply.', related: ['hammers', 'gongs', 'governor', 'repeater-works'] },
     { id: 'crown', name: 'Crown', group: 'Exterior', status: 'D', anchor: [21.5, 0, -1], face: 0,
-      beginner: 'The winding knob. The watch winds itself on the wrist, so it is mostly used to set the time.',
-      horologist: 'The winding and setting crown, with two positions. The calendar is corrected by small pushers worked with a stylus: for the date and for the month and year between the upper lugs, for the moon between the lower lugs, and for the day near the top left lug. They are not modelled.',
+      beginner: 'The winding knob, with the maker’s cross on its end. The watch winds itself on the wrist, so it is mostly used to set the time.',
+      horologist: 'The winding and setting crown, with two positions. It is fluted round its edge and carries the Calatrava cross on its end, as on the watch; the cross is drawn by eye from a photograph. The calendar is corrected by small pushers worked with a stylus: for the date and for the month and year between the upper lugs, for the moon between the lower lugs, and for the day near the top left lug. They are not modelled.',
       fn: 'Sets the hands and winds by hand when needed.', material: 'Gold',
       significance: '', related: ['rotor', 'case'] },
     { id: 'strap', name: 'Strap', group: 'Exterior', status: 'I', anchor: [0, 26, -3], face: 0,

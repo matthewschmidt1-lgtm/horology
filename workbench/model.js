@@ -73,6 +73,12 @@ function escapeShape(R, n = 15) {
   s.closePath(); return s;
 }
 // Convex outline around a set of circles: used for simplified bridges and levers.
+/* One arm of Patek Philippe's Calatrava cross: a stem ending in a fleur-de-lis, pointing up, 2.62 long at k = 1. Drawn by eye from photographs. */
+function fleurArm(k) {
+  const f = new THREE.Shape(), q = (a, b, c, d) => f.quadraticCurveTo(a * k, b * k, c * k, d * k);
+  f.moveTo(0.2 * k, 0.25 * k); f.lineTo(0.2 * k, 1.0 * k); q(0.9, 0.85, 1.05, 1.45); q(0.75, 1.2, 0.45, 1.45); q(0.5, 2.1, 0, 2.62);
+  q(-0.5, 2.1, -0.45, 1.45); q(-0.75, 1.2, -1.05, 1.45); q(-0.9, 0.85, -0.2, 1.0); f.lineTo(-0.2 * k, 0.25 * k); f.closePath(); return f;
+}
 function hullShape(circles) {
   const pts = [];
   circles.forEach(([x, y, r]) => { for (let i = 0; i < 20; i++) { const a = i * Math.PI / 10; pts.push([x + r * Math.cos(a), y + r * Math.sin(a)]); } });
@@ -120,7 +126,16 @@ export function buildProcedural(watch, face, tex) {
   if (!backCrown) crown.add(at(mk(new THREE.CylinderGeometry(cR, cR, cL, P.crownHex ? 6 : 28).rotateZ(Math.PI / 2), CASE, { edgeAngle: 10 }), R + 0.6 + cL / 2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.2, 16).rotateZ(Math.PI / 2), CASE), R + 0.3, 0, -0.9));
   if (P.cabochon && !backCrown) crown.add(at(mk(new THREE.SphereGeometry(cR * 0.62, 16, 12), 'blue', { noEdges: true }), R + 0.6 + cL, 0, -0.9));
   if (P.crownLeft) crown.rotation.z = Math.PI; // the Calibre 11 watches carry the crown at nine
-  if (P.slide) { const sl = part('slide'); sl.add(at(mk(new THREE.BoxGeometry(1.0, 10, 1.5), CASE), -(R + 0.3), 2.0, -0.9), at(mk(new THREE.BoxGeometry(1.7, 2.4, 2.0), CASE), -(R + 0.65), -2.0, -0.9)); } // a minute repeater's slide, on the flank opposite the crown: a rail and the thumb-piece that runs along it
+  if (P.slide) { // a minute repeater's slide, on the flank opposite the crown: a slim band that follows the curve of the case, with a small lip at one end for the thumb
+    const sl = part('slide'), band = (r0, r1, a0, a1) => { const sh = new THREE.Shape(); sh.absarc(0, 0, r1, a0, a1, false); sh.absarc(0, 0, r0, a1, a0, true); sh.closePath(); return sh; }, dg = Math.PI / 180;
+    sl.add(at(mk(new THREE.ExtrudeGeometry(band(R - 0.1, R + 0.42, 152 * dg, 214 * dg), { depth: 1.5, bevelEnabled: true, bevelThickness: 0.12, bevelSize: 0.12, bevelSegments: 2, curveSegments: 40 }), CASE), 0, 0, -1.65),
+      at(mk(new THREE.ExtrudeGeometry(band(R + 0.3, R + 0.85, 206 * dg, 214 * dg), { depth: 1.5, bevelEnabled: true, bevelThickness: 0.14, bevelSize: 0.14, bevelSegments: 2, curveSegments: 12 }), CASE), 0, 0, -1.65));
+  }
+  if (P.crownCross && !backCrown) { // a fluted crown with the Calatrava cross on its end, as Patek Philippe signs its crowns
+    crown.clear(); const fl = mk(extr(gearShape(cR, 26, 0.16, 0), cL), CASE, { edgeAngle: 30 }); fl.rotation.y = Math.PI / 2; fl.position.set(R + 0.6, 0, -0.9);
+    const cross = new THREE.Group(); for (let k = 0; k < 4; k++) { const arm = mk(extr(fleurArm(cR * 0.31), 0.16), CASE === 'gold' ? 'goldSatin' : CASE, { edgeAngle: 40 }); /* raised a little and in a satin finish, so that it shows against the polished end */ arm.rotation.z = k * Math.PI / 2; cross.add(arm); } cross.rotation.y = Math.PI / 2; cross.position.set(R + 0.6 + cL, 0, -0.9);
+    crown.add(fl, cross, at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.2, 16).rotateZ(Math.PI / 2), CASE), R + 0.3, 0, -0.9));
+  }
   const push = chrono || P.monoPusher ? part('pushers') : null;
   if (push) for (const a of P.monoPusher ? [1] : [-1, 1]) { const g = new THREE.Group(); if (square) g.position.y = a * 7; else g.rotation.z = a * Math.PI / 6; /* on a square case the pushers stand straight out of the flank */ g.add(at(mk(new THREE.CylinderGeometry(1.9, 1.9, 2, 22).rotateZ(Math.PI / 2), P.monoPusher ? CASE : 'steel'), R + 2.2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.6, 16).rotateZ(Math.PI / 2), P.monoPusher ? CASE : 'steel'), R + 0.6, 0, -0.9)); if (P.screwPushers) g.add(at(mk(new THREE.CylinderGeometry(2.3, 2.3, 1.3, 20).rotateZ(Math.PI / 2), 'steelDark', { edgeAngle: 12 }), R + 0.95, 0, -0.9)); /* a knurled collar that screws down over each pusher */ push.add(g); }
   const strap = part('strap');
@@ -545,8 +560,7 @@ export function buildProcedural(watch, face, tex) {
     const gov = at(part('governor', mv), 8.12, 0.31, 0);
     gov.add(at(mk(new THREE.TorusGeometry(2.9, 0.22, 8, 56), 'steel', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(cyl(0.55, 0.3, 14), 'goldSatin'), 0, 0, 2.3), at(mk(cyl(0.2, 2.4, 10), 'steelDark', { noEdges: true }), 0, 0, 1.2));
     /* the cross is Patek Philippe's emblem, the Calatrava cross: four arms, each ending in a fleur-de-lis. Its outline is drawn by eye from a photograph of the movement */
-    const fleur = new THREE.Shape(); fleur.moveTo(0.2, 0.25); fleur.lineTo(0.2, 1.0); fleur.quadraticCurveTo(0.9, 0.85, 1.05, 1.45); fleur.quadraticCurveTo(0.75, 1.2, 0.45, 1.45); fleur.quadraticCurveTo(0.5, 2.1, 0, 2.62);
-    fleur.quadraticCurveTo(-0.5, 2.1, -0.45, 1.45); fleur.quadraticCurveTo(-0.75, 1.2, -1.05, 1.45); fleur.quadraticCurveTo(-0.9, 0.85, -0.2, 1.0); fleur.lineTo(-0.2, 0.25); fleur.closePath();
+    const fleur = fleurArm(1);
     for (let k = 0; k < 4; k++) { const arm = mk(extr(fleur, 0.2), 'goldSatin', { edgeAngle: 40 }); arm.position.z = 2.2; arm.rotation.z = k * Math.PI / 2; gov.add(arm); }
     gov.add(at(mk(cyl(0.24, 0.12, 12), 'ruby'), 0, 0, 2.5));
     layer(gov, 5); gov.userData.anchor = [0, 0, 2.6];
