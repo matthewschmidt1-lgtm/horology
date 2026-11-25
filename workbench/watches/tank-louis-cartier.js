@@ -16,7 +16,7 @@ export default {
     type: 'procedural',
     builder: 'round-chronograph',
     note: 'Sizes varied across a century of production, so the case dimensions here are representative, not definitive. Many movements were fitted; the one shown is LeCoultre’s calibre 818, which dealers describe in Paris-made Tanks of the late 1960s. Its size and beat are from LeCoultre’s own sheet and its layout is measured from the small photographs on that sheet; other sizes, heights, tooth counts and outlines are estimated. Not a factory model or scan.',
-    params: { thickness: 6.5, lugToLug: 30, lugWidth: 17.3, movementDiameter: 20.8, beatsPerHour: 18000, calibre: '818', spacer: false, caseShape: 'tank', bodyHalfH: 12, dialHalfW: 8.2, dialHalfH: 10.9, wall: 3.2, chrono: false, noSeconds: true, dustCover: false, bezelInsert: false, metal: 'gold', handKind: 'blue', cabochon: true, crownR: 1.5, plate: 'steel' }
+    params: { thickness: 6.5, lugToLug: 30, lugWidth: 17.3, movementDiameter: 20.8, beatsPerHour: 18000, calibre: '818', spacer: false, caseShape: 'tank', bodyHalfH: 12, dialHalfW: 8.2, dialHalfH: 10.9, wall: 3.2, chrono: false, noSeconds: true, dustCover: false, bezelInsert: false, metal: 'gold', handKind: 'blue', hands: 'dauphine', cabochon: true, crownR: 1.5, plate: 'steel' }
   },
   images: [],
 
@@ -63,12 +63,12 @@ export default {
       significance: '', related: ['crystal', 'case'] },
     { id: 'dial', name: 'Dial', group: 'Exterior', status: 'D', anchor: [-5, -6, 2.7], face: 1,
       beginner: 'The pale dial with Roman numerals stretched to follow the rectangle, and a track of minute marks like a railway line.',
-      horologist: 'Roman numerals radiating from the centre and a chemin-de-fer minute track that follows the rectangle. The numerals are distorted on purpose, so that each one points at the centre.',
+      horologist: 'Roman numerals radiating from the centre and a chemin-de-fer minute track that follows the rectangle. The numerals are distorted on purpose, so that each one points at the centre, and four is written IIII. The track carries a fine line at each minute and a heavy bar at each five. CARTIER is printed inside the track and PARIS at the foot, as on dials made in Paris. Dials from the late 1970s onward hide a tiny signature in one stroke of a numeral; the dial shown is of the earlier kind and has none. The layout follows a dealer’s photograph of a Paris-dial example; the typefaces are approximations and the numerals are not stretched as far as the real ones.',
       fn: 'Displays hours and minutes.', material: 'Not specified',
       significance: 'Fitting a circle of hours into a rectangle is the design problem the Tank’s dial solves.', related: ['hands'] },
     { id: 'hands', name: 'Hands', group: 'Exterior', status: 'D', anchor: [2, 5, 3.0], face: 1,
       beginner: 'Two blue hands for hours and minutes. There is no seconds hand.',
-      horologist: 'Blued steel sword hands, hours and minutes only. The blue is the colour steel takes when heated, not a paint. The model’s hands are plain bars.',
+      horologist: 'Blued steel sword hands, hours and minutes only. The blue is the colour steel takes when heated, not a paint. The model’s hands are plain tapered blades, widest near the centre.',
       fn: 'Indicate hours and minutes.', material: 'Blued steel',
       significance: '', related: ['dial'] },
     { id: 'case', name: 'Case and brancards', group: 'Exterior', status: 'D', anchor: [-10.2, 13, 0.5], face: 0,

@@ -71,7 +71,7 @@ window.WATCHES = [
 {
   id:'tanklc', brand:'Cartier', model:'Tank Louis Cartier', ref:'-', year:'1922', span:'1922 onward', kind:'Dress watch',
   c:{shape:'tank', w:23, h:30, da:'a', t:[6.5,'n'], lug:null},
-  dial:{dark:false, markers:'roman', text:['CARTIER']},
+  dial:{dark:false, markers:'roman', text:['CARTIER'], set:{lines:[['CARTIER',-0.42,0.135,0]], foot:'PARIS'}},
   hands:'epee', sec:'none', crown:{pos:3, cabochon:true}, strap:'leather',
   mv:{cal:'not specified', type:'manual', vph:18000, wind:'Manual', note:'Early movements were supplied through the European Watch & Clock Co., Cartier’s venture with Edmond Jaeger and LeCoultre. Many calibres followed, so none is named as the Tank’s. The Workbench shows one real example: LeCoultre’s calibre 818 (20.80 mm, 18,000 A/h), which dealers describe in Paris-made Tanks of the late 1960s.'},
   back:{type:'plainrect', note:'Detail not verified; shown plain.'},

@@ -272,8 +272,8 @@ function markers(w, g, skip) {
     case 'roman': {
       const a1 = g.dhw * 0.6, b1 = g.dhh * 0.6, t1 = rectEdge(a1, b1), t2 = rectEdge(a1 - 0.9, b1 - 0.9);
       s += Pa(rrD(a1, b1, 0.01), 't') + Pa(rrD(a1 - 0.9, b1 - 0.9, 0.01), 't');
-      for (let i = 0; i < 60; i++) { const a = i * 6, p = P(a, t1(a)), q = P(a, t2(a)); s += L(p[0], p[1], q[0], q[1], i % 5 ? 't' : 'l'); }
-      for (let h = 0; h < 12; h++) { const a = h * 30, r = (E(a) + t1(a)) / 2, sz = 2.5; s += T(ROMAN[h], 0, 0, sz, 'tx rom', `transform="rotate(${a}) translate(0,${f(-r + sz * 0.36)})"`); }
+      for (let i = 0; i < 60; i++) { const a = i * 6, p = P(a, t1(a)), q = P(a, t2(a)); s += L(p[0], p[1], q[0], q[1], i % 5 ? 't' : 'bar'); } // a fine line at each minute and a heavy bar at each five, as on the watch
+      for (let h = 0; h < 12; h++) { const a = h * 30, r = (E(a) + t1(a)) / 2, sz = ROMAN[h].length > 3 ? 1.95 : 2.25; /* the two widest numerals are set a little smaller so they clear the edge */ s += T(ROMAN[h], 0, 0, sz, 'tx rom', `transform="rotate(${a}) translate(0,${f(-r + sz * 0.36)})"`); }
       break;
     }
     case 'rectbaton': {
@@ -392,7 +392,7 @@ function dtext(w, g, o) {
     if (q.mono) s += T(q.mono[0], 0, R0 * q.mono[1], R0 * 0.16, 'tx nm', 'style="font-family:Georgia,serif;font-weight:bold" letter-spacing="-.12em"'); // an applied monogram, shown as its two letters set close; the real one interlocks them
     if (q.crown != null) { const u = R0 * 0.075, y0 = R0 * q.crown; s += Pa(polyD([[-.55, 0], [-.95, -.7], [-.45, -.32], [-.5, -.98], [-.12, -.38], [0, -1.12], [.12, -.38], [.5, -.98], [.45, -.32], [.95, -.7], [.55, 0]].map(p => [f(p[0] * u), f(y0 + p[1] * u)])), 'k dl') + [[-.95, -.7], [-.5, -.98], [0, -1.12], [.5, -.98], [.95, -.7]].map(p => C(u * 0.1, p[0] * u, y0 + p[1] * u, 'k dl')).join('') + RC(-0.55 * u, y0 + 0.08 * u, 1.1 * u, 0.12 * u, 'k dl'); }
     q.lines.forEach(l => { s += T(l[0].replace(/&/g, '&amp;'), 0, R0 * l[1], R0 * l[2], 'tx dl', l[3] === 2 ? 'style="font-style:italic"' : l[3] ? sans : 'letter-spacing=".06em"'); }); // 2: a script line, approximated in italic
-    if (q.foot) s += T(q.foot, 0, q.footY ? R0 * q.footY : R0 - 0.12, R0 * 0.042, 'tx dl', sans);
+    if (q.foot) s += T(q.foot, 0, q.footY ? R0 * q.footY : g.dhh ? g.dhh - 0.3 : R0 - 0.12, R0 * (g.dhh ? 0.07 : 0.042), 'tx dl', sans); // on a rectangular dial the word sits just inside the lower edge
     return s;
   }
   /* With registers at three and nine, the second line has to sit above their tops, or its ends run into them; the first line moves up with it. */
