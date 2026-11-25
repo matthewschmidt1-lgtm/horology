@@ -305,6 +305,7 @@ if (watches.length > 1) {
     '62mas': ['#0d1719', '#274044', '#d7d9d6', '#0a0d0e', '#1a2123', '#2a3336', '#e6dfc4', ''],
     calatrava: ['#4b3c1e', '#9a8148', '#f4eddb', '#2a2212', '#e7dcbd', '#d8cba6', '#7a5f22', 'sun'],
     tanklc: ['#3f0d15', '#7d1f2c', '#f1dfa8', '#2a1206', '#f6f1e4', '#e9e1cd', '#1f3a7a', ''],
+    explorer1016: ['#06252b', '#1f6f78', '#d9dbd7', '#0b0d0e', '#14181a', '#262b2e', '#d8c58f', ''],
     carrera: ['#2b1407', '#9a4f1c', '#eeece6', '#141414', '#dcdad2', '#cfcdc5', '#b8975a', ''],
     spaceview: ['#0b2019', '#1f4f3e', '#dcdcd4', '#0a130f', '#1f4a3c', '#2b6050', '#d8c58f', 'grid']
   }

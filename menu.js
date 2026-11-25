@@ -10,7 +10,7 @@
     'workbench.html': [
       ['Omega Speedmaster', '?watch=speedmaster-105003'], ['Rolex Submariner', '?watch=submariner-5513'], ['Patek Philippe Calatrava', '?watch=calatrava-96'],
       ['Zenith El Primero', '?watch=el-primero-a386'], ['Bulova Accutron', '?watch=accutron-spaceview'], ['Audemars Piguet Royal Oak', '?watch=royal-oak-5402'],
-      ['Heuer Monaco', '?watch=monaco-1133b'], ['Cartier Tank', '?watch=tank-louis-cartier'], ['Rolex Daytona', '?watch=daytona-6263'], ['Seiko 62MAS', '?watch=seiko-62mas'], ['Heuer Carrera', '?watch=carrera-2447']
+      ['Heuer Monaco', '?watch=monaco-1133b'], ['Cartier Tank', '?watch=tank-louis-cartier'], ['Rolex Daytona', '?watch=daytona-6263'], ['Seiko 62MAS', '?watch=seiko-62mas'], ['Heuer Carrera', '?watch=carrera-2447'], ['Rolex Explorer', '?watch=explorer-1016']
     ],
     'time.html': [
       ['The living solar clock', '#solar'], ['The rhythm of time', '#rhythm'], ['The anatomy of a second', '#second'], ['The sound of time', '#sound'],

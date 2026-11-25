@@ -11,5 +11,6 @@ import tank from './tank-louis-cartier.js';
 import daytona from './daytona-6263.js';
 import seiko62mas from './seiko-62mas.js';
 import carrera from './carrera-2447.js';
+import explorer from './explorer-1016.js';
 
-export const watches = [speedmaster, submariner, calatrava, elPrimero, spaceview, royalOak, monaco, tank, daytona, seiko62mas, carrera];
+export const watches = [speedmaster, submariner, calatrava, elPrimero, spaceview, royalOak, monaco, tank, daytona, seiko62mas, carrera, explorer];
