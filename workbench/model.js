@@ -154,7 +154,8 @@ export function buildProcedural(watch, face, tex) {
       dial.add(at(mk(cg, 'face', { noEdges: true, real: { map: tex.real }, tech: { map: tex.tech } }), c[0], c[1], z), at(mk(cyl(c[2], z - 2.36, 64), CASE), c[0], c[1], (z + 2.32) / 2 - 0.01)); };
     raised(G3.dn, 2.6); raised(G3.sec, 2.75); raised(G3.time, 3.1); // their heights, and which overlaps which, are read from an angled photograph and are estimates
     dial.add(at(mk(new THREE.BoxGeometry(0.2, G3.sec[2] - 0.6, 0.1), HAND), G3.sec[0], G3.sec[1] + (G3.sec[2] - 0.6) / 2 - 1.0, 2.95), at(mk(cyl(0.45, 0.25, 16), HAND), G3.sec[0], G3.sec[1], 2.95)); // the chronograph seconds hand, at rest
-    dial.add(at(mk(lathe([[G3.tb[2], -3.4], [G3.tb[2] + 0.45, -3.4], [G3.tb[2] + 0.45, 2.5], [G3.tb[2], 2.5], [G3.tb[2], -3.4]]), 'ink'), G3.tb[0], G3.tb[1], 0), at(mk(new THREE.TorusGeometry(G3.tb[2] + 0.25, 0.22, 8, 72), CASE, { noEdges: true }), G3.tb[0], G3.tb[1], 2.5)); // the dark well the tourbillon turns in, with a gold rim
+    const cwf = part('column-wheel'); cwf.add(at(mk(cyl(G3.cw[2], 0.5, 28), 'steel'), G3.cw[0], G3.cw[1], 2.6), at(mk(new THREE.BoxGeometry(1.7, 0.22, 0.08), 'ink', { noEdges: true }), G3.cw[0], G3.cw[1], 2.87)); cwf.userData.anchor = [G3.cw[0], G3.cw[1], 3.2]; assembly(cwf, 8); // the chronograph's column wheel shows on the front as a steel cap, just above the chronograph dial
+    dial.add(at(mk(lathe([[G3.tb[2], 0.25], [G3.tb[2] + 0.45, 0.25], [G3.tb[2] + 0.45, 2.5], [G3.tb[2], 2.5], [G3.tb[2], 0.25]]), 'ink'), G3.tb[0], G3.tb[1], 0), at(mk(new THREE.TorusGeometry(G3.tb[2] + 0.25, 0.22, 8, 72), CASE, { noEdges: true }), G3.tb[0], G3.tb[1], 2.5)); // the dark well the tourbillon turns in, with a gold rim
   }
   assembly(dial, 8);
   const hands = part('hands'), Lm = P.handLen || face.handLen, Lh = Lm * 0.64, HW = P.handWidth || 1;
@@ -587,23 +588,31 @@ export function buildProcedural(watch, face, tex) {
     layer(multi('levers', [[[-16.4, 7.5, 0.6], [-13.5, 2.9, 0.45]], [[-7.2, 12.4, 0.6], [-11.9, 2.2, 0.45]]], 3.5, 0.2, 'steel'), 9);
     Object.assign(M, { balSpin, palRock: new THREE.Group(), hsPos, hsGeo, HN, interRatio: 1 });
   } else if (P.calibre === '176') {
-    /* Jaeger-LeCoultre calibre 176 (Gyrotourbillon 3). No maker's drawing is published and no usable photograph of the back was measured, so NOTHING of the movement
-       is modelled except the tourbillon, which stands in the opening where a front photograph of the watch shows it. Its form is a simplification: an outer cage of three
-       rings, an inner cage of two set at an angle to it, a balance and a balance spring wound round a ball. The axes the two cages turn on, their speeds (once a minute and
-       once in 24 seconds) and every size are illustrative, not taken from the calibre. The barrel, the going train, the escapement, the chronograph and its jumping minute
-       counter, and the day and night work are all left out. */
+    /* Jaeger-LeCoultre calibre 176 (Gyrotourbillon 3). No maker's drawing is published. The tourbillon stands in the opening where a front photograph of the watch shows it.
+       Its form is a simplification: an outer cage of three rings, an inner cage of two set at an angle to it, a balance and a balance spring wound round a ball. The speeds are
+       those reported for the calibre: the outer cage once a minute, the inner two and a half times a minute, in the opposite direction. The axes they turn on, and every size,
+       are illustrative. The barrels, most of the going train, the escapement, the chronograph work and the day and night work are left out. */
     spins.centre = spins.third = spins.fourth = spins.escape = new THREE.Group(); // not modelled; the animation only needs something to turn
     const palRock = new THREE.Group(), HN = 240, hsPos = new Float32Array((HN + 1) * 3), hsGeo = new THREE.BufferGeometry(); hsGeo.setAttribute('position', new THREE.BufferAttribute(hsPos, 3));
     const gy = at(part('gyrotourbillon', mv), -G3.tb[0], G3.tb[1], -2.0), /* its centre stands a little above the level of the dials, as the angled photograph shows */ outer = new THREE.Group(), tilt = new THREE.Group(), innerCage = new THREE.Group(), balSpin = new THREE.Group();
     gy.add(outer); outer.add(tilt); tilt.rotation.y = 0.95; tilt.add(innerCage); innerCage.add(balSpin);
     const hoop = (r, tube, kind, rx, ry) => { const m = mk(new THREE.TorusGeometry(r, tube, 8, 72), kind, { noEdges: true }); m.rotation.set(rx, ry, 0); return m; };
-    outer.add(hoop(4.3, 0.22, 'steel', 0, 0), hoop(4.3, 0.22, 'steel', Math.PI / 2, 0), hoop(4.3, 0.22, 'steel', 0, Math.PI / 2));
-    innerCage.add(hoop(3.3, 0.2, 'blue', 0, 0), hoop(3.3, 0.2, 'blue', Math.PI / 2, 0));
-    balSpin.add(mk(new THREE.TorusGeometry(2.3, 0.2, 8, 56), CASE, { edgeAngle: 50 }), mk(new THREE.BoxGeometry(4.5, 0.3, 0.2), CASE), at(mk(cyl(0.3, 0.25, 12), 'ruby'), 0, 0, 0.3));
+    outer.add(hoop(4.3, 0.22, 'iron', 0, 0), hoop(4.3, 0.22, 'iron', Math.PI / 2, 0), hoop(4.3, 0.22, 'iron', 0, Math.PI / 2)); // matt grey, for cages of blasted aluminium
+    innerCage.add(hoop(3.3, 0.2, 'iron', 0, 0), hoop(3.3, 0.2, 'iron', Math.PI / 2, 0));
+    balSpin.add(mk(new THREE.TorusGeometry(2.3, 0.2, 8, 56), 'blue', { edgeAngle: 50 }), mk(new THREE.BoxGeometry(4.5, 0.3, 0.2), 'blue'), at(mk(cyl(0.3, 0.25, 12), 'ruby'), 0, 0, 0.3)); // the balance is blued gold
     const ball = []; for (let i = 0; i <= 260; i++) { const t = i / 260, ph = 0.2 * Math.PI + t * 0.6 * Math.PI, a = t * Math.PI * 2 * 8; ball.push(new THREE.Vector3(1.15 * Math.sin(ph) * Math.cos(a), 1.15 * Math.sin(ph) * Math.sin(a), 1.15 * Math.cos(ph))); }
     const bl = new THREE.Line(new THREE.BufferGeometry().setFromPoints(ball), new THREE.LineBasicMaterial({ color: 0x4a78d0 })); bl.raycast = () => {}; balSpin.add(bl);
     gy.userData.anchor = [0, 0, -5.2];
-    M.extraAnim = tv => { outer.rotation.z = tv * Math.PI * 2 / 60; innerCage.rotation.x = tv * Math.PI * 2 / 24; };
+    /* The back, from SJX Watches' photographs of it (2019): a steel winding wheel near the crown, a large gold wheel beside the tourbillon turning a small pinion at the
+       cage's edge, and a second gold wheel in an opening. They are placed from a view of the whole back that is turned and slightly angled, good to about 1.5 mm. Two plain
+       grey panels stand in for the bridges, which in the real watch cover most of the back and are inlaid with meteorite; their outlines are not reproduced. */
+    const TB = [-G3.tb[0], G3.tb[1]];
+    layer(multi('back-bridges', [[[-2.0, 11.4, 6.2], [-9.0, 6.0, 4.0]], [[10.0, 6.0, 5.5], [11.0, -6.0, 5.0]]], 0.05, 1.2, 'iron'), 3);
+    const rw = at(part('ratchet', mv), -2.0, 11.4, 0); rw.add(at(mk(extr(gearShape(6.3, 72, 0.25, 0), 0.3), 'steel', { edgeAngle: 40 }), 0, 0, 1.3), at(mk(cyl(3.6, 0.2, 40), 'steel'), 0, 0, 1.7), at(mk(new THREE.BoxGeometry(1.6, 0.24, 0.1), 'ink', { noEdges: true }), 0, 0, 1.83)); rw.userData.anchor = [0, 0, 2.0]; layer(rw, 6);
+    const dw = part('drive-wheel', mv), dwSpin = mobile(null, TB[0] + 0.1, TB[1] + 9.7, { R: 2.9, n: 72, tooth: 0.12, z: 1.5, th: 0.2, spokes: 5, arbor: 1.7 }, dw), pinSpin = new THREE.Group();
+    pinSpin.position.set(TB[0] + 0.1, TB[1] + 6.2, 0); pinSpin.add(at(mk(extr(gearShape(0.6, 10, 0.14, 0), 0.5), 'steelDark', { edgeAngle: 40 }), 0, 0, 1.35)); dw.add(pinSpin); dw.userData.anchor = [TB[0] + 0.1, TB[1] + 9.7, 2.0]; layer(dw, 6);
+    const sw = part('second-wheel', mv); mobile(null, 9.1, -2.6, { R: 2.0, n: 56, tooth: 0.12, z: 1.5, th: 0.2, spokes: 4, arbor: 1.7 }, sw); sw.userData.anchor = [9.1, -2.6, 2.0]; layer(sw, 6);
+    M.extraAnim = tv => { const a = tv * Math.PI * 2 / 60; outer.rotation.z = a; innerCage.rotation.x = -a * 2.5; pinSpin.rotation.z = a; dwSpin.rotation.z = -a * 0.6 / 2.9; }; // the outer cage turns once a minute and the inner two and a half times, the opposite way, as the maker's figures have it
     Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1 });
   } else if (P.calibre === '11') {
     /* Heuer Calibre 11 (Buren micro-rotor base, Dubois Depraz chronograph module). No dimensioned maker's drawing was available. Positions of the barrel, the large driving

@@ -337,7 +337,7 @@ function dtext(w, g, o) {
 /* The open front of the Jaeger-LeCoultre Gyrotourbillon 3: no single dial, but three separate ones over the movement, and an opening for the tourbillon.
    Centres and sizes are measured from a front photograph of the watch, in millimetres from the centre of the case (x to the right, y upwards):
    time dial, chronograph seconds dial with its digital minute window, day and night disc, tourbillon opening. Everything between them is simplified. */
-const G3 = { time: [3.0, 9.4, 9.4], sec: [-10.5, 1.5, 8.2], dn: [13.1, 1.1, 5.0], tb: [2.8, -10.3, 6.4] };
+const G3 = { time: [3.0, 9.4, 9.4], sec: [-10.5, 1.5, 8.2], dn: [13.1, 1.1, 5.0], tb: [2.8, -10.3, 6.4], cw: [-9.0, 10.2, 2.0] }; // cw: the chronograph's column wheel, under its steel cap
 function gyro3(w, g, o) {
   const [tx, ty, tr] = G3.time, [sx, sy, sr] = G3.sec, [nx, ny, nr] = G3.dn, [bx, by, br] = G3.tb, now = new Date();
   let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647; // the same scatter of flecks every time
@@ -346,6 +346,7 @@ function gyro3(w, g, o) {
   /* two grey panels stand in for the bridges inlaid with meteorite; their real outlines are not reproduced */
   s += Pa(`M${f(bx + 7.6)},${f(-by - 6)}Q${f(bx + 15)},${f(-by - 5)} ${f(bx + 13.5)},${f(-by + 3)}Q${f(bx + 9)},${f(-by + 6)} ${f(bx + 7.2)},${f(-by + 2)}Z`, 'tn g3-met') + Pa(`M${f(sx - 4)},${f(-sy + 9)}Q${f(sx + 2)},${f(-sy + 14)} ${f(sx + 9)},${f(-sy + 11.5)}L${f(sx + 6)},${f(-sy + 8.6)}Q${f(sx + 1)},${f(-sy + 10)} ${f(sx - 2)},${f(-sy + 8.2)}Z`, 'tn g3-met');
   s += C(br + 0.5, bx, -by, 'p g3-rim') + C(br, bx, -by, 'k g3-hole');
+  s += C(G3.cw[2], G3.cw[0], -G3.cw[1], 'p g3-steel') + C(G3.cw[2] * 0.62, G3.cw[0], -G3.cw[1], 'p g3-steel') + L(G3.cw[0] - 0.8, -G3.cw[1] + 0.35, G3.cw[0] + 0.8, -G3.cw[1] - 0.35, 't g3-ink'); // the capped column wheel, with the slot of its screw
   /* day and night: a disc that turns once in 24 hours, set to the hour at which the page was opened */
   s += `<g transform="translate(${nx},${-ny}) rotate(${f((now.getHours() + now.getMinutes() / 60) * 15)})">` + C(nr, 0, 0, 'p g3-rim') + C(nr - 0.35, 0, 0, 'p g3-day') + Pa(`M${f(-nr + 0.35)},0A${f(nr - 0.35)},${f(nr - 0.35)} 0 0 1 ${f(nr - 0.35)},0Z`, 'tn g3-blue')
     + Pa(`M-1.5,-2.6A1.5,1.5 0 1 0 0.6,-1.2A1.15,1.15 0 1 1 -1.5,-2.6Z`, 'p g3-sun') + star(1.7, -2.6, 0.42, 'k g3-sun') + star(-2.6, -1.3, 0.34, 'k g3-sun') + C(0.75, 0, 2.3, 'p g3-sun');
@@ -355,7 +356,7 @@ function gyro3(w, g, o) {
   s += C(sr, sx, -sy, 'p g3-rim') + C(sr - 0.3, sx, -sy, 'p g3-white') + C(sr - 2.6, sx, -sy, 'tn g3-blue') + flecks(sx, -sy, 0, sr - 2.8, 46);
   for (let i = 0; i < 60; i++) s += rad(i * 6, sr - (i % 5 ? 0.9 : 1.25), sr - 0.45, 't g3-ink', sx, -sy);
   [60, 10, 20, 30, 40, 50].forEach((n, i) => { const q = P(i * 60, sr - 1.85, sx, -sy); s += T(n, q[0], q[1] + 0.42, 1.2, 'tx g3-inkf'); });
-  s += RC(sx + 2.6, -sy - 1.55, 4.3, 3.1, 'p g3-white', 0.15) + T('00', sx + 4.75, -sy + 0.95, 2.7, 'tx g3-inkf');
+  s += RC(sx + 2.35, -sy - 1.8, 4.8, 3.6, 'p g3-rim', 0.2) + RC(sx + 2.6, -sy - 1.55, 4.3, 3.1, 'p g3-white', 0.15) + L(sx + 4.75, -sy - 1.55, sx + 4.75, -sy + 1.55, 'hair g3-ink') + T('00', sx + 4.75, -sy + 0.95, 2.7, 'tx g3-inkf');
   if (!o.noHands) s += L(sx, -sy + 1.2, sx, -sy - sr + 1.1, 'hd') + C(0.4, sx, -sy, 'k');
   /* time: a ring flecked like a night sky round a centre of meteorite */
   s += C(tr, tx, -ty, 'p g3-rim') + C(tr - 0.3, tx, -ty, 'tn g3-blue') + flecks(tx, -ty, 6.1, tr - 0.9, 70) + C(tr - 0.65, tx, -ty, 't g3-wt');
@@ -683,7 +684,7 @@ function face(w, real) {
   const mixed = real && !w.dial.dark ? `${w.bezel && w.bezel.dark ? '.bzd .tn{fill:#121212;stroke:#2b2b2b}.bzd text{fill:#f0ede2}.bzd .t,.bzd .hair{stroke:#e9e6da}.bzd .bar{stroke:#e9e6da}.bzd .k{fill:#e9e6da}' : ''}${w.dial.subDark ? '.tn2{fill:#161616;stroke:#2b2b2b}' : ''}` : '';
   const gold = real && w.dial.gold ? '.nm,.cal,.dl{fill:#cfa13a}.hc{fill:#cfa13a;stroke:#4a3c16}.mw{fill:#1b2a55;stroke:#cfa13a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}.t,.hair{stroke:#b08a34}.k{fill:#cfa13a}' : '';
   const pinkHands = real && w.dial.goldHands ? '.hc{fill:#cf9a78;stroke:#5a3b2a}.mw{fill:#1b2a55;stroke:#5a3b2a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}' : '';
-  const g3 = real && w.dial.custom === 'gyro3' ? '.g3-base{fill:#050506;stroke:none}.g3-met{fill:#5d5f63;stroke:#2f3033;stroke-width:.08}.g3-streak{stroke:#9a9c9f;stroke-width:.07}.g3-rim{fill:#c98d6b;stroke:#5a3b2a;stroke-width:.06}.g3-hole{fill:#09090a}.g3-blue{fill:#0a1340;stroke:#c98d6b;stroke-width:.06}.g3-white{fill:#f2f0e9;stroke:#8a8a86;stroke-width:.05}.g3-ink{stroke:#1a1a1a}.g3-inkf{fill:#1a1a1a;font-family:Helvetica,Arial,sans-serif}.g3-gold{fill:#dba886;stroke:#5a3b2a;stroke-width:.04}.g3-star{fill:#d5dcff}.g3-day{fill:#e9dfc6;stroke:none}.g3-sun{fill:#dba886;stroke:none}.g3-ray{stroke:#b98a64;stroke-width:.06}.g3-wt{stroke:#eef0ff}.g3-txt{fill:#e6e6e6}' : '';
+  const g3 = real && w.dial.custom === 'gyro3' ? '.g3-base{fill:#050506;stroke:none}.g3-met{fill:#5d5f63;stroke:#2f3033;stroke-width:.08}.g3-streak{stroke:#9a9c9f;stroke-width:.07}.g3-rim{fill:#c98d6b;stroke:#5a3b2a;stroke-width:.06}.g3-hole{fill:#09090a}.g3-blue{fill:#0a1340;stroke:#c98d6b;stroke-width:.06}.g3-white{fill:#f2f0e9;stroke:#8a8a86;stroke-width:.05}.g3-ink{stroke:#1a1a1a}.g3-inkf{fill:#1a1a1a;font-family:Helvetica,Arial,sans-serif}.g3-gold{fill:#dba886;stroke:#5a3b2a;stroke-width:.04}.g3-star{fill:#d5dcff}.g3-day{fill:#e3e1da;stroke:none}.g3-steel{fill:#b9bbbd;stroke:#4a4c4f;stroke-width:.07}.g3-sun{fill:#dba886;stroke:none}.g3-ray{stroke:#b98a64;stroke-width:.06}.g3-wt{stroke:#eef0ff}.g3-txt{fill:#e6e6e6}' : '';
   const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}${pinkHands}${g3}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
   // The dial is drawn once as a picture, so the date window is filled here with today's date; on the plates it is filled live.
   const today = new Date(), DAYS3 = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
