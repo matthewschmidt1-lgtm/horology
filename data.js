@@ -135,7 +135,7 @@ window.WATCHES = [
   q:{t:'How fast does the El Primero beat?', a:'36,000 vibrations per hour', w:['18,000 vibrations per hour','21,600 vibrations per hour','28,800 vibrations per hour']}
 },
 {
-  id:'polerouter', brand:'Universal Genève', model:'Polerouter', ref:'-', year:'1954', span:'1954 – 1969', kind:'Dress / travel watch',
+  id:'polerouter', brand:'Universal Genève', model:'Polerouter', ref:'-', year:'c. 1956', span:'1954 – 1969', kind:'Dress / travel watch',
   c:{shape:'round', d:35, da:'a', t:[10,'n'], lug:[18,'n'], lyre:true},
   bezel:{type:'plain', w:1.3}, dial:{dark:true, markers:'polerouter', text:['UNIVERSAL GENÈVE','POLEROUTER'], set:{ushield:-0.56, lines:[['UNIVERSAL',-0.39,0.085,1],['GENÈVE',-0.315,0.058,1],['POLEROUTER',-0.235,0.066,2],['AUTOMATIC',0.4,0.05,1],['MICROTOR',0.475,0.05,1]]}},
   hands:'dauphine', sec:'center', crown:{pos:3, small:true}, strap:'leather',
