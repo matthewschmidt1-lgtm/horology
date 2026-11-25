@@ -170,23 +170,23 @@ window.WATCHES = [
 {
   id:'62mas', brand:'Seiko', model:'62MAS', ref:'6217-8000 / 8001', year:'1965', span:'1965 – c. 1968', kind:'Dive watch',
   c:{shape:'round', d:37, t:[13.5,'a'], lug:[19,'a']},
-  bezel:{type:'dive', w:3.4}, dial:{dark:true, markers:'block', date:3, text:['SEIKO','DIVER’S 150m']},
-  hands:'baton', sec:'center', crown:{pos:3, big:true}, strap:'tropic',
+  bezel:{type:'dive', w:3.4, pip:true, dots:true}, dial:{dark:true, blue:'#2a2d30', markers:'mas62', date:3, text:['SEIKO','WATER 150 PROOF'], set:{lines:[['SEIKO',-0.42,0.12,1],['AUTOMATIC',-0.33,0.05,1],['WATER  150  PROOF',0.36,0.06,1],['DIASHOCK 17 JEWELS',0.44,0.045,1]]}},
+  hands:'baton', secTip:'block', sec:'center', crown:{pos:3, big:true}, strap:'tropic',
   mv:{cal:'6217A', type:'auto', vph:18000, jewels:17, wind:'Automatic, full rotor'},
   back:{type:'screw', emblem:'Dolphin emblem', note:'Screw back. The dolphin emblem is indicated, not reproduced.'},
   specs:[['Water resistance','150 m'],['Complication','Date at 3'],['Bezel','Rotating, sixty-minute scale']],
-  notes:['Japan’s first professional dive watch.','The nickname contracts “autoMAtic Selfdater”, from the 62-series movement family.'],
+  notes:['Japan’s first professional dive watch.','The dial reads WATER 150 PROOF and DIASHOCK 17 JEWELS, with no mention of “diver”; it is a grey sunburst, not black. The bezel carries a round luminous pip at nought and a dot at every minute. Read from photographs of a 6217-8001.','The nickname contracts “autoMAtic Selfdater”, from the 62-series movement family.'],
   q:{t:'What distinction does the 62MAS hold?', a:'Japan’s first professional dive watch', w:['The first quartz dive watch','The first titanium watch case','The first watch on the Moon']}
 },
 {
   id:'6139', brand:'Seiko', model:'5 Sports Speed-Timer', ref:'6139-6002', year:'c. 1970', span:'Cal. 6139 from 1969', kind:'Chronograph',
   c:{shape:'cushion', d:41, da:'a', t:[13.5,'n'], lug:[19,'a']},
-  bezel:{type:'tachy', w:2.6, dark:true}, dial:{dark:false, markers:'baton', flange:'minutes', date:3, daydate:true, subs:[[6,'min30']], text:['SEIKO','CHRONOGRAPH']},
+  bezel:{type:'tachy', w:2.6, dark:true, scale:'6139'}, dial:{dark:false, markers:'seiko6139', flange:'minutes60', date:3, daydate:true, subNums:true, subs:[[6,'min30']], text:['SEIKO','CHRONOGRAPH'], set:{lines:[['SEIKO',-0.45,0.11,1],['CHRONOGRAPH',-0.36,0.055,1],['AUTOMATIC',-0.295,0.055,1],['WATER',-0.06,0.045,2,-0.55],['70m',0,0.045,2,-0.55],['RESIST',0.06,0.045,2,-0.55]]}},
   hands:'baton', sec:'none', chrono:true, crown:{pos:3}, pushers:'pump', strap:'oyster',
   mv:{cal:'6139', type:'autochrono', vph:21600, wind:'Automatic, full rotor', note:'Column wheel with vertical clutch. No running-seconds hand.'},
   back:{type:'screw', note:'Screw back. Engraving omitted.'},
-  specs:[['Dial','Single 30-minute register at 6'],['Complication','Day and date at 3'],['Inner ring','Rotating, turned by the crown']],
-  notes:['One of the 1969 automatic chronographs, and the first to pair a column wheel with a vertical clutch.','Astronaut William Pogue carried a yellow-dialled example aboard Skylab 4 in 1973–74.','With no running seconds, the watch looks still until you start the chronograph.'],
+  specs:[['Dial','Single 30-minute register at 6'],['Complication','Day and date at 3'],['Bezel','Fixed tachymeter, red from 60 to 50 and blue beyond'],['Inner ring','Sixty-minute scale, turned by the crown']],
+  notes:['One of the 1969 automatic chronographs, and the first to pair a column wheel with a vertical clutch.','Astronaut William Pogue carried a yellow-dialled example aboard Skylab 4 in 1973–74.','With no running seconds, the watch looks still until you start the chronograph.','Drawn with the export dial of mid-1970 to 1972, lettered CHRONOGRAPH, AUTOMATIC and WATER 70m RESIST; earlier dials read PROOF. The bezel and the inner ring are read from photographs. Sources give the case as 40 or 41 mm.'],
   q:{t:'Who wore a 6139 aboard Skylab 4?', a:'William Pogue', w:['Buzz Aldrin','Wally Schirra','Scott Carpenter']}
 },
 {

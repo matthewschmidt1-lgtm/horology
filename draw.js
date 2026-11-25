@@ -159,7 +159,8 @@ function bezel(w, g) {
     for (let a = 0; a < 360; a += 5) s += rad(a, R - 0.5, R, 't');
     s += C(R - 0.55, 0, 0, 'tn') + C(ri, 0, 0, 'p');
     const ro = R - 0.55, h = ro - ri, rm = (ro + ri) / 2;
-    s += Pa(polyD([P(-6, ro - 0.5), P(6, ro - 0.5), P(0, ri + 0.5)]), 'p'); if (b.pearl) s += C(h * 0.2, 0, -(ro - 0.5 - h * 0.27), 'p') + C(h * 0.11, 0, -(ro - 0.5 - h * 0.27), 't'); // the luminous pearl set in the triangle, where the watch has one
+    if (b.pip) s += C(h * 0.3, 0, -rm, 'p'); /* a round luminous pip at nought, where other divers carry a triangle */ else s += Pa(polyD([P(-6, ro - 0.5), P(6, ro - 0.5), P(0, ri + 0.5)]), 'p'); if (b.pearl) s += C(h * 0.2, 0, -(ro - 0.5 - h * 0.27), 'p') + C(h * 0.11, 0, -(ro - 0.5 - h * 0.27), 't'); // the luminous pearl set in the triangle, where the watch has one
+    if (b.dots) for (let m = 1; m < 60; m++) if (m % 5) { const p = P(m * 6, rm); s += C(0.2, p[0], p[1], 'k'); } // a dot at every minute between the bars
     if (b.every) for (let m = 1; m < 60; m++) if (m % 5) s += rad(m * 6, ri + h * 0.3, ro - h * 0.3, 'bar'); // a bar at every minute, all the way round
     for (let m = 5; m < 60; m += 5) {
       const a = m * 6;
@@ -169,6 +170,14 @@ function bezel(w, g) {
     if (b.first15) for (let m = 1; m < 15; m++) if (m % 5) s += rad(m * 6, ri + 0.35, ri + 1.25, 't');
   } else if (b.type === 'tachy') {
     s += C(R - 0.4, 0, 0, 'tn') + C(ri, 0, 0, 'p');
+    if (b.scale === '6139') { /* the fixed bezel of the Seiko 6139-6002, read from photographs: a tachymeter that tops out at 250. On the watch the stretch from 60 round to 50 is red and the rest
+         is blue; the two lines drawn across the ring mark where the colours meet. Each figure stands at 3600 divided by its value, in seconds. */
+      const rm = (R - 0.4 + ri) / 2 + 0.1, sz = Math.min(b.w * 0.34, 0.85);
+      [60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 250, 220, 200, 180, 170, 160, 150, 140, 130, 120, 110, 100, 90, 85, 80, 75, 70, 65].forEach(v => { const a = 21600 / v % 360; s += T(v, 0, 0, sz, 'tx bz', `transform="rotate(${f(a)}) translate(0,${f(-rm + sz * 0.36)})"`); });
+      [...'TACHYMETER'].forEach((ch, i) => { s += T(ch, 0, 0, sz * 0.8, 'tx bz', `transform="rotate(${f(336.5 + i * 2.2)}) translate(0,${f(-rm + sz * 0.3)})"`); });
+      s += rad(-3.2, ri, R - 0.4, 't') + rad(79, ri, R - 0.4, 't');
+      return s;
+    }
     if (b.scale === '6263') { /* the acrylic insert of the Daytona 6263, read from dealers' photographs: these figures, running to 200, each at 3600 divided by its value, in seconds,
          with a mark beside it; and UNITS PER HOUR on two lines at three o'clock. The typeface is an approximation. */
       const rm = (R - 0.4 + ri) / 2 + 0.12, sz = Math.min(b.w * 0.36, 1.1);
@@ -242,8 +251,10 @@ function markers(w, g, skip) {
     case 'royaloak': { // the first Royal Oak's dial, from Audemars Piguet's own photographs: long slim applied bars with rounded ends, two side by side at twelve, and none at three, where the date is
       s += ticks(0.7, 0.2); const rb = (h, dx) => `<rect class="p" x="${f(dx - 0.3)}" y="${f(-R0 + 0.95)}" width="0.6" height="4.3" rx="0.3" transform="rotate(${h * 30})"/>`;
       each(h => h ? rb(h, 0) : rb(0, -0.45) + rb(0, 0.45)); break; }
+    case 'seiko6139': s += ticks(0.6, 0.2); each(h => bat(h, h ? 1.7 : 1.7, h ? 1.3 : 2.1, 'p', 0.9)); break; // applied steel blocks with luminous centres, a wider one at twelve; none at three or six, where the window and the register are
     case 'baton': s += ticks(); each(h => h === 0 ? dbl(2.6, 0.8) : bat(h, 2.6, 0.8)); break;
     case 'block': s += ticks(); each(h => h === 0 ? dbl(2.8, 1.3) : bat(h, 2.6, 1.7)); break;
+    case 'mas62': s += ticks(); each(h => bat(h, 2.7, h === 0 ? 2.9 : h % 3 === 0 ? 2.2 : 1.6, 'p', 0.8) + bat(h, 2.1, h === 0 ? 2.3 : h % 3 === 0 ? 1.6 : 1.0, 'p', 1.1)); break; // applied luminous blocks in metal surrounds: one extra-wide at twelve, wider ones at six and nine
     case 'sm300': { // the early dial of the Seamaster 300 165.024, from photographs: a long printed mark at every minute, eight long luminous bars that taper a little toward the centre, and at 12, 3, 6 and 9 a figure with a small luminous block outside it
       for (let i = 0; i < 60; i++) if (i % 5) s += rad(i * 6, R0 - 3.1, R0 - 0.3, 't');
       const wedge = (h, len, w0, w1) => `<path class="p" d="${polyD([[f(-w0 / 2), f(-R0 + 0.3)], [f(w0 / 2), f(-R0 + 0.3)], [f(w1 / 2), f(-R0 + 0.3 + len)], [f(-w1 / 2), f(-R0 + 0.3 + len)]])}" transform="rotate(${h * 30})"/>`;
@@ -487,6 +498,10 @@ function dial(w, g, o) {
       for (let v = 5; v <= 100; v += 5) s += put(v, v * 3.6 % 360, r + 1.0, 0.74, 'tx dkt');
       s += put('SWISS', 190.5, rb - 0.2, 0.34, 'tx dkt') + put('MADE - T', 168, rb - 0.2, 0.34, 'tx dkt');
     }
+    else if (d.flange === 'minutes60') { /* the 6139's inner ring, which the crown turns: a sixty-minute scale with a triangle at nought and figures at the tens */
+      for (let i = 0; i < 60; i++) s += rad(i * 6, r + 0.15, r + (i % 5 ? 0.5 : 0.8), 't');
+      [10, 20, 30, 40, 50].forEach(v => { s += T(v, 0, 0, 0.85, 'tx bz', `transform="rotate(${v * 6}) translate(0,${f(-r - 0.62)})"`); });
+      s += Pa(polyD([[-0.5, f(-r - 1.4)], [0.5, f(-r - 1.4)], [0, f(-r - 0.45)]]), 'k'); }
     else if (d.flange === 'fifths') for (let i = 0; i < 300; i++) s += rad(i * 1.2, r + 0.2, r + (i % 5 ? 0.75 : 1.35), i % 5 ? 'hair' : 't');
     else if (d.flange === 'tachy') { for (let i = 0; i < 60; i++) s += rad(i * 6, r + 0.15, r + 0.55, 't'); [200, 150, 120, 100, 90, 80, 70, 60].forEach(v => { s += T(v, 0, 0, 0.95, 'tx bz', `transform="rotate(${f(21600 / v)}) translate(0,${f(-r - 0.65)})"`); }); }
     else for (let i = 0; i < 60; i++) s += rad(i * 6, r + 0.2, r + (i % 5 ? 0.8 : 1.4), 't');
@@ -532,7 +547,7 @@ function hands(w, g) {
   else { hp = Pa(pen(Lh, 0.8), 'p'); mp = Pa(pen(Lm, 0.62), 'p'); }
   let s = `<g data-hand="h">${hp}</g><g data-hand="m">${mp}</g>`;
   if (w.chrono) s += `<g data-chr="s" data-bps="${b}">${L(0, 3.2, 0, -Lm * 1.04, 'hd')}${Pa(polyD([[-0.5, f(-Lm * 0.9)], [0.5, f(-Lm * 0.9)], [0, f(-Lm * 1.04)]]), 'k')}</g>`;
-  else if (w.sec === 'center') s += `<g data-hand="s" data-bps="${b}">${L(0, 3.4, 0, -Lm * 1.02, 'hd')}${st === 'mercedes' ? C(0.75, 0, -Lm * 0.62, 'p') : ''}${w.secTip === 'diamond' ? Pa(polyD([[0, f(-Lm * 0.7)], [0.55, f(-Lm * 0.8)], [0, f(-Lm * 0.93)], [-0.55, f(-Lm * 0.8)]]), 'p') : ''}${RC(-0.35, 1.6, 0.7, 1.8, 'k')}</g>`;
+  else if (w.sec === 'center') s += `<g data-hand="s" data-bps="${b}">${L(0, 3.4, 0, -Lm * 1.02, 'hd')}${st === 'mercedes' ? C(0.75, 0, -Lm * 0.62, 'p') : ''}${w.secTip === 'block' ? RC(-0.4, f(-Lm * 0.86), 0.8, 1.5, 'p') : ''}${w.secTip === 'diamond' ? Pa(polyD([[0, f(-Lm * 0.7)], [0.55, f(-Lm * 0.8)], [0, f(-Lm * 0.93)], [-0.55, f(-Lm * 0.8)]]), 'p') : ''}${RC(-0.35, 1.6, 0.7, 1.8, 'k')}</g>`;
   return s + C(0.95, 0, 0, 'p') + C(0.3, 0, 0, 'k');
 }
 
