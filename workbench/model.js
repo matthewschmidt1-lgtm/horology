@@ -606,21 +606,39 @@ export function buildProcedural(watch, face, tex) {
     gy.add(outer); outer.add(tilt); tilt.rotation.y = 0.95; tilt.add(innerCage); innerCage.add(balSpin);
     const hoop = (r, tube, kind, rx, ry) => { const m = mk(new THREE.TorusGeometry(r, tube, 8, 72), kind, { noEdges: true }); m.rotation.set(rx, ry, 0); return m; };
     outer.add(hoop(4.3, 0.22, 'iron', 0, 0), hoop(4.3, 0.22, 'iron', Math.PI / 2, 0), hoop(4.3, 0.22, 'iron', 0, Math.PI / 2)); // matt grey, for cages of blasted aluminium
-    innerCage.add(hoop(3.3, 0.2, 'iron', 0, 0), hoop(3.3, 0.2, 'iron', Math.PI / 2, 0));
+    innerCage.add(hoop(3.3, 0.2, 'iron', 0, 0), hoop(3.3, 0.2, 'iron', Math.PI / 2, 0), hoop(3.3, 0.2, 'iron', 0, Math.PI / 2));
+    for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; balSpin.add(at(mk(cyl(0.2, 0.3, 8), 'gold', { noEdges: true }), 2.3 * Math.cos(a), 2.3 * Math.sin(a), 0)); } // weights on the rim of the balance; their number is not counted
     balSpin.add(mk(new THREE.TorusGeometry(2.3, 0.2, 8, 56), 'blue', { edgeAngle: 50 }), mk(new THREE.BoxGeometry(4.5, 0.3, 0.2), 'blue'), at(mk(cyl(0.3, 0.25, 12), 'ruby'), 0, 0, 0.3)); // the balance is blued gold
     const ball = []; for (let i = 0; i <= 260; i++) { const t = i / 260, ph = 0.2 * Math.PI + t * 0.6 * Math.PI, a = t * Math.PI * 2 * 8; ball.push(new THREE.Vector3(1.15 * Math.sin(ph) * Math.cos(a), 1.15 * Math.sin(ph) * Math.sin(a), 1.15 * Math.cos(ph))); }
     const bl = new THREE.Line(new THREE.BufferGeometry().setFromPoints(ball), new THREE.LineBasicMaterial({ color: 0x4a78d0 })); bl.raycast = () => {}; balSpin.add(bl);
     gy.userData.anchor = [0, 0, -5.2];
-    /* The back, from SJX Watches' photographs of it (2019): a steel winding wheel near the crown, a large gold wheel beside the tourbillon turning a small pinion at the
-       cage's edge, and a second gold wheel in an opening. They are placed from a view of the whole back that is turned and slightly angled, good to about 1.5 mm. Two plain
-       grey panels stand in for the bridges, which in the real watch cover most of the back and are inlaid with meteorite; their outlines are not reproduced. */
-    const TB = [-G3.tb[0], G3.tb[1]];
-    layer(multi('back-bridges', [[[-2.0, 11.4, 6.2], [-9.0, 6.0, 4.0]], [[10.0, 6.0, 5.5], [11.0, -6.0, 5.0]]], 0.05, 1.2, 'iron'), 3);
-    const rw = at(part('ratchet', mv), -2.0, 11.4, 0); rw.add(at(mk(extr(gearShape(6.3, 72, 0.25, 0), 0.3), 'steel', { edgeAngle: 40 }), 0, 0, 1.3), at(mk(cyl(3.6, 0.2, 40), 'steel'), 0, 0, 1.7), at(mk(new THREE.BoxGeometry(1.6, 0.24, 0.1), 'ink', { noEdges: true }), 0, 0, 1.83)); rw.userData.anchor = [0, 0, 2.0]; layer(rw, 6);
-    const dw = part('drive-wheel', mv), dwSpin = mobile(null, TB[0] + 0.1, TB[1] + 9.7, { R: 2.9, n: 72, tooth: 0.12, z: 1.5, th: 0.2, spokes: 5, arbor: 1.7 }, dw), pinSpin = new THREE.Group();
-    pinSpin.position.set(TB[0] + 0.1, TB[1] + 6.2, 0); pinSpin.add(at(mk(extr(gearShape(0.6, 10, 0.14, 0), 0.5), 'steelDark', { edgeAngle: 40 }), 0, 0, 1.35)); dw.add(pinSpin); dw.userData.anchor = [TB[0] + 0.1, TB[1] + 9.7, 2.0]; layer(dw, 6);
-    const sw = part('second-wheel', mv); mobile(null, 9.1, -2.6, { R: 2.0, n: 56, tooth: 0.12, z: 1.5, th: 0.2, spokes: 4, arbor: 1.7 }, sw); sw.userData.anchor = [9.1, -2.6, 2.0]; layer(sw, 6);
-    M.extraAnim = tv => { const a = tv * Math.PI * 2 / 60; outer.rotation.z = a; innerCage.rotation.x = -a * 2.5; pinSpin.rotation.z = a; dwSpin.rotation.z = -a * 0.6 / 2.9; }; // the outer cage turns once a minute and the inner two and a half times, the opposite way, as the maker's figures have it
+    /* The back, traced from SJX Watches' photograph of the whole back (2019). That view is turned and taken at an angle, so it was fitted to this layout by the tourbillon's
+       opening and the directions of the crown and the strap; positions are good to about 1.5 mm, less near the edge. Traced from it: three bridges and the winding channel
+       between them, with rough outlines; the meteorite inlaid in two of them; seven jewels and fifteen blued screws; the steel winding wheel; the large gold wheel in the
+       channel and the steel pinion it meets at the edge of the tourbillon, under a small steel cock; and a second gold wheel in an opening of the right-hand bridge. One jewel
+       falls on the centre of the movement, which supports the fit. Heights, tooth counts and the turning of the wheel and pinion are estimates. */
+    const TB = [-G3.tb[0], G3.tb[1]], RIM = 17.5, dg2 = Math.PI / 180;
+    const arc = (c, r, a0, a1, st = 3) => { const o = [], n = Math.max(1, Math.round(Math.abs(a1 - a0) / st)); for (let k = 0; k <= n; k++) { const a = (a0 + (a1 - a0) * k / n) * dg2; o.push([c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)]); } return o; };
+    const poly = pts => { const sh = new THREE.Shape(); pts.forEach((q, k) => (k ? sh.lineTo(q[0], q[1]) : sh.moveTo(q[0], q[1]))); sh.closePath(); return sh; };
+    const W3 = [7.5, -3.1], upper = poly(arc([0, 0], RIM, 65, 200).concat([[-9.4, 0.7], [-2.9, 2.2], [2.2, 4.8], [5.9, 12.7]]));
+    const right = poly([[-1.8, 1.4], [0.2, -2.6]].concat(arc(TB, 7.6, 62, -38), arc([0, 0], RIM, -50, 60), [[6.8, 12.0], [3.0, 3.9]])), hole = new THREE.Path(); hole.absarc(W3[0], W3[1], 2.7, 0, Math.PI * 2, true); right.holes.push(hole);
+    const left = poly(arc([0, 0], RIM, 203, 239).concat(arc(TB, 7.6, 220, 125), [[-8.6, -1.2], [-9.9, -0.4]]));
+    const bridges = part('back-bridges', mv); for (const sh of [upper, right, left]) bridges.add(at(mk(extr(sh, 1.0), 'steel', { edgeAngle: 40 }), 0, 0, 0.05)); bridges.userData.anchor = [12, 6, 1.3]; layer(bridges, 3);
+    const met = part('meteorite-panels', mv);
+    met.add(at(mk(extr(poly([[-16, 0], [-15, 6], [-12.5, 11.5], [-11.8, 6], [-9.6, 2.2], [-13, -1.8]]), 0.08), 'iron', { edgeAngle: 40 }), 0, 0, 1.05), at(mk(extr(poly([[4.5, 3.5], [8, 10.5], [13.5, 8.5], [16, 2], [14.5, -5], [11.5, -3.5], [10.6, -0.8], [6.5, 0.6], [3.6, -1.5], [1.6, -1.2]]), 0.08), 'iron', { edgeAngle: 40 }), 0, 0, 1.05));
+    met.userData.anchor = [12, 3, 1.3]; layer(met, 3.4);
+    const scr = part('screws', mv);
+    for (const q of [[-16.9, 0.2], [-13.9, 9.6], [-12.0, 11.9], [-1.5, 15.5], [-8.0, 3.8], [-12.8, -5.8], [-2.6, 4.1], [7.8, 12.0], [2.4, 2.9], [-8.9, -2.9], [1.2, -3.2], [3.8, -5.2], [13.95, 3.9], [7.6, -10.7], [12.5, -6.0]]) scr.add(at(mk(cyl(0.55, 0.2, 16), 'blue'), q[0], q[1], 1.25), at(mk(new THREE.BoxGeometry(0.85, 0.12, 0.04), 'ink', { noEdges: true }), q[0], q[1], 1.36));
+    scr.userData.anchor = [13.95, 3.9, 1.5]; layer(scr, 4);
+    for (const q of [[-12.6, 7.2], [-11.7, 4.3], [0.6, 13.3], [1.9, 10.1], [0.6, 0.4], [7.2, 6.5], [8.1, 0.9]]) { jewel(q[0], q[1], 1.24, 4); jw.add((c => { layer(c, 4); return c; })(at(mk(new THREE.TorusGeometry(0.62, 0.13, 8, 24), 'gold', { noEdges: true }), q[0], q[1], 1.24))); } // each in a gold setting
+    const rw = at(part('ratchet', mv), -5.3, 10.0, 0); rw.add(at(mk(extr(gearShape(6.2, 72, 0.25, 0), 0.3), 'steel', { edgeAngle: 40 }), 0, 0, 1.45), at(mk(cyl(3.5, 0.2, 40), 'steel'), 0, 0, 1.85), at(mk(new THREE.BoxGeometry(1.6, 0.24, 0.1), 'ink', { noEdges: true }), 0, 0, 1.98)); rw.userData.anchor = [0, 0, 2.1]; layer(rw, 6);
+    const DW = [-3.63, -0.85], PN = [-3.26, -5.02]; // set so that the wheel and the pinion mesh; each is within about a millimetre of where it was measured
+    const dw = part('drive-wheel', mv), dwSpin = mobile(null, DW[0], DW[1], { R: 3.6, n: 84, tooth: 0.12, z: 1.5, th: 0.2, spokes: 5, arbor: 1.7 }, dw), pinSpin = new THREE.Group();
+    pinSpin.position.set(PN[0], PN[1], 0); pinSpin.add(at(mk(extr(gearShape(0.55, 10, 0.14, 0), 0.5), 'steelDark', { edgeAngle: 40 }), 0, 0, 1.35)); dw.add(pinSpin);
+    dw.add(at(mk(extr(hullShape([[PN[0], PN[1], 0.7], [-6.9, -4.3, 0.6]]), 0.25), 'steel', { edgeAngle: 40 }), 0, 0, 1.95), at(mk(cyl(0.3, 0.14, 12), 'ruby'), DW[0], DW[1], 1.74)); // the small steel cock over the pinion, and the wheel's own jewel
+    dw.userData.anchor = [DW[0], DW[1], 2.0]; layer(dw, 6);
+    const sw = part('second-wheel', mv); mobile(null, W3[0], W3[1], { R: 2.2, n: 60, tooth: 0.12, z: 0.6, th: 0.2, spokes: 4, arbor: 0.9 }, sw); sw.add(at(mk(cyl(0.3, 0.14, 12), 'ruby'), W3[0], W3[1], 0.86)); sw.userData.anchor = [W3[0], W3[1], 1.2]; layer(sw, 5);
+    M.extraAnim = tv => { const a = tv * Math.PI * 2 / 60; outer.rotation.z = a; innerCage.rotation.x = -a * 2.5; pinSpin.rotation.z = a; dwSpin.rotation.z = -a * 0.55 / 3.6; }; // the outer cage turns once a minute and the inner two and a half times, the opposite way, as reported for the calibre
     Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1 });
   } else if (P.calibre === '11') {
     /* Heuer Calibre 11 (Buren micro-rotor base, Dubois Depraz chronograph module). No dimensioned maker's drawing was available. Positions of the barrel, the large driving
