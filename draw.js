@@ -312,7 +312,42 @@ function dtext(w, g, o) {
   return s;
 }
 
+/* The open front of the Jaeger-LeCoultre Gyrotourbillon 3: no single dial, but three separate ones over the movement, and an opening for the tourbillon.
+   Centres and sizes are measured from a front photograph of the watch, in millimetres from the centre of the case (x to the right, y upwards):
+   time dial, chronograph seconds dial with its digital minute window, day and night disc, tourbillon opening. Everything between them is simplified. */
+const G3 = { time: [3.0, 9.4, 9.4], sec: [-10.5, 1.5, 8.2], dn: [13.1, 1.1, 5.0], tb: [2.8, -10.3, 6.4] };
+function gyro3(w, g, o) {
+  const [tx, ty, tr] = G3.time, [sx, sy, sr] = G3.sec, [nx, ny, nr] = G3.dn, [bx, by, br] = G3.tb, now = new Date();
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647; // the same scatter of flecks every time
+  const flecks = (cx, cy, r0, r1, n) => { let t = ''; for (let i = 0; i < n; i++) { const a = rnd() * 360, r = Math.sqrt(r0 * r0 + rnd() * (r1 * r1 - r0 * r0)), q = P(a, r, cx, cy); t += C(0.04 + rnd() * 0.05, q[0], q[1], 'k g3-star'); } return t; };
+  let s = Pa(g.dial, 'tn g3-base');
+  /* two grey panels stand in for the bridges inlaid with meteorite; their real outlines are not reproduced */
+  s += Pa(`M${f(bx + 7.6)},${f(-by - 6)}Q${f(bx + 15)},${f(-by - 5)} ${f(bx + 13.5)},${f(-by + 3)}Q${f(bx + 9)},${f(-by + 6)} ${f(bx + 7.2)},${f(-by + 2)}Z`, 'tn g3-met') + Pa(`M${f(sx - 4)},${f(-sy + 9)}Q${f(sx + 2)},${f(-sy + 14)} ${f(sx + 9)},${f(-sy + 11.5)}L${f(sx + 6)},${f(-sy + 8.6)}Q${f(sx + 1)},${f(-sy + 10)} ${f(sx - 2)},${f(-sy + 8.2)}Z`, 'tn g3-met');
+  s += C(br + 0.5, bx, -by, 'p g3-rim') + C(br, bx, -by, 'k g3-hole');
+  /* day and night: a disc that turns once in 24 hours, set to the hour at which the page was opened */
+  s += `<g transform="translate(${nx},${-ny}) rotate(${f((now.getHours() + now.getMinutes() / 60) * 15)})">` + C(nr, 0, 0, 'p g3-rim') + C(nr - 0.35, 0, 0, 'p g3-day') + Pa(`M${f(-nr + 0.35)},0A${f(nr - 0.35)},${f(nr - 0.35)} 0 0 1 ${f(nr - 0.35)},0Z`, 'tn g3-blue')
+    + Pa(`M-1.5,-2.6A1.5,1.5 0 1 0 0.6,-1.2A1.15,1.15 0 1 1 -1.5,-2.6Z`, 'p g3-sun') + star(1.7, -2.6, 0.42, 'k g3-sun') + star(-2.6, -1.3, 0.34, 'k g3-sun') + C(0.75, 0, 2.3, 'p g3-sun');
+  for (let i = -5; i <= 5; i++) s += rad(180 + i * 15, 1.1, nr - 0.7, 't g3-ray', 0, 2.3);
+  s += '</g>';
+  /* chronograph: seconds round the white ring, minutes as two digits in the window. Shown at rest */
+  s += C(sr, sx, -sy, 'p g3-rim') + C(sr - 0.3, sx, -sy, 'p g3-white') + C(sr - 2.6, sx, -sy, 'tn g3-blue') + flecks(sx, -sy, 0, sr - 2.8, 46);
+  for (let i = 0; i < 60; i++) s += rad(i * 6, sr - (i % 5 ? 0.9 : 1.25), sr - 0.45, 't g3-ink', sx, -sy);
+  [60, 10, 20, 30, 40, 50].forEach((n, i) => { const q = P(i * 60, sr - 1.85, sx, -sy); s += T(n, q[0], q[1] + 0.42, 1.2, 'tx g3-inkf'); });
+  s += RC(sx + 2.6, -sy - 1.55, 4.3, 3.1, 'p g3-white', 0.15) + T('00', sx + 4.75, -sy + 0.95, 2.7, 'tx g3-inkf');
+  if (!o.noHands) s += L(sx, -sy + 1.2, sx, -sy - sr + 1.1, 'hd') + C(0.4, sx, -sy, 'k');
+  /* time: a ring flecked like a night sky round a centre of meteorite */
+  s += C(tr, tx, -ty, 'p g3-rim') + C(tr - 0.3, tx, -ty, 'tn g3-blue') + flecks(tx, -ty, 6.1, tr - 0.9, 70) + C(tr - 0.65, tx, -ty, 't g3-wt');
+  for (let i = 0; i < 60; i++) s += rad(i * 6, tr - 0.95, tr - 0.65, 'hair g3-wt', tx, -ty);
+  for (let h = 0; h < 12; h++) { const b = dx => `<rect class="p g3-gold" x="${f(dx - 0.2)}" y="${f(-tr + 1.35)}" width="0.4" height="1.9" transform="translate(${tx},${-ty}) rotate(${h * 30})"/>`; s += h ? b(0) : b(-0.36) + b(0.36); }
+  s += C(6.1, tx, -ty, 'tn g3-met');
+  [[-5.2, -1.6, 4.6, 3.2], [-4.6, 2.4, 5.4, -0.4], [-3.4, -4.4, 2.6, 4.6], [-1.2, -5.6, 5.2, 0.8], [-5.6, 0.6, -0.6, 5.6], [0.8, -5.8, 3.8, 4.2]].forEach(q => { s += L(tx + q[0], -ty + q[1], tx + q[2], -ty + q[3], 'hair g3-streak'); });
+  if (!o.redact) s += T('JAEGER-LECOULTRE', tx, -ty - 2.2, 0.72, 'tx g3-txt', 'letter-spacing=".04em"');
+  return s;
+}
+const handsAt = (w, g) => w.dial.handsAt ? `<g transform="translate(${w.dial.handsAt[0]},${-w.dial.handsAt[1]}) scale(${w.dial.handsAt[2]})">${hands(w, g)}</g>` : hands(w, g); // a watch whose time dial is off centre and small
+
 function dial(w, g, o) {
+  if (w.dial.custom === 'gyro3') return gyro3(w, g, o);
   const d = w.dial; let s = Pa(g.dial, d.dark ? 'tn' : 'p');
   if (d.tapisserie) { const id = 'u' + (++uid); s += `<defs><pattern id="${id}" width="1.15" height="1.15" patternUnits="userSpaceOnUse"><path class="hair" d="M0,0H1.15M0,0V1.15"/></pattern></defs><path d="${g.dial}" fill="url(#${id})" stroke="none"/>`; }
   if (d.flange) {
@@ -376,7 +411,7 @@ function dims(w, g) {
 /* ---------- views ---------- */
 function front(w, o = {}) {
   const g = geo(w);
-  let s = base(w, g) + bezel(w, g) + dial(w, g, o) + hands(w, g);
+  let s = base(w, g) + bezel(w, g) + dial(w, g, o) + handsAt(w, g);
   if (o.dims) s += dims(w, g);
   return svg(o.dims ? '-34 -44 68 88' : '-30 -40 60 80', s, 'fig front', o.redact ? 'Front elevation of an unidentified watch' : `${w.brand} ${w.model}, front elevation`);
 }
@@ -625,12 +660,13 @@ function face(w, real) {
   // A light dial can still carry a black bezel and dark registers (the Daytona): those keep the dark palette.
   const mixed = real && !w.dial.dark ? `${w.bezel && w.bezel.dark ? '.bzd .tn{fill:#121212;stroke:#2b2b2b}.bzd text{fill:#f0ede2}.bzd .t,.bzd .hair{stroke:#e9e6da}.bzd .bar{stroke:#e9e6da}.bzd .k{fill:#e9e6da}' : ''}${w.dial.subDark ? '.tn2{fill:#161616;stroke:#2b2b2b}' : ''}` : '';
   const gold = real && w.dial.gold ? '.nm,.cal,.dl{fill:#cfa13a}.hc{fill:#cfa13a;stroke:#4a3c16}.mw{fill:#1b2a55;stroke:#cfa13a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}.t,.hair{stroke:#b08a34}.k{fill:#cfa13a}' : '';
-  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
+  const g3 = real && w.dial.custom === 'gyro3' ? '.g3-base{fill:#050506;stroke:none}.g3-met{fill:#5d5f63;stroke:#2f3033;stroke-width:.08}.g3-streak{stroke:#9a9c9f;stroke-width:.07}.g3-rim{fill:#c98d6b;stroke:#5a3b2a;stroke-width:.06}.g3-hole{fill:#09090a}.g3-blue{fill:#0a1340;stroke:#c98d6b;stroke-width:.06}.g3-white{fill:#f2f0e9;stroke:#8a8a86;stroke-width:.05}.g3-ink{stroke:#1a1a1a}.g3-inkf{fill:#1a1a1a;font-family:Helvetica,Arial,sans-serif}.g3-gold{fill:#dba886;stroke:#5a3b2a;stroke-width:.04}.g3-star{fill:#d5dcff}.g3-day{fill:#e9dfc6;stroke:none}.g3-sun{fill:#dba886;stroke:none}.g3-ray{stroke:#b98a64;stroke-width:.06}.g3-wt{stroke:#eef0ff}.g3-txt{fill:#e6e6e6}' : '';
+  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}${g3}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
   // The dial is drawn once as a picture, so the date window is filled here with today's date; on the plates it is filled live.
   const today = new Date(), DAYS3 = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const dated = s.replace(new RegExp('(data-date=""[^>]*>)', 'g'), `$1${today.getDate()}`).replace(new RegExp('(data-daydate=""[^>]*>)', 'g'), `$1${DAYS3[today.getDay()]} ${today.getDate()}`);
   return { svg: `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="${-R} ${-R} ${2 * R} ${2 * R}">${dated}<style>.dt{fill:#1a1a1a}</style></svg>`, R, dialR: g.dialR, inR: g.inR, bezelInner: R - (w.bezel ? w.bezel.w : 0), handLen: g.hl };
 }
 
-window.Draw = { front, side, rear, exploded, movement, bps, face, plan: id => PLAN[id] || null };
+window.Draw = { front, side, rear, exploded, movement, bps, face, G3, plan: id => PLAN[id] || null };
 })();

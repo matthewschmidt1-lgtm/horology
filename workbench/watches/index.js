@@ -14,5 +14,6 @@ import carrera from './carrera-2447.js';
 import explorer from './explorer-1016.js';
 import navitimer from './navitimer-806.js';
 import patek3974 from './patek-3974.js';
+import gyro3 from './jlc-gyrotourbillon-3.js';
 
-export const watches = [speedmaster, submariner, calatrava, elPrimero, spaceview, royalOak, monaco, tank, daytona, seiko62mas, carrera, explorer, navitimer, patek3974];
+export const watches = [speedmaster, submariner, calatrava, elPrimero, spaceview, royalOak, monaco, tank, daytona, seiko62mas, carrera, explorer, navitimer, patek3974, gyro3];
