@@ -113,7 +113,7 @@ window.WATCHES = [
   q:{t:'Which movement powers the Carrera 2447?', a:'Valjoux 72', w:['Venus 178','Calibre 11','Lemania 2310']}
 },
 {
-  id:'navitimer', brand:'Breitling', model:'Navitimer', ref:'806', year:'c. 1954', span:'c. 1954 – 1970s', kind:'Pilot’s chronograph',
+  id:'navitimer', brand:'Breitling', model:'Navitimer', ref:'806', year:'c. 1959', span:'c. 1954 – 1970s', kind:'Pilot’s chronograph',
   c:{shape:'round', d:40.5, da:'a', t:[13.5,'n'], lug:[22,'v']},
   bezel:{type:'slide', w:1.8, beads:93}, dial:{dark:true, markers:'arabic', sliderule:'806', goldNums:true, subNums:'all', subRings:true, subs:[[3,'min30'],[6,'hr12'],[9,'sec']], text:['BREITLING','NAVITIMER'], set:{lines:[['BREITLING',-0.47,0.065,1],['NAVITIMER',0.2,0.065,1]], wings:-0.34, split:['SWISS','MADE']}},
   hands:'pencil', sec:'sub', chrono:true, crown:{pos:3}, pushers:'pump', strap:'leather',

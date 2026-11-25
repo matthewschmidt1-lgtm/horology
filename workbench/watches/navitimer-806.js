@@ -6,7 +6,7 @@ export default {
   model: 'Navitimer',
   short: 'Breitling Navitimer 806',
   reference: '806',
-  year: 'c. 1954',
+  year: 'c. 1959',
   era: 'c. 1954 – 1970s',
   movement: 'Venus calibre 178',
   archiveId: 'navitimer',
