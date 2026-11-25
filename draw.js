@@ -325,8 +325,11 @@ function dtext(w, g, o) {
   const d = w.dial, R0 = g.hl / 0.9, sz = Math.min(R0 * 0.135, 2.1) * (d.textScale || 1), y1 = -R0 * (d.textY || 0.42); // a crowded dial can ask for smaller lettering, set lower
   const low6 = (d.subs && d.subs.some(x => x[0] === 6)) || d.date === 6;
   let s = '';
+  /* With registers at three and nine, the second line has to sit above their tops, or its ends run into them; the first line moves up with it. */
+  const side = d.subs && d.subs.some(x => x[0] === 3 || x[0] === 9) && low6 && d.textY == null, top = -(g.inR || R0) * (d.subBig ? 0.31 : 0.235) - 0.5;
+  const yb = side ? Math.min(y1 + sz * 1.3, top) : y1 + sz * 1.3, ya = side ? Math.min(y1, yb - sz * 1.2) : y1;
   d.text.forEach((t, i) => {
-    const z = sz * (i ? 0.78 : 1), y = i === 0 ? y1 : (low6 ? y1 + sz * 1.3 : R0 * 0.44);
+    const z = sz * (i ? 0.78 : 1), y = i === 0 ? ya : (low6 ? yb : R0 * 0.44);
     if (o.redact) { const ww = Math.min(t.length * z * 0.62, R0 * 1.3); s += RC(-ww / 2, y - z * 0.8, ww, z, 'rd', 0.2); }
     else s += T(t.replace(/&/g, '&amp;'), 0, y, z, 'tx dl', 'letter-spacing=".06em"'); // an ampersand has to be written this way inside a drawing
     if (i === 1 && d.star && !o.redact) s += star(0, y - z * 1.9, 0.75);
@@ -680,7 +683,7 @@ function movement(w) {
 
 /* ---------- face texture for the 3D workbench (bezel + dial, no hands) ---------- */
 const REAL = ".l{fill:none;stroke:#8d8d88;stroke-width:.14}.p{fill:#ebe5cf;stroke:#0d0d0d;stroke-width:.06}.t{fill:none;stroke:#e9e6da;stroke-width:.13}.hair{fill:none;stroke:#e9e6da;stroke-width:.05}.k{fill:#e9e6da}.tn,.tn2{fill:#121212;stroke:#2b2b2b;stroke-width:.12}.bar{fill:none;stroke:#e9e6da;stroke-width:.5}text{fill:#f0ede2;font-family:Georgia,'Times New Roman',serif}.bz{font-family:Helvetica,Arial,sans-serif;font-weight:bold}";
-const REAL_LIGHT = ".l{fill:none;stroke:#6d6657;stroke-width:.14}.p{fill:#ece6d4;stroke:#3a3428;stroke-width:.1}.t{fill:none;stroke:#3a3428;stroke-width:.11}.hair{fill:none;stroke:#3a3428;stroke-width:.05}.k{fill:#3a3428}.tn,.tn2{fill:#cfc6ae;stroke:#3a3428;stroke-width:.12}.bar{fill:none;stroke:#3a3428;stroke-width:.5}text{fill:#2b271f;font-family:Georgia,'Times New Roman',serif}.bz{font-family:Helvetica,Arial,sans-serif;font-weight:bold}";
+const REAL_LIGHT = ".l{fill:none;stroke:#4a453a;stroke-width:.14}.p{fill:#ece6d4;stroke:#14120e;stroke-width:.1}.t{fill:none;stroke:#14120e;stroke-width:.11}.hair{fill:none;stroke:#14120e;stroke-width:.05}.k{fill:#14120e}.tn,.tn2{fill:#cfc6ae;stroke:#14120e;stroke-width:.12}.bar{fill:none;stroke:#14120e;stroke-width:.5}text{fill:#0c0b09;font-family:Georgia,'Times New Roman',serif}.bz{font-family:Helvetica,Arial,sans-serif;font-weight:bold}"; // inks are near black: the studio lighting lifts anything paler to a weak tan
 const TECH = ".l{fill:none;stroke:#242521;stroke-width:.2}.p{fill:#EDE6D8;stroke:#242521;stroke-width:.2}.t{fill:none;stroke:#242521;stroke-width:.1}.hair{fill:none;stroke:#242521;stroke-width:.05}.k{fill:#242521}.tn,.tn2{fill:#D9CEB9;stroke:#242521;stroke-width:.2}.bar{fill:none;stroke:#242521;stroke-width:.5}text{fill:#242521;font-family:Georgia,'Times New Roman',serif}.bz{font-family:Helvetica,Arial,sans-serif;font-weight:bold}";
 function face(w, real) {
   const g = geo(w), R = g.bezR || g.hw;
