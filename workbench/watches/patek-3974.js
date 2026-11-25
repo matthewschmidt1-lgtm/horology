@@ -180,8 +180,8 @@ export default {
       significance: '', related: ['escape', 'rotor', 'main-bridge'] },
 
     { id: 'governor', name: 'Governor', group: 'Repeater', status: 'E',
-      beginner: 'A tiny flywheel that spins while the watch chimes. It keeps the chime at a steady pace so the notes do not rush.',
-      horologist: 'A centrifugal governor, open to view on this calibre, under a pierced Calatrava cross of solid gold. Its position and size are measured from the photograph. Shown as a ring and a plain cross; it does not turn in the model.',
+      beginner: 'The gold cross in a ring. Under it is a tiny flywheel that spins while the watch chimes, keeping the chime at a steady pace so the notes do not rush. The cross is Patek Philippe’s emblem.',
+      horologist: 'A centrifugal governor, open to view on this calibre, under a pierced Calatrava cross of solid gold. Its position and size are measured from the photograph. The cross is drawn with its four fleur-de-lis arms and a jewel at its centre, inside a steel ring; its outline is by eye from a photograph, and it does not turn in the model.',
       fn: 'Regulates the speed of the repeating train.', material: 'Steel and gold',
       significance: 'A governor that spins in air is much quieter than the older kind, which worked by a ratchet and buzzed under the chime.', related: ['hammers', 'slide', 'repeater-works'] },
     { id: 'hammers', name: 'Hammers', group: 'Repeater', status: 'I',
