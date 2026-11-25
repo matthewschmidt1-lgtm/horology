@@ -167,6 +167,17 @@ function bezel(w, g) {
     if (b.first15) for (let m = 1; m < 15; m++) if (m % 5) s += rad(m * 6, ri + 0.35, ri + 1.25, 't');
   } else if (b.type === 'tachy') {
     s += C(R - 0.4, 0, 0, 'tn') + C(ri, 0, 0, 'p');
+    if (b.scale === '105') { /* the insert of the Speedmaster 105.003, read from photographs: these figures, each nearly level and not turned to follow the ring; the word TACHYMÈTRE after twelve;
+         a dot above the 90, and dots beside the 75 and the 70. Each figure stands at 3600 divided by its value, in seconds. The slight lean of the figures is approximated, and the fine marks between them are left out. */
+      const rm = (R - 0.4 + ri) / 2 + 0.1, sz = Math.min(b.w * 0.36, 1.15), dg = Math.PI / 180;
+      [500, 400, 350, 300, 275, 250, 225, 200, 190, 180, 170, 160, 150, 140, 130, 120, 110, 100, 90, 85, 80, 75, 70, 65, 60].forEach(v => {
+        const a = 21600 / v, p = P(a, rm), tilt = (Math.cos(a * dg) > 0 ? 30 : 10) * Math.sin(2 * a * dg);
+        s += T(v, 0, sz * 0.36, sz, 'tx bz', `transform="translate(${f(p[0])},${f(p[1])}) rotate(${f(tilt)})"`) + rad(a, ri + 0.08, ri + 0.38, 't');
+        if (v === 90) s += C(0.13, p[0] + sz * 0.15, p[1] - sz * 0.85, 'k'); else if (v === 75) s += C(0.13, p[0] + sz * 0.85, p[1], 'k'); else if (v === 70) s += C(0.13, p[0] + sz * 0.85, p[1] + sz * 0.3, 'k');
+      });
+      [...'TACHYMÈTRE'].forEach((ch, i) => { s += T(ch, 0, 0, sz * 0.92, 'tx bz', `transform="rotate(${f(9 + i * 3.05)}) translate(0,${f(-rm + sz * 0.33)})"`); });
+      return s;
+    }
     const rm = (R - 0.4 + ri) / 2, sz = Math.min(b.w * 0.48, 1.55);
     TACHY.forEach(v => { const a = 21600 / v; s += T(v, 0, 0, sz, 'tx bz', `transform="rotate(${f(a)}) translate(0,${f(-rm + sz * 0.36)})"`); });
     for (let i = 0; i < 60; i++) { const p = P(i * 6 + 3, ri + 0.3); s += C(0.09, p[0], p[1], 'k'); }
@@ -202,6 +213,11 @@ function markers(w, g, skip) {
   switch (m) {
     case 'dive': s += `<g class="gt">${ticks(1.0)}</g>`; each(h => h === 0 ? tri(4.3, 2.9, 0.9) : h % 3 === 0 ? bat(h, 3.0, 1.2, 'p', 1.35) : (p => C(1.15, p[0], p[1], 'p'))(P(h * 30, R0 - 2.3))); break; // the triangle is tall and narrow, as on the watch
     case 'explorer': s += '<g class="gt">'; for (let i = 0; i < 60; i++) s += rad(i * 6, E(i * 6) - 1.7, E(i * 6) - 0.2, 't'); s += '</g>'; each(h => h === 0 ? tri(3.3, 3.0, 2.0) : h % 3 === 0 ? num(h, h, R0 * 0.27, R0 * 0.7) : bat(h, 2.5, 0.85, 'p', 2.0)); break; // long printed minute marks at the edge, with the luminous hour marks set inside them
+    case 'speed': { // the Speedmaster's dial, from photographs of a 105.003: a track in fifths of a second, long thin luminous bars, short ones beside the registers, and two dots flanking the bar at twelve
+      for (let i = 0; i < 300; i++) { const a = i * 1.2, r = E(a) - 0.25; if (i % 25 === 0 || (i > 142 && i < 158 && i % 5)) continue; /* the fine marks give way to the words at the foot */ s += i % 5 ? rad(a, r - 0.75, r, 'hair') : rad(a, r - 2.1, r, 't'); }
+      for (let h = 0; h < 12; h++) s += bat(h, h && h % 3 === 0 ? 1.7 : 3.4, 0.5, 'p', h === 6 ? 1.0 : 0.25);
+      s += C(0.28, -0.72, -(R0 - 3.35), 'p') + C(0.28, 0.72, -(R0 - 3.35), 'p') + C(R0 - 4.0, 0, 0, 'hair'); // the last circle is the step in the dial
+      break; }
     case 'baton': s += ticks(); each(h => h === 0 ? dbl(2.6, 0.8) : bat(h, 2.6, 0.8)); break;
     case 'block': s += ticks(); each(h => h === 0 ? dbl(2.8, 1.3) : bat(h, 2.6, 1.7)); break;
     case 'sm300': s += ticks(); each(h => h % 3 === 0 ? num(h, h || 12, R0 * 0.25, R0 * 0.7) + bat(h, 1, 1) : bat(h, 3.6, 1.1)); break;
@@ -312,6 +328,7 @@ function subs(w, g, o = {}) {
     s += d.subSquare ? RC(cx - rs, cy - rs, 2 * rs, 2 * rs, cls, 0.9) : C(rs, cx, cy, 'p') + C(rs, cx, cy, cls, sty);
     const n = role === 'min30' ? 30 : 12;
     if (!d.subSquare) for (let i = 0; i < n; i++) s += rad(i * 360 / n, rs - (i % (n / 6) ? 0.45 : 0.9), rs - 0.12, 't sk' + pos, cx, cy);
+    if (d.subNums && !d.subSquare) (role === 'hr12' ? [[0, 12], [90, 3], [180, 6], [270, 9]] : role === 'min30' ? [[0, 30], [120, 10], [240, 20]] : [[0, 60], [120, 20], [240, 40]]).forEach(q => { const p = P(q[0], rs * 0.56, cx, cy), z = rs * 0.3; s += T(q[1], p[0], p[1] + z * 0.36, z, 'tx sn', 'style="font-family:Helvetica,Arial,sans-serif"'); }); // the figures printed in each register
     if (!o.noHands) s += `<g transform="translate(${cx},${cy})"><g ${role === 'sec' ? `data-hand="s" data-bps="${b}"` : `data-chr="${role === 'min30' ? 'm' : 'h'}"`}>${L(0, 0.8, 0, -rs * 0.82, 'hd')}</g>${C(0.32, 0, 0, 'k')}</g>`;
   }
   return s;
@@ -331,8 +348,9 @@ function dtext(w, g, o) {
      Places and sizes are fractions of the dial's radius, read from those photographs. The coronet is a simple five-pointed figure, not the maker's exact drawing. */
   if (d.set && !o.redact) {
     const q = d.set, sans = 'style="font-family:Helvetica,Arial,sans-serif" letter-spacing=".03em"';
+    if (q.omega != null) s += T('Ω', 0, R0 * q.omega, R0 * 0.13, 'tx om', 'style="font-family:Helvetica,Arial,sans-serif"'); // the applied metal emblem, shown as the letter
     if (q.crown != null) { const u = R0 * 0.075, y0 = R0 * q.crown; s += Pa(polyD([[-.55, 0], [-.95, -.7], [-.45, -.32], [-.5, -.98], [-.12, -.38], [0, -1.12], [.12, -.38], [.5, -.98], [.45, -.32], [.95, -.7], [.55, 0]].map(p => [f(p[0] * u), f(y0 + p[1] * u)])), 'k dl') + [[-.95, -.7], [-.5, -.98], [0, -1.12], [.5, -.98], [.95, -.7]].map(p => C(u * 0.1, p[0] * u, y0 + p[1] * u, 'k dl')).join('') + RC(-0.55 * u, y0 + 0.08 * u, 1.1 * u, 0.12 * u, 'k dl'); }
-    q.lines.forEach(l => { s += T(l[0].replace(/&/g, '&amp;'), 0, R0 * l[1], R0 * l[2], 'tx dl', l[3] ? sans : 'letter-spacing=".06em"'); });
+    q.lines.forEach(l => { s += T(l[0].replace(/&/g, '&amp;'), 0, R0 * l[1], R0 * l[2], 'tx dl', l[3] === 2 ? 'style="font-style:italic"' : l[3] ? sans : 'letter-spacing=".06em"'); }); // 2: a script line, approximated in italic
     if (q.foot) s += T(q.foot, 0, R0 - 0.12, R0 * 0.042, 'tx dl', sans);
     return s;
   }

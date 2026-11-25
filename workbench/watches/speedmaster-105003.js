@@ -23,7 +23,7 @@ export default {
     type: 'procedural',
     builder: 'round-chronograph',
     note: 'Case and lugs are simplified. The movement is laid out from Omega’s 1958 spare-parts sheet for calibre 321: wheel positions are measured from its photographs; sizes, heights, tooth counts and lever shapes are estimated. Not a factory model or scan.',
-    params: { thickness: 14, lugToLug: 47.6, lugWidth: 19, movementDiameter: 27, beatsPerHour: 18000, calibre: '321' }
+    params: { thickness: 14, lugToLug: 47.6, lugWidth: 19, movementDiameter: 27, beatsPerHour: 18000, calibre: '321', bracelet: true }
   },
   images: [],                           // no photographs are bundled; Studio mode is a render
 
@@ -54,7 +54,7 @@ export default {
     { h: 'Reference differences', s: 'D', p: '105.002 (1962): same case, alpha hands. 105.003: baton hands. 105.012 and 145.012: larger asymmetrical case that shelters the crown and pushers, “Professional” on the dial; these are the references worn on the Moon. 145.022 (1968): calibre 321 replaced by the cam-operated calibre 861.' },
     { h: 'Notable variations', s: 'D', p: 'Bezels of this period carry a dot above the 90 of the tachymeter scale, a detail collectors use for dating. Dials are stepped, with an applied metal Omega symbol.' },
     { h: 'How the movement was laid out', s: 'E', p: 'The positions of the barrel, the going train, the pallets, the balance, the column wheel and the chronograph wheels are measured from Omega’s spare-parts sheet for the calibre (GF 620-4, 1958): its photograph of the main plate, printed at actual size, and its photograph of the assembled movement. Each is good to about 0.3 mm. The sheet also gives the 27.00 mm diameter, 6.74 mm height and 18,000 vibrations an hour.' },
-    { h: 'What is estimated or left out', s: 'I', p: 'The sheet gives no tooth counts, so every tooth count here is an estimate, as are wheel diameters, pinion sizes and the height of each part in the stack. The outlines of the bridges and levers are simplified. The springs, the jumpers, the blocking lever, the winding and setting works and the 12-hour recorder under the dial are not modelled. The caseback’s seahorse engraving and the dial’s fine print are not reproduced.' }
+    { h: 'What is estimated or left out', s: 'I', p: 'The sheet gives no tooth counts, so every tooth count here is an estimate, as are wheel diameters, pinion sizes and the height of each part in the stack. The outlines of the bridges and levers are simplified. The springs, the jumpers, the blocking lever, the winding and setting works and the 12-hour recorder under the dial are not modelled. The caseback’s seahorse engraving is not reproduced. The dial’s lettering follows photographs of the reference, but its typefaces are approximations.' }
   ],
 
   components: [
@@ -66,12 +66,12 @@ export default {
       significance: 'The plastic crystal is part of why the watch passed NASA’s tests and was kept for flight.', related: ['bezel', 'dial'] },
     { id: 'bezel', name: 'Tachymeter bezel', group: 'Exterior', status: 'D', anchor: [0, 18, 4.2], face: 1,
       beginner: 'The black ring with numbers. Start the stopwatch at one kilometre marker, stop it at the next, and the seconds hand points to your speed.',
-      horologist: 'Fixed steel bezel with a black anodised aluminium insert, scale based on 3600 divided by elapsed seconds. In the model each figure sits at exactly that angle. Period inserts place a dot above the 90.',
+      horologist: 'Fixed steel bezel with a black anodised aluminium insert, scale based on 3600 divided by elapsed seconds. The figures run from 500 to 60 after the word TACHYMÈTRE, as read from photographs of the reference, and each sits at exactly that angle. A dot stands above the 90, as on period inserts. The slight lean of the figures is approximated, and the fine marks between them are left out.',
       fn: 'Converts an elapsed time over a known distance into units per hour.', material: 'Steel ring, aluminium insert', location: 'Around the crystal.',
       significance: 'Putting this scale on the bezel in 1957 was the Speedmaster’s defining idea and cleared the dial.', related: ['hands', 'crystal'] },
     { id: 'dial', name: 'Dial and registers', group: 'Exterior', status: 'D', anchor: [-8, -1, 2.4], face: 1,
       beginner: 'The black face. The three small dials are a running seconds hand on the left, a 30-minute counter on the right and a 12-hour counter at the bottom.',
-      horologist: 'Matte black stepped dial with applied logo. Running seconds at 9, 30-minute recorder at 3, 12-hour recorder at 6. The seconds register sits directly above the fourth wheel, which is why it is where it is.',
+      horologist: 'Matte black stepped dial with an applied metal emblem above OMEGA and Speedmaster, and no “Professional”; T SWISS MADE T at the foot. Long luminous bars mark the hours, with two dots flanking the bar at twelve, inside a track divided into fifths of a second. The lettering is placed from photographs; the emblem is shown as a plain letter and the script as italic. Running seconds at 9, 30-minute recorder at 3, 12-hour recorder at 6. The seconds register sits directly above the fourth wheel, which is why it is where it is.',
       fn: 'Displays the time and the chronograph’s elapsed minutes and hours.', material: 'Painted brass (typical for the period)', location: 'Under the crystal, fixed to the movement.',
       significance: 'High contrast and no decoration. NASA’s astronauts valued the legibility.', related: ['hands', 'fourth', 'minute-recorder'] },
     { id: 'hands', name: 'Hands', group: 'Exterior', status: 'D', anchor: [3, 9, 3.1], face: 1,
@@ -94,9 +94,9 @@ export default {
       horologist: 'Pump pushers at 2 and 4. The upper advances the column wheel one step per press: start, stop. The lower drives the hammer onto the heart cams, and the column wheel blocks it while the chronograph runs.',
       fn: 'Operate the chronograph.', material: 'Stainless steel', location: 'Right flank, at 2 and 4 o’clock.',
       significance: 'The firm, stepped feel of a column-wheel pusher is one reason the calibre is admired.', related: ['column-wheel', 'hammer'] },
-    { id: 'strap', name: 'Strap', group: 'Exterior', status: 'I', anchor: [0, 28, -3], face: 0,
+    { id: 'strap', name: 'Bracelet', group: 'Exterior', status: 'I', anchor: [0, 28, -3], face: 0,
       beginner: 'What holds the watch on the wrist. Shown here as a plain stub.',
-      horologist: 'Generic strap ends, included only to show how the watch sits. The original bracelets and their reference numbers are not represented.',
+      horologist: 'The watch was sold on a steel bracelet of flat links. Only plain steel stubs are shown; the links are not modelled.',
       fn: 'Attaches the watch to the wrist.', material: 'Not specified', location: 'Between the lugs.',
       significance: 'Astronauts wore the watch on long fabric straps over the suit sleeve.', related: ['case'] },
     { id: 'caseback', name: 'Caseback', group: 'Exterior', status: 'D', anchor: [0, 0, -6.6], face: -1,

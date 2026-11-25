@@ -38,7 +38,7 @@ window.WATCHES = [
 {
   id:'speedy105003', brand:'Omega', model:'Speedmaster', ref:'105.003', year:'1964', span:'c. 1964 – 1969', kind:'Chronograph',
   c:{shape:'round', d:39.7, t:[14,'a'], lug:[19,'v'], straight:true},
-  bezel:{type:'tachy', w:3.3, dark:true}, dial:{dark:true, markers:'baton', subs:[[3,'min30'],[6,'hr12'],[9,'sec']], text:['OMEGA','Speedmaster']},
+  bezel:{type:'tachy', w:3.3, dark:true, scale:'105'}, dial:{dark:true, markers:'speed', subNums:true, subs:[[3,'min30'],[6,'hr12'],[9,'sec']], text:['OMEGA','Speedmaster'], set:{omega:-0.46, lines:[['OMEGA',-0.375,0.08,1],['Speedmaster',-0.295,0.08,2]], foot:'T SWISS MADE T'}},
   hands:'baton', sec:'sub', chrono:true, crown:{pos:3}, pushers:'pump', strap:'flat',
   mv:{cal:'321', type:'chrono', vph:18000, wind:'Manual', size:'27 mm', note:'Column-wheel chronograph derived from the Lemania 2310.'},
   back:{type:'screw', emblem:'Hippocampus emblem', note:'Screw back. The seahorse emblem is indicated, not reproduced.'},
