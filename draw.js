@@ -202,12 +202,16 @@ const ROMAN = ['XII', 'I', 'II', 'III', 'IIII', 'V', 'VI', 'VII', 'VIII', 'IX', 
 const SLIDE = [10, 12, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 90];
 
 function forkWorks() {
-  const fd = 'M-6.5,-5V2.5Q-6.5,5.5 -3.2,5.5H3.2Q6.5,5.5 6.5,2.5V-5';
-  let s = Pa(fd, 'lv1 wide') + Pa(fd, 'lv2 wide');
-  for (const sx of [-1, 1]) { const x = sx * 6.5; s += RC(x - 2.6, -11.5, 5.2, 6.8, 'p', 1); for (let y = -10.8; y < -5; y += 0.55) s += L(x - 2.6, y, x + 2.6, y, 't'); }
-  s += L(0, 5.5, 0, 7.2, 'bar') + C(3.9, 0, 10.6, 'p') + C(3.3, 0, 10.6, 't');
-  s += C(0.9, 2.4, 0.5, 'p') + C(0.9, 2.4, 0.5, 'gear') + L(6.5, -1.5, 3.2, 0.2, 't');
-  s += RC(-11.5, 1.5, 3, 2, 'p', 0.3) + RC(9, 2, 1.6, 3.4, 'p', 0.5);
+  /* What shows through the front of an Accutron 214, laid out from a frontal photograph (Wikimedia Commons, "Accutron.jpg"): the fork's foot is screwed down at six and its two tines
+     rise either side of the centre to a pair of coils lying side by side at the top; a moulded plate with two slim strips fills the left, and a carrier with the transistor, the
+     resistor and the capacitor fills the right. Shapes are simplified, positions are good to about a millimetre, and the wheels and the tiny index mechanism are barely indicated. */
+  let s = Pa(polyD([[-14.1, -5.6], [-8.9, -7.2], [-4.4, -1], [-3.2, 3.8], [-5.2, 12.2], [-10.3, 10.3], [-15, 2.8]]), 'tn') + L(-11.6, -5.2, -8.6, 6, 'bar') + L(-9.7, -5.6, -6.7, 5.6, 'bar');
+  s += Pa(polyD([[9.5, -9], [13.5, -6.5], [15, 0], [13.5, 6.5], [9.5, 11.5], [5, 13], [4.6, 9], [8.5, 5.5], [9.5, 0], [8.3, -5]]), 'tn');
+  s += C(0.9, 12.2, -4.6, 'p') + C(0.35, 12.2, -4.6, 'k') + `<g transform="rotate(-55 10.6 6.6)">${RC(9, 6, 3.2, 1.2, 'p', 0.4)}${L(9.9, 6, 9.9, 7.2, 't')}${L(10.6, 6, 10.6, 7.2, 't')}${L(11.3, 6, 11.3, 7.2, 't')}</g>` + C(0.7, 11.6, 1.2, 'p') + L(12.2, -3.7, 11.6, 0.5, 't') + L(11.6, 1.9, 11.2, 5.2, 't');
+  const fd = 'M-3.3,-8.2L-2.3,11.4Q-2.3,13.4 0,13.4Q2.3,13.4 2.3,11.4L3.3,-8.2';
+  s += RC(-1.5, 7.3, 3, 5.6, 'p', 0.6) + Pa(fd, 'lv1 wide') + Pa(fd, 'lv2 wide') + C(0.55, 0, 8.6, 'k') + C(0.55, 0, 11.6, 'k');
+  for (const sx of [-1, 1]) { const x = sx * 5.9; s += RC(x - 3.3, -11.4, 6.6, 4, 'p', 0.9) + RC(x - 2.5, -10.8, 5, 2.8, 'p', 0.4); for (let k = -2.1; k < 2.2; k += 0.5) s += L(x + k, -10.8, x + k, -8, 't'); }
+  s += C(0.9, 2.6, 0.6, 'p') + C(0.9, 2.6, 0.6, 'gear') + C(1.5, 3.4, 3.4, 't');
   return s;
 }
 
@@ -300,10 +304,11 @@ function markers(w, g, skip) {
         D.forEach(q => { s += C(0.55, q[0], q[1], 'p wg'); }); s += C(0.55, -0.2, -10.85, 'p wg');
       } break;
     case 'spaceview':
-      s += C(R0 - 2.6, 0, 0, 'l');
-      for (let i = 0; i < 60; i++) if (i % 5) s += rad(i * 6, R0 - 2, R0 - 0.7, 't');
-      for (let h = 0; h < 12; h++) { const p = P(h * 30, R0 - 1.3); s += C(0.5, p[0], p[1], 'k'); }
-      s += `<g transform="scale(${f((R0 - 3.2) / 15.5)})">${forkWorks()}</g>`; break;
+      s += `<g transform="scale(${f((R0 - 3.2) / 15.5)})">${forkWorks()}</g>` + C(R0 - 2.6, 0, 0, 'l'); // the works first, then the ring that carries the marks
+      for (let i = 0; i < 60; i++) if (i % 5) s += rad(i * 6, R0 - 2.1, R0 - 0.6, 't');
+      for (let h = 0; h < 12; h++) s += bat(h, 1.9, 0.75, 'p', 0.4); // a luminous bar at each hour
+      s += Pa(`M-0.6,${f(-R0 + 3.5)}V${f(-R0 + 4.7)}Q-0.6,${f(-R0 + 5.4)} 0,${f(-R0 + 5.4)}Q0.6,${f(-R0 + 5.4)} 0.6,${f(-R0 + 4.7)}V${f(-R0 + 3.5)}M0,${f(-R0 + 5.4)}V${f(-R0 + 6.4)}`, 't'); // the tuning-fork emblem printed at twelve
+      break;
   }
   return s;
 }
@@ -398,7 +403,7 @@ function dtext(w, g, o) {
     if (q.star != null) s += star(0, R0 * q.star, R0 * 0.05);
     if (q.mono) s += T(q.mono[0], 0, R0 * q.mono[1], R0 * 0.16, 'tx nm', 'style="font-family:Georgia,serif;font-weight:bold" letter-spacing="-.12em"'); // an applied monogram, shown as its two letters set close; the real one interlocks them
     if (q.crown != null) { const u = R0 * 0.075, y0 = R0 * q.crown; s += Pa(polyD([[-.55, 0], [-.95, -.7], [-.45, -.32], [-.5, -.98], [-.12, -.38], [0, -1.12], [.12, -.38], [.5, -.98], [.45, -.32], [.95, -.7], [.55, 0]].map(p => [f(p[0] * u), f(y0 + p[1] * u)])), 'k dl') + [[-.95, -.7], [-.5, -.98], [0, -1.12], [.5, -.98], [.95, -.7]].map(p => C(u * 0.1, p[0] * u, y0 + p[1] * u, 'k dl')).join('') + RC(-0.55 * u, y0 + 0.08 * u, 1.1 * u, 0.12 * u, 'k dl'); }
-    q.lines.forEach(l => { s += T(l[0].replace(/&/g, '&amp;'), 0, R0 * l[1], R0 * l[2], 'tx dl', l[3] === 2 ? 'style="font-style:italic"' : l[3] ? sans : 'letter-spacing=".06em"'); }); // 2: a script line, approximated in italic
+    q.lines.forEach(l => { s += T(l[0].replace(/&/g, '&amp;'), R0 * (l[4] || 0), R0 * l[1], R0 * l[2], 'tx dl', l[3] === 2 ? 'style="font-style:italic"' : l[3] ? sans : 'letter-spacing=".06em"'); }); // 2: a script line, approximated in italic
     if (q.foot) s += T(q.foot, 0, q.footY ? R0 * q.footY : g.dhh ? g.dhh - 0.3 : R0 - 0.12, R0 * (g.dhh ? 0.07 : 0.042), 'tx dl', sans); // on a rectangular dial the word sits just inside the lower edge
     return s;
   }

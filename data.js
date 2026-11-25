@@ -214,12 +214,12 @@ window.WATCHES = [
 {
   id:'spaceview', brand:'Bulova', model:'Accutron Spaceview', ref:'Cal. 214', year:'1960', span:'1960 – 1970s', kind:'Electronic watch',
   c:{shape:'round', d:34, da:'a', t:[12,'n'], lug:[18,'a']},
-  bezel:{type:'plain', w:1.5}, dial:{dark:false, markers:'spaceview', text:['ACCUTRON']},
-  hands:'pencil', sec:'center', crown:{pos:0}, strap:'leather',
+  bezel:{type:'plain', w:1.5}, dial:{dark:false, markers:'spaceview', text:['ACCUTRON'], set:{lines:[['ACCUTRON',0.39,0.062,1,-0.47]]}},
+  hands:'dauphine', sec:'center', crown:{pos:0}, strap:'leather',
   mv:{cal:'214', type:'fork', vph:0, wind:'Battery-driven tuning fork, 360 Hz', note:'A transistor circuit keeps the fork vibrating; a pawl on one tine advances a minute index wheel.'},
   back:{type:'accutron', note:'No crown on the flank. A folding handle on the back sets the hands; a hatch covers the battery.'},
   specs:[['Regulator','Tuning fork, 360 Hz'],['Dial','None: the movement is the dial'],['Engineer','Max Hetzel']],
-  notes:['The Spaceview began as a dealer’s demonstration piece with the dial left off. Customers asked to buy it.','It hums rather than ticks, and the seconds hand glides.','Bulova guaranteed accuracy to a minute a month.'],
+  notes:['The Spaceview began as a dealer’s demonstration piece with the dial left off. Customers asked to buy it.','It hums rather than ticks, and the seconds hand glides.','Bulova guaranteed accuracy to a minute a month.','What shows through the front is laid out from a photograph: the fork’s foot at six, its tines rising to two coils at the top, a moulded plate on the left and the transistor’s carrier on the right. Shapes are simplified. The marks were printed on the crystal on the earliest pieces and on a ring on later ones; the ring is shown here.'],
   q:{t:'What regulates the Accutron?', a:'A tuning fork vibrating at 360 Hz', w:['A quartz crystal','A balance wheel at 36,000 A/h','A pendulum']}
 }
 ];
