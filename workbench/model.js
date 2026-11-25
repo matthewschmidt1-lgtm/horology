@@ -166,7 +166,7 @@ export function buildProcedural(watch, face, tex) {
   const subHand = (x, y) => { const p = hand(0.26, 4.2, square ? 2.66 : 2.5, P.subHandKind || HAND); p.position.x = x; p.position.y = y; p.children[0].geometry.translate(0, -0.5, 0); return p; };
   const two = P.registers === 2; // two registers and no running seconds, as on the Calibre 11
   const hSec = chrono ? (two ? new THREE.Group() : subHand(-sub, 0)) : P.subSeconds === 6 ? subHand(0, -sub) : hChr; if (chrono) { subHand(sub, 0); if (two) subHand(-sub, 0); else subHand(0, -sub); }
-  if (P.subSeconds || P.noSeconds) hChr.visible = false;
+  if ((P.subSeconds || P.noSeconds) && !P.chronoCentre) hChr.visible = false; // a watch can have running seconds in a small dial and still carry a chronograph hand at the centre
   if (P.handsAt) hands.position.set(P.handsAt[0], P.handsAt[1], P.handsAt[2] || 0); // a time dial that is off centre
   assembly(hands, 13);
 
@@ -553,6 +553,11 @@ export function buildProcedural(watch, face, tex) {
     rot.add(at(mk(extr(rw, 0.55), 'gold', { edgeAngle: 40 }), 0, 0, 3.95), at(mk(cyl(1.1, 0.7, 20), 'steel'), 0, 0, 4.3), at(mk(cyl(0.7, 3.95, 16), 'steelDark', { noEdges: true }), 0, 0, 1.975));
     rot.userData.anchor = [2.5, 2.5, 4.6]; layer(rot, 12);
     Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1 });
+  } else if (P.calibre === 'bare') {
+    /* A movement of which nothing could be placed from a source. Only the plate is shown; no wheel, bridge or balance is invented for it. */
+    spins.centre = spins.third = spins.fourth = spins.escape = new THREE.Group();
+    const HN = 240, hsPos = new Float32Array((HN + 1) * 3), hsGeo = new THREE.BufferGeometry(); hsGeo.setAttribute('position', new THREE.BufferAttribute(hsPos, 3));
+    Object.assign(M, { balSpin: new THREE.Group(), palRock: new THREE.Group(), hsPos, hsGeo, HN, interRatio: 1 });
   } else if (P.calibre === '176') {
     /* Jaeger-LeCoultre calibre 176 (Gyrotourbillon 3). No maker's drawing is published and no usable photograph of the back was measured, so NOTHING of the movement
        is modelled except the tourbillon, which stands in the opening where a front photograph of the watch shows it. Its form is a simplification: an outer cage of three

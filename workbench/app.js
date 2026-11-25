@@ -310,6 +310,7 @@ if (watches.length > 1) {
     navitimer: ['#111a2b', '#3c5a8a', '#e6e6e0', '#0b0c0e', '#14161a', '#24262a', '#e8e4d6', ''],
     patek3974: ['#0c1430', '#2b3f7c', '#e6e6e0', '#0b0c0e', '#14161a', '#24262a', '#dcc27a', 'stars'],
     jlcgyro3: ['#1a0f14', '#6b3a3a', '#e6e6e0', '#0b0c0e', '#14161a', '#24262a', '#dba886', 'stars'],
+    langegc: ['#2a1a12', '#8a5a40', '#f2efe6', '#141414', '#dcdad2', '#cfcdc5', '#cf9a78', ''],
     carrera: ['#2b1407', '#9a4f1c', '#eeece6', '#141414', '#dcdad2', '#cfcdc5', '#b8975a', ''],
     spaceview: ['#0b2019', '#1f4f3e', '#dcdcd4', '#0a130f', '#1f4a3c', '#2b6050', '#d8c58f', 'grid']
   }
