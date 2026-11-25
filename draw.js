@@ -158,7 +158,7 @@ function bezel(w, g) {
     for (let a = 0; a < 360; a += 5) s += rad(a, R - 0.5, R, 't');
     s += C(R - 0.55, 0, 0, 'tn') + C(ri, 0, 0, 'p');
     const ro = R - 0.55, h = ro - ri, rm = (ro + ri) / 2;
-    s += Pa(polyD([P(-6, ro - 0.5), P(6, ro - 0.5), P(0, ri + 0.5)]), 'p');
+    s += Pa(polyD([P(-6, ro - 0.5), P(6, ro - 0.5), P(0, ri + 0.5)]), 'p') + C(h * 0.2, 0, -(ro - 0.5 - h * 0.27), 'p') + C(h * 0.11, 0, -(ro - 0.5 - h * 0.27), 't'); // the luminous pearl set in the triangle
     for (let m = 5; m < 60; m += 5) {
       const a = m * 6;
       if (m % 10 === 0) s += T(m, 0, 0, h * 0.6, 'tx bz', `transform="rotate(${a}) translate(0,${f(-rm + h * 0.21)})"`);
@@ -200,8 +200,8 @@ function markers(w, g, skip) {
   const tri = (len, wd, off = 0.7) => { const r = E(0) - off; return Pa(polyD([[f(-wd / 2), f(-r)], [f(wd / 2), f(-r)], [0, f(-r + len)]]), 'p'); };
   const each = fn => { for (let h = 0; h < 12; h++) if (!skip.has(h)) s += fn(h); };
   switch (m) {
-    case 'dive': s += ticks(); each(h => h === 0 ? tri(3.4, 3.4) : h % 3 === 0 ? bat(h, 3.2, 1.3) : (p => C(1.15, p[0], p[1], 'p'))(P(h * 30, R0 - 2.1))); break;
-    case 'explorer': s += ticks(); each(h => h === 0 ? tri(3.4, 3.4) : h % 3 === 0 ? num(h, h, R0 * 0.3, R0 * 0.72) : bat(h, 3, 0.9)); break;
+    case 'dive': s += `<g class="gt">${ticks(1.0)}</g>`; each(h => h === 0 ? tri(4.3, 2.9, 0.9) : h % 3 === 0 ? bat(h, 3.0, 1.2, 'p', 1.35) : (p => C(1.15, p[0], p[1], 'p'))(P(h * 30, R0 - 2.3))); break; // the triangle is tall and narrow, as on the watch
+    case 'explorer': s += '<g class="gt">'; for (let i = 0; i < 60; i++) s += rad(i * 6, E(i * 6) - 1.7, E(i * 6) - 0.2, 't'); s += '</g>'; each(h => h === 0 ? tri(3.3, 3.0, 2.0) : h % 3 === 0 ? num(h, h, R0 * 0.27, R0 * 0.7) : bat(h, 2.5, 0.85, 'p', 2.0)); break; // long printed minute marks at the edge, with the luminous hour marks set inside them
     case 'baton': s += ticks(); each(h => h === 0 ? dbl(2.6, 0.8) : bat(h, 2.6, 0.8)); break;
     case 'block': s += ticks(); each(h => h === 0 ? dbl(2.8, 1.3) : bat(h, 2.6, 1.7)); break;
     case 'sm300': s += ticks(); each(h => h % 3 === 0 ? num(h, h || 12, R0 * 0.25, R0 * 0.7) + bat(h, 1, 1) : bat(h, 3.6, 1.1)); break;
@@ -327,6 +327,15 @@ function dtext(w, g, o) {
   const d = w.dial, R0 = g.hl / 0.9, sz = Math.min(R0 * 0.135, 2.1) * (d.textScale || 1), y1 = -R0 * (d.textY || 0.42); // a crowded dial can ask for smaller lettering, set lower
   const low6 = (d.subs && d.subs.some(x => x[0] === 6)) || d.date === 6;
   let s = '';
+  /* A dial whose lettering has been checked line by line against photographs carries it as a set: a coronet, the lines above the centre, the lines below, and the word at the foot.
+     Places and sizes are fractions of the dial's radius, read from those photographs. The coronet is a simple five-pointed figure, not the maker's exact drawing. */
+  if (d.set && !o.redact) {
+    const q = d.set, sans = 'style="font-family:Helvetica,Arial,sans-serif" letter-spacing=".03em"';
+    if (q.crown != null) { const u = R0 * 0.075, y0 = R0 * q.crown; s += Pa(polyD([[-.55, 0], [-.95, -.7], [-.45, -.32], [-.5, -.98], [-.12, -.38], [0, -1.12], [.12, -.38], [.5, -.98], [.45, -.32], [.95, -.7], [.55, 0]].map(p => [f(p[0] * u), f(y0 + p[1] * u)])), 'k dl') + [[-.95, -.7], [-.5, -.98], [0, -1.12], [.5, -.98], [.95, -.7]].map(p => C(u * 0.1, p[0] * u, y0 + p[1] * u, 'k dl')).join('') + RC(-0.55 * u, y0 + 0.08 * u, 1.1 * u, 0.12 * u, 'k dl'); }
+    q.lines.forEach(l => { s += T(l[0].replace(/&/g, '&amp;'), 0, R0 * l[1], R0 * l[2], 'tx dl', l[3] ? sans : 'letter-spacing=".06em"'); });
+    if (q.foot) s += T(q.foot, 0, R0 - 0.12, R0 * 0.042, 'tx dl', sans);
+    return s;
+  }
   /* With registers at three and nine, the second line has to sit above their tops, or its ends run into them; the first line moves up with it. */
   const side = d.subs && d.subs.some(x => x[0] === 3 || x[0] === 9) && low6 && d.textY == null, top = -(g.inR || R0) * (d.subBig ? 0.31 : 0.235) - 0.5;
   const yb = side ? Math.min(y1 + sz * 1.3, top) : y1 + sz * 1.3, ya = side ? Math.min(y1, yb - sz * 1.2) : y1;
@@ -692,10 +701,11 @@ function face(w, real) {
   // A light dial can still carry a black bezel and dark registers (the Daytona): those keep the dark palette.
   const mixed = real && !w.dial.dark ? `${w.bezel && w.bezel.dark ? '.bzd .tn{fill:#121212;stroke:#2b2b2b}.bzd text{fill:#f0ede2}.bzd .t,.bzd .hair{stroke:#e9e6da}.bzd .bar{stroke:#e9e6da}.bzd .k{fill:#e9e6da}' : ''}${w.dial.subDark ? '.tn2{fill:#161616;stroke:#2b2b2b}' : ''}` : '';
   const gold = real && w.dial.gold ? '.nm,.cal,.dl{fill:#cfa13a}.hc{fill:#cfa13a;stroke:#4a3c16}.mw{fill:#1b2a55;stroke:#cfa13a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}.t,.hair{stroke:#b08a34}.k{fill:#cfa13a}' : '';
+  const gilt = real && w.dial.gilt ? '.dl{fill:#c9a45c}.gt .t{stroke:#c9a45c}' : ''; // printing in gilt, as on the early glossy dials
   const sf = real && w.dial.subFills ? 'svg{--so:1;' + Object.entries(w.dial.subFills).map(q => `--sf${q[0]}:${q[1][0]}`).join(';') + '}' + Object.entries(w.dial.subFills).filter(q => q[1][1]).map(q => `.sk${q[0]}{stroke:#ecece8}`).join('') : ''; // each register's colour, and pale marks on the dark ones
   const pinkHands = real && w.dial.goldHands ? '.hc{fill:#cf9a78;stroke:#5a3b2a}.mw{fill:#1b2a55;stroke:#5a3b2a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}' : '';
   const g3 = real && w.dial.custom === 'gyro3' ? '.g3-base{fill:#050506;stroke:none}.g3-met{fill:#5d5f63;stroke:#2f3033;stroke-width:.08}.g3-streak{stroke:#9a9c9f;stroke-width:.07}.g3-rim{fill:#c98d6b;stroke:#5a3b2a;stroke-width:.06}.g3-hole{fill:#09090a}.g3-blue{fill:#0a1340;stroke:#c98d6b;stroke-width:.06}.g3-white{fill:#f2f0e9;stroke:#8a8a86;stroke-width:.05}.g3-ink{stroke:#1a1a1a}.g3-inkf{fill:#1a1a1a;font-family:Helvetica,Arial,sans-serif}.g3-gold{fill:#dba886;stroke:#5a3b2a;stroke-width:.04}.g3-star{fill:#d5dcff}.g3-day{fill:#e3e1da;stroke:none}.g3-steel{fill:#b9bbbd;stroke:#4a4c4f;stroke-width:.07}.g3-screw{fill:#2a55a8;stroke:#0d1f45;stroke-width:.06}.g3-teeth{stroke:#c9cbcd;stroke-width:.09}.g3-sun{fill:#dba886;stroke:none}.g3-ray{stroke:#b98a64;stroke-width:.06}.g3-wt{stroke:#eef0ff}.g3-txt{fill:#e6e6e6}' : '';
-  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}${pinkHands}${g3}${sf}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
+  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}${gilt}${pinkHands}${g3}${sf}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
   // The dial is drawn once as a picture, so the date window is filled here with today's date; on the plates it is filled live.
   const today = new Date(), DAYS3 = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const dated = s.replace(new RegExp('(data-date=""[^>]*>)', 'g'), `$1${today.getDate()}`).replace(new RegExp('(data-daydate=""[^>]*>)', 'g'), `$1${DAYS3[today.getDay()]} ${today.getDate()}`);

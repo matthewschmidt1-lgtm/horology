@@ -15,7 +15,7 @@ export default {
     type: 'procedural',
     builder: 'round-chronograph',
     note: 'Case and crown guards are simplified. No Rolex document was available for the movement: its pivot positions are read from a watchmaker’s photographs of a stripped calibre 1560, the chronometer-grade sister of this watch’s calibre 1530, on the assumption that the two share one plate. Sizes, heights, tooth counts and outlines are estimated. Not a factory model or scan.',
-    params: { thickness: 14.5, lugToLug: 47.6, lugWidth: 20, movementDiameter: 28.5, beatsPerHour: 18000, calibre: '1530', chrono: false, dustCover: false, rotor: true, crownGuards: true, hands: 'mercedes', plate: 'steel' }
+    params: { thickness: 14.5, lugToLug: 47.6, lugWidth: 20, movementDiameter: 28.5, beatsPerHour: 18000, calibre: '1530', chrono: false, dustCover: false, rotor: true, crownGuards: true, bracelet: true, bezelGrip: 40, handKind: 'gold', hands: 'mercedes', plate: 'steel' }
   },
   images: [],
 
@@ -46,7 +46,7 @@ export default {
     { h: 'Notable variations', s: 'D', p: 'Early dials are glossy with gilt printing; matte dials with white printing followed in the later 1960s, and applied white-gold marker surrounds near the end. Some were supplied to the diving company Comex, and military-issue examples went to the Royal Navy with fixed strap bars and sword hands.' },
     { h: 'In film', s: 'D', p: 'Roger Moore’s James Bond wears a 5513 in “Live and Let Die” (1973).' },
     { h: 'How the movement was laid out', s: 'E', p: 'No Rolex technical document could be obtained, so this is a weaker source than a maker’s sheet. The positions of the barrel, the train wheels, the pallets and the balance are read from a watchmaker’s near-overhead photograph of a bare plate, published with a 2017 service write-up on mitka.co.uk, and scaled to the calibre’s 28.5 mm diameter. Each is good to about 0.5 mm. That write-up names the movement as calibre 1560 in its title and as 1530 in its text; the bridge in its photographs is engraved 1560, so it is taken to be a 1560. Calibres 1530 and 1560 belong to one family, and using this layout for the Submariner assumes that they share a plate, which has not been checked against a 1530. Which hole belongs to which wheel is read from the same watchmaker’s photograph of the train in place, and is an interpretation.' },
-    { h: 'What is estimated or left out', s: 'I', p: 'Tooth counts, wheel diameters, pinion sizes, heights and every bridge outline are estimates. The wheel that carries the seconds to the centre is drawn from the photographs, but which arbor it rides on is an interpretation. The automatic winding gears and the springs are not modelled. The model shows the early configuration, running at the calibre 1530’s 18,000 A/h. The dial artwork is a simplified two-line layout and the bezel has no luminous pearl.' }
+    { h: 'What is estimated or left out', s: 'I', p: 'Tooth counts, wheel diameters, pinion sizes, heights and every bridge outline are estimates. The wheel that carries the seconds to the centre is drawn from the photographs, but which arbor it rides on is an interpretation. The automatic winding gears and the springs are not modelled. The model shows the early configuration, running at the calibre 1530’s 18,000 A/h. The dial’s lettering follows photographs of a gilt dial of about 1963, line for line, but its typefaces and the coronet are approximations. The number of notches round the bezel is an estimate.' }
   ],
 
   components: [
@@ -57,12 +57,12 @@ export default {
       significance: 'The tall dome and its edge distortion are a large part of the vintage Submariner’s look.', related: ['bezel', 'case'] },
     { id: 'bezel', name: 'Rotating bezel', group: 'Exterior', status: 'D', anchor: [0, 18.2, 4.2], face: 1,
       beginner: 'The numbered ring that turns. Line its triangle up with the minute hand when you dive, and the minute hand then shows how long you have been down.',
-      horologist: 'Friction-fitted bezel turning in both directions, with a black anodised aluminium insert graduated to sixty and marked minute by minute for the first fifteen. The model omits the luminous pearl in the triangle.',
+      horologist: 'Friction-fitted bezel turning in both directions, with a black anodised aluminium insert graduated to sixty and marked minute by minute for the first fifteen. A luminous pearl is set in the triangle at twelve, and the edge is notched for grip; the number of notches in the model is an estimate.',
       fn: 'Measures elapsed time up to an hour.', material: 'Steel ring, aluminium insert', location: 'Around the crystal.',
       significance: 'The rotating elapsed-time bezel is the defining feature of the dive watch.', related: ['hands', 'crystal'] },
     { id: 'dial', name: 'Dial', group: 'Exterior', status: 'D', anchor: [-8, -2, 2.4], face: 1,
       beginner: 'The black face. Dots, bars and a triangle at twelve glow in the dark, and the different shapes tell you which way up the watch is.',
-      horologist: 'Black dial with luminous plots: a triangle at 12, batons at 3, 6 and 9, dots elsewhere. Early dials are gilt-printed gloss, later ones matte with white print. The text here is simplified.',
+      horologist: 'Black dial with luminous plots: a triangle at 12, batons at 3, 6 and 9, dots elsewhere. Shown as the early glossy dial with gilt printing: the coronet, ROLEX and OYSTER PERPETUAL above the centre, the depth, 200 m = 660 ft, above the name below it, as on dials of the first years, and SWISS at the foot. Later dials are matte with white print. The lettering is placed from photographs; the typefaces and the coronet are approximations.',
       fn: 'Displays the time legibly in poor light.', material: 'Painted brass, luminous compound', location: 'Under the crystal.',
       significance: 'Dial type is the main way collectors date and value a 5513.', related: ['hands', 'bezel'] },
     { id: 'hands', name: 'Hands', group: 'Exterior', status: 'D', anchor: [3, 8, 3.1], face: 1,
@@ -80,10 +80,10 @@ export default {
       horologist: 'Screw-down crown with twin gaskets, threaded onto a tube fixed in the case. Because the watch winds itself, the crown can stay locked for weeks at a time.',
       fn: 'Sets the hands, winds by hand when needed, and seals the case.', material: 'Stainless steel', location: 'Right flank, between the guards.',
       significance: 'An automatic movement and a locking crown belong together: the less the crown is opened, the better the seal.', related: ['case', 'rotor', 'barrel'] },
-    { id: 'strap', name: 'Strap', group: 'Exterior', status: 'I', anchor: [0, 28, -3], face: 0,
+    { id: 'strap', name: 'Bracelet', group: 'Exterior', status: 'I', anchor: [0, 28, -3], face: 0,
       beginner: 'What holds the watch on the wrist. Shown here as a plain stub.',
-      horologist: 'Generic strap ends, shown only so the watch sits naturally. The Oyster bracelet and its reference numbers are not represented.',
-      fn: 'Attaches the watch to the wrist.', material: 'Not specified', location: 'Between the lugs.',
+      horologist: 'The watch was sold on a steel Oyster bracelet with riveted links. Only plain steel stubs are shown; the links are not modelled.',
+      fn: 'Attaches the watch to the wrist.', material: 'Not modelled', location: 'Between the lugs.',
       significance: 'Divers often swapped the bracelet for a fabric strap long enough to go over a wetsuit.', related: ['case'] },
     { id: 'caseback', name: 'Caseback', group: 'Exterior', status: 'D', anchor: [0, 0, -6.6], face: -1,
       beginner: 'The steel lid on the back. It screws down hard against a gasket. Choose the Movement view to open it.',

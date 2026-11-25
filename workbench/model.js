@@ -154,6 +154,7 @@ export function buildProcedural(watch, face, tex) {
     for (let k = 0; k < 8; k++) bezel.add(at(mk(new THREE.CylinderGeometry(1.05, 1.05, 0.4, 6).rotateX(Math.PI / 2), 'white', { edgeAngle: 20 }), br * Math.cos(A(k)), br * Math.sin(A(k)), 4.05), (sl => { sl.rotation.z = A(k) + Math.PI / 2; return sl; })(at(mk(new THREE.BoxGeometry(1.5, 0.2, 0.1), 'iron', { noEdges: true }), br * Math.cos(A(k)), br * Math.sin(A(k)), 4.3)));
   } else
   bezel.add(mk(lathe([[ri, 2.5], [R, 2.5], [R - 0.3, 3.9], [ri, 3.95], [ri, 2.5]]), CASE));
+  if (P.bezelGrip) for (let k = 0; k < P.bezelGrip; k++) { const a = k * Math.PI * 2 / P.bezelGrip, t = mk(new THREE.BoxGeometry(0.6, Math.PI * R / P.bezelGrip, 1.3), CASE, { edgeAngle: 40 }); t.position.set((R - 0.06) * Math.cos(a), (R - 0.06) * Math.sin(a), 3.2); t.rotation.z = a; bezel.add(t); } /* the notched edge a diver grips; the number of notches is an estimate */
   if (P.bezelInsert !== false) bezel.add(at(mk(new THREE.RingGeometry(ri + 0.05, R - 0.45, 128), 'face', { noEdges: true, real: { map: tex.real }, tech: { map: tex.tech } }), 0, 0, 3.97));
   assembly(bezel, 21);
   const crystal = part('crystal'), dome = [];

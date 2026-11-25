@@ -16,7 +16,7 @@ export default {
     type: 'procedural',
     builder: 'round-chronograph',
     note: 'Case and lugs are simplified. No Rolex document was available for the movement. Its pivot positions are read from a watchmaker’s photographs of a stripped calibre 1560. Sizes, heights, tooth counts and outlines are estimated. Not a factory model or scan.',
-    params: { thickness: 12.5, lugToLug: 44, lugWidth: 20, movementDiameter: 28.5, beatsPerHour: 18000, calibre: '1530', chrono: false, dustCover: false, rotor: true, bezelInsert: false, bracelet: true, hands: 'mercedes', plate: 'steel' }
+    params: { thickness: 12.5, lugToLug: 44, lugWidth: 20, movementDiameter: 28.5, beatsPerHour: 18000, calibre: '1530', chrono: false, dustCover: false, rotor: true, bezelInsert: false, bracelet: true, handKind: 'gold', hands: 'mercedes', plate: 'steel' }
   },
   images: [],
 
@@ -46,7 +46,7 @@ export default {
     { h: 'Two movements', s: 'D', p: 'It began with the calibre 1560, beating at 18,000 an hour, and later took the calibre 1570 at 19,800. Published accounts disagree on when the change was made, and give dates from the mid 1960s to the 1970s. In the early 1970s the 1570 gained a seconds hand that stops when the crown is pulled out, so that the watch can be set exactly.' },
     { h: 'Dials', s: 'D', p: 'Early dials are glossy with gilt printing. Matte dials with white printing replaced them in the later 1960s.' },
     { h: 'How the movement was laid out', s: 'E', p: 'No Rolex technical document could be obtained, so this is a weaker source than a maker’s sheet. The positions of the barrel, the train wheels, the pallets and the balance are read from a watchmaker’s near-overhead photograph of a bare plate, published with a 2017 service write-up on mitka.co.uk, and scaled to a diameter of 28.5 mm. That write-up names the movement as calibre 1560 in its title and as 1530 in its text; in its photographs the bridge is engraved 1560 and the dial reads “Superlative Chronometer”, so it is taken to be a 1560, the Explorer’s own calibre. The six positions were measured a second time for this watch and each agrees with the model to about 0.3 mm. Which hole belongs to which wheel is read from the same watchmaker’s photographs of the train in place, and is an interpretation.' },
-    { h: 'What is estimated or left out', s: 'I', p: 'Tooth counts, wheel diameters, pinion sizes, heights and every bridge outline are estimates. The wheel that carries the seconds to the centre is drawn from the photographs, but which arbor it rides on is an interpretation. The automatic winding gears and the springs are not modelled, and the calibre’s balance and the way it is regulated are not reproduced. The model runs at the calibre 1560’s 18,000 A/h. The dial artwork is simplified and the lugs are plain blocks.' }
+    { h: 'What is estimated or left out', s: 'I', p: 'Tooth counts, wheel diameters, pinion sizes, heights and every bridge outline are estimates. The wheel that carries the seconds to the centre is drawn from the photographs, but which arbor it rides on is an interpretation. The automatic winding gears and the springs are not modelled, and the calibre’s balance and the way it is regulated are not reproduced. The model runs at the calibre 1560’s 18,000 A/h. The dial’s lettering follows photographs of a gilt dial of about 1963, line for line, but its typefaces and the coronet are approximations. The lugs are plain blocks.' }
   ],
 
   components: [
@@ -62,7 +62,7 @@ export default {
       significance: 'The absence of any scale is part of what makes the Explorer the plainest of the Rolex tool watches.', related: ['crystal', 'case'] },
     { id: 'dial', name: 'Dial', group: 'Exterior', status: 'D', anchor: [-8, -2, 2.4], face: 1,
       beginner: 'The black face, with a triangle at twelve and the numerals 3, 6 and 9. The marks glow in the dark.',
-      horologist: 'Black dial with a luminous triangle at 12, Arabic numerals at 3, 6 and 9 and batons for the other hours. Early dials are gilt-printed gloss, later ones matte with white print. The text here is simplified.',
+      horologist: 'Black dial with a luminous triangle at 12, Arabic numerals at 3, 6 and 9 and batons for the other hours. Shown as the early glossy dial with gilt printing: the coronet, ROLEX, OYSTER PERPETUAL and EXPLORER above the centre, SUPERLATIVE CHRONOMETER and OFFICIALLY CERTIFIED below it, and SWISS at the foot. Later dials are matte with white print. The lettering is placed from photographs; the typefaces and the coronet are approximations.',
       fn: 'Displays the time legibly in poor light.', material: 'Painted brass, luminous compound', location: 'Under the crystal.',
       significance: 'The 3, 6 and 9 layout is the Explorer’s signature.', related: ['hands'] },
     { id: 'hands', name: 'Hands', group: 'Exterior', status: 'D', anchor: [3, 8, 3.1], face: 1,

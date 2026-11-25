@@ -5,7 +5,7 @@ window.WATCHES = [
 {
   id:'sub5513', brand:'Rolex', model:'Submariner', ref:'5513', year:'1962', span:'c. 1962 – 1989', kind:'Dive watch',
   c:{shape:'round', d:40, t:[14.5,'n'], lug:[20,'v']},
-  bezel:{type:'dive', w:3.6, first15:true}, dial:{dark:true, markers:'dive', text:['ROLEX','SUBMARINER']},
+  bezel:{type:'dive', w:3.6, first15:true}, dial:{dark:true, gilt:true, markers:'dive', text:['ROLEX','SUBMARINER'], set:{crown:-0.43, lines:[['ROLEX',-0.31,0.11,0],['OYSTER PERPETUAL',-0.225,0.056,1],['200 m = 660 ft',0.31,0.062,1],['SUBMARINER',0.41,0.072,1]], foot:'SWISS'}},
   hands:'mercedes', sec:'center', crown:{pos:3, guards:true}, strap:'oyster',
   mv:{cal:'1530, later 1520', type:'auto', vph:18000, wind:'Automatic, full rotor', note:'Cal. 1530 beats at 18,000 A/h; the later cal. 1520 at 19,800 A/h. Drawn here at the earlier rate.'},
   back:{type:'fluted', note:'Screw-down Oyster back with fluted edge.'},
@@ -27,7 +27,7 @@ window.WATCHES = [
 {
   id:'explorer1016', brand:'Rolex', model:'Explorer', ref:'1016', year:'c. 1963', span:'c. 1963 – 1989', kind:'Field watch',
   c:{shape:'round', d:36, t:[12.5,'n'], lug:[20,'v']},
-  bezel:{type:'plain', w:2.4}, dial:{dark:true, markers:'explorer', text:['ROLEX','EXPLORER']},
+  bezel:{type:'plain', w:2.4}, dial:{dark:true, gilt:true, markers:'explorer', text:['ROLEX','EXPLORER'], set:{crown:-0.5, lines:[['ROLEX',-0.385,0.11,0],['OYSTER PERPETUAL',-0.3,0.056,1],['EXPLORER',-0.215,0.082,1],['SUPERLATIVE CHRONOMETER',0.4,0.047,1],['OFFICIALLY CERTIFIED',0.465,0.047,1]], foot:'SWISS'}},
   hands:'mercedes', sec:'center', crown:{pos:3}, strap:'oyster',
   mv:{cal:'1560, later 1570', type:'auto', vph:18000, wind:'Automatic, full rotor', note:'Cal. 1560 at 18,000 A/h, succeeded by the cal. 1570 at 19,800 A/h. Drawn at the earlier rate.'},
   back:{type:'fluted', note:'Screw-down Oyster back with fluted edge.'},
