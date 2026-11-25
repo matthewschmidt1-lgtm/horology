@@ -148,12 +148,12 @@ window.WATCHES = [
 {
   id:'calatrava', brand:'Patek Philippe', model:'Calatrava', ref:'96', year:'1932', span:'1932 – c. 1973', kind:'Dress watch',
   c:{shape:'round', d:31, da:'a', t:[9,'n'], lug:[18,'a']},
-  bezel:{type:'plain', w:1.7}, dial:{dark:false, markers:'calatrava', subs:[[6,'sec']], text:['PATEK PHILIPPE','GENÈVE']},
+  bezel:{type:'plain', w:1.7}, dial:{dark:false, markers:'calatrava', subTrack:true, subs:[[6,'sec']], text:['PATEK PHILIPPE','GENÈVE'], set:{lines:[['PATEK, PHILIPPE & Co',-0.4,0.07,1],['GENÈVE',-0.31,0.055,1]]}},
   hands:'dauphine', sec:'sub', crown:{pos:3, small:true}, strap:'leather',
   mv:{cal:'12‴-120', type:'manual', vph:18000, wind:'Manual', size:'12 lignes', note:'Patek’s own calibre from 1934. The first examples used a LeCoultre ébauche.'},
   back:{type:'snap', note:'Plain snap back.'},
   specs:[['Case','Flat bezel, lugs integral with the band'],['Dial','Applied faceted batons, subsidiary seconds'],['Complication','Small seconds at 6']],
-  notes:['The reference that set the template for the round dress watch.','Usually read as the Bauhaus rule that form follows function, applied to a wristwatch.'],
+  notes:['The reference that set the template for the round dress watch.','Usually read as the Bauhaus rule that form follows function, applied to a wristwatch.','Drawn with the dial of the 1930s and 1940s: the long signature, a pair of bars at twelve, small raised dots for the minutes and a ringed seconds track. From about 1948 the signature was shortened to PATEK PHILIPPE. Sources give the case as 30, 30.5 or 31 mm.'],
   q:{t:'Which design principle is the ref. 96 associated with?', a:'Bauhaus: form follows function', w:['Art Nouveau ornament','Streamline Moderne','Brutalism']}
 },
 {

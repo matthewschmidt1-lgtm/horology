@@ -255,8 +255,8 @@ function markers(w, g, skip) {
       s += Pa(polyD(pts), 't'); break;
     }
     case 'calatrava':
-      for (let i = 0; i < 60; i++) { const p = P(i * 6, R0 - 0.5); s += C(0.12, p[0], p[1], 'k'); }
-      each(h => bat(h, 2.8, 0.9, 'p', 1.2) + rad(h * 30, R0 - 4, R0 - 1.2, 't')); break;
+      for (let i = 0; i < 60; i++) { const p = P(i * 6, R0 - 0.5); s += C(0.15, p[0], p[1], 'k'); } // sixty small raised dots for the minutes
+      each(h => h ? bat(h, 2.8, 0.9, 'p', 1.2) + rad(h * 30, R0 - 4, R0 - 1.2, 't') : dbl(2.8, 0.75, 'p', 1.2)); break; // applied faceted bars, two side by side at twelve
     case 'polerouter':
       { /* the Polerouter's dial, from a dealer's photograph of a reference 20357: a narrow sloping outer ring, turned in fine circles, with a plain polished bar at each hour and a wider one at
            twelve; and a flat centre with short minute marks at its edge, a luminous dot at each hour, two at twelve, and a crosshair right across it. */
@@ -373,6 +373,8 @@ function subs(w, g, o = {}) {
     const cls = d.subDark ? 'tn2' : d.subLight ? 'p' : (d.dark ? 'tn' : 'p'), sty = tint != null ? `style="fill:var(--sf${pos}, var(--ink));fill-opacity:var(--so, ${tint})"` : ''; // the Workbench's dial picture can give each register its true colour; elsewhere it is a tint of the ink
     s += d.subSquare ? RC(cx - rs * 1.3, cy - rs, 2.6 * rs, 2 * rs, cls, 1.5) : C(rs, cx, cy, 'p') + C(rs, cx, cy, cls, sty);
     const n = role === 'min30' ? 30 : 12;
+    if (d.subTrack && role === 'sec') { s += C(rs - 0.55, cx, cy, 't'); for (let i = 0; i < 60; i++) s += rad(i * 6, rs - (i % 15 ? 0.55 : 1.0), rs + (i % 15 ? 0 : 0.35), i % 15 ? (i % 5 ? 'hair' : 't') : 'bar', cx, cy); } // a ringed track with a mark at each second and a bold bar at each quarter
+    else
     if (!d.subSquare) for (let i = 0; i < n; i++) s += rad(i * 360 / n, rs - (i % (n / 6) ? 0.45 : 0.9), rs - 0.12, 't sk' + pos + dr, cx, cy);
     if (d.subRings) for (const k of [0.12, 0.2, 0.28, 0.36]) { // the fine circles turned into each register, a few of them, kept inside the figures; in the register at six they break for the word printed there
       if (d.subWord && pos === 6 && k > 0.15) { const r = rs * k, g0 = 55 * Math.PI / 180, x = r * Math.sin(g0), y = r * Math.cos(g0); s += Pa(`M${f(cx + x)},${f(cy + y)}A${f(r)},${f(r)} 0 1 0 ${f(cx - x)},${f(cy + y)}`, 'hair'); }
