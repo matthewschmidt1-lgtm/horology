@@ -256,7 +256,7 @@ export function buildProcedural(watch, face, tex) {
 
   /* ----- movement: local +Z points out of the back of the watch ----- */
   const MK = mvR < 13 ? mvR / 13.5 : 1; /* the layout below is drawn for a movement about 27 mm across; a smaller one is the same layout, scaled */
-  const mv = new THREE.Group(); mv.position.z = 0.2; mv.rotation.y = Math.PI; mv.scale.set(MK, MK, 1); if (P.subSeconds === 6) mv.rotation.z = -Math.PI / 2; /* puts the fourth wheel under the six o'clock register */ root.add(mv); assembly(mv, 0);
+  const mv = new THREE.Group(); mv.position.z = 0.2; mv.rotation.y = Math.PI; mv.scale.set(MK, MK, 1); if (P.subSeconds === 6 && P.calibre !== 'L1902') mv.rotation.z = -Math.PI / 2; /* the L1902 is laid out as photographed, with its crown where the case has it */ /* puts the fourth wheel under the six o'clock register */ root.add(mv); assembly(mv, 0);
   part('plate', mv).add(G3 ? at(mk(extr(holed(mvR, [-G3.tb[0], G3.tb[1], G3.tb[2] + 0.6]), 1.78), P.plate || 'copper', { real: { color: P.plate === 'steel' ? 0x7f7f7c : 0x9a6649, roughness: 0.72 } }), 0, 0, -1.78) : at(mk(cyl(mvR / MK, 1.78, 72), P.plate || 'copper', { real: { color: P.plate === 'steel' ? 0x7f7f7c : 0x9a6649, roughness: 0.72 } }), 0, 0, -0.89)); /* matte and darker than the bridges, so they read against it */
   const spins = {};
   const mobile = (id, x, y, o, parent) => {
@@ -558,6 +558,34 @@ export function buildProcedural(watch, face, tex) {
     spins.centre = spins.third = spins.fourth = spins.escape = new THREE.Group();
     const HN = 240, hsPos = new Float32Array((HN + 1) * 3), hsGeo = new THREE.BufferGeometry(); hsGeo.setAttribute('position', new THREE.BufferAttribute(hsPos, 3));
     Object.assign(M, { balSpin: new THREE.Group(), palRock: new THREE.Group(), hsPos, hsGeo, HN, interRatio: 1 });
+  } else if (P.calibre === 'L1902') {
+    /* A. Lange & Söhne calibre L1902 (Grand Complication). No maker's drawing is published. Only what one photograph shows is modelled: SJX Watches' near-overhead view of the
+       prototype's movement through its glazed back (2013). It is a small picture taken at a slight angle, and its scale is taken from the 50 mm case in the same frame, which makes
+       the movement about 40 mm across; positions are good to about 1 mm. Placed from it: the balance and the foot of its cock, two column wheels, a winding wheel with a square
+       at its centre, the central jewel, and seven other jewels with plain bridges laid over them. Two steel levers are placed by eye. Seen from the back, the crown is towards -x.
+       What each jewel belongs to is not known, so no wheel is put under any bridge, and the escapement, the three barrels and trains, the striking work, the chronograph work
+       and the calendar are all left out. The balance swings; nothing else moves. Every outline, height and size is an estimate. */
+    spins.centre = spins.third = spins.fourth = spins.escape = new THREE.Group(); // not modelled; the animation only needs something to turn
+    const BX = 12.2, BY = -5.8, bal = at(part('balance', mv), BX, BY, 0), balSpin = new THREE.Group(); bal.add(balSpin);
+    balSpin.add(at(mk(new THREE.TorusGeometry(5.74, 0.26, 10, 88), 'brass', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(11.2, 0.36, 0.2), 'brass'), 0, 0, 2.3), at(mk(cyl(0.45, 0.3, 14), 'steelDark'), 0, 0, 1.9));
+    for (let k = 0; k < 16; k++) { const a = k * Math.PI / 8; balSpin.add(at(mk(cyl(0.22, 0.34, 8), 'gold', { noEdges: true }), 5.74 * Math.cos(a), 5.74 * Math.sin(a), 2.3)); } // the gold screws on its rim, whose number is not counted
+    bal.add(at(mk(cyl(0.2, 3, 10), 'steelDark', { noEdges: true }), 0, 0, 1.6));
+    const hs = at(part('hairspring', mv), BX, BY, 2.72), HN = 240, hsPos = new Float32Array((HN + 1) * 3), hsGeo = new THREE.BufferGeometry();
+    hsGeo.setAttribute('position', new THREE.BufferAttribute(hsPos, 3));
+    const hsLine = new THREE.Line(hsGeo, new THREE.LineBasicMaterial({ color: 0x3d4f6e })); hsLine.userData.pickLine = true; hs.add(hsLine);
+    layer(flat('balance-cock', [[BX, BY, 1.4], [17.8, 0.6, 1.3]], 3.3, 0.45), 4);
+    layer(multi('chrono-bridge', [[[0, 0, 1.5], [5.5, 5.0, 1.3]], [[5.5, 5.0, 1.3], [0.8, 10.6, 1.2]], [[0.8, 10.6, 1.2], [-1.75, 15.5, 1.2]]], 2.35, 0.45, P.plate || 'copper'), 4);
+    layer(flat('lower-cock', [[-0.7, -9.6, 1.5], [4.4, -9.8, 1.5], [1.9, -14.2, 1.3]], 2.35, 0.45), 4);
+    layer(flat('side-bridge', [[-6.1, 1.7, 1.4], [-8.4, 5.6, 1.2]], 2.35, 0.45), 4);
+    jewel(0, 0, 2.86, 4); jewel(5.5, 5.0, 2.86, 4); jewel(0.8, 10.6, 2.86, 4); jewel(-1.75, 15.5, 2.86, 4); jewel(-6.1, 1.7, 2.86, 4);
+    jewel(-0.7, -9.6, 2.86, 4); jewel(4.4, -9.8, 2.86, 4); jewel(7.5, -12.9, 0.1, 0); jewel(BX, BY, 3.82, 4);
+    const cws = part('column-wheel', mv);
+    for (const c of [[-13.1, 0], [12.9, 4.7]]) { const g = at(new THREE.Group(), c[0], c[1], 0); g.add(at(mk(extr(gearShape(2.1, 18, 0.3, 0), 0.25), 'steelDark', { edgeAngle: 40 }), 0, 0, 2.4), at(mk(cyl(1.0, 0.5, 20), 'steel'), 0, 0, 3.3));
+      for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3, pl = mk(new THREE.BoxGeometry(0.5, 0.42, 0.7), 'steelDark'); pl.position.set(1.3 * Math.cos(a), 1.3 * Math.sin(a), 3.0); pl.rotation.z = a; g.add(pl); } cws.add(g); }
+    cws.userData.anchor = [-13.1, 0, 3.6]; layer(cws, 8);
+    const rw = at(part('ratchet', mv), -10.0, -9.1, 0); rw.add(at(mk(extr(gearShape(4.6, 60, 0.25, 0), 0.3), 'steel', { edgeAngle: 40 }), 0, 0, 2.4), at(mk(new THREE.BoxGeometry(1.5, 1.5, 0.35), 'steelDark'), 0, 0, 2.85)); rw.userData.anchor = [0, 0, 3.0]; layer(rw, 6);
+    layer(multi('levers', [[[-16.4, 7.5, 0.6], [-13.5, 2.9, 0.45]], [[-7.2, 12.4, 0.6], [-11.9, 2.2, 0.45]]], 3.5, 0.2, 'steel'), 9);
+    Object.assign(M, { balSpin, palRock: new THREE.Group(), hsPos, hsGeo, HN, interRatio: 1 });
   } else if (P.calibre === '176') {
     /* Jaeger-LeCoultre calibre 176 (Gyrotourbillon 3). No maker's drawing is published and no usable photograph of the back was measured, so NOTHING of the movement
        is modelled except the tourbillon, which stands in the opening where a front photograph of the watch shows it. Its form is a simplification: an outer cage of three
