@@ -158,7 +158,8 @@ function bezel(w, g) {
     for (let a = 0; a < 360; a += 5) s += rad(a, R - 0.5, R, 't');
     s += C(R - 0.55, 0, 0, 'tn') + C(ri, 0, 0, 'p');
     const ro = R - 0.55, h = ro - ri, rm = (ro + ri) / 2;
-    s += Pa(polyD([P(-6, ro - 0.5), P(6, ro - 0.5), P(0, ri + 0.5)]), 'p') + C(h * 0.2, 0, -(ro - 0.5 - h * 0.27), 'p') + C(h * 0.11, 0, -(ro - 0.5 - h * 0.27), 't'); // the luminous pearl set in the triangle
+    s += Pa(polyD([P(-6, ro - 0.5), P(6, ro - 0.5), P(0, ri + 0.5)]), 'p'); if (b.pearl) s += C(h * 0.2, 0, -(ro - 0.5 - h * 0.27), 'p') + C(h * 0.11, 0, -(ro - 0.5 - h * 0.27), 't'); // the luminous pearl set in the triangle, where the watch has one
+    if (b.every) for (let m = 1; m < 60; m++) if (m % 5) s += rad(m * 6, ri + h * 0.3, ro - h * 0.3, 'bar'); // a bar at every minute, all the way round
     for (let m = 5; m < 60; m += 5) {
       const a = m * 6;
       if (m % 10 === 0) s += T(m, 0, 0, h * 0.6, 'tx bz', `transform="rotate(${a}) translate(0,${f(-rm + h * 0.21)})"`);
@@ -235,7 +236,11 @@ function markers(w, g, skip) {
       break;
     case 'baton': s += ticks(); each(h => h === 0 ? dbl(2.6, 0.8) : bat(h, 2.6, 0.8)); break;
     case 'block': s += ticks(); each(h => h === 0 ? dbl(2.8, 1.3) : bat(h, 2.6, 1.7)); break;
-    case 'sm300': s += ticks(); each(h => h % 3 === 0 ? num(h, h || 12, R0 * 0.25, R0 * 0.7) + bat(h, 1, 1) : bat(h, 3.6, 1.1)); break;
+    case 'sm300': { // the early dial of the Seamaster 300 165.024, from photographs: a long printed mark at every minute, eight long luminous bars that taper a little toward the centre, and at 12, 3, 6 and 9 a figure with a small luminous block outside it
+      for (let i = 0; i < 60; i++) if (i % 5) s += rad(i * 6, R0 - 3.1, R0 - 0.3, 't');
+      const wedge = (h, len, w0, w1) => `<path class="p" d="${polyD([[f(-w0 / 2), f(-R0 + 0.3)], [f(w0 / 2), f(-R0 + 0.3)], [f(w1 / 2), f(-R0 + 0.3 + len)], [f(-w1 / 2), f(-R0 + 0.3 + len)]])}" transform="rotate(${h * 30})"/>`;
+      each(h => { if (h % 3) return wedge(h, 4.3, 1.9, 1.35); const p = P(h * 30, R0 * 0.66), z = R0 * 0.2; return wedge(h, 1.5, 1.8, 1.55) + T(h || 12, p[0], p[1] + z * 0.36, z, 'tx nm', 'style="font-family:Helvetica,Arial,sans-serif"'); });
+      break; }
     case 'pie': {
       s += ticks(0.6); each(h => bat(h, 2.6, 0.7, 'k'));
       const pts = []; for (let k = 0; k < 12; k++) { pts.push(P(15 + 30 * k, R0 * 0.7)); s += rad(15 + 30 * k, R0 * 0.7, R0, 't'); }
@@ -500,7 +505,7 @@ function hands(w, g) {
   else { hp = Pa(pen(Lh, 0.8), 'p'); mp = Pa(pen(Lm, 0.62), 'p'); }
   let s = `<g data-hand="h">${hp}</g><g data-hand="m">${mp}</g>`;
   if (w.chrono) s += `<g data-chr="s" data-bps="${b}">${L(0, 3.2, 0, -Lm * 1.04, 'hd')}${Pa(polyD([[-0.5, f(-Lm * 0.9)], [0.5, f(-Lm * 0.9)], [0, f(-Lm * 1.04)]]), 'k')}</g>`;
-  else if (w.sec === 'center') s += `<g data-hand="s" data-bps="${b}">${L(0, 3.4, 0, -Lm * 1.02, 'hd')}${st === 'mercedes' ? C(0.75, 0, -Lm * 0.62, 'p') : ''}${RC(-0.35, 1.6, 0.7, 1.8, 'k')}</g>`;
+  else if (w.sec === 'center') s += `<g data-hand="s" data-bps="${b}">${L(0, 3.4, 0, -Lm * 1.02, 'hd')}${st === 'mercedes' ? C(0.75, 0, -Lm * 0.62, 'p') : ''}${w.secTip === 'diamond' ? Pa(polyD([[0, f(-Lm * 0.7)], [0.55, f(-Lm * 0.8)], [0, f(-Lm * 0.93)], [-0.55, f(-Lm * 0.8)]]), 'p') : ''}${RC(-0.35, 1.6, 0.7, 1.8, 'k')}</g>`;
   return s + C(0.95, 0, 0, 'p') + C(0.3, 0, 0, 'k');
 }
 

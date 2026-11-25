@@ -5,7 +5,7 @@ window.WATCHES = [
 {
   id:'sub5513', brand:'Rolex', model:'Submariner', ref:'5513', year:'1962', span:'c. 1962 – 1989', kind:'Dive watch',
   c:{shape:'round', d:40, t:[14.5,'n'], lug:[20,'v']},
-  bezel:{type:'dive', w:3.6, first15:true}, dial:{dark:true, gilt:true, markers:'dive', text:['ROLEX','SUBMARINER'], set:{crown:-0.43, lines:[['ROLEX',-0.31,0.11,0],['OYSTER PERPETUAL',-0.225,0.056,1],['200 m = 660 ft',0.31,0.062,1],['SUBMARINER',0.41,0.072,1]], foot:'SWISS'}},
+  bezel:{type:'dive', w:3.6, first15:true, pearl:true}, dial:{dark:true, gilt:true, markers:'dive', text:['ROLEX','SUBMARINER'], set:{crown:-0.43, lines:[['ROLEX',-0.31,0.11,0],['OYSTER PERPETUAL',-0.225,0.056,1],['200 m = 660 ft',0.31,0.062,1],['SUBMARINER',0.41,0.072,1]], foot:'SWISS'}},
   hands:'mercedes', sec:'center', crown:{pos:3, guards:true}, strap:'oyster',
   mv:{cal:'1530, later 1520', type:'auto', vph:18000, wind:'Automatic, full rotor', note:'Cal. 1530 beats at 18,000 A/h; the later cal. 1520 at 19,800 A/h. Drawn here at the earlier rate.'},
   back:{type:'fluted', note:'Screw-down Oyster back with fluted edge.'},
@@ -49,12 +49,12 @@ window.WATCHES = [
 {
   id:'sm300', brand:'Omega', model:'Seamaster 300', ref:'165.024', year:'mid-1960s', span:'c. 1964 – 1969', kind:'Dive watch',
   c:{shape:'round', d:41.5, da:'a', t:[14,'n'], lug:[20,'a'], lyre:true},
-  bezel:{type:'dive', w:4.2, wide:true}, dial:{dark:true, markers:'sm300', text:['OMEGA','Seamaster 300']},
-  hands:'sword', sec:'center', crown:{pos:3, guards:true}, strap:'flat',
+  bezel:{type:'dive', w:4.2, wide:true, every:true}, dial:{dark:true, markers:'sm300', text:['OMEGA','Seamaster 300'], set:{omega:-0.42, lines:[['OMEGA',-0.345,0.075,1],['AUTOMATIC',-0.28,0.045,1],['Seamaster 300',0.42,0.085,2]]}},
+  hands:'baton', secTip:'diamond', sec:'center', crown:{pos:3, guards:true}, strap:'flat',
   mv:{cal:'552', type:'auto', vph:19800, jewels:24, wind:'Automatic, full rotor'},
   back:{type:'screw', emblem:'Hippocampus emblem', note:'Screw back. The seahorse emblem is indicated, not reproduced.'},
   specs:[['Case','Asymmetrical, twisted lugs'],['Bezel','Wide rotating insert, sixty-minute scale'],['Complication','Time only']],
-  notes:['Second-generation Seamaster 300 in the larger asymmetrical case shared with the Speedmaster Professional.','Issued to divers of the British Royal Navy in the late 1960s.','Sources give the case as 41 or 42 mm; dial and hand configurations varied through production.'],
+  notes:['Second-generation Seamaster 300 in the larger asymmetrical case shared with the Speedmaster Professional.','Issued to divers of the British Royal Navy in the late 1960s.','Sources give the case as 40, 41 or 42 mm.','Drawn with the early dial and straight hands of the mid-1960s. From about 1966 or 1967 a large luminous triangle replaced the 12 and broad sword hands replaced the straight ones.'],
   q:{t:'Which navy issued the Seamaster 300 to its divers?', a:'The British Royal Navy', w:['The United States Navy','The Italian Marina Militare','The Imperial Japanese Navy']}
 },
 {
