@@ -19,4 +19,4 @@ import langeGC from './lange-grand-complication.js';
 
 const all = [speedmaster, submariner, calatrava, elPrimero, spaceview, royalOak, monaco, tank, daytona, seiko62mas, carrera, explorer, navitimer, patek3974, gyro3, langeGC];
 export const watches = all.slice().sort((a, b) => (a.brand + ' ' + a.model).localeCompare(b.brand + ' ' + b.model));
-export const first = speedmaster; // the Speedmaster, whose movement is laid out from the fullest source, stays the watch the Workbench opens on
+export const first = patek3974; // the watch the Workbench opens on when no watch is asked for
