@@ -203,12 +203,12 @@ window.WATCHES = [
 {
   id:'ventura', brand:'Hamilton', model:'Ventura', ref:'-', year:'1957', span:'1957 – 1963', kind:'Electric watch',
   c:{shape:'shield', w:32, h:50, da:'a', t:[11,'n'], lug:null},
-  dial:{dark:true, markers:'ventura', text:['HAMILTON','ELECTRIC']},
+  dial:{dark:true, gilt:true, markers:'ventura', text:['HAMILTON','ELECTRIC'], set:{lines:[['HAMILTON',-0.43,0.11,1],['ELECTRIC',0.58,0.11,1],['PAT. PENDING',1.52,0.05,1]]}},
   hands:'dauphine', sec:'center', crown:{pos:3, small:true}, strap:'leather',
   mv:{cal:'500', type:'electric', vph:18000, wind:'Battery-driven balance', note:'A coil carried on the balance wheel is impulsed by fixed magnets. Beat rate assumed for drawing. Succeeded by the cal. 505.'},
   back:{type:'plainshield', note:'Detail not verified; shown plain.'},
-  specs:[['Design','Richard Arbib'],['Case','Asymmetrical shield, 14 k gold'],['Power','Battery']],
-  notes:['The first battery-powered wristwatch offered to the public, announced in January 1957.','Arbib’s case owes more to tail fins than to watchmaking tradition.','Elvis Presley wore one in “Blue Hawaii”.','Case outline and dial ornament are interpretive; overall size is approximate.'],
+  specs:[['Design','Richard Arbib'],['Case','Asymmetrical shield, 14 k gold, stepped lugs'],['Dial','Gold dots, and a zigzag line across the centre'],['Power','Battery']],
+  notes:['The first battery-powered wristwatch offered to the public, announced in January 1957.','Arbib’s case owes more to tail fins than to watchmaking tradition.','Elvis Presley wore one in “Blue Hawaii”.','The point of the case sits at nine o’clock and the crown on the broad side at three.','The outline and the dial are placed from a dealer’s photograph of an example of about 1957, so they are approximate. That dealer measures the case at 31.5 by 35 mm without its lugs; the overall length shown is not confirmed.'],
   q:{t:'What was new about the Ventura in 1957?', a:'It ran on a battery', w:['It was the first automatic','It had the first sapphire crystal','It used a quartz crystal']}
 },
 {

@@ -23,8 +23,9 @@ const bps = w => w.mv.vph ? w.mv.vph / 3600 : 0;
 
 const SQ_D = 'M-17,-19.5Q0,-20.5 17,-19.5Q19.5,-19.5 19.5,-17Q20.5,0 19.5,17Q19.5,19.5 17,19.5Q0,20.5 -17,19.5Q-19.5,19.5 -19.5,17Q-20.5,0 -19.5,-17Q-19.5,-19.5 -17,-19.5Z';
 const RO_D = 'M-13.5,-23H13.5L19.5,-12V12L13.5,23H-13.5L-19.5,12V-12Z';
-const SH_D = 'M-12.5,-18C2.3,-19.4 16,-9 19.4,0C16,9 2.3,19.4 -12.5,18C-10.3,7 -10.3,-7 -12.5,-18Z';
-const SH_DIAL = 'M-9.4,-14.4C2.4,-15.5 13.4,-7.2 16.1,0C13.4,7.2 2.4,15.5 -9.4,14.4C-7.6,5.6 -7.6,-5.6 -9.4,-14.4Z';
+/* The Ventura's case, as seen on the wrist: the point is at nine o'clock and the broad side, with the crown, at three. Traced loosely from a dealer's photograph taken slightly off square, so the outline is approximate. */
+const SH_D = 'M11.5,-18C-1,-19.6 -14,-9.5 -17.4,0C-14,9.5 -1,19.6 11.5,18L15.5,0Z';
+const SH_DIAL = 'M10.2,-16.2C-1,-17.4 -12.6,-8.6 -15.6,0C-12.6,8.6 -1,17.4 10.2,16.2L13.7,0Z';
 
 /* ---------- geometry ---------- */
 function geo(w) {
@@ -54,8 +55,8 @@ function geo(w) {
     g.hw = g.hh = c.d / 2; g.outline = RO_D; g.dialR = 13.9; g.dial = circD(13.9); g.bezR = 19.75;
     g.inR = 13.9; g.edge = () => g.inR; g.hl = 12.4; g.lugW = 22; g.l2l = 46; g.lugs = true; g.cwh = g.hh; g.dw = 13.9;
   } else { // shield
-    g.hw = 19.4; g.x0 = -12.5; g.hh = 18; g.outline = SH_D; g.dial = SH_DIAL;
-    g.inR = 7.6; g.edge = () => g.inR; g.hl = 6.9; g.lugW = 17; g.l2l = c.h; g.lugs = true; g.cwh = 18; g.dw = 16; g.crx = 18.8; g.lr = 0.62;
+    g.hw = 15.5; g.x0 = -17.4; g.hh = 18; g.outline = SH_D; g.dial = SH_DIAL;
+    g.inR = 7.6; g.edge = () => g.inR; g.hl = 8.6; g.lugW = 17; g.l2l = c.h; g.lugs = true; g.cwh = 18; g.dw = 16; g.crx = 15.3; g.lr = 0.62;
   }
   g.strapEnd = g.l2l / 2 + (c.shape === 'octagon' ? 10 : 6);
   return g;
@@ -131,7 +132,7 @@ function base(w, g) {
     s += cr + Pa(RO_D, 'p');
   } else {
     s += `<g transform="translate(-1.5,0)">${strapBoth(w, g, 13)}</g>`;
-    s += [1, -1].map(sy => `<g transform="scale(1,${sy})">${RC(-10.6, 11, 2.7, 14, 'p', 0.5)}${RC(5.2, 11, 2.7, 14, 'p', 0.5)}${L(-10.6, 21.5, -7.9, 21.5, 't')}${L(5.2, 21.5, 7.9, 21.5, 't')}</g>`).join('');
+    s += [1, -1].map(sy => `<g transform="scale(1,${sy})">${RC(-8.6, 11, 14.2, 14, 'p', 0.8)}${RC(-9.6, 11, 16.2, 11.4, 'p', 0.8)}${RC(-10.6, 11, 18.2, 8.8, 'p', 0.8)}</g>`).join(''); // the stepped lugs, as three tiers; their true sweep to one side is not reproduced
     s += crown(w, g) + Pa(SH_D, 'p');
   }
   return s;
@@ -290,8 +291,14 @@ function markers(w, g, skip) {
       for (const sx of [-1, 1]) for (const sy of [-1, 1]) s += RC(sx * 9.2 - 1.7, sy * 13.15 - 0.4, 3.4, 0.8, 'p ap') + RC(sx * 14.1 - 0.6, sy * 6.9 - 0.45, 1.2, 0.9, 'p ap');
       s += RC(-0.65, -14.35, 1.3, 3.2, 'p ap') + L(0, -14.25, 0, -11.25, 't rd5'); break;
     case 'ventura':
-      each(h => (p => C(0.55, p[0], p[1], 'p'))(P(h * 30, R0 - 0.9)));
-      s += Pa('M-6.2,0H-3.6L-2.6,-2L-0.9,2.1L0.9,-2.1L2.6,2L3.6,0H6.2', 't'); break;
+      { /* the Ventura's dial, placed from a dealer's photograph of an example of about 1957: a gold dot at each hour, set out to follow the triangle, two at twelve; a fine line running in
+           from each toward the centre; and across the middle a line from the dot at nine to the dot at three that breaks into a zigzag either side of the centre. Positions are good to about a millimetre. */
+        const D = [[-0.2, -12.0, -0.2, -7.5], [6.9, -12.6, 3.9, -6.5], [8.8, -5.1, 6.7, -3.7], [9.1, 0], [8.9, 5.4, 6.7, 3.9], [6.9, 12.6, 3.9, 6.8], [-0.2, 12.5, -0.2, 7.9], [-5.7, 9.5, -3.9, 6.8], [-9.7, 5.7, -6.7, 3.8], [-13.3, 0], [-9.7, -5.4, -6.7, -3.7], [-5.7, -9.4, -3.9, -6.5]];
+        D.forEach(q => { if (q.length > 2) s += L(q[0], q[1], q[2], q[3], 't gt'); });
+        const zig = (x0, x1) => { let d = `M${x0},0`; const n = 10, st = (x1 - x0) / n; for (let k = 1; k < n; k++) d += `L${f(x0 + k * st)},${k % 2 ? -1.1 : 1.1}`; return d + `L${x1},0`; };
+        s += `<g class="gt">${L(-13.3, 0, -5.3, 0, 't')}${Pa(zig(-5.3, -1.4), 't')}${Pa(zig(1.3, 5.6), 't')}${L(5.6, 0, 9.1, 0, 't')}</g>`;
+        D.forEach(q => { s += C(0.55, q[0], q[1], 'p wg'); }); s += C(0.55, -0.2, -10.85, 'p wg');
+      } break;
     case 'spaceview':
       s += C(R0 - 2.6, 0, 0, 'l');
       for (let i = 0; i < 60; i++) if (i % 5) s += rad(i * 6, R0 - 2, R0 - 0.7, 't');
@@ -788,7 +795,7 @@ function face(w, real) {
   const gold = real && w.dial.gold ? '.nm,.cal,.dl{fill:#cfa13a}.hc{fill:#cfa13a;stroke:#4a3c16}.mw{fill:#1b2a55;stroke:#cfa13a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}.t,.hair{stroke:#b08a34}.k{fill:#cfa13a}' : '';
   const gilt = real && w.dial.gilt ? '.dl{fill:#c9a45c}.gt .t{stroke:#c9a45c}' : ''; // printing in gilt, as on the early glossy dials
   const ap = real && !w.dial.dark ? '.t.dk2,.hair.dk2{stroke:#ecece8}text.dk2{fill:#ecece8}.ap{fill:#a7a8a4}.dk{fill:#131313;stroke:#2b2b2b}.dkt{fill:#f1efe7}.dks{stroke:#f1efe7}' : ''; // applied steel bars on a pale dial
-  const wg = real && w.dial.goldNums ? '.nm,.wg{fill:#c8ad74}.wg{stroke:#4a3c16;stroke-width:.05}' : ''; // applied gilt figures and emblem
+  const wg = real && (w.dial.goldNums || w.dial.gilt) ? '.nm,.wg{fill:#c8ad74}.wg{stroke:#4a3c16;stroke-width:.05}' : ''; // applied gilt figures and emblem
   const blue = real ? (w.dial.blue ? `.db{fill:${w.dial.blue}}` : '') + '.rd5{stroke:#c51f10;stroke-width:.32}' : ''; // a coloured dial, and red marks
   const sf = real && w.dial.subFills ? 'svg{--so:1;' + Object.entries(w.dial.subFills).map(q => `--sf${q[0]}:${q[1][0]}`).join(';') + '}' + Object.entries(w.dial.subFills).filter(q => q[1][1]).map(q => `.sk${q[0]}{stroke:#ecece8}.sn${q[0]}{fill:#ecece8}`).join('') : ''; // each register's colour, and pale marks on the dark ones
   const pinkHands = real && w.dial.goldHands ? '.hc{fill:#cf9a78;stroke:#5a3b2a}.mw{fill:#1b2a55;stroke:#5a3b2a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}' : '';
