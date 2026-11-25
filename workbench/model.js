@@ -116,6 +116,7 @@ export function buildProcedural(watch, face, tex) {
   if (!backCrown) crown.add(at(mk(new THREE.CylinderGeometry(cR, cR, cL, P.crownHex ? 6 : 28).rotateZ(Math.PI / 2), CASE, { edgeAngle: 10 }), R + 0.6 + cL / 2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.2, 16).rotateZ(Math.PI / 2), CASE), R + 0.3, 0, -0.9));
   if (P.cabochon && !backCrown) crown.add(at(mk(new THREE.SphereGeometry(cR * 0.62, 16, 12), 'blue', { noEdges: true }), R + 0.6 + cL, 0, -0.9));
   if (P.crownLeft) crown.rotation.z = Math.PI; // the Calibre 11 watches carry the crown at nine
+  if (P.slide) { const sl = part('slide'); sl.add(at(mk(new THREE.BoxGeometry(1.0, 10, 1.5), CASE), -(R + 0.3), 2.0, -0.9), at(mk(new THREE.BoxGeometry(1.7, 2.4, 2.0), CASE), -(R + 0.65), -2.0, -0.9)); } // a minute repeater's slide, on the flank opposite the crown: a rail and the thumb-piece that runs along it
   const push = chrono ? part('pushers') : null;
   if (push) for (const a of [-1, 1]) { const g = new THREE.Group(); if (square) g.position.y = a * 7; else g.rotation.z = a * Math.PI / 6; /* on a square case the pushers stand straight out of the flank */ g.add(at(mk(new THREE.CylinderGeometry(1.9, 1.9, 2, 22).rotateZ(Math.PI / 2), 'steel'), R + 2.2, 0, -0.9), at(mk(new THREE.CylinderGeometry(1.1, 1.1, 1.6, 16).rotateZ(Math.PI / 2), 'steel'), R + 0.6, 0, -0.9)); if (P.screwPushers) g.add(at(mk(new THREE.CylinderGeometry(2.3, 2.3, 1.3, 20).rotateZ(Math.PI / 2), 'steelDark', { edgeAngle: 12 }), R + 0.95, 0, -0.9)); /* a knurled collar that screws down over each pusher */ push.add(g); }
   const strap = part('strap');
@@ -497,6 +498,49 @@ export function buildProcedural(watch, face, tex) {
     cb.add(at(mk(cyl(0.5, 3.55, 14), 'steelDark', { noEdges: true }), -4.4, 5.9, 1.775)); layer(cb, 12); cb.userData.anchor = [-4.2, 0, 4];
     jewel(0, 0, 4.0, 12); jewel(-8.37, -0.1, 4.0, 12);
     Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 3.4 / 2.3 });
+  } else if (P.calibre === 'R27') {
+    /* Patek Philippe calibre R 27 Q (ref. 3974): self-winding with a small off-centre rotor, minute repeater, perpetual calendar. No maker's drawing is published.
+       Only what can be seen from the back is modelled, and it is placed from one small press photograph of the back of the calibre (as reproduced on WatchBase), scaled to the
+       28 mm diameter given for it, each to about 0.7 mm: the rotor and its pivot, the repeater's governor, the balance, and the jewels that show in the bridges. Two of those jewels
+       lie in a straight line with the balance, 2.5 mm apart, and are taken to be the pallets and the escape wheel; that is an interpretation. The hammers are placed by eye.
+       Seen from the back, the crown is towards -x. The barrel and the going train are hidden under the bridges and the rotor and are NOT modelled, nor are the repeater's racks and
+       snails or the calendar work under the dial: nothing was found from which to place them. Every outline, height and size here is an estimate. */
+    spins.centre = spins.third = spins.fourth = new THREE.Group(); // hidden in the real movement and left out of the model; the animation only needs something to turn
+    const eX = -8.89, eY = -2.32;
+    spins.escape = mobile('escape', eX, eY, { shape: escapeShape(2.0, P.escapeTeeth || 15), z: 0.8, pin: 0.5, pinZ: 1.2, kind: 'steelDark', arbor: 2.35 });
+    const BX = -5.64, BY = -6.11, bal = at(part('balance', mv), BX, BY, 0), balSpin = new THREE.Group(); bal.add(balSpin);
+    balSpin.add(at(mk(new THREE.TorusGeometry(3.24, 0.26, 10, 64), 'brass', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(6.2, 0.36, 0.2), 'brass'), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(0.36, 6.2, 0.2), 'brass'), 0, 0, 2.3), at(mk(cyl(0.45, 0.3, 14), 'steelDark'), 0, 0, 1.9));
+    bal.add(at(mk(cyl(0.2, 3, 10), 'steelDark', { noEdges: true }), 0, 0, 1.6));
+    const hs = at(part('hairspring', mv), BX, BY, 2.72), HN = 240, hsPos = new Float32Array((HN + 1) * 3), hsGeo = new THREE.BufferGeometry();
+    hsGeo.setAttribute('position', new THREE.BufferAttribute(hsPos, 3));
+    const hsLine = new THREE.Line(hsGeo, new THREE.LineBasicMaterial({ color: 0x3d4f6e })); hsLine.userData.pickLine = true; hs.add(hsLine);
+    const pmx = -7.34, pmy = -4.25, pal = at(part('pallet', mv), pmx, pmy, 0), palRock = new THREE.Group();
+    pal.rotation.z = Math.atan2(BY - pmy, BX - pmx) - Math.PI / 2; pal.add(palRock);
+    palRock.add(at(mk(new THREE.BoxGeometry(0.4, 2.6, 0.2), 'steelDark'), 0, 0.4, 1.1), at(mk(new THREE.BoxGeometry(1.8, 0.36, 0.2), 'steelDark'), 0, -0.8, 1.1), at(mk(new THREE.BoxGeometry(0.28, 0.45, 0.3), 'ruby'), -0.8, -1.0, 1.1), at(mk(new THREE.BoxGeometry(0.28, 0.45, 0.3), 'ruby'), 0.8, -1.0, 1.1));
+    /* bridges: plain outlines laid over the jewels that the photograph shows */
+    layer(flat('main-bridge', [[3.2, 7.4, 4.2], [-3.8, 7.8, 3.5], [-8.6, 6.6, 1.6]], 2.35, 0.45), 4);
+    layer(flat('repeater-bridge', [[6.0, -6.2, 3.2], [6.4, -8.3, 2.4]], 2.35, 0.45), 4);
+    layer(flat('escape-cock', [[eX, eY, 1.0], [-10.9, -1.0, 1.1]], 2.35, 0.45), 4);
+    layer(flat('pallet-cock', [[pmx, pmy, 0.6], [-9.3, -5.3, 0.6]], 1.45, 0.24), 3);
+    layer(flat('balance-cock', [[BX, BY, 1.3], [-9.6, -6.9, 1.2]], 3.3, 0.45), 4);
+    jewel(-3.71, 9.35, 2.86, 4); jewel(-6.34, 7.81, 2.86, 4); jewel(-9.28, 6.49, 2.86, 4);
+    jewel(6.8, -4.41, 2.86, 4); jewel(4.64, -5.8, 2.86, 4); jewel(7.27, -7.96, 2.86, 4); jewel(5.41, -9.2, 2.86, 4);
+    jewel(eX, eY, 2.86, 4); jewel(BX, BY, 3.82, 4); jewel(pmx, pmy, 1.3, 0);
+    /* the repeater's governor: a small flywheel that sets the pace of the chime. On this calibre it is open to view and carries the Calatrava cross */
+    const gov = at(part('governor', mv), 8.12, 0.31, 0);
+    gov.add(at(mk(new THREE.TorusGeometry(2.9, 0.22, 8, 56), 'steel', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(cyl(0.55, 0.3, 14), 'gold'), 0, 0, 2.3), at(mk(cyl(0.2, 2.4, 10), 'steelDark', { noEdges: true }), 0, 0, 1.2));
+    for (let k = 0; k < 2; k++) { const arm = mk(new THREE.BoxGeometry(5.3, 0.75, 0.2), 'gold'); arm.position.z = 2.3; arm.rotation.z = k * Math.PI / 2; gov.add(arm); }
+    layer(gov, 5); gov.userData.anchor = [0, 0, 2.6];
+    /* the two hammers, at the edge of the movement, and the two wire gongs that run round it */
+    layer(multi('hammers', [[[1.16, -9.97, 0.8], [2.5, -8.9, 0.5]], [[3.48, -8.81, 0.8], [4.9, -8.0, 0.5]]], 2.85, 0.4, 'steel'), 7);
+    const gongs = part('gongs', mv);
+    for (let k = 0; k < 2; k++) { const g = mk(new THREE.TorusGeometry(mvR - 0.45, 0.16, 8, 160, Math.PI * 2 * 0.93), 'steelDark', { noEdges: true }); g.position.z = 0.45 + k * 0.5; g.rotation.z = -1.35; gongs.add(g); }
+    gongs.userData.anchor = [0, mvR - 0.45, 0.8]; layer(gongs, 2);
+    /* the rotor: a half-disc of gold on its own pivot, off centre, swinging above the bridges */
+    const rot = at(part('rotor', mv), -4.48, -0.46, 0), rw = new THREE.Shape(); rw.absarc(0, 0, 7.9, -Math.PI / 4, Math.PI * 3 / 4, false); rw.closePath();
+    rot.add(at(mk(extr(rw, 0.55), 'gold', { edgeAngle: 40 }), 0, 0, 3.95), at(mk(cyl(1.1, 0.7, 20), 'steel'), 0, 0, 4.3), at(mk(cyl(0.7, 3.95, 16), 'steelDark', { noEdges: true }), 0, 0, 1.975));
+    rot.userData.anchor = [2.5, 2.5, 4.6]; layer(rot, 12);
+    Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 1 });
   } else if (P.calibre === '11') {
     /* Heuer Calibre 11 (Buren micro-rotor base, Dubois Depraz chronograph module). No dimensioned maker's drawing was available. Positions of the barrel, the large driving
        wheel, the third and fourth wheels, the balance, the micro-rotor and the two recorders are measured off overhead photographs of the base movement and of the assembled calibre

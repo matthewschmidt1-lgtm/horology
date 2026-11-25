@@ -4,7 +4,8 @@ import { watches } from './watches/index.js';
 
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const want = new URLSearchParams(location.search).get('watch') || new URLSearchParams(location.hash.slice(1)).get('watch'), watch = watches.find(w => w.id === want) || watches[0], comps = watch.components, byId = Object.fromEntries(comps.map(c => [c.id, c]));
-const archive = (window.WATCHES || []).find(w => w.id === watch.archiveId), Draw = window.Draw;
+const plateOf = w => (window.WATCHES || []).find(x => x.id === w.archiveId) || w.plate || null; // a watch that is not in the Archive brings its own drawing data
+const archive = plateOf(watch), Draw = window.Draw;
 const ST = { D: 'Documented', E: 'Estimated', I: 'Interpretation' };
 const state = { view: 'front', style: 'real', level: 'beginner', sel: null, labels: false, loupe: false, run: true, slow: false, explode: 0, open: 0, layers: 0 };
 const cur = { explode: 0, open: 0, layers: 0 };
@@ -18,7 +19,7 @@ document.title = `${watch.brand} ${watch.model} · The Workbench`;
 /* One quiet line for choosing a watch: the name of the one on the bench, which opens the full set, and a step to the next or the last. */
 {
   const n = watches.length, at = watches.indexOf(watch), prev = watches[(at + n - 1) % n], next = watches[(at + 1) % n], plates = window.WATCHES || [];
-  const thumb = w => { const pl = plates.find(x => x.id === w.archiveId); return pl && Draw ? Draw.front(pl, {}) : ''; };
+  const thumb = w => { const pl = plateOf(w); return pl && Draw ? Draw.front(pl, {}) : ''; };
   const meta = `${watch.brand}${watch.noRef ? '' : ` · Ref. ${watch.reference}`} · ${watch.year}`;
   $('#picker').innerHTML = n > 1 ? `<button type="button" class="pk-cur" id="pk-cur" aria-expanded="false" aria-controls="pk-menu" aria-label="${watch.short || watch.model}. Choose another watch"><span class="pk-name"><b><span class="long">${watch.short || watch.model}</span><span class="short">${watch.model}${watch.noRef ? '' : ' ' + watch.reference}</span></b><span class="pk-chev" aria-hidden="true"></span></span><i><span class="long">${meta} · </span>${at + 1} of ${n}</i></button>
     <span class="pk-step"><a href="?watch=${prev.id}" aria-label="Previous watch: ${prev.short || prev.model}">\u2039</a><a href="?watch=${next.id}" aria-label="Next watch: ${next.short || next.model}">\u203A</a></span>
@@ -293,7 +294,7 @@ start3D().catch(err => { console.error(err); $('#fail').hidden = false; $$('#too
 /* ---------- the next watch: an invitation at the end of each panel, so the page never ends in a dead end ---------- */
 if (watches.length > 1) {
   const nx = watches[(watches.indexOf(watch) + 1) % watches.length], rest = watches.filter(w => w !== watch && w !== nx)
-  const plate = (window.WATCHES || []).find(w => w.id === nx.archiveId)
+  const plate = plateOf(nx)
   /* each tile takes its colours from the watch: ground (two stops), case metal, outline, dial, sub-dial, accent, and an optional texture */
   const SKIN = {
     sub5513: ['#0a1216', '#1d3038', '#d9dbd7', '#0b0d0e', '#14181a', '#262b2e', '#d8c58f', ''],
@@ -307,10 +308,11 @@ if (watches.length > 1) {
     tanklc: ['#3f0d15', '#7d1f2c', '#f1dfa8', '#2a1206', '#f6f1e4', '#e9e1cd', '#1f3a7a', ''],
     explorer1016: ['#06252b', '#1f6f78', '#d9dbd7', '#0b0d0e', '#14181a', '#262b2e', '#d8c58f', ''],
     navitimer: ['#111a2b', '#3c5a8a', '#e6e6e0', '#0b0c0e', '#14161a', '#24262a', '#e8e4d6', ''],
+    patek3974: ['#0c1430', '#2b3f7c', '#e6e6e0', '#0b0c0e', '#14161a', '#24262a', '#dcc27a', 'stars'],
     carrera: ['#2b1407', '#9a4f1c', '#eeece6', '#141414', '#dcdad2', '#cfcdc5', '#b8975a', ''],
     spaceview: ['#0b2019', '#1f4f3e', '#dcdcd4', '#0a130f', '#1f4a3c', '#2b6050', '#d8c58f', 'grid']
   }
-  const tile = w => { const pl = (window.WATCHES || []).find(x => x.id === w.archiveId), k = SKIN[w.archiveId], name = `${w.brand} ${w.model}`;
+  const tile = w => { const pl = plateOf(w), k = SKIN[w.archiveId], name = `${w.brand} ${w.model}`;
     if (!k) return `<a href="?watch=${w.id}">${w.short || w.model}</a>`;
     return `<a class="wn-tile${k[7] ? ' tx-' + k[7] : ''}" href="?watch=${w.id}" aria-label="${name}" title="${name}" style="--g1:${k[0]};--g2:${k[1]};--paper:${k[2]};--ink:${k[3]};--tint:${k[4]};--tint-2:${k[5]};--sienna:${k[6]}"><img src="workbench/thumbs/${w.id}.webp" alt="" width="360" height="480" loading="lazy" decoding="async"></a>` } // the picture is the Studio view of that watch from the front, rendered once and kept as a small image
   const html = `<aside class="wb-next" aria-label="More watches"><p class="kicker">Next on the bench</p>

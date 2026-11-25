@@ -216,6 +216,12 @@ function markers(w, g, skip) {
       s += C(R0 * 0.76, 0, 0, 'l') + L(-R0 * 0.76, 0, R0 * 0.76, 0, 't') + L(0, -R0 * 0.76, 0, R0 * 0.76, 't');
       each(h => bat(h, R0 * 0.24 - 0.3, 0.55, 'k', 0.3)); break;
     case 'arabic': s += ticks(); for (let h = 1; h <= 12; h++) if (!skip.has(h % 12)) s += num(h % 12, h, 2.5, R0 - 2.1); break;
+    case 'breguet': { // applied numerals where there is room, dots elsewhere, and a fine dotted minute track
+      for (let i = 0; i < 60; i++) if (i % 5) { const p = P(i * 6, R0 - 0.45); s += C(0.07, p[0], p[1], 'k'); }
+      const sz = R0 * 0.2; [0, 1, 2, 4, 8, 10, 11].forEach(h => { const p = P(h * 30, R0 - 2.5); s += T(h || 12, p[0], p[1] + sz * 0.35, sz, 'tx nm', 'font-style="italic"'); });
+      [3, 5, 7, 9].forEach(h => { const p = P(h * 30, R0 - 1.0); s += C(0.34, p[0], p[1], 'p hc'); });
+      break;
+    }
     case 'roman': {
       const a1 = g.dhw * 0.6, b1 = g.dhh * 0.6, t1 = rectEdge(a1, b1), t2 = rectEdge(a1 - 0.9, b1 - 0.9);
       s += Pa(rrD(a1, b1, 0.01), 't') + Pa(rrD(a1 - 0.9, b1 - 0.9, 0.01), 't');
@@ -244,10 +250,39 @@ function markers(w, g, skip) {
   return s;
 }
 
+/* A perpetual calendar's sub-dials: day with a 24-hour hand, month with the leap-year cycle, date with the phase of the moon.
+   The drawing is made once, so their hands are set to the date and hour at which the page was opened and do not move. */
+const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'], MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+function calSub(w, g, pos, role) {
+  const R0 = g.inR || g.edge(0), now = new Date(), big = role === 'datemoon', rs = R0 * (big ? 0.34 : 0.27), [cx, cy] = P(pos * 30, R0 * (big ? 0.5 : 0.52));
+  const lab = (txt, a, r, sz) => T(txt, 0, 0, sz, 'tx cal', `transform="translate(${cx},${cy}) rotate(${f(a)}) translate(0,${f(-r + sz * 0.36)})"`);
+  const hand = (a, len, wd = 0.3) => `<g transform="translate(${cx},${cy}) rotate(${f(a)})">${Pa(`M0,${f(len * 0.16)}L${wd},0L0,${f(-len)}L${-wd},0Z`, 'p hc')}</g>`;
+  let s = C(rs, cx, cy, 'p') + C(rs, cx, cy, w.dial.dark ? 'tn' : 'p');
+  if (role === 'day24') {
+    DAYS.forEach((t, i) => { s += lab(t, i * 360 / 7, rs - 0.3, rs * 0.2); });
+    s += C(rs * 0.6, cx, cy, 'hair'); [[12, 0], [18, 90], [24, 180], [6, 270]].forEach(q => { s += lab(q[0], q[1], rs * 0.56, rs * 0.2); });
+    s += hand((now.getHours() + now.getMinutes() / 60 - 12) * 15, rs * 0.42, 0.22) + hand(now.getDay() * 360 / 7, rs * 0.72);
+  } else if (role === 'monthleap') {
+    MONTHS.forEach((t, i) => { s += i % 2 ? rad(i * 30, rs - 0.75, rs - 0.3, 't', cx, cy) : lab(t, i * 30, rs - 0.3, rs * 0.2); });
+    s += C(rs * 0.6, cx, cy, 'hair'); [1, 2, 3, 4].forEach(n => { s += lab(n, n * 90 - 45, rs * 0.56, rs * 0.2); });
+    s += L(cx - rs * 0.6, cy, cx + rs * 0.6, cy, 'hair') + L(cx, cy - rs * 0.6, cx, cy + rs * 0.6, 'hair');
+    const yc = (now.getFullYear() + 3) % 4; // 0, 1, 2 for the three ordinary years; 3 for the leap year, which is quarter "4"
+    s += hand(yc * 90 + (now.getMonth() + 0.5) * 7.5, rs * 0.42, 0.22) + hand(now.getMonth() * 30, rs * 0.72);
+  } else {
+    for (let d = 1; d <= 31; d++) { const a = (d - 1) * 360 / 31; s += d % 2 ? lab(d, a, rs - 0.3, rs * 0.17) : (p => C(0.08, p[0], p[1], 'k'))(P(a, rs - 0.75, cx, cy)); }
+    const rm = rs * 0.5, id = 'u' + (++uid), wy = cy - rs * 0.04, ph = ((Date.now() / 86400000 - 10962.76) % 29.530588853 + 29.530588853) % 29.530588853 / 29.530588853; // 0 new moon, 0.5 full
+    const win = `M${f(cx - rm)},${f(wy)}A${f(rm)},${f(rm)} 0 0 1 ${f(cx + rm)},${f(wy)}Z`;
+    s += `<defs><clipPath id="${id}"><path d="${win}"/></clipPath></defs>` + Pa(win, 'tn mw') + `<g clip-path="url(#${id})">${star(cx - rm * 0.55, wy - rm * 0.72, rm * 0.13, 'k mn')}${star(cx + rm * 0.5, wy - rm * 0.8, rm * 0.1, 'k mn')}${C(rm * 0.42, cx - rm * 1.4 + ph * rm * 2.8, wy - rm * 0.42, 'p mn')}</g>` + Pa(win, 't');
+    s += hand((now.getDate() - 1) * 360 / 31, rs * 0.74);
+  }
+  return s + C(0.36, cx, cy, 'p hc');
+}
+
 function subs(w, g, o = {}) {
   const d = w.dial; if (!d.subs) return ''; const R0 = g.inR || g.edge(0), b = bps(w); let s = '';
   const rs = R0 * (d.subBig ? 0.31 : 0.235), off = R0 * (d.subBig ? 0.46 : 0.5);
   for (const [pos, role] of d.subs) {
+    if (role === 'day24' || role === 'monthleap' || role === 'datemoon') { s += calSub(w, g, pos, role); continue; }
     const [cx, cy] = P(pos * 30, off), tint = d.subTints ? d.subTints[pos] : null;
     const cls = d.subDark ? 'tn2' : d.subLight ? 'p' : (d.dark ? 'tn' : 'p'), sty = tint != null ? `style="fill:var(--ink);fill-opacity:${tint}"` : '';
     s += d.subSquare ? RC(cx - rs, cy - rs, 2 * rs, 2 * rs, cls, 0.9) : C(rs, cx, cy, 'p') + C(rs, cx, cy, cls, sty);
@@ -265,7 +300,7 @@ function dateWin(w, g) {
 }
 
 function dtext(w, g, o) {
-  const d = w.dial, R0 = g.hl / 0.9, sz = Math.min(R0 * 0.135, 2.1), y1 = -R0 * 0.42;
+  const d = w.dial, R0 = g.hl / 0.9, sz = Math.min(R0 * 0.135, 2.1) * (d.textScale || 1), y1 = -R0 * (d.textY || 0.42); // a crowded dial can ask for smaller lettering, set lower
   const low6 = (d.subs && d.subs.some(x => x[0] === 6)) || d.date === 6;
   let s = '';
   d.text.forEach((t, i) => {
@@ -307,6 +342,7 @@ function hands(w, g) {
     mp = Pa(pen(Lm, 0.7), 'p');
   } else if (st === 'sword') { hp = Pa(kite(Lh, 1.5, 0.5), 'p'); mp = Pa(kite(Lm, 1.15, 0.5), 'p'); }
   else if (st === 'dauphine') { hp = Pa(kite(Lh, 1.05, 0.12), 'p') + L(0, 0, 0, -Lh, 't'); mp = Pa(kite(Lm, 0.85, 0.1), 'p') + L(0, 0, 0, -Lm, 't'); }
+  else if (st === 'leaf') { const lf = (Ln, wd) => `M0,1.6Q${wd},${f(-Ln * 0.42)} 0,${f(-Ln)}Q${-wd},${f(-Ln * 0.42)} 0,1.6Z`; hp = Pa(lf(Lh, 1.5), 'p hc'); mp = Pa(lf(Lm, 1.25), 'p hc'); }
   else if (st === 'epee') { hp = Pa(kite(Lh, 0.8, 0.28), 'k'); mp = Pa(kite(Lm, 0.62, 0.28), 'k'); }
   else if (st === 'pencil') { hp = Pa(pen(Lh, 0.62), 'p'); mp = Pa(pen(Lm, 0.48), 'p'); }
   else { hp = Pa(pen(Lh, 0.8), 'p'); mp = Pa(pen(Lm, 0.62), 'p'); }
@@ -588,7 +624,8 @@ function face(w, real) {
   const g = geo(w), R = g.bezR || g.hw;
   // A light dial can still carry a black bezel and dark registers (the Daytona): those keep the dark palette.
   const mixed = real && !w.dial.dark ? `${w.bezel && w.bezel.dark ? '.bzd .tn{fill:#121212;stroke:#2b2b2b}.bzd text{fill:#f0ede2}.bzd .t,.bzd .hair{stroke:#e9e6da}.bzd .bar{stroke:#e9e6da}.bzd .k{fill:#e9e6da}' : ''}${w.dial.subDark ? '.tn2{fill:#161616;stroke:#2b2b2b}' : ''}` : '';
-  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
+  const gold = real && w.dial.gold ? '.nm,.cal,.dl{fill:#cfa13a}.hc{fill:#cfa13a;stroke:#4a3c16}.mw{fill:#1b2a55;stroke:#cfa13a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}.t,.hair{stroke:#b08a34}.k{fill:#cfa13a}' : '';
+  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
   // The dial is drawn once as a picture, so the date window is filled here with today's date; on the plates it is filled live.
   const today = new Date(), DAYS3 = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const dated = s.replace(new RegExp('(data-date=""[^>]*>)', 'g'), `$1${today.getDate()}`).replace(new RegExp('(data-daydate=""[^>]*>)', 'g'), `$1${DAYS3[today.getDay()]} ${today.getDate()}`);
