@@ -331,7 +331,9 @@ function subs(w, g, o = {}) {
     s += d.subSquare ? RC(cx - rs, cy - rs, 2 * rs, 2 * rs, cls, 0.9) : C(rs, cx, cy, 'p') + C(rs, cx, cy, cls, sty);
     const n = role === 'min30' ? 30 : 12;
     if (!d.subSquare) for (let i = 0; i < n; i++) s += rad(i * 360 / n, rs - (i % (n / 6) ? 0.45 : 0.9), rs - 0.12, 't sk' + pos, cx, cy);
-    if (d.subRings) for (const k of [0.3, 0.5, 0.7]) s += C(rs * k, cx, cy, 'hair'); // the fine circles turned into each register, a few of them
+    if (d.subRings) for (const k of [0.12, 0.2, 0.28, 0.36]) { // the fine circles turned into each register, a few of them, kept inside the figures; in the register at six they break for the word printed there
+      if (d.subWord && pos === 6 && k > 0.15) { const r = rs * k, g0 = 55 * Math.PI / 180, x = r * Math.sin(g0), y = r * Math.cos(g0); s += Pa(`M${f(cx + x)},${f(cy + y)}A${f(r)},${f(r)} 0 1 0 ${f(cx - x)},${f(cy + y)}`, 'hair'); }
+      else s += C(rs * k, cx, cy, 'hair'); }
     if (d.subWord && pos === 6) s += T(d.subWord, cx, cy + rs * 0.3, rs * 0.14, 'tx dl', 'style="font-family:Helvetica,Arial,sans-serif"');
     if (d.subNums && !d.subSquare) (role === 'hr12' ? [[0, 12], [90, 3], [180, 6], [270, 9]] : role === 'min30' ? [[0, 30], [120, 10], [240, 20]] : [[0, 60], [120, 20], [240, 40]]).forEach(q => { const p = P(q[0], rs * 0.56, cx, cy), z = rs * 0.3; s += T(q[1], p[0], p[1] + z * 0.36, z, 'tx sn', 'style="font-family:Helvetica,Arial,sans-serif"'); }); // the figures printed in each register
     if (!o.noHands) s += `<g transform="translate(${cx},${cy})"><g ${role === 'sec' ? `data-hand="s" data-bps="${b}"` : `data-chr="${role === 'min30' ? 'm' : 'h'}"`}>${L(0, 0.8, 0, -rs * 0.82, 'hd')}</g>${C(0.32, 0, 0, 'k')}</g>`;
