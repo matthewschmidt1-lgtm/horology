@@ -248,7 +248,7 @@ function renderHome() {
     <article class="h-card c1">
       <a class="h-art mv" href="workbench.html" aria-label="Explore the workbench">${D.movement(omega)}</a>
       <div class="h-txt"><h3>Examine the details.</h3><p>Take a movement apart, part by part.</p>
-        <p class="h-links"><a class="h-go" href="workbench.html">Explore the workbench</a><a class="h-go" href="#/exam">Begin an exam</a></p></div>
+        <p class="h-links"><a class="h-go" href="workbench.html">Explore the workbench</a></p></div>
     </article>
     <article class="h-card c2">
       <a class="h-art four" href="#/archive" aria-label="Browse the plates">${['tanklc', 'royaloak', 'ventura', 'spaceview'].map(id => D.front(by(id), {})).join('')}</a>
@@ -285,6 +285,9 @@ function route() {
   const h = location.hash.replace(/^#\/?/, '') || 'home', [a, b] = h.split('/');
   document.querySelectorAll('.nav a').forEach(el => el.classList.toggle('on', el.dataset.r === (a === 'plate' ? 'archive' : a)));
   if (a === 'archive') renderArchive(); else if (a === 'plate') renderPlate(b); else if (a === 'exam') renderExam(); else renderHome();
+  /* the three ways in rise gently into place as they come into view */
+  const cards = document.querySelectorAll('.h-card');
+  if ('IntersectionObserver' in window) { const io = new IntersectionObserver(en => en.forEach(x => { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } }), { threshold: 0.15 }); cards.forEach(c => io.observe(c)); } else cards.forEach(c => c.classList.add('in'));
   document.querySelectorAll('.h-watch [data-push]').forEach(g => { g.setAttribute('role', 'button'); g.setAttribute('tabindex', '0'); g.setAttribute('aria-label', g.dataset.push === 'start' ? 'Start or stop the stopwatch' : 'Set the stopwatch back to zero'); }); // the home page's pushers can be reached and pressed from the keyboard
   window.scrollTo(0, 0);
 }
