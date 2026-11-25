@@ -82,12 +82,12 @@ window.WATCHES = [
 {
   id:'reverso', brand:'Jaeger-LeCoultre', model:'Reverso', ref:'-', year:'1931', span:'1931 onward', kind:'Sports watch',
   c:{shape:'reverso', w:24, h:38, da:'a', t:[8,'n'], lug:null},
-  dial:{dark:true, markers:'rectbaton', text:['REVERSO']},
-  hands:'baton', sec:'none', crown:{pos:3, small:true}, strap:'leather',
+  dial:{dark:true, markers:'rectbaton', text:['REVERSO'], set:{lines:[['REVERSO',-0.5,0.11,1]]}},
+  hands:'dauphine', sec:'none', crown:{pos:3, small:true}, strap:'leather',
   mv:{cal:'Tavannes, then LeCoultre 410', type:'manual', vph:18000, wind:'Manual', rect:true, note:'The first Reversos used Tavannes movements; LeCoultre’s own shaped calibre followed in 1933. Beat rate assumed for drawing.'},
   back:{type:'plainrect', note:'A blank metal reverse. Turned outward, it shields the crystal.'},
   specs:[['Case','Swivels within its carriage'],['Patent','René-Alfred Chauvot, filed 4 March 1931'],['Decoration','Three gadroons above and below the dial']],
-  notes:['Made for polo players in British India who wanted a crystal that would survive a match.'],
+  notes:['Made for polo players in British India who wanted a crystal that would survive a match.','Drawn as the first watches of 1931: a black dial signed REVERSO alone, long tapered markers with a pair at twelve, no seconds hand. Small seconds came in 1934 and the joint name Jaeger-LeCoultre in 1937.','Measured examples run from 23 by 37 to 23 by 38.5 mm.'],
   q:{t:'Why does the Reverso’s case flip over?', a:'To protect the crystal during polo matches', w:['To show a second time zone','To wind the mainspring','To reveal a hidden portrait']}
 },
 {

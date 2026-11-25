@@ -291,7 +291,9 @@ function markers(w, g, skip) {
       const e1 = rectEdge(g.dhw - 0.5, g.dhh - 0.5), e2 = rectEdge(g.dhw - 1.3, g.dhh - 1.3);
       s += Pa(rrD(g.dhw - 0.5, g.dhh - 0.5, 0.01), 't') + Pa(rrD(g.dhw - 1.3, g.dhh - 1.3, 0.01), 't');
       for (let i = 0; i < 60; i++) { const a = i * 6, p = P(a, e1(a)), q = P(a, e2(a)); s += L(p[0], p[1], q[0], q[1], 't'); }
-      each(h => bat(h, 2.4, 0.7, 'p', 1.9)); break;
+      { /* long applied markers that taper to a point toward the centre, starting at the inner rail of the track, with a pair at twelve; from photographs of first-generation Reversos */
+        const dart = (h, dx) => { const r = e2(h * 30) - 0.3; return `<path class="p" d="${polyD([[f(dx - 0.4), f(-r)], [f(dx + 0.4), f(-r)], [f(dx + 0.08), f(-r + 3.3)], [f(dx - 0.08), f(-r + 3.3)]])}" transform="rotate(${h * 30})"/>`; };
+        each(h => h ? dart(h, 0) : dart(0, -0.6) + dart(0, 0.6)); } break;
     }
     case 'monaco':
       /* the Monaco 1133B's dial, from Phillips' photograph of an early example: a circular track with fine divisions and a red dash inside it at each five minutes; and applied steel
