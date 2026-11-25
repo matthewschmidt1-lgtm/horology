@@ -446,6 +446,57 @@ export function buildProcedural(watch, face, tex) {
     cb.add(at(mk(cyl(0.5, 3.55, 14), 'steelDark', { noEdges: true }), -6.2, 5.3, 1.775), at(mk(cyl(0.5, 0.75, 14), 'steelDark', { noEdges: true }), -3.7, -2.8, 3.175)); layer(cb, 12); cb.userData.anchor = [-3.9, 0, 4];
     jewel(0, 0, 4.0, 12); jewel(-7.85, 0, 4.0, 12);
     Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 3.3 / 2.4 });
+  } else if (P.calibre === '178') {
+    /* Venus calibre 178 (Breitling Navitimer 806). Sizes that Venus states on its own sheet for the calibre are used: casing diameter 31.00, escape wheel 5.45, balance 13.00,
+       inside of the barrel drum 12.50. The sheet's photographs are too small to measure, so positions are read from a watchmaker's photographs (watchguy.co.uk, 2013): the barrel,
+       the going train, the pallets and the balance from a near-overhead view of the bare plate, the chronograph wheels, the column wheel and the bridge feet from a view of the
+       assembled movement, each to about 0.5 mm. The measured positions give 3.2 mm from escape wheel to pallets and 3.9 from pallets to balance; the sheet states 3.15 and 3.85.
+       Seen from the back, the crown is towards -x. Heights, tooth counts, pinion sizes, the other wheel sizes and every outline are estimated; the hour counter, on the dial side, is left out. */
+    const bX = -4.0, bY = -6.76, barrel = at(part('barrel', mv), bX, bY, 0);
+    barrel.add(at(mk(cyl(6.55, 0.8, 56), 'brass'), 0, 0, 0.75), at(mk(extr(gearShape(6.95, 84, 0.25, 0), 0.3), 'brass', { edgeAngle: 40 }), 0, 0, 0.4), at(mk(cyl(0.42, 2.4, 14), 'steelDark', { noEdges: true }), 0, 0, 1.2));
+    const spring = []; for (let i = 0; i <= 300; i++) { const a = i / 300 * Math.PI * 2 * 8, r = 0.8 + i / 300 * 5.2; spring.push(new THREE.Vector3(r * Math.cos(a), r * Math.sin(a), 1.165)); }
+    const ms = new THREE.Line(new THREE.BufferGeometry().setFromPoints(spring), new THREE.LineBasicMaterial({ color: 0x3d4f6e })); ms.raycast = () => {}; barrel.add(ms);
+    const cover = at(mk(cyl(6.25, 0.12, 48), 'brass'), 0, 0, 1.24); barrel.add(cover); layer(cover, 4);
+    spins.centre = mobile('centre', 0, 0, { R: 5.3, n: 80, z: 1.4, pin: 0.88, pinZ: 0.45 });
+    spins.third = mobile('third', 5.31, -2.99, { R: 3.3, n: 60, z: 1.85, pin: 0.77, pinZ: 1.45 });
+    spins.fourth = mobile('fourth', 8.2, -0.41, { R: 3.3, n: 58, z: 1.05, pin: 0.57, pinZ: 1.85, arbor: 3.35 }); // set lower than in the Valjoux, so that it passes under the centre wheel, which it overlaps in plan
+    const eX = 9.68, eY = 3.27;
+    spins.escape = mobile('escape', eX, eY, { shape: escapeShape(2.72, P.escapeTeeth || 15), z: 0.8, pin: 0.66, pinZ: 1.35, kind: 'steelDark' });
+    const BX = 4.04, BY = 7.59, bal = at(part('balance', mv), BX, BY, 0), balSpin = new THREE.Group(); bal.add(balSpin);
+    balSpin.add(at(mk(new THREE.TorusGeometry(6.22, 0.26, 10, 88), 'brass', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(12.1, 0.36, 0.2), 'brass'), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(0.36, 12.1, 0.2), 'brass'), 0, 0, 2.3), at(mk(cyl(0.45, 0.3, 14), 'steelDark'), 0, 0, 1.9));
+    bal.add(at(mk(cyl(0.2, 3, 10), 'steelDark', { noEdges: true }), 0, 0, 1.6));
+    const hs = at(part('hairspring', mv), BX, BY, 2.72), HN = 240, hsPos = new Float32Array((HN + 1) * 3), hsGeo = new THREE.BufferGeometry();
+    hsGeo.setAttribute('position', new THREE.BufferAttribute(hsPos, 3));
+    const hsLine = new THREE.Line(hsGeo, new THREE.LineBasicMaterial({ color: 0x3d4f6e })); hsLine.userData.pickLine = true; hs.add(hsLine);
+    const pmx = 7.0, pmy = 5.1, pal = at(part('pallet', mv), pmx, pmy, 0), palRock = new THREE.Group();
+    pal.rotation.z = Math.atan2(BY - pmy, BX - pmx) - Math.PI / 2; pal.add(palRock);
+    palRock.add(at(mk(new THREE.BoxGeometry(0.45, 3.9, 0.2), 'steelDark'), 0, 0.85, 1.1), at(mk(new THREE.BoxGeometry(3.4, 0.4, 0.2), 'steelDark'), 0, -0.9, 1.1), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), -1.55, -1.1, 1.1), at(mk(new THREE.BoxGeometry(0.3, 0.5, 0.3), 'ruby'), 1.55, -1.1, 1.1));
+    /* bridges: placed over the measured pivots, with simplified outlines */
+    layer(flat('barrel-bridge', [[bX, bY, 6.1], [0, 0, 1.7]], 2.35, 0.45), 4);
+    layer(flat('train-bridge', [[5.31, -2.99, 1.5], [8.2, -0.41, 1.5], [eX, eY, 0.5]], 2.35, 0.45), 4); // kept narrow at the escape wheel, whose pivot lies just outside the balance rim
+    layer(flat('pallet-cock', [[pmx, pmy, 0.7], [8.3, 7.5, 0.7]], 1.45, 0.24), 3);
+    layer(flat('balance-cock', [[BX, BY, 1.4], [-3.2, 13.0, 1.4]], 3.3, 0.45), 4); // its foot is measured from both photographs, which agree
+    jewel(5.31, -2.99, 2.86, 4); jewel(eX, eY, 2.86, 4); jewel(BX, BY, 3.82, 4); jewel(pmx, pmy, 1.3, 0);
+    /* chronograph works */
+    const run = part('chrono-runner', mv), runSpin = mobile(null, 0, 0, { R: 3.5, n: 160, tooth: 0.1, z: 3.0, th: 0.18, kind: 'steelDark', spokes: 4, arbor: 3.5 }, run);
+    runSpin.add(at(mk(cyl(0.6, 0.25, 3), 'steelDark'), 0, 0, 3.32)); layer(run, 8);
+    /* the coupling wheel is put where it meshes with the driving wheel and stands just clear of the runner; that is within 0.3 mm of where the photograph shows it */
+    const cpx = 4.07, cpy = -4.34, cp = at(part('coupling', mv), cpx, cpy, 0);
+    spins.drive = mobile(null, 8.2 - cpx, -0.41 - cpy, { R: 3.4, n: 124, tooth: 0.1, z: 3.0, th: 0.18, spokes: 5, arbor: 0.01 }, cp);
+    spins.inter = mobile(null, 0, 0, { R: 2.3, n: 84, tooth: 0.1, z: 3.0, th: 0.18, spokes: 0, arbor: 0.01 }, cp);
+    cp.add(at(mk(extr(hullShape([[0, 0, 0.75], [2.0, -6.5, 0.6]]), 0.2), 'steel', { edgeAngle: 40 }), 0, 0, 3.3)); layer(cp, 8);
+    const mr = part('minute-recorder', mv), mrSpin = mobile(null, -8.37, -0.1, { R: 2.6, n: 54, tooth: 0.2, z: 3.0, th: 0.18, spokes: 4, arbor: 0.01 }, mr);
+    mrSpin.add(at(mk(cyl(0.45, 0.25, 3), 'steelDark'), 0, 0, 3.32), at(mk(cyl(0.2, 3.5, 10), 'steelDark', { noEdges: true }), 0, 0, 1.75)); layer(mr, 8); mr.userData.anchor = [-8.37, -0.1, 3.3];
+    const sg = at(part('sliding-gear', mv), -4.6, -2.6, 0); sg.add(at(mk(extr(gearShape(0.9, 20, 0.16, 0), 0.18), 'brass', { edgeAngle: 40 }), 0, 0, 3.0), at(mk(cyl(0.5, 0.1, 14), 'steel'), 0, 0, 3.23)); layer(sg, 8); sg.userData.anchor = [0, 0, 3.3];
+    const cw = at(part('column-wheel', mv), 2.32, -9.6, 0); cw.add(at(mk(extr(gearShape(2.0, 18, 0.3, 0), 0.25), 'steelDark', { edgeAngle: 40 }), 0, 0, 2.95));
+    for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3, pl = mk(new THREE.BoxGeometry(0.5, 0.42, 0.7), 'steelDark'); pl.position.set(1.25 * Math.cos(a), 1.25 * Math.sin(a), 3.55); pl.rotation.z = a; cw.add(pl); }
+    layer(cw, 8);
+    layer(multi('hammer', [[[-4.8, -6.4, 0.7], [-0.7, -1.5, 0.45]], [[-4.8, -6.4, 0.7], [-7.2, -2.2, 0.45]]], 3.3, 0.2, 'steel'), 8);
+    layer(flat('operating-lever', [[-11.8, -2.5, 0.6], [-1.0, -11.6, 0.5]], 3.3, 0.2, 'steel'), 8);
+    const cb = multi('chrono-bridge', [[[0, 0, 1.15], [-8.37, -0.1, 1.05]], [[-4.2, 0, 1.0], [-4.4, 5.9, 0.9]]], 3.55, 0.4, P.plate || 'copper'); // the foot is measured from the photograph
+    cb.add(at(mk(cyl(0.5, 3.55, 14), 'steelDark', { noEdges: true }), -4.4, 5.9, 1.775)); layer(cb, 12); cb.userData.anchor = [-4.2, 0, 4];
+    jewel(0, 0, 4.0, 12); jewel(-8.37, -0.1, 4.0, 12);
+    Object.assign(M, { balSpin, palRock, hsPos, hsGeo, HN, interRatio: 3.4 / 2.3 });
   } else if (P.calibre === '11') {
     /* Heuer Calibre 11 (Buren micro-rotor base, Dubois Depraz chronograph module). No dimensioned maker's drawing was available. Positions of the barrel, the large driving
        wheel, the third and fourth wheels, the balance, the micro-rotor and the two recorders are measured off overhead photographs of the base movement and of the assembled calibre

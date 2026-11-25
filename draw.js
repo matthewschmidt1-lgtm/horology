@@ -482,6 +482,9 @@ const PLAN = {
     bridges: [[[-3.05, 6.23, 5.0]], [[0, 0, 1.15], [-2.6, -4.67, 1.4], [0, -7.79, 1.2]]], cock: [[6.88, -2.01, 1.4], [9.6, 5.6, 1.3]] },
   spaceview: { cal: '214', fork: 1, pr: 14.5 }
 };
+PLAN.navitimer = { cal: 'Venus 178', pr: 15.5, barrel: [-4.0, -6.76, 6.95], centre: [0, 0, 5.3], third: [5.31, -2.99, 3.3], fourth: [8.2, -0.41, 3.3], esc: [9.68, 3.27, 2.72], pal: [7.0, 5.1], bal: [4.04, 7.59, 6.48],
+  bridges: [[[-4.0, -6.76, 6.1], [0, 0, 1.7]], [[5.31, -2.99, 1.5], [8.2, -0.41, 1.5], [9.68, 3.27, 0.5]]], cock: [[4.04, 7.59, 1.4], [-3.2, 13.0, 1.4]],
+  chrono: { run: 3.5, drive: [8.2, -0.41, 3.4], coup: [4.07, -4.34, 2.3], rec: [[-8.37, -0.1, 2.6]], cw: [2.32, -9.6], small: [[-4.6, -2.6, 0.9]], bridge: [[[0, 0, 1.15], [-8.37, -0.1, 1.05]], [[-4.2, 0, 1.0], [-4.4, 5.9, 0.9]]] } };
 PLAN.explorer1016 = Object.assign({}, PLAN.sub5513, { cal: '1560' }); // same layout as the Submariner: both are read from photographs of a calibre 1560
 PLAN.carrera = Object.assign({}, PLAN.daytona6263, { cal: 'Valjoux 72' }); // the Carrera 2447 uses the same calibre as the Daytona's 727, so it shares that layout
 function planMovement(w, pl) {
