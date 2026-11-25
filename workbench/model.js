@@ -113,10 +113,17 @@ export function buildProcedural(watch, face, tex) {
     for (const sy of [-1, 1]) { const cs = new THREE.Shape(); cs.moveTo(-CW, sy * CH); cs.lineTo(CW, sy * CH); cs.lineTo(CW, sy * cavY); cs.absarc(0, 0, cavR, sy * t0, sy * (Math.PI - t0), sy < 0); cs.closePath(); kase.add(at(mk(extr(cs, 6.6), CASE), 0, 0, -4.6)); }
     for (const sx of [-1, 1]) kase.add(at(mk(new THREE.BoxGeometry(0.55, 2 * cavY + 1, 6.5), CASE), sx * (R - 0.275), 0, -1.25));
   } else if (square) kase.add(at(mk(new THREE.ExtrudeGeometry(rrShape(CW, CH, CR, { R: inner }), { depth: 7.1, bevelEnabled: false, curveSegments: 16 }), CASE), 0, 0, -4.6));
+  else if (P.bezel === 'octagon') { /* the Royal Oak's case is not round: it is a barrel shape with angled shoulders that run into the bracelet, and the eight-sided bezel sits on top of it.
+       The outline is the one used for the Archive drawing; the real case's facets and its brushed and polished surfaces are not reproduced. */
+    const cs = new THREE.Shape(), hole = new THREE.Path(); [[-13.5, -23], [13.5, -23], [19.5, -12], [19.5, 12], [13.5, 23], [-13.5, 23], [-19.5, 12], [-19.5, -12]].forEach((q, k) => (k ? cs.lineTo(q[0], q[1]) : cs.moveTo(q[0], q[1]))); cs.closePath();
+    hole.absarc(0, 0, inner, 0, Math.PI * 2, true); cs.holes.push(hole);
+    kase.add(at(mk(new THREE.ExtrudeGeometry(cs, { depth: 6.5, bevelEnabled: true, bevelThickness: 0.3, bevelSize: 0.3, bevelSegments: 2, curveSegments: 48 }), CASE, { edgeAngle: 25 }), 0, 0, -4.3));
+  }
   else kase.add(mk(lathe([[inner, -4.6], [R - 1.45, -4.6], [R, -3.3], [R, 1.7], [R - 0.7, 2.5], [inner, 2.5], [inner, -4.6]]), BAND));
   const lugL = Math.max(5, P.lugToLug / 2 - R + 5.5), lugT = P.lugThick || 2.7;
   if (tank && wideMv) { const L = P.lugToLug / 2, bl = L - cavY - 0.2; for (const sx of [-1, 1]) { kase.add(at(mk(extr(rrShape(BW / 2, L, 1.1), 1.7), CASE), sx * (R - BW / 2), 0, 2.0)); for (const sy of [-1, 1]) kase.add(at(mk(new THREE.BoxGeometry(BW, bl, 6.5), CASE), sx * (R - BW / 2), sy * (cavY + 0.2 + bl / 2), -1.25)); } }
   else if (tank) { for (const sx of [-1, 1]) kase.add(at(mk(extr(rrShape(BW / 2, P.lugToLug / 2, 1.1), 8.2), CASE), sx * (R - BW / 2), 0, -4.5)); } // two side bars run the full length and carry the strap between their ends
+  else if (P.integrated && P.bezel === 'octagon') { /* the barrel-shaped case already reaches the bracelet */ }
   else if (P.integrated) { for (const sy of [-1, 1]) { const sh = mk(new THREE.BoxGeometry(P.lugWidth + 1.5, 7, 3.6), 'steelDark'); sh.position.set(0, sy * (R - 1.2), -1.6); sh.rotation.x = -sy * 0.2; kase.add(sh); } } // no separate lugs: the case runs straight into the bracelet
   else for (const sx of [-1, 1]) for (const sy of [-1, 1]) { const lug = mk(new THREE.BoxGeometry(lugT, lugL, 3.4), CASE); lug.position.set(sx * (P.lugWidth / 2 + lugT / 2), sy * (P.lugToLug / 2 - lugL / 2 + 0.55), -2.0); lug.rotation.x = -sy * 0.28; kase.add(lug); }
   if (P.crownGuards) for (const sy of [-1, 1]) { const gd = mk(new THREE.BoxGeometry(3.2, 2.4, 3.4), CASE); gd.position.set(R + 0.7, sy * 3.9, -0.9); gd.rotation.z = -sy * 0.5; kase.add(gd); }
@@ -149,7 +156,8 @@ export function buildProcedural(watch, face, tex) {
     const o = new THREE.Shape(), hole = new THREE.Path(), A = k => (22.5 + 45 * k) * Math.PI / 180;
     for (let k = 0; k < 8; k++) (k ? o.lineTo(R * Math.cos(A(k)), R * Math.sin(A(k))) : o.moveTo(R * Math.cos(A(k)), R * Math.sin(A(k)))); o.closePath();
     hole.absarc(0, 0, ri, 0, Math.PI * 2, true); o.holes.push(hole);
-    bezel.add(at(mk(new THREE.ExtrudeGeometry(o, { depth: 1.45, bevelEnabled: false, curveSegments: 48 }), CASE), 0, 0, 2.5));
+    bezel.add(at(mk(new THREE.ExtrudeGeometry(o, { depth: 0.05, bevelEnabled: false, curveSegments: 48 }), 'ink', { noEdges: true }), 0, 0, 2.52)); // the dark gasket that shows as a line under the bezel
+    bezel.add(at(mk(new THREE.ExtrudeGeometry(o, { depth: 1.1, bevelEnabled: true, bevelThickness: 0.28, bevelSize: 0.28, bevelSegments: 2, curveSegments: 48 }), CASE, { edgeAngle: 25 }), 0, 0, 2.86)); // a polished bevel round a flat top
     const br = ri + (R - ri) * 0.56;
     for (let k = 0; k < 8; k++) bezel.add(at(mk(new THREE.CylinderGeometry(1.05, 1.05, 0.4, 6).rotateX(Math.PI / 2), 'white', { edgeAngle: 20 }), br * Math.cos(A(k)), br * Math.sin(A(k)), 4.05), (sl => { sl.rotation.z = A(k) + Math.PI / 2; return sl; })(at(mk(new THREE.BoxGeometry(1.5, 0.2, 0.1), 'iron', { noEdges: true }), br * Math.cos(A(k)), br * Math.sin(A(k)), 4.3)));
   } else
