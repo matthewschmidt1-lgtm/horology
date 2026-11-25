@@ -62,7 +62,7 @@ export default {
       significance: 'The flat bezel is the first thing collectors look for in a 96.', related: ['crystal', 'case'] },
     { id: 'dial', name: 'Dial and seconds register', group: 'Exterior', status: 'D', anchor: [-6, 3, 2.4], face: 1,
       beginner: 'The pale face, with a small dial at the bottom for the seconds hand.',
-      horologist: 'Silvered dial with applied faceted batons, a dot minute track and subsidiary seconds at 6. The register sits there because the fourth wheel of the movement turns directly beneath it.',
+      horologist: 'Silvered dial with applied faceted batons, two side by side at twelve, a dot minute track and subsidiary seconds at 6 on a ringed track with a bold bar at each quarter. It carries the long signature of the 1930s and 1940s, PATEK, PHILIPPE & Co over GENÈVE; from about 1948 it was shortened to PATEK PHILIPPE. The lettering is placed from Phillips’ photographs; the typefaces are approximations. The register sits there because the fourth wheel of the movement turns directly beneath it.',
       fn: 'Displays hours, minutes and running seconds.', material: 'Silvered metal, applied gold markers', location: 'Under the crystal, fixed to the movement.',
       significance: 'Dial variety is where the many versions of the 96 differ most.', related: ['hands', 'fourth'] },
     { id: 'hands', name: 'Hands', group: 'Exterior', status: 'D', anchor: [3, 7, 3.0], face: 1,

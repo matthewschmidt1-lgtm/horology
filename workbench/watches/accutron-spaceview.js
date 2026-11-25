@@ -62,7 +62,7 @@ export default {
       significance: '', related: ['crystal', 'case'] },
     { id: 'dial', name: 'Chapter ring', group: 'Exterior', status: 'I', anchor: [-10.6, -10.6, 2.4], face: 1,
       beginner: 'There is no dial. Only a narrow ring of minute marks runs round the edge, so you can still read the time.',
-      horologist: 'A minute track with hour dots and nothing inside it. The drawing of the fork printed on this model’s texture is not used: what you see through the ring is the modelled movement.',
+      horologist: 'A minute track with a luminous bar at each hour and nothing inside it. On the real watch a small tuning-fork emblem is printed at twelve and the name ACCUTRON at the lower left; neither appears on the model. The drawing of the fork printed on this model’s texture is not used: what you see through the ring is the modelled movement.',
       fn: 'Gives the hands something to be read against.', material: 'Not specified',
       significance: 'Leaving the dial off is what made this the best-known Accutron.', related: ['hands', 'fork'] },
     { id: 'hands', name: 'Hands', group: 'Exterior', status: 'E', anchor: [3, 7, 3.0], face: 1,
