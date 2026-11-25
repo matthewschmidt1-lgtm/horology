@@ -482,7 +482,7 @@ const PLAN = {
     bridges: [[[-3.05, 6.23, 5.0]], [[0, 0, 1.15], [-2.6, -4.67, 1.4], [0, -7.79, 1.2]]], cock: [[6.88, -2.01, 1.4], [9.6, 5.6, 1.3]] },
   spaceview: { cal: '214', fork: 1, pr: 14.5 }
 };
-PLAN.explorer1016 = Object.assign({}, PLAN.sub5513, { cal: '1560' }); // drawn with the calibre 1530 layout, as on the Workbench, which assumes the family shares its plate
+PLAN.explorer1016 = Object.assign({}, PLAN.sub5513, { cal: '1560' }); // same layout as the Submariner: both are read from photographs of a calibre 1560
 PLAN.carrera = Object.assign({}, PLAN.daytona6263, { cal: 'Valjoux 72' }); // the Carrera 2447 uses the same calibre as the Daytona's 727, so it shares that layout
 function planMovement(w, pl) {
   const k = 15 / pl.pr, X = q => (pl.turn ? [q[1] * k, q[0] * k] : [q[0] * k, -q[1] * k]); // to drawing units; y runs down the page. A "turned" movement (the Calatrava) is drawn a quarter turn round, as the bench mounts it

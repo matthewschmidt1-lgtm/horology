@@ -1,6 +1,6 @@
 /* Watch record for the Interactive Workbench. See the README for the schema.
    Status marks:  D documented · E estimated · I interpretation (modelled for explanation).
-   The movement is drawn with the layout of calibre 1530 (shared with the Submariner record, calibre '1530' in model.js), on the assumption explained in the History. */
+   The movement layout is read from photographs of a calibre 1560. The Submariner record shares it (it is the branch called '1530' in model.js). */
 export default {
   id: 'explorer-1016',
   brand: 'Rolex',
@@ -15,7 +15,7 @@ export default {
   asset: {
     type: 'procedural',
     builder: 'round-chronograph',
-    note: 'Case and lugs are simplified. No Rolex document was available for the movement. Its pivot positions are read from a watchmaker’s photographs of a stripped calibre 1530, a plainer member of the same family, on the assumption that the Explorer’s calibre 1560 shares that layout. Sizes, heights, tooth counts and outlines are estimated. Not a factory model or scan.',
+    note: 'Case and lugs are simplified. No Rolex document was available for the movement. Its pivot positions are read from a watchmaker’s photographs of a stripped calibre 1560. Sizes, heights, tooth counts and outlines are estimated. Not a factory model or scan.',
     params: { thickness: 12.5, lugToLug: 44, lugWidth: 20, movementDiameter: 28.5, beatsPerHour: 18000, calibre: '1530', chrono: false, dustCover: false, rotor: true, bezelInsert: false, bracelet: true, hands: 'mercedes', plate: 'steel' }
   },
   images: [],
@@ -27,7 +27,7 @@ export default {
     ['Production', 'c. 1963 – 1989', 'D'],
     ['Movement', 'Calibre 1560, later 1570; automatic', 'D'],
     ['Frequency', '18,000 A/h (cal. 1560); 19,800 A/h (cal. 1570)', 'D'],
-    ['Movement size', '28.5 mm, taken from calibre 1530', 'E'],
+    ['Movement size', '28.5 mm, the figure published for the sister calibre 1530', 'E'],
     ['Case diameter', '36 mm', 'D'],
     ['Lug width', '20 mm', 'D'],
     ['Thickness', 'Not verified; modelled at 12.5 mm', 'E'],
@@ -45,8 +45,8 @@ export default {
     { h: 'The reference 1016', s: 'D', p: 'The 1016 was made from about 1963 until 1989, the longest run of any Explorer. It is a 36 mm steel Oyster with a smooth bezel and a domed acrylic crystal, rated to 100 metres.' },
     { h: 'Two movements', s: 'D', p: 'It began with the calibre 1560, beating at 18,000 an hour, and later took the calibre 1570 at 19,800. Published accounts disagree on when the change was made, and give dates from the mid 1960s to the 1970s. In the early 1970s the 1570 gained a seconds hand that stops when the crown is pulled out, so that the watch can be set exactly.' },
     { h: 'Dials', s: 'D', p: 'Early dials are glossy with gilt printing. Matte dials with white printing replaced them in the later 1960s.' },
-    { h: 'How the movement was laid out', s: 'E', p: 'No Rolex technical document could be obtained, and no usable overhead photograph of a bare calibre 1560 plate was found. The layout is therefore the one worked out for calibre 1530 on the Submariner: the positions of the barrel, the train wheels, the pallets and the balance are read from a watchmaker’s near-overhead photograph of a bare calibre 1530 plate, published with a 2017 service write-up on mitka.co.uk, and scaled to that calibre’s 28.5 mm diameter. Each is good to about 0.5 mm for the 1530. Calibres 1530, 1560 and 1570 belong to one family, and using the 1530’s layout for the Explorer assumes that the family shares its plate. That assumption has not been checked against a 1560.' },
-    { h: 'What is estimated or left out', s: 'I', p: 'Tooth counts, wheel diameters, pinion sizes, heights and every bridge outline are estimates. The wheel that carries the seconds to the centre is drawn from the photographs, but which arbor it rides on is an interpretation. The automatic winding gears and the springs are not modelled, and nothing that distinguishes the chronometer-grade 1560 from the 1530, such as its balance and regulation, is shown. The model runs at the calibre 1560’s 18,000 A/h. The dial artwork is simplified and the lugs are plain blocks.' }
+    { h: 'How the movement was laid out', s: 'E', p: 'No Rolex technical document could be obtained, so this is a weaker source than a maker’s sheet. The positions of the barrel, the train wheels, the pallets and the balance are read from a watchmaker’s near-overhead photograph of a bare plate, published with a 2017 service write-up on mitka.co.uk, and scaled to a diameter of 28.5 mm. That write-up names the movement as calibre 1560 in its title and as 1530 in its text; in its photographs the bridge is engraved 1560 and the dial reads “Superlative Chronometer”, so it is taken to be a 1560, the Explorer’s own calibre. The six positions were measured a second time for this watch and each agrees with the model to about 0.3 mm. Which hole belongs to which wheel is read from the same watchmaker’s photographs of the train in place, and is an interpretation.' },
+    { h: 'What is estimated or left out', s: 'I', p: 'Tooth counts, wheel diameters, pinion sizes, heights and every bridge outline are estimates. The wheel that carries the seconds to the centre is drawn from the photographs, but which arbor it rides on is an interpretation. The automatic winding gears and the springs are not modelled, and the calibre’s balance and the way it is regulated are not reproduced. The model runs at the calibre 1560’s 18,000 A/h. The dial artwork is simplified and the lugs are plain blocks.' }
   ],
 
   components: [
@@ -108,37 +108,37 @@ export default {
       significance: '', related: ['barrel-bridge', 'train-bridge'] },
     { id: 'barrel', name: 'Barrel and mainspring', group: 'Movement', status: 'E',
       beginner: 'A drum with a coiled spring inside. The rotor keeps it wound, and its slow unwinding drives the watch.',
-      horologist: 'Going barrel driving the centre pinion. In an automatic the spring’s outer end is a slipping bridle, not a fixed hook, so the rotor cannot overwind it. The coil count here is illustrative. Its position is read from a watchmaker’s photograph of a bare calibre 1530 plate; its size is estimated.',
+      horologist: 'Going barrel driving the centre pinion. In an automatic the spring’s outer end is a slipping bridle, not a fixed hook, so the rotor cannot overwind it. The coil count here is illustrative. Its position is read from a watchmaker’s photograph of a bare calibre 1560 plate; its size is estimated.',
       fn: 'Stores energy and feeds it to the gear train.', material: 'Brass barrel, alloy spring', location: 'Beside the centre wheel, under the barrel bridge.',
       significance: 'The slipping bridle is what makes continuous automatic winding safe.', related: ['centre', 'rotor', 'barrel-bridge'] },
     { id: 'centre', name: 'Centre wheel', group: 'Movement', status: 'E',
       beginner: 'The first wheel after the spring. It turns once an hour and carries the minute hand.',
-      horologist: 'Driven by the barrel through its pinion; one turn per hour. Its position is read from a watchmaker’s photograph of a bare calibre 1530 plate; its size is estimated.',
+      horologist: 'Driven by the barrel through its pinion; one turn per hour. Its position is read from a watchmaker’s photograph of a bare calibre 1560 plate; its size is estimated.',
       fn: 'Takes power from the barrel and sets the pace of the minute hand.', material: 'Brass wheel, steel pinion', location: 'Centre of the movement.',
       significance: 'Every timekeeping wheel after it is geared up from this one turn per hour.', related: ['barrel', 'third'] },
     { id: 'third', name: 'Third wheel', group: 'Movement', status: 'E',
       beginner: 'A go-between wheel that speeds the turning up on its way to the seconds wheel.',
-      horologist: 'Intermediate mobile between centre and fourth. The ratios used in the animation, 8 then 7.5, are typical ones and not taken from the calibre’s tooth counts. Its position is read from a watchmaker’s photograph of a bare calibre 1530 plate; its size is estimated.',
+      horologist: 'Intermediate mobile between centre and fourth. The ratios used in the animation, 8 then 7.5, are typical ones and not taken from the calibre’s tooth counts. Its position is read from a watchmaker’s photograph of a bare calibre 1560 plate; its size is estimated.',
       fn: 'Multiplies speed between the centre and fourth wheels.', material: 'Brass wheel, steel pinion', location: 'Between the centre and fourth wheels.',
       significance: '', related: ['centre', 'fourth'] },
     { id: 'fourth', name: 'Fourth wheel', group: 'Movement', status: 'I',
       beginner: 'This wheel turns once a minute, the same pace as the seconds hand.',
-      horologist: 'One turn per minute, driving the escape wheel. Its position is read from a watchmaker’s photograph of a bare calibre 1530 plate. It is not at the centre: a separate wheel above the bridge takes the seconds there.',
+      horologist: 'One turn per minute, driving the escape wheel. Its position is read from a watchmaker’s photograph of a bare calibre 1560 plate. It is not at the centre: a separate wheel above the bridge takes the seconds there.',
       fn: 'Drives the escape wheel and sets the pace of the seconds hand.', material: 'Brass wheel, steel pinion', location: 'Beside the centre wheel.',
       significance: '', related: ['third', 'escape', 'hands'] },
     { id: 'escape', name: 'Escape wheel', group: 'Movement', status: 'E',
       beginner: 'The last wheel. The pallet fork lets it move one tooth at a time, and that is the tick.',
-      horologist: 'Swiss lever escape wheel. Drawn with fifteen teeth, the usual number; at 18,000 A/h that is ten turns a minute, half a tooth space per beat. The whole train moves in those steps. Its position is read from a watchmaker’s photograph of a bare calibre 1530 plate; its size is estimated.',
+      horologist: 'Swiss lever escape wheel. Drawn with fifteen teeth, the usual number; at 18,000 A/h that is ten turns a minute, half a tooth space per beat. The whole train moves in those steps. Its position is read from a watchmaker’s photograph of a bare calibre 1560 plate; its size is estimated.',
       fn: 'Delivers impulse to the pallet fork and is locked by it between beats.', material: 'Steel', location: 'Between the fourth wheel and the balance.',
       significance: 'The step you see is why a mechanical seconds hand moves in small jumps.', related: ['fourth', 'pallet', 'balance'] },
     { id: 'pallet', name: 'Pallet fork', group: 'Movement', status: 'E',
       beginner: 'A tiny rocking lever. Each swing of the balance flips it, releasing one tooth and getting a small push in return.',
-      horologist: 'Lever with two jewelled pallets: it locks the escape wheel, is unlocked by the balance’s impulse pin, and passes the wheel’s impulse back to the balance. Its position is read from a watchmaker’s photograph of a bare calibre 1530 plate; its size is estimated.',
+      horologist: 'Lever with two jewelled pallets: it locks the escape wheel, is unlocked by the balance’s impulse pin, and passes the wheel’s impulse back to the balance. Its position is read from a watchmaker’s photograph of a bare calibre 1560 plate; its size is estimated.',
       fn: 'Locks and releases the escape wheel; passes impulse to the balance.', material: 'Steel, synthetic ruby pallets', location: 'Between the escape wheel and the balance.',
       significance: 'The detached lever escapement is the basis of nearly every mechanical wristwatch.', related: ['escape', 'balance', 'jewels'] },
     { id: 'balance', name: 'Balance wheel', group: 'Movement', status: 'E',
       beginner: 'The beating heart. It swings back and forth five times a second, and that steady rhythm is what keeps time.',
-      horologist: 'Shown at the calibre 1560’s rate of 18,000 vibrations per hour, 2.5 Hz. The later calibre 1570 beats at 19,800. Amplitude in the animation is about 270 degrees; use slow motion to follow one swing. Its position is read from a watchmaker’s photograph of a bare calibre 1530 plate; its size is estimated.',
+      horologist: 'Shown at the calibre 1560’s rate of 18,000 vibrations per hour, 2.5 Hz. The later calibre 1570 beats at 19,800. Amplitude in the animation is about 270 degrees; use slow motion to follow one swing. Its position is read from a watchmaker’s photograph of a bare calibre 1560 plate; its size is estimated.',
       fn: 'Divides time into equal beats.', material: 'Metal alloy rim', location: 'Under the balance cock, at the edge of the movement.',
       significance: 'The change from 18,000 to 19,800 A/h marks the two generations of 1016 movement.', related: ['hairspring', 'pallet', 'balance-cock'] },
     { id: 'hairspring', name: 'Balance spring', group: 'Movement', status: 'I',

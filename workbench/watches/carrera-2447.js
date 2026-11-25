@@ -16,7 +16,7 @@ export default {
     type: 'procedural',
     builder: 'round-chronograph',
     note: 'Case, lugs and pushers are simplified. The movement is laid out from Valjoux’s own sheet for calibres 23 and 72: the going train is measured from its photograph of the plate and a few sizes are stated in its table. The chronograph wheels are placed from Rolex’s photograph of its calibre 727, which is the same calibre with a faster balance. The other sizes, the heights, the tooth counts and every outline are estimated. Not a factory model or scan.',
-    params: { thickness: 13, lugToLug: 44, lugWidth: 18, movementDiameter: 29.5, beatsPerHour: 18000, calibre: '72', dustCover: false, bezelInsert: false, plate: 'steel', handKind: 'ink', chronoHand: 'ink', dome: 2.6 }
+    params: { thickness: 13, lugToLug: 44, lugWidth: 18, movementDiameter: 29.5, beatsPerHour: 18000, calibre: '72', dustCover: false, spacer: false, wall: 3.05, bezelInsert: false, plate: 'steel', handKind: 'ink', chronoHand: 'ink', dome: 2.6 }
   },
   images: [],
 
@@ -45,7 +45,7 @@ export default {
     { h: 'A dial with nothing extra', s: 'D', p: 'The aim was a chronograph that could be read at a glance. The scale that divides each second into fifths was moved off the dial and onto the tension ring that holds the crystal in place, which left the dial itself clear.' },
     { h: 'The reference 2447', s: 'D', p: 'The 2447 is the Carrera with three registers, counting up to twelve hours, and it is wound by hand. Letters after the number describe the dial: S for silver, N for black, T for a tachymeter scale and D for a decimal one. The model shows the 2447 S, silver throughout.' },
     { h: 'The same movement as the Daytona', s: 'D', p: 'Valjoux sold its calibre 72 to many watchmakers. Rolex used it in the hand-wound Daytona, and in its calibre 727 raised the beat to 21,600 an hour. In the Carrera it runs at the original 18,000.' },
-    { h: 'How the movement was laid out', s: 'E', p: 'Valjoux’s own sheet for calibres 23 and 72, dated 1976, photographs the bare plate and prints a table of dimensions. The barrel, the going train, the pallets and the balance are placed from that photograph, to about 0.3 mm. The table gives the distance from escape wheel to pallets as 3.30 mm and from pallets to balance as 4.50 mm, and the measured positions agree with both to 0.2 mm. The sheet has no usable view of the assembled chronograph, so the chronograph wheels and the column wheel are placed from Rolex’s photograph of its calibre 727, to about 0.5 mm, on the assumption that they sit in the same places in the calibre as Heuer used it.' },
+    { h: 'How the movement was laid out', s: 'E', p: 'Valjoux’s own sheet for calibres 23 and 72, dated 1976, photographs the bare plate and prints a table of dimensions. The barrel, the going train, the pallets and the balance are placed from that photograph, to about 0.3 mm. The table gives the distance from escape wheel to pallets as 3.30 mm and from pallets to balance as 4.50 mm, and the measured positions agree with both to 0.2 mm. The sheet has no usable view of the assembled chronograph, so the chronograph wheels and the column wheel are placed from Rolex’s photograph of its calibre 727, to about 0.5 mm, on the assumption that they sit in the same places in the calibre as Heuer used it. That was then checked against a photograph on OnTheDash of a Heuer-signed Valjoux 72 in an earlier Heuer chronograph. The driving wheel, the coupling wheel, the minute recorder and the balance fall where the model has them. The column wheel agrees to within about 0.8 mm, which is as closely as that photograph, taken at an angle, can be read.' },
     { h: 'What is estimated or left out', s: 'I', p: 'The Valjoux sheet states the escape wheel’s diameter, the balance’s diameter and the inside diameter of the barrel, and those are used. No tooth counts are given: every tooth count, the other wheel and pinion sizes and the height of each part are estimates, and every bridge and lever is a simplified outline. The 12-hour counter on the dial side, the springs, the jumpers, the blocking lever and the winding and setting works are not modelled. The lugs are plain blocks, not the long faceted lugs of the real case, and the engraving on the back and on the movement is left out.' }
   ],
 
@@ -72,7 +72,7 @@ export default {
       significance: '', related: ['dial', 'chrono-runner'] },
     { id: 'case', name: 'Case and lugs', group: 'Exterior', status: 'D', anchor: [-15, 17, 0], face: 0,
       beginner: 'The steel body of the watch.',
-      horologist: 'A 36 mm steel case. The real watch has long lugs with polished facets; the model’s lugs are plain blocks and do not reproduce them.',
+      horologist: 'A 36 mm steel case. The 29.5 mm movement nearly fills it, so no movement ring is shown. The real watch has long lugs with polished facets; the model’s lugs are plain blocks and do not reproduce them.',
       fn: 'Houses the movement and carries the strap.', material: 'Steel',
       significance: '', related: ['bezel', 'caseback', 'crown', 'pushers'] },
     { id: 'crown', name: 'Crown', group: 'Exterior', status: 'D', anchor: [21.5, 0, -1], face: 0,
@@ -94,13 +94,7 @@ export default {
       beginner: 'The screw-on lid on the back. Choose the Movement view to unscrew it.',
       horologist: 'A screw back. Its engraving is not modelled.',
       fn: 'Closes the case.', material: 'Steel',
-      significance: '', related: ['case', 'spacer'] },
-    { id: 'spacer', name: 'Movement ring', group: 'Exterior', status: 'I', anchor: [15.3, 0, 0.2], face: -1,
-      beginner: 'A ring that holds the movement steady in the case.',
-      horologist: 'A plain ring standing in for however the movement is held. Not taken from the real watch.',
-      fn: 'Centres the movement in the case.', material: 'Not specified',
-      significance: '', related: ['plate', 'case'] },
-
+      significance: '', related: ['case', 'plate'] },
     { id: 'plate', name: 'Main plate', group: 'Movement', status: 'I', anchor: [-11, -6, 0.2], face: -1,
       beginner: 'The metal base everything else is built on.',
       horologist: 'Shown as a plain disc; the real plate’s shape and finish are not reproduced. Valjoux’s sheet gives its casing diameter as 29.50 mm.',
