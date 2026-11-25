@@ -14,7 +14,7 @@ export default {
   asset: {
     type: 'procedural',
     builder: 'round-chronograph',
-    note: 'Case and pushers are simplified. The blue dial is rendered dark. No dimensioned maker’s drawing was available for the movement: wheel positions are measured from published overhead photographs and identified from the service manual’s exploded views; the escape wheel and pallets, and all sizes, heights, tooth counts and outlines, are estimated. Not a factory model or scan.',
+    note: 'Case and pushers are simplified. No dimensioned maker’s drawing was available for the movement: wheel positions are measured from published overhead photographs and identified from the service manual’s exploded views; the escape wheel and pallets, and all sizes, heights, tooth counts and outlines, are estimated. Not a factory model or scan.',
     params: { thickness: 14.5, lugToLug: 46, lugWidth: 22, movementDiameter: 31, beatsPerHour: 19800, calibre: '11', caseShape: 'square', crownLeft: true, registers: 2, cam: true, rotor: 'micro', dustCover: false, bezelInsert: false, chronoHand: 'red', subHandKind: 'ink', plate: 'steel', crownR: 2.5 }
   },
   images: [],
@@ -62,12 +62,12 @@ export default {
       significance: '', related: ['crystal', 'case'] },
     { id: 'dial', name: 'Dial and registers', group: 'Exterior', status: 'D', anchor: [-9.5, -9.5, 2.4], face: 1,
       beginner: 'The blue dial with two white squares. The right one counts minutes and the left one counts hours while the stopwatch runs. The date is at the bottom.',
-      horologist: 'Blue dial with square registers: 30 minutes at 3 and 12 hours at 9, date at 6. There is no running seconds register, so with the chronograph stopped nothing shows that the watch is going. The model renders the dial dark, not blue.',
+      horologist: 'Blue dial with square registers: 30 minutes at 3 and 12 hours at 9, date at 6. There is no running seconds register, so with the chronograph stopped nothing shows that the watch is going. The dial is shown as on an early example photographed by Phillips: MONACO above Heuer’s shield, AUTOMATIC CHRONOGRAPH below the centre and SWISS above the date; a circular track with a red dash at each five minutes; and applied steel bars laid level in the margins of the square, long at 1, 5, 7 and 11, short at 2, 4, 8 and 10, with an upright bar striped red at twelve. The very first dials of 1969 read CHRONOMATIC above the shield and MONACO below. The shield is a plain outline, the typefaces are approximations, and the blue is judged from photographs.',
       fn: 'Displays the time, the date and elapsed time.', material: 'Metal dial',
       significance: 'Round track, square registers, square case: the dial is a study in fitting one shape inside another.', related: ['hands', 'minute-recorder'] },
     { id: 'hands', name: 'Hands', group: 'Exterior', status: 'D', anchor: [3, 8, 3.1], face: 1,
       beginner: 'Hour and minute hands, a red centre hand that is the stopwatch, and a small hand in each register.',
-      horologist: 'Baton hands with a red central chronograph seconds hand, at rest at twelve, and a hand in each register. The model’s hands are plain and do not show the red details of the originals.',
+      horologist: 'Baton hands with a red central chronograph seconds hand, at rest at twelve, and a hand in each register. On the first watches the hour and minute hands are polished steel with luminous inserts and squared ends, with no red; red-tipped hands came with the later dials. The model’s hands are plain and their inserts are not modelled.',
       fn: 'Indicate the time and the elapsed time.', material: 'Not specified',
       significance: '', related: ['dial', 'chrono-runner'] },
     { id: 'case', name: 'Case and lugs', group: 'Exterior', status: 'D', anchor: [-16, 19, 0], face: 0,

@@ -275,8 +275,12 @@ function markers(w, g, skip) {
       each(h => bat(h, 2.4, 0.7, 'p', 1.9)); break;
     }
     case 'monaco':
-      s += C(R0, 0, 0, 't') + ticks();
-      each(h => { if (h === 0) return dbl(2.6, 0.8, 'p', 1); const p = P(h * 30, R0 - 2.4); return RC(p[0] - 1.6, p[1] - 0.45, 3.2, 0.9); }); break;
+      /* the Monaco 1133B's dial, from Phillips' photograph of an early example: a circular track with fine divisions and a red dash inside it at each five minutes; and applied steel
+         bars laid level, outside the track, in the margins of the square. Long bars stand at 1, 5, 7 and 11, short ones at 2, 4, 8 and 10, and an upright bar with a red stripe at twelve. */
+      s += C(R0, 0, 0, 't'); for (let i = 0; i < 300; i++) s += i % 5 ? rad(i * 1.2, R0 - 0.35, R0, 'hair') : rad(i * 1.2, R0 - 0.7, R0, 't');
+      for (let h = 1; h < 12; h++) s += rad(h * 30, R0 - 2.0, R0 - 0.85, 't rd5');
+      for (const sx of [-1, 1]) for (const sy of [-1, 1]) s += RC(sx * 9.2 - 1.7, sy * 13.15 - 0.4, 3.4, 0.8, 'p ap') + RC(sx * 14.1 - 0.6, sy * 6.9 - 0.45, 1.2, 0.9, 'p ap');
+      s += RC(-0.65, -14.35, 1.3, 3.2, 'p ap') + L(0, -14.25, 0, -11.25, 't rd5'); break;
     case 'ventura':
       each(h => (p => C(0.55, p[0], p[1], 'p'))(P(h * 30, R0 - 0.9)));
       s += Pa('M-6.2,0H-3.6L-2.6,-2L-0.9,2.1L0.9,-2.1L2.6,2L3.6,0H6.2', 't'); break;
@@ -341,13 +345,14 @@ function subs(w, g, o = {}) {
     const [cx, cy] = P(pos * 30, off), tint = d.subTints ? d.subTints[pos] : null;
     const dr = (tint != null && tint >= 0.3 ? ' dkr' : '') + (d.subDark ? ' dk2' : ''); // on the plates, marks on a dark register are drawn pale
     const cls = d.subDark ? 'tn2' : d.subLight ? 'p' : (d.dark ? 'tn' : 'p'), sty = tint != null ? `style="fill:var(--sf${pos}, var(--ink));fill-opacity:var(--so, ${tint})"` : ''; // the Workbench's dial picture can give each register its true colour; elsewhere it is a tint of the ink
-    s += d.subSquare ? RC(cx - rs, cy - rs, 2 * rs, 2 * rs, cls, 0.9) : C(rs, cx, cy, 'p') + C(rs, cx, cy, cls, sty);
+    s += d.subSquare ? RC(cx - rs * 1.3, cy - rs, 2.6 * rs, 2 * rs, cls, 1.5) : C(rs, cx, cy, 'p') + C(rs, cx, cy, cls, sty);
     const n = role === 'min30' ? 30 : 12;
     if (!d.subSquare) for (let i = 0; i < n; i++) s += rad(i * 360 / n, rs - (i % (n / 6) ? 0.45 : 0.9), rs - 0.12, 't sk' + pos + dr, cx, cy);
     if (d.subRings) for (const k of [0.12, 0.2, 0.28, 0.36]) { // the fine circles turned into each register, a few of them, kept inside the figures; in the register at six they break for the word printed there
       if (d.subWord && pos === 6 && k > 0.15) { const r = rs * k, g0 = 55 * Math.PI / 180, x = r * Math.sin(g0), y = r * Math.cos(g0); s += Pa(`M${f(cx + x)},${f(cy + y)}A${f(r)},${f(r)} 0 1 0 ${f(cx - x)},${f(cy + y)}`, 'hair'); }
       else s += C(rs * k, cx, cy, 'hair sk' + pos + dr); }
     if (d.subWord && pos === 6) s += T(d.subWord, cx, cy + rs * 0.3, rs * 0.14, 'tx dl', 'style="font-family:Helvetica,Arial,sans-serif"');
+    if (d.subNums && d.subSquare) (role === 'hr12' ? [12, 2, 4, 6, 8, 10] : [30, 5, 10, 15, 20, 25]).forEach((v, i) => { const a = i * Math.PI / 3, z = rs * 0.36; s += T(v, cx + rs * 0.92 * Math.sin(a), cy - rs * 0.66 * Math.cos(a) + z * 0.36, z, 'tx sn', 'style="fill:#161616;font-family:Helvetica,Arial,sans-serif"'); }); // six figures round each square register, as on the Monaco
     if (d.subNums === 'all' && !d.subSquare) { const n2 = role === 'hr12' ? 12 : 6, st = role === 'hr12' ? 1 : role === 'min30' ? 5 : 10; for (let i = 0; i < n2; i++) { const p = P(i * 360 / n2, rs * 0.6, cx, cy), z = rs * 0.21; s += T(i ? i * st : n2 * st, p[0], p[1] + z * 0.36, z, 'tx sn', 'style="font-family:Helvetica,Arial,sans-serif"'); } } // a figure at every step, as on the Navitimer
     else if (d.subNums && !d.subSquare) (role === 'hr12' ? [[0, 12], [90, 3], [180, 6], [270, 9]] : role === 'min30' ? [[0, 30], [120, 10], [240, 20]] : [[0, 60], [120, 20], [240, 40]]).forEach(q => { const p = P(q[0], rs * 0.56, cx, cy), z = rs * 0.3; s += T(q[1], p[0], p[1] + z * 0.36, z, 'tx sn sn' + pos + dr, 'style="font-family:Helvetica,Arial,sans-serif"'); }); // the figures printed in each register
     if (!o.noHands) s += `<g transform="translate(${cx},${cy})"><g ${role === 'sec' ? `data-hand="s" data-bps="${b}"` : `data-chr="${role === 'min30' ? 'm' : 'h'}"`}>${L(0, 0.8, 0, -rs * 0.82, 'hd')}</g>${C(0.32, 0, 0, 'k')}</g>`;
@@ -434,7 +439,7 @@ const handsAt = (w, g) => w.dial.handsAt ? `<g transform="translate(${w.dial.han
 
 function dial(w, g, o) {
   if (w.dial.custom === 'gyro3') return gyro3(w, g, o);
-  const d = w.dial; let s = Pa(g.dial, d.dark ? 'tn' : 'p');
+  const d = w.dial; let s = Pa(g.dial, d.dark ? 'tn db' : 'p');
   if (d.tapisserie) { const id = 'u' + (++uid); s += `<defs><pattern id="${id}" width="1.15" height="1.15" patternUnits="userSpaceOnUse"><path class="hair" d="M0,0H1.15M0,0V1.15"/></pattern></defs><path d="${g.dial}" fill="url(#${id})" stroke="none"/>`; }
   if (d.flange) {
     const r = g.inR; s += C(r, 0, 0, 'l');
@@ -775,10 +780,11 @@ function face(w, real) {
   const gilt = real && w.dial.gilt ? '.dl{fill:#c9a45c}.gt .t{stroke:#c9a45c}' : ''; // printing in gilt, as on the early glossy dials
   const ap = real && !w.dial.dark ? '.t.dk2,.hair.dk2{stroke:#ecece8}text.dk2{fill:#ecece8}.ap{fill:#a7a8a4}.dk{fill:#131313;stroke:#2b2b2b}.dkt{fill:#f1efe7}.dks{stroke:#f1efe7}' : ''; // applied steel bars on a pale dial
   const wg = real && w.dial.goldNums ? '.nm,.wg{fill:#c8ad74}.wg{stroke:#4a3c16;stroke-width:.05}' : ''; // applied gilt figures and emblem
+  const blue = real ? (w.dial.blue ? `.db{fill:${w.dial.blue}}` : '') + '.rd5{stroke:#c51f10;stroke-width:.32}' : ''; // a coloured dial, and red marks
   const sf = real && w.dial.subFills ? 'svg{--so:1;' + Object.entries(w.dial.subFills).map(q => `--sf${q[0]}:${q[1][0]}`).join(';') + '}' + Object.entries(w.dial.subFills).filter(q => q[1][1]).map(q => `.sk${q[0]}{stroke:#ecece8}.sn${q[0]}{fill:#ecece8}`).join('') : ''; // each register's colour, and pale marks on the dark ones
   const pinkHands = real && w.dial.goldHands ? '.hc{fill:#cf9a78;stroke:#5a3b2a}.mw{fill:#1b2a55;stroke:#5a3b2a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}' : '';
   const g3 = real && w.dial.custom === 'gyro3' ? '.g3-base{fill:#050506;stroke:none}.g3-met{fill:#5d5f63;stroke:#2f3033;stroke-width:.08}.g3-streak{stroke:#9a9c9f;stroke-width:.07}.g3-rim{fill:#c98d6b;stroke:#5a3b2a;stroke-width:.06}.g3-hole{fill:#09090a}.g3-blue{fill:#0a1340;stroke:#c98d6b;stroke-width:.06}.g3-white{fill:#f2f0e9;stroke:#8a8a86;stroke-width:.05}.g3-ink{stroke:#1a1a1a}.g3-inkf{fill:#1a1a1a;font-family:Helvetica,Arial,sans-serif}.g3-gold{fill:#dba886;stroke:#5a3b2a;stroke-width:.04}.g3-star{fill:#d5dcff}.g3-day{fill:#e3e1da;stroke:none}.g3-steel{fill:#b9bbbd;stroke:#4a4c4f;stroke-width:.07}.g3-screw{fill:#2a55a8;stroke:#0d1f45;stroke-width:.06}.g3-teeth{stroke:#c9cbcd;stroke-width:.09}.g3-sun{fill:#dba886;stroke:none}.g3-ray{stroke:#b98a64;stroke-width:.06}.g3-wt{stroke:#eef0ff}.g3-txt{fill:#e6e6e6}' : '';
-  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}${gilt}${ap}${wg}${pinkHands}${g3}${sf}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
+  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}${gilt}${ap}${wg}${blue}${pinkHands}${g3}${sf}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
   // The dial is drawn once as a picture, so the date window is filled here with today's date; on the plates it is filled live.
   const today = new Date(), DAYS3 = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const dated = s.replace(new RegExp('(data-date=""[^>]*>)', 'g'), `$1${today.getDate()}`).replace(new RegExp('(data-daydate=""[^>]*>)', 'g'), `$1${DAYS3[today.getDay()]} ${today.getDate()}`);

@@ -93,7 +93,7 @@ window.WATCHES = [
 {
   id:'monaco', brand:'Heuer', model:'Monaco', ref:'1133B', year:'1969', span:'1969 – mid-1970s', kind:'Chronograph',
   c:{shape:'square', d:39, t:[14.5,'n'], lug:[22,'a']},
-  dial:{dark:true, markers:'monaco', date:6, subs:[[3,'min30'],[9,'hr12']], subSquare:true, subLight:true, text:['MONACO','HEUER']},
+  dial:{dark:true, blue:'#071737', markers:'monaco', date:6, subs:[[3,'min30'],[9,'hr12']], subSquare:true, subLight:true, subNums:true, text:['MONACO','HEUER'], set:{lines:[['MONACO',-0.5,0.075,1],['AUTOMATIC',0.33,0.045,1],['CHRONOGRAPH',0.4,0.045,1],['SWISS',0.55,0.032,1]], shield:-0.46}},
   hands:'baton', sec:'none', chrono:true, crown:{pos:9}, pushers:'pump', strap:'leather',
   mv:{cal:'11 “Chronomatic”', type:'microchrono', vph:19800, wind:'Automatic, micro-rotor', note:'The “Chronomatic”: a modular automatic chronograph developed by Heuer, Breitling, Büren and Dubois-Dépraz.'},
   back:{type:'plainsq', note:'Detail not verified; shown plain.'},
