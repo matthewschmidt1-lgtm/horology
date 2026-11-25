@@ -15,7 +15,7 @@ export default {
   plate: {
     id: 'patek3974', brand: 'Patek Philippe', model: 'Ref. 3974', ref: '3974', year: '1989', span: '1989 – c. 2000', kind: 'Minute repeater, perpetual calendar',
     c: { shape: 'round', d: 36, t: [12, 'n'], lug: [19, 'n'] },
-    bezel: { type: 'plain', w: 2.6 }, dial: { dark: true, gold: true, markers: 'breguet', subs: [[3, 'monthleap'], [6, 'datemoon'], [9, 'day24']], text: ['PATEK PHILIPPE', 'GENEVE'], textScale: 0.6, textY: 0.5 },
+    bezel: { type: 'plain', w: 2.6 }, dial: { dark: true, gold: true, markers: 'breguet', subs: [[3, 'monthleap'], [6, 'datemoon'], [9, 'day24']], text: ['PATEK PHILIPPE', 'GENEVE'], textScale: 0.6, textY: 0.5, foot: 'σ SWISS σ' },
     hands: 'leaf', sec: 'none', crown: { pos: 3, small: true }, strap: 'leather',
     mv: { cal: 'R 27 Q', type: 'micro', vph: 21600, wind: 'Automatic, micro-rotor', note: 'Minute repeater and perpetual calendar. A general schematic, not this calibre’s layout.' },
     back: { type: 'snap', note: 'Shown plain; not verified.' }, specs: [], notes: []
@@ -74,7 +74,7 @@ export default {
       significance: '', related: ['crystal', 'case'] },
     { id: 'dial', name: 'Dial and calendar', group: 'Exterior', status: 'D', anchor: [-8, -1, 2.4], face: 1,
       beginner: 'A black dial with gold numerals and three small dials: the day on the left, the month on the right, and the date with the moon at the bottom.',
-      horologist: 'Day and 24-hour hand at 9, month and leap-year cycle at 3, date and moon phase at 6. Applied Breguet numerals where there is room and dots elsewhere. The drawing is simplified, and its calendar hands and moon are set once, to the moment the page was opened.',
+      horologist: 'Day and 24-hour hand at 9, month and leap-year cycle at 3, date and moon phase at 6. Applied Breguet numerals where there is room and dots elsewhere, as on the black-dial version; the commoner silvered dial carries applied gold batons instead. PATEK PHILIPPE and GENEVE, without an accent, are printed above the centre, and σ SWISS σ at the foot. In the day dial the names run in English round a 24-hour scale; the month dial shows six of the twelve names round the four-year cycle; the date dial shows the odd dates round the moon. The drawing is simplified, and its calendar hands and moon are set once, to the moment the page was opened.',
       fn: 'Displays the time and the full calendar.', material: 'Metal dial, applied gold numerals',
       significance: 'Four years of calendar are read from three small dials.', related: ['hands', 'calendar-works'] },
     { id: 'hands', name: 'Hands', group: 'Exterior', status: 'E', anchor: [3, 9, 3.1], face: 1,

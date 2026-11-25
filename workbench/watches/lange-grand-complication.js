@@ -16,7 +16,7 @@ export default {
   plate: {
     id: 'langegc', brand: 'A. Lange & Söhne', model: 'Grand Complication', ref: '-', year: '2013', span: '2013', kind: 'Grand complication',
     c: { shape: 'round', d: 50, t: [20.3, 'v'], lug: [24, 'n'] },
-    bezel: { type: 'plain', w: 3.0 }, dial: { dark: false, goldHands: true, markers: 'railway', subs: [[12, 'monthleap'], [3, 'date31'], [6, 'moonsec'], [9, 'dayde']], text: ['A. LANGE & SÖHNE', 'GLASHÜTTE I/SA'], textScale: 0.42, textY: -0.1 },
+    bezel: { type: 'plain', w: 3.0 }, dial: { dark: false, goldHands: true, inkNums: true, railNums: true, de: true, markers: 'railway', subs: [[12, 'monthleap'], [3, 'date31'], [6, 'moonsec'], [9, 'dayde']], text: [], subSign: ['A. LANGE & SÖHNE', 'GLASHÜTTE I/SA'], foot: 'MADE IN GERMANY', footY: 0.845 },
     hands: 'leaf', sec: 'sub', chrono: true, crown: { pos: 3 }, strap: 'leather',
     mv: { cal: 'L1902', type: 'manual', vph: 18000, wind: 'Manual', note: 'Grand complication. A general schematic, not this calibre’s layout.' },
     back: { type: 'snap', note: 'Shown plain; not verified.' }, specs: [], notes: []
@@ -26,7 +26,7 @@ export default {
     type: 'procedural',
     builder: 'round-chronograph',
     note: 'A partial model. The case and dial are built from published dimensions and a photograph of the dial. The movement, calibre L1902, has 876 parts and no published drawing. What one photograph of its back shows is traced from that photograph: the balance, two column wheels, a winding wheel, the bridges with their jewels and screws, three gold wheels that show beneath them, and some of the levers. Everything else is left out so that nothing is invented. Case, lugs and bezel are simplified. Not a factory model or scan.',
-    params: { thickness: 20.3, lugToLug: 60, lugWidth: 24, movementDiameter: 40, beatsPerHour: 18000, calibre: 'L1902', chrono: false, subSeconds: 6, chronoCentre: true, chronoHand: 'blue', slide: true, dustCover: false, metal: 'rose', hands: 'dauphine', plate: 'steel', bezelInsert: false, crownR: 3.3, dome: 3.0, crystalOpacity: 0.06 }
+    params: { thickness: 20.3, lugToLug: 60, lugWidth: 24, movementDiameter: 40, beatsPerHour: 18000, calibre: 'L1902', chrono: false, subSeconds: 6, chronoCentre: true, parkSeconds: true, chronoHand: 'blue', slide: true, dustCover: false, metal: 'rose', hands: 'dauphine', plate: 'steel', bezelInsert: false, crownR: 3.3, dome: 3.0, crystalOpacity: 0.06 }
   },
   images: [],
 
@@ -68,13 +68,13 @@ export default {
       fn: 'Frames and retains the crystal.', material: 'Pink gold',
       significance: '', related: ['crystal', 'case'] },
     { id: 'dial', name: 'Dial and calendar', group: 'Exterior', status: 'D', anchor: [-11, 0, 2.4], face: 1,
-      beginner: 'A white dial with four small dials: the month at the top, the date on the right, the day on the left, and at the bottom the moon with the running seconds.',
-      horologist: 'Month and leap-year cycle at 12, date at 3, moon phase with running seconds and the scale for the flying seconds at 6, day at 9, in German. Railway minute track. The drawing is simplified, and its calendar hands and moon are set once, to the moment the page was opened.',
+      beginner: 'A white dial with four small dials: the month at the top, the date on the right, the day on the left, and at the bottom the moon, with the hand of the flying seconds.',
+      horologist: 'Month and leap-year cycle at 12, date at 3, the moon with the five-step scale of the flying seconds at 6, and the day at 9, all in German. The figures are black on white enamel, inside a railway track with the five-minute figures outside it and the quarters in red. The maker’s name is printed in the lower dial under the moon, and MADE IN GERMANY at the foot. Read from SJX’s photograph of the dial. On the real watch the top dial sets out all 48 months of the four-year cycle in rings and doubles as the chronograph’s minute counter, and the 3, 6 and 9 show as part figures behind their dials; the model shows twelve months and leaves those figures out. No running seconds hand could be confirmed, so none is shown. The drawing is simplified, and its calendar hands and moon are set once, to the moment the page was opened.',
       fn: 'Displays the time, the calendar, the moon and the chronograph.', material: 'Enamel, as reported',
       significance: '', related: ['hands', 'calendar-works', 'chrono-works'] },
     { id: 'hands', name: 'Hands', group: 'Exterior', status: 'E', anchor: [3, 10, 3.2], face: 1,
       beginner: 'Gold hour and minute hands, a blue stopwatch hand that rests at twelve, and a small seconds hand at the bottom.',
-      horologist: 'Pink gold hour and minute hands and a blued chronograph seconds hand. The real watch has a second, split-seconds hand beneath it, and a flying seconds hand at 6; neither is modelled. The running seconds at 6 moves in the model.',
+      horologist: 'Pink gold hour and minute hands and a blued chronograph seconds hand. The real watch has a second, split-seconds hand beneath it, and a flying seconds hand at 6; neither is modelled. The hand at 6 stands for the flying seconds and is shown at rest.',
       fn: 'Indicate the time and elapsed time.', material: 'Pink gold and blued steel',
       significance: '', related: ['dial', 'chrono-works'] },
     { id: 'case', name: 'Case and lugs', group: 'Exterior', status: 'D', anchor: [-21, 24, 0], face: 0,

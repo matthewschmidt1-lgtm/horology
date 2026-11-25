@@ -286,9 +286,11 @@ function markers(w, g, skip) {
       break;
     }
     case 'railway': { // two fine circles with a tick for each minute and each fifth of a second, and upright numerals inside
-      s += C(R0 - 0.25, 0, 0, 't') + C(R0 - 1.25, 0, 0, 't');
-      for (let i = 0; i < 300; i++) s += rad(i * 1.2, R0 - (i % 25 ? (i % 5 ? 0.75 : 1.25) : 1.25), R0 - 0.25, i % 5 ? 'hair' : 't');
-      const sz = R0 * 0.17; for (let h = 1; h <= 12; h++) if (!skip.has(h % 12)) { const p = P(h * 30, R0 - 3.7); s += T(h, p[0], p[1] + sz * 0.35, sz, 'tx nm'); }
+      const k0 = w.dial.railNums ? 1.15 : 0; // room outside the track for the five-minute figures, where a dial carries them
+      s += C(R0 - 0.25 - k0, 0, 0, 't') + C(R0 - 1.25 - k0, 0, 0, 't');
+      for (let i = 0; i < 300; i++) s += rad(i * 1.2, R0 - k0 - (i % 25 ? (i % 5 ? 0.75 : 1.25) : 1.25), R0 - 0.25 - k0, i % 5 ? 'hair' : 't');
+      if (k0) for (let m = 5; m <= 60; m += 5) s += T(m < 10 ? '0' + m : m, 0, 0, 0.78, 'tx rn' + (m % 15 ? '' : ' rq'), `style="font-family:Helvetica,Arial,sans-serif" transform="rotate(${m * 6}) translate(0,${f(-R0 + 0.92)})"`); // the quarters are printed red
+      const sz = R0 * 0.17; for (let h = 1; h <= 12; h++) if (!skip.has(h % 12)) { const p = P(h * 30, R0 - 3.7 - k0 * 0.6); s += T(h, p[0], p[1] + sz * 0.35, sz, 'tx nm'); }
       break;
     }
     case 'roman': {
@@ -352,16 +354,16 @@ function calSub(w, g, pos, role, o = {}) {
     for (let d = 1; d <= 31; d++) { const a = (d - 1) * 360 / 31; s += d % 2 ? lab(d, a, rs * 0.81, rs * 0.17) : (p => C(0.08, p[0], p[1], 'k'))(P(a, rs * 0.81, cx, cy)); }
     s += C(rs * 0.52, cx, cy, 'hair') + hand((now.getDate() - 1) * 360 / 31, rs * 0.68);
   } else if (role === 'moonsec') { // running seconds round the edge, the moon above the centre, and the scale of fifths for the flying seconds
-    for (let i = 0; i < 60; i++) s += rad(i * 6, rs - (i % 5 ? 0.4 : 0.75), rs - 0.12, 't', cx, cy);
-    [5, 1, 2, 3, 4].forEach((n, i) => { s += lab(n, i * 72, rs * 0.74, rs * 0.19); });
-    s += moon(rs * 0.5, cy - rs * 0.06);
+    [5, 1, 2, 3, 4].forEach((n, i) => { s += lab(n, i * 72, rs * 0.8, rs * 0.17); }); // the five jumps of the flying seconds; there is no running seconds track
+    s += moon(rs * 0.5, cy - rs * 0.1);
+    if (w.dial.subSign && !o.redact) w.dial.subSign.forEach((t, i) => { s += T(t.replace(/&/g, '&amp;'), cx, cy + rs * (0.3 + i * 0.16), rs * 0.115, 'tx cal', 'letter-spacing=".04em"'); }); // the maker's name, printed in this dial under the moon
     if (!o.noHands) s += `<g transform="translate(${cx},${cy})"><g data-hand="s" data-bps="${bps(w)}">${L(0, 0.8, 0, -rs * 0.86, 'hd')}</g></g>`;
   } else if (role === 'day24') {
     DAYS.forEach((t, i) => { s += lab(t, i * 360 / 7, rs * 0.79, rs * 0.2); });
     s += C(rs * 0.6, cx, cy, 'hair'); [[12, 0], [18, 90], [24, 180], [6, 270]].forEach(q => { s += lab(q[0], q[1], rs * 0.4, rs * 0.19); });
     s += hand((now.getHours() + now.getMinutes() / 60 - 12) * 15, rs * 0.42, 0.22) + hand(now.getDay() * 360 / 7, rs * 0.72);
   } else if (role === 'monthleap') {
-    MONTHS.forEach((t, i) => { s += i % 2 ? rad(i * 30, rs * 0.72, rs * 0.86, 't', cx, cy) : lab(t, i * 30, rs * 0.79, rs * 0.2); });
+    (w.dial.de ? ['JAN', 'FEB', 'MÄR', 'APR', 'MAI', 'JUN', 'JUL', 'AUG', 'SEP', 'OKT', 'NOV', 'DEZ'] : MONTHS).forEach((t, i) => { s += i % 2 ? rad(i * 30, rs * 0.72, rs * 0.86, 't', cx, cy) : lab(t, i * 30, rs * 0.79, rs * 0.2); });
     s += C(rs * 0.6, cx, cy, 'hair'); [1, 2, 3, 4].forEach(n => { s += lab(n, n * 90 - 45, rs * 0.38, rs * 0.19); });
     s += L(cx - rs * 0.6, cy, cx + rs * 0.6, cy, 'hair') + L(cx, cy - rs * 0.6, cx, cy + rs * 0.6, 'hair');
     const yc = (now.getFullYear() + 3) % 4; // 0, 1, 2 for the three ordinary years; 3 for the leap year, which is quarter "4"
@@ -438,6 +440,7 @@ function dtext(w, g, o) {
     else s += T(t.replace(/&/g, '&amp;'), 0, y, z, 'tx dl', 'letter-spacing=".06em"'); // an ampersand has to be written this way inside a drawing
     if (i === 1 && d.star && !o.redact) s += star(0, y - z * 1.9, 0.75);
   });
+  if (d.foot && !o.redact) s += T(d.foot, 0, d.footY ? R0 * d.footY : R0 - 0.1, R0 * 0.04, 'tx dl', 'style="font-family:Helvetica,Arial,sans-serif" letter-spacing=".08em"'); // the small lettering at the very foot of the dial
   return s;
 }
 
@@ -472,10 +475,10 @@ function gyro3(w, g, o) {
   /* time: a ring flecked like a night sky round a centre of meteorite */
   s += C(tr, tx, -ty, 'p g3-rim') + C(tr - 0.3, tx, -ty, 'tn g3-blue') + flecks(tx, -ty, 6.1, tr - 0.9, 70) + C(tr - 0.65, tx, -ty, 't g3-wt');
   for (let i = 0; i < 60; i++) s += rad(i * 6, tr - 0.95, tr - 0.65, 'hair g3-wt', tx, -ty);
-  for (let h = 0; h < 12; h++) { const b = dx => `<rect class="p g3-gold" x="${f(dx - 0.2)}" y="${f(-tr + 1.35)}" width="0.4" height="1.9" transform="translate(${tx},${-ty}) rotate(${h * 30})"/>`; s += h ? b(0) : b(-0.36) + b(0.36); }
+  for (let h = 0; h < 12; h++) { const b = dx => `<rect class="p g3-gold" x="${f(dx - 0.2)}" y="${f(-tr + 1.35)}" width="0.4" height="1.9" transform="translate(${tx},${-ty}) rotate(${h * 30})"/>`; s += h % 3 ? b(0) : b(-0.36) + b(0.36); } // a pair of bars at each quarter
   s += C(6.1, tx, -ty, 'tn g3-met');
   [[-5.2, -1.6, 4.6, 3.2], [-4.6, 2.4, 5.4, -0.4], [-3.4, -4.4, 2.6, 4.6], [-1.2, -5.6, 5.2, 0.8], [-5.6, 0.6, -0.6, 5.6], [0.8, -5.8, 3.8, 4.2]].forEach(q => { s += L(tx + q[0], -ty + q[1], tx + q[2], -ty + q[3], 'hair g3-streak'); });
-  if (!o.redact) s += T('JAEGER-LECOULTRE', tx, -ty - 2.2, 0.72, 'tx g3-txt', 'letter-spacing=".04em"');
+  if (!o.redact) s += T('JAEGER-LECOULTRE', tx, -ty - 2.2, 0.72, 'tx g3-txt', 'letter-spacing=".04em"') + T('SWISS MADE', tx, -ty + tr - 1.25, 0.36, 'tx g3-txt', 'letter-spacing=".06em"');
   return s;
 }
 const handsAt = (w, g) => w.dial.handsAt ? `<g transform="translate(${w.dial.handsAt[0]},${-w.dial.handsAt[1]}) scale(${w.dial.handsAt[2]})">${hands(w, g)}</g>` : hands(w, g); // a watch whose time dial is off centre and small
@@ -828,10 +831,11 @@ function face(w, real) {
   const ap = real && !w.dial.dark ? '.t.dk2,.hair.dk2{stroke:#ecece8}text.dk2{fill:#ecece8}.ap{fill:#a7a8a4}.dk{fill:#131313;stroke:#2b2b2b}.dkt{fill:#f1efe7}.dks{stroke:#f1efe7}' : ''; // applied steel bars on a pale dial
   const wg = real && (w.dial.goldNums || w.dial.gilt) ? '.nm,.wg{fill:#c8ad74}.wg{stroke:#4a3c16;stroke-width:.05}' : ''; // applied gilt figures and emblem
   const blue = real ? (w.dial.blue ? `.db{fill:${w.dial.blue}}` : '') + '.rd5{stroke:#c51f10;stroke-width:.32}' : ''; // a coloured dial, and red marks
+  const ink = real && w.dial.inkNums ? '.nm,.cal,.rn{fill:#12151c}.rq{fill:#b3261a}' : ''; // black figures on white enamel, with the quarters in red
   const sf = real && w.dial.subFills ? 'svg{--so:1;' + Object.entries(w.dial.subFills).map(q => `--sf${q[0]}:${q[1][0]}`).join(';') + '}' + Object.entries(w.dial.subFills).filter(q => q[1][1]).map(q => `.sk${q[0]}{stroke:#ecece8}.sn${q[0]}{fill:#ecece8}`).join('') : ''; // each register's colour, and pale marks on the dark ones
   const pinkHands = real && w.dial.goldHands ? '.hc{fill:#cf9a78;stroke:#5a3b2a}.mw{fill:#1b2a55;stroke:#5a3b2a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}' : '';
   const g3 = real && w.dial.custom === 'gyro3' ? '.g3-base{fill:#050506;stroke:none}.g3-met{fill:#5d5f63;stroke:#2f3033;stroke-width:.08}.g3-streak{stroke:#9a9c9f;stroke-width:.07}.g3-rim{fill:#c98d6b;stroke:#5a3b2a;stroke-width:.06}.g3-hole{fill:#09090a}.g3-blue{fill:#0a1340;stroke:#c98d6b;stroke-width:.06}.g3-white{fill:#f2f0e9;stroke:#8a8a86;stroke-width:.05}.g3-ink{stroke:#1a1a1a}.g3-inkf{fill:#1a1a1a;font-family:Helvetica,Arial,sans-serif}.g3-gold{fill:#dba886;stroke:#5a3b2a;stroke-width:.04}.g3-star{fill:#d5dcff}.g3-day{fill:#e3e1da;stroke:none}.g3-steel{fill:#b9bbbd;stroke:#4a4c4f;stroke-width:.07}.g3-screw{fill:#2a55a8;stroke:#0d1f45;stroke-width:.06}.g3-teeth{stroke:#c9cbcd;stroke-width:.09}.g3-sun{fill:#dba886;stroke:none}.g3-ray{stroke:#b98a64;stroke-width:.06}.g3-wt{stroke:#eef0ff}.g3-txt{fill:#e6e6e6}' : '';
-  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}${gilt}${ap}${wg}${blue}${pinkHands}${g3}${sf}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
+  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}${gilt}${ap}${wg}${blue}${pinkHands}${ink}${g3}${sf}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
   // The dial is drawn once as a picture, so the date window is filled here with today's date; on the plates it is filled live.
   const today = new Date(), DAYS3 = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const dated = s.replace(new RegExp('(data-date=""[^>]*>)', 'g'), `$1${today.getDate()}`).replace(new RegExp('(data-daydate=""[^>]*>)', 'g'), `$1${DAYS3[today.getDay()]} ${today.getDate()}`);

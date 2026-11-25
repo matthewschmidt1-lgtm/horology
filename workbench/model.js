@@ -947,7 +947,7 @@ export function buildProcedural(watch, face, tex) {
     balSpin.rotation.z = th; palRock.rotation.z = 0.17 * Math.tanh(7 * ph); if (M.extraAnim) M.extraAnim(tv);
     for (let i = 0; i <= HN; i++) { const t = i / HN, w = 1 - t, a = t * TAU * 9 + th * w, r = (0.38 + t * 1.75) * (1 - 0.035 * th * w * t * 4); hsPos[i * 3] = r * Math.cos(a); hsPos[i * 3 + 1] = r * Math.sin(a); hsPos[i * 3 + 2] = 0; }
     hsGeo.attributes.position.needsUpdate = true; hsGeo.computeBoundingSphere();
-    hSec.rotation.z = -(beats * TAU / (60 * beatHz));
+    hSec.rotation.z = P.parkSeconds ? 0 : -(beats * TAU / (60 * beatHz)); // a hand that only runs with a mechanism the model does not have is left at rest
     const s = now.getSeconds() + now.getMilliseconds() / 1000, m = now.getMinutes() + s / 60, h = (now.getHours() % 12) + m / 60;
     hMin.rotation.z = -m * TAU / 60; hHour.rotation.z = -h * TAU / 12; if (chrono) hChr.rotation.z = 0;
   }
