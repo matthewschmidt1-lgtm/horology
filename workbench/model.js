@@ -7,7 +7,9 @@ import * as THREE from 'three';
 const INK = 0x242521, BRASS_HI = 0xE2C27A;
 const KIND = {
   steel:    { real: { color: 0xcfcfcb, metalness: 1, roughness: 0.3 }, tech: 0xEDE6D8 },
-  gold:     { real: { color: 0xd9b25c, metalness: 1, roughness: 0.24 }, tech: 0xEDE6D8 },
+  gold:     { real: { color: 0xefc567, metalness: 1, roughness: 0.24 }, tech: 0xEDE6D8 }, // 18-carat yellow gold
+  goldSatin:{ real: { color: 0xe6c36c, metalness: 0.7, roughness: 0.5 }, tech: 0xEDE6D8 }, // gold with an engine-turned or grained face, which scatters the light and reads brighter
+  rhodium:  { real: { color: 0xe6e6e2, metalness: 0.8, roughness: 0.42 }, tech: 0xEDE6D8 }, // the bright silvery plating on fine bridges
   rose:     { real: { color: 0xd9a183, metalness: 1, roughness: 0.26 }, tech: 0xEDE6D8 },
   navy:     { real: { color: 0x151b30, metalness: 0, roughness: 0.85 }, tech: 0xD9CEB9 },
   steelDark:{ real: { color: 0x9c9c99, metalness: 1, roughness: 0.36 }, tech: 0xE1D8C4 },
@@ -172,7 +174,7 @@ export function buildProcedural(watch, face, tex) {
   assembly(hands, 13);
 
   /* ----- spacer ring, dust cover, caseback ----- */
-  if (P.spacer !== false && !wideMv) { const spacer = part('spacer'); spacer.add(mk(lathe([[mvR + 0.05, -3.6], [inner - 0.1, -3.6], [inner - 0.1, 2.0], [mvR + 0.05, 2.0], [mvR + 0.05, -3.6]]), 'steelDark')); assembly(spacer, -7); }
+  if (P.spacer !== false && !wideMv) { const spacer = part('spacer'); spacer.add(mk(lathe([[mvR + 0.05, -3.6], [inner - 0.1, -3.6], [inner - 0.1, 2.0], [mvR + 0.05, 2.0], [mvR + 0.05, -3.6]]), P.spacerKind || 'steelDark')); assembly(spacer, -7); }
   const dust = P.dustCover === false ? null : part('dustcover'); if (dust) { dust.add(at(mk(cyl(inner - 0.3, 0.25, 64), 'iron'), 0, 0, -4.3)); assembly(dust, -24); }
   const back = part('caseback'); if (tank) back.add(at(mk(extr(rrShape(wideMv ? R - 0.05 : CW, CH, CR), 1.2), CASE), 0, 0, -5.8)); else back.add(mk(lathe([[0, -6.4], [R - 6.85, -6.4], [R - 2.25, -5.4], [R - 1.45, -4.6], [0, -4.6]]), CASE)); if (G3) back.add(at(mk(cyl(G3.tb[2] + 0.4, 0.08, 48), 'ink'), G3.tb[0], G3.tb[1], -4.55)); /* dark behind the tourbillon when the back is on; with the back off, the tourbillon shows from behind too */ assembly(back, -31);
 
@@ -531,18 +533,18 @@ export function buildProcedural(watch, face, tex) {
     pal.rotation.z = Math.atan2(BY - pmy, BX - pmx) - Math.PI / 2; pal.add(palRock);
     palRock.add(at(mk(new THREE.BoxGeometry(0.4, 2.6, 0.2), 'steelDark'), 0, 0.4, 1.1), at(mk(new THREE.BoxGeometry(1.8, 0.36, 0.2), 'steelDark'), 0, -0.8, 1.1), at(mk(new THREE.BoxGeometry(0.28, 0.45, 0.3), 'ruby'), -0.8, -1.0, 1.1), at(mk(new THREE.BoxGeometry(0.28, 0.45, 0.3), 'ruby'), 0.8, -1.0, 1.1));
     /* bridges: plain outlines laid over the jewels that the photograph shows */
-    layer(flat('main-bridge', [[3.2, 7.4, 4.2], [-3.8, 7.8, 3.5], [-8.6, 6.6, 1.6]], 2.35, 0.45), 4);
-    layer(flat('repeater-bridge', [[6.0, -6.2, 3.2], [6.4, -8.3, 2.4]], 2.35, 0.45), 4);
-    layer(flat('escape-cock', [[eX, eY, 1.0], [-10.9, -1.0, 1.1]], 2.35, 0.45), 4);
-    layer(flat('pallet-cock', [[pmx, pmy, 0.6], [-9.3, -5.3, 0.6]], 1.45, 0.24), 3);
-    layer(flat('balance-cock', [[BX, BY, 1.3], [-9.6, -6.9, 1.2]], 3.3, 0.45), 4);
+    layer(flat('main-bridge', [[3.2, 7.4, 4.2], [-3.8, 7.8, 3.5], [-8.6, 6.6, 1.6]], 2.35, 0.45, 'rhodium'), 4); // bright and silvery, as the photographs show them
+    layer(flat('repeater-bridge', [[6.0, -6.2, 3.2], [6.4, -8.3, 2.4]], 2.35, 0.45, 'rhodium'), 4);
+    layer(flat('escape-cock', [[eX, eY, 1.0], [-10.9, -1.0, 1.1]], 2.35, 0.45, 'rhodium'), 4);
+    layer(flat('pallet-cock', [[pmx, pmy, 0.6], [-9.3, -5.3, 0.6]], 1.45, 0.24, 'rhodium'), 3);
+    layer(flat('balance-cock', [[BX, BY, 1.3], [-9.6, -6.9, 1.2]], 3.3, 0.45, 'rhodium'), 4);
     jewel(-3.71, 9.35, 2.86, 4); jewel(-6.34, 7.81, 2.86, 4); jewel(-9.28, 6.49, 2.86, 4);
     jewel(6.8, -4.41, 2.86, 4); jewel(4.64, -5.8, 2.86, 4); jewel(7.27, -7.96, 2.86, 4); jewel(5.41, -9.2, 2.86, 4);
     jewel(eX, eY, 2.86, 4); jewel(BX, BY, 3.82, 4); jewel(pmx, pmy, 1.3, 0);
     /* the repeater's governor: a small flywheel that sets the pace of the chime. On this calibre it is open to view and carries the Calatrava cross */
     const gov = at(part('governor', mv), 8.12, 0.31, 0);
-    gov.add(at(mk(new THREE.TorusGeometry(2.9, 0.22, 8, 56), 'steel', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(cyl(0.55, 0.3, 14), 'gold'), 0, 0, 2.3), at(mk(cyl(0.2, 2.4, 10), 'steelDark', { noEdges: true }), 0, 0, 1.2));
-    for (let k = 0; k < 2; k++) { const arm = mk(new THREE.BoxGeometry(5.3, 0.75, 0.2), 'gold'); arm.position.z = 2.3; arm.rotation.z = k * Math.PI / 2; gov.add(arm); }
+    gov.add(at(mk(new THREE.TorusGeometry(2.9, 0.22, 8, 56), 'steel', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(cyl(0.55, 0.3, 14), 'goldSatin'), 0, 0, 2.3), at(mk(cyl(0.2, 2.4, 10), 'steelDark', { noEdges: true }), 0, 0, 1.2));
+    for (let k = 0; k < 2; k++) { const arm = mk(new THREE.BoxGeometry(5.3, 0.75, 0.2), 'goldSatin'); arm.position.z = 2.3; arm.rotation.z = k * Math.PI / 2; gov.add(arm); }
     layer(gov, 5); gov.userData.anchor = [0, 0, 2.6];
     /* the two hammers, at the edge of the movement, and the two wire gongs that run round it */
     layer(multi('hammers', [[[1.16, -9.97, 0.8], [2.5, -8.9, 0.5]], [[3.48, -8.81, 0.8], [4.9, -8.0, 0.5]]], 2.85, 0.4, 'steel'), 7);
@@ -551,7 +553,7 @@ export function buildProcedural(watch, face, tex) {
     gongs.userData.anchor = [0, mvR - 0.45, 0.8]; layer(gongs, 2);
     /* the rotor: a half-disc of gold on its own pivot, off centre, swinging above the bridges */
     const rot = at(part('rotor', mv), -4.48, -0.46, 0), rw = new THREE.Shape(); rw.absarc(0, 0, 7.9, -Math.PI / 4, Math.PI * 3 / 4, false); rw.closePath();
-    rot.add(at(mk(extr(rw, 0.55), 'gold', { edgeAngle: 40 }), 0, 0, 3.95), at(mk(cyl(1.1, 0.7, 20), 'steel'), 0, 0, 4.3), at(mk(cyl(0.7, 3.95, 16), 'steelDark', { noEdges: true }), 0, 0, 1.975));
+    rot.add(at(mk(extr(rw, 0.55), 'goldSatin', { edgeAngle: 40 }), 0, 0, 3.95), at(mk(cyl(1.1, 0.7, 20), 'steel'), 0, 0, 4.3), at(mk(cyl(0.7, 3.95, 16), 'steelDark', { noEdges: true }), 0, 0, 1.975));
     rot.userData.anchor = [2.5, 2.5, 4.6]; layer(rot, 12);
     /* From a second photograph, of a rose gold 3974 (Watch Collecting Lifestyle, 2016), fitted to this layout by the governor and the rotor's pivot: two steel winding wheels
        in mesh, one on the rotor's axis and one beside it, and a large capped jewel in the main bridge. The same photograph puts a jewel within 0.5 mm of the one taken above to

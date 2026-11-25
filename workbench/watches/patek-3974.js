@@ -25,7 +25,7 @@ export default {
     type: 'procedural',
     builder: 'round-chronograph',
     note: 'A partial model. Patek Philippe publishes no drawing of this movement, and most of it cannot be seen. What shows from the back is placed from two photographs: the gold rotor and the winding wheels beneath it, the repeater’s governor, the balance, the hammers and the jewels in the bridges. The barrel, the going train, the repeating work and the calendar work are hidden, and they are left out of the model so that nothing is invented. Case, lugs and bezel are simplified. Not a factory model or scan.',
-    params: { thickness: 12, lugToLug: 43, lugWidth: 19, movementDiameter: 28, beatsPerHour: 21600, calibre: 'R27', chrono: false, noSeconds: true, dustCover: false, metal: 'gold', hands: 'dauphine', plate: 'steel', bezelInsert: false, slide: true, crownR: 2.2, dome: 1.6, wall: 3.0, lugThick: 2.2 }
+    params: { thickness: 12, lugToLug: 43, lugWidth: 19, movementDiameter: 28, beatsPerHour: 21600, calibre: 'R27', chrono: false, noSeconds: true, dustCover: false, metal: 'gold', hands: 'dauphine', plate: 'steel', bezelInsert: false, slide: true, spacerKind: 'gold', strapKind: 'ink', crownR: 2.2, dome: 1.6, wall: 3.0, lugThick: 2.2 }
   },
   images: [],
 
