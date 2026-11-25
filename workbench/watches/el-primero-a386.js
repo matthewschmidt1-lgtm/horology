@@ -14,8 +14,8 @@ export default {
   asset: {
     type: 'procedural',
     builder: 'round-chronograph',
-    note: 'Case and lugs are simplified. The blue register is rendered grey. The movement is laid out from the assembly photographs in Zenith’s technical booklet for calibre 3019 PHC: most wheel positions are measured from them; the escape wheel and pallets, and all sizes, heights, tooth counts and outlines, are estimated. Not a factory model or scan.',
-    params: { thickness: 12.6, lugToLug: 46, lugWidth: 19, movementDiameter: 29.3, beatsPerHour: 36000, calibre: '3019', escapeTeeth: 21, rotor: true, dustCover: false, bezelInsert: false, plate: 'steel', handKind: 'ink', chronoHand: 'red', subOffset: 0.46, dome: 2.6 }
+    note: 'Case and lugs are simplified. The movement is laid out from the assembly photographs in Zenith’s technical booklet for calibre 3019 PHC: most wheel positions are measured from them; the escape wheel and pallets, and all sizes, heights, tooth counts and outlines, are estimated. Not a factory model or scan.',
+    params: { thickness: 12.6, lugToLug: 46, lugWidth: 19, movementDiameter: 29.3, beatsPerHour: 36000, calibre: '3019', escapeTeeth: 21, rotor: true, dustCover: false, bezelInsert: false, plate: 'steel', handKind: 'ink', chronoHand: 'red', subHandKinds: { 3: 'white', 6: 'white', 9: 'ink' }, subOffset: 0.46, dome: 2.6 }
   },
   images: [],
 
@@ -64,7 +64,7 @@ export default {
       significance: 'The opposite choice from the Speedmaster, which puts its scale out on a wide bezel.', related: ['crystal', 'dial'] },
     { id: 'dial', name: 'Dial and registers', group: 'Exterior', status: 'D', anchor: [-8, -1, 2.4], face: 1,
       beginner: 'The white face with three small overlapping dials: running seconds on the left, stopwatch minutes on the right, stopwatch hours at the bottom.',
-      horologist: 'White lacquered dial with three overlapping registers in light grey (running seconds, 9), blue (30 minutes, 3) and anthracite (12 hours, 6), a date between 4 and 5 and a tachymeter on the flange. The model renders all three registers in greys.',
+      horologist: 'White lacquered dial with three overlapping registers in light grey (running seconds, 9), blue (30 minutes, 3) and anthracite (12 hours, 6), a date between 4 and 5 and a tachymeter on the flange. The model shows them in those colours, with white hands on the two dark registers; the exact shades are judged from photographs.',
       fn: 'Displays the time, the date and the chronograph’s elapsed minutes and hours.', material: 'Lacquered metal', location: 'Under the crystal, fixed to the movement.',
       significance: 'The three-colour overlap became Zenith’s signature and is still used on its chronographs.', related: ['hands', 'fourth', 'minute-recorder'] },
     { id: 'hands', name: 'Hands', group: 'Exterior', status: 'D', anchor: [3, 9, 3.1], face: 1,

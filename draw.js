@@ -306,10 +306,10 @@ function subs(w, g, o = {}) {
   for (const [pos, role] of d.subs) {
     if (CAL_ROLES.includes(role)) { s += calSub(w, g, pos, role, o); continue; }
     const [cx, cy] = P(pos * 30, off), tint = d.subTints ? d.subTints[pos] : null;
-    const cls = d.subDark ? 'tn2' : d.subLight ? 'p' : (d.dark ? 'tn' : 'p'), sty = tint != null ? `style="fill:var(--ink);fill-opacity:${tint}"` : '';
+    const cls = d.subDark ? 'tn2' : d.subLight ? 'p' : (d.dark ? 'tn' : 'p'), sty = tint != null ? `style="fill:var(--sf${pos}, var(--ink));fill-opacity:var(--so, ${tint})"` : ''; // the Workbench's dial picture can give each register its true colour; elsewhere it is a tint of the ink
     s += d.subSquare ? RC(cx - rs, cy - rs, 2 * rs, 2 * rs, cls, 0.9) : C(rs, cx, cy, 'p') + C(rs, cx, cy, cls, sty);
     const n = role === 'min30' ? 30 : 12;
-    if (!d.subSquare) for (let i = 0; i < n; i++) s += rad(i * 360 / n, rs - (i % (n / 6) ? 0.45 : 0.9), rs - 0.12, 't', cx, cy);
+    if (!d.subSquare) for (let i = 0; i < n; i++) s += rad(i * 360 / n, rs - (i % (n / 6) ? 0.45 : 0.9), rs - 0.12, 't sk' + pos, cx, cy);
     if (!o.noHands) s += `<g transform="translate(${cx},${cy})"><g ${role === 'sec' ? `data-hand="s" data-bps="${b}"` : ''}>${L(0, 0.8, 0, -rs * 0.82, 'hd')}</g>${C(0.32, 0, 0, 'k')}</g>`;
   }
   return s;
@@ -690,9 +690,10 @@ function face(w, real) {
   // A light dial can still carry a black bezel and dark registers (the Daytona): those keep the dark palette.
   const mixed = real && !w.dial.dark ? `${w.bezel && w.bezel.dark ? '.bzd .tn{fill:#121212;stroke:#2b2b2b}.bzd text{fill:#f0ede2}.bzd .t,.bzd .hair{stroke:#e9e6da}.bzd .bar{stroke:#e9e6da}.bzd .k{fill:#e9e6da}' : ''}${w.dial.subDark ? '.tn2{fill:#161616;stroke:#2b2b2b}' : ''}` : '';
   const gold = real && w.dial.gold ? '.nm,.cal,.dl{fill:#cfa13a}.hc{fill:#cfa13a;stroke:#4a3c16}.mw{fill:#1b2a55;stroke:#cfa13a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}.t,.hair{stroke:#b08a34}.k{fill:#cfa13a}' : '';
+  const sf = real && w.dial.subFills ? 'svg{--so:1;' + Object.entries(w.dial.subFills).map(q => `--sf${q[0]}:${q[1][0]}`).join(';') + '}' + Object.entries(w.dial.subFills).filter(q => q[1][1]).map(q => `.sk${q[0]}{stroke:#ecece8}`).join('') : ''; // each register's colour, and pale marks on the dark ones
   const pinkHands = real && w.dial.goldHands ? '.hc{fill:#cf9a78;stroke:#5a3b2a}.mw{fill:#1b2a55;stroke:#5a3b2a;stroke-width:.08}.mn{fill:#e3c060;stroke:none}' : '';
   const g3 = real && w.dial.custom === 'gyro3' ? '.g3-base{fill:#050506;stroke:none}.g3-met{fill:#5d5f63;stroke:#2f3033;stroke-width:.08}.g3-streak{stroke:#9a9c9f;stroke-width:.07}.g3-rim{fill:#c98d6b;stroke:#5a3b2a;stroke-width:.06}.g3-hole{fill:#09090a}.g3-blue{fill:#0a1340;stroke:#c98d6b;stroke-width:.06}.g3-white{fill:#f2f0e9;stroke:#8a8a86;stroke-width:.05}.g3-ink{stroke:#1a1a1a}.g3-inkf{fill:#1a1a1a;font-family:Helvetica,Arial,sans-serif}.g3-gold{fill:#dba886;stroke:#5a3b2a;stroke-width:.04}.g3-star{fill:#d5dcff}.g3-day{fill:#e3e1da;stroke:none}.g3-steel{fill:#b9bbbd;stroke:#4a4c4f;stroke-width:.07}.g3-screw{fill:#2a55a8;stroke:#0d1f45;stroke-width:.06}.g3-teeth{stroke:#c9cbcd;stroke-width:.09}.g3-sun{fill:#dba886;stroke:none}.g3-ray{stroke:#b98a64;stroke-width:.06}.g3-wt{stroke:#eef0ff}.g3-txt{fill:#e6e6e6}' : '';
-  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}${pinkHands}${g3}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
+  const s = `<style>${real ? (w.dial.dark ? REAL : REAL_LIGHT) : TECH}${mixed}${gold}${pinkHands}${g3}${sf}</style><circle r="${R}" fill="${real ? '#b5b5af' : '#EDE6D8'}"/><g class="bzd">${bezel(w, g)}</g>` + dial(w, g, { noHands: true });
   // The dial is drawn once as a picture, so the date window is filled here with today's date; on the plates it is filled live.
   const today = new Date(), DAYS3 = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const dated = s.replace(new RegExp('(data-date=""[^>]*>)', 'g'), `$1${today.getDate()}`).replace(new RegExp('(data-daydate=""[^>]*>)', 'g'), `$1${DAYS3[today.getDay()]} ${today.getDate()}`);

@@ -126,7 +126,7 @@ window.WATCHES = [
 {
   id:'a386', brand:'Zenith', model:'El Primero', ref:'A386', year:'1969', span:'1969 – early 1970s', kind:'Chronograph',
   c:{shape:'round', d:38, t:[12.5,'n'], lug:[19,'n']},
-  bezel:{type:'plain', w:1.4}, dial:{dark:false, markers:'baton', flange:'tachy', date:4.5, subs:[[3,'min30'],[6,'hr12'],[9,'sec']], subBig:true, subTints:{3:.34,6:.6,9:.12}, text:['ZENITH','El Primero']},
+  bezel:{type:'plain', w:1.4}, dial:{dark:false, markers:'baton', flange:'tachy', date:4.5, subs:[[3,'min30'],[6,'hr12'],[9,'sec']], subBig:true, subTints:{3:.34,6:.6,9:.12}, subFills:{3:['#0f2452',1],6:['#16171a',1],9:['#a2a3a0',0]}, text:['ZENITH','El Primero']},
   hands:'baton', sec:'sub', chrono:true, crown:{pos:3}, pushers:'pump', strap:'leather',
   mv:{cal:'3019 PHC', type:'autochrono', vph:36000, jewels:31, wind:'Automatic, full rotor', size:'13 lignes', note:'Integrated automatic chronograph with column wheel, dividing the second into tenths.'},
   back:{type:'screw', note:'Detail not verified; shown plain.'},

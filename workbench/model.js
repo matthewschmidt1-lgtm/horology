@@ -166,9 +166,9 @@ export function buildProcedural(watch, face, tex) {
   const hHour = hand(1.5 * HW, Lh, 2.7), hMin = hand(1.15 * HW, Lm, 2.95), hChr = hand(0.28, Lm * 1.05, 3.2, P.chronoHand || HAND);
   if (P.hands === 'mercedes') { hHour.add(at(mk(cyl(1.75, 0.14, 28), 'white'), 0, Lh * 0.62, 0)); for (let k = 0; k < 3; k++) { const sp = mk(new THREE.BoxGeometry(0.2, 1.75, 0.05), 'ink', { noEdges: true }); const a = k * Math.PI * 2 / 3; sp.position.set(-Math.sin(a) * 0.875, Lh * 0.62 + Math.cos(a) * 0.875, 0.1); sp.rotation.z = a; hHour.add(sp); } hChr.add(at(mk(cyl(0.8, 0.1, 18), 'white'), 0, Lm * 0.62, 0)); }
   hands.add(at(mk(cyl(0.95, 0.9, 20), CASE), 0, 0, 3.0));
-  const subHand = (x, y) => { const p = hand(0.26, 4.2, square ? 2.66 : 2.5, P.subHandKind || HAND); p.position.x = x; p.position.y = y; p.children[0].geometry.translate(0, -0.5, 0); return p; };
+  const subHand = (x, y, pos) => { const p = hand(0.26, 4.2, square ? 2.66 : 2.5, (P.subHandKinds && P.subHandKinds[pos]) || P.subHandKind || HAND); p.position.x = x; p.position.y = y; p.children[0].geometry.translate(0, -0.5, 0); return p; };
   const two = P.registers === 2; // two registers and no running seconds, as on the Calibre 11
-  const hSec = chrono ? (two ? new THREE.Group() : subHand(-sub, 0)) : P.subSeconds === 6 ? subHand(0, -sub) : hChr; if (chrono) { subHand(sub, 0); if (two) subHand(-sub, 0); else subHand(0, -sub); }
+  const hSec = chrono ? (two ? new THREE.Group() : subHand(-sub, 0, 9)) : P.subSeconds === 6 ? subHand(0, -sub, 6) : hChr; if (chrono) { subHand(sub, 0, 3); if (two) subHand(-sub, 0, 9); else subHand(0, -sub, 6); }
   if ((P.subSeconds || P.noSeconds) && !P.chronoCentre) hChr.visible = false; // a watch can have running seconds in a small dial and still carry a chronograph hand at the centre
   if (P.handsAt) hands.position.set(P.handsAt[0], P.handsAt[1], P.handsAt[2] || 0); // a time dial that is off centre
   assembly(hands, 13);
