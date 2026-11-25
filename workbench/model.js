@@ -572,8 +572,9 @@ export function buildProcedural(watch, face, tex) {
        prototype's movement through its glazed back (2013). It is a small picture taken at a slight angle, and its scale is taken from the 50 mm case in the same frame, which makes
        the movement about 40 mm across; positions are good to about 1 mm. Placed from it: the balance and the foot of its cock, two column wheels, a winding wheel with a square
        at its centre, the central jewel, and seven other jewels with plain bridges laid over them. Two steel levers are placed by eye. Seen from the back, the crown is towards -x.
-       What each jewel belongs to is not known, so no wheel is put under any bridge, and the escapement, the three barrels and trains, the striking work, the chronograph work
-       and the calendar are all left out. The balance swings; nothing else moves. Every outline, height and size is an estimate. */
+       Three gold wheels that show beneath the bridges are drawn, each on its jewel; what they are is not identified, and nothing is added that the photograph does not show.
+       The escapement, the three barrels and trains, the striking work, the chronograph work and the calendar are left out. The balance swings; nothing else moves.
+       Every outline, height, size and tooth count is an estimate. */
     spins.centre = spins.third = spins.fourth = spins.escape = new THREE.Group(); // not modelled; the animation only needs something to turn
     const BX = 12.2, BY = -5.8, bal = at(part('balance', mv), BX, BY, 0), balSpin = new THREE.Group(); bal.add(balSpin);
     balSpin.add(at(mk(new THREE.TorusGeometry(5.74, 0.26, 10, 88), 'brass', { edgeAngle: 50 }), 0, 0, 2.3), at(mk(new THREE.BoxGeometry(11.2, 0.36, 0.2), 'brass'), 0, 0, 2.3), at(mk(cyl(0.45, 0.3, 14), 'steelDark'), 0, 0, 1.9));
@@ -582,18 +583,28 @@ export function buildProcedural(watch, face, tex) {
     const hs = at(part('hairspring', mv), BX, BY, 2.72), HN = 240, hsPos = new Float32Array((HN + 1) * 3), hsGeo = new THREE.BufferGeometry();
     hsGeo.setAttribute('position', new THREE.BufferAttribute(hsPos, 3));
     const hsLine = new THREE.Line(hsGeo, new THREE.LineBasicMaterial({ color: 0x3d4f6e })); hsLine.userData.pickLine = true; hs.add(hsLine);
-    layer(flat('balance-cock', [[BX, BY, 1.4], [17.8, 0.6, 1.3]], 3.3, 0.45), 4);
-    layer(multi('chrono-bridge', [[[0, 0, 1.5], [5.5, 5.0, 1.3]], [[5.5, 5.0, 1.3], [0.8, 10.6, 1.2]], [[0.8, 10.6, 1.2], [-1.75, 15.5, 1.2]]], 2.35, 0.45, P.plate || 'copper'), 4);
-    layer(flat('lower-cock', [[-0.7, -9.6, 1.5], [4.4, -9.8, 1.5], [1.9, -14.2, 1.3]], 2.35, 0.45), 4);
-    layer(flat('side-bridge', [[-6.1, 1.7, 1.4], [-8.4, 5.6, 1.2]], 2.35, 0.45), 4);
-    jewel(0, 0, 2.86, 4); jewel(5.5, 5.0, 2.86, 4); jewel(0.8, 10.6, 2.86, 4); jewel(-1.75, 15.5, 2.86, 4); jewel(-6.1, 1.7, 2.86, 4);
-    jewel(-0.7, -9.6, 2.86, 4); jewel(4.4, -9.8, 2.86, 4); jewel(7.5, -12.9, 0.1, 0); jewel(BX, BY, 3.82, 4);
+    /* Second pass over the same photograph, enlarged: the bridges are re-traced, and the gold wheels that show beneath them, the screws and four of the steel levers are added. */
+    layer(flat('balance-cock', [[BX, BY, 1.4], [18.0, 0.4, 1.3]], 3.3, 0.45), 4);
+    layer(multi('chrono-bridge', [[[-1.6, 15.6, 1.2], [1.0, 10.6, 1.3]], [[1.0, 10.6, 1.3], [-1.9, 7.0, 1.2]], [[-1.9, 7.0, 1.2], [-0.6, 0.4, 1.6]], [[8.2, 10.1, 1.1], [5.4, 5.0, 1.4]]], 2.35, 0.45, P.plate || 'copper'), 4);
+    layer(multi('lower-cock', [[[-0.7, -9.6, 1.5], [4.7, -10.1, 1.5]], [[-0.7, -9.6, 1.5], [1.5, -16.6, 1.3]], [[4.7, -10.1, 1.5], [6.4, -16.2, 1.3]], [[7.6, -13.2, 1.0], [6.4, -16.2, 1.3]]], 2.35, 0.45, P.plate || 'copper'), 4);
+    layer(flat('side-bridge', [[-6.0, 1.7, 1.4], [-8.4, 5.6, 1.2]], 2.35, 0.45), 4);
+    for (const q of [[-1.6, 15.6], [1.0, 10.6], [5.4, 5.0], [-0.6, 0.4], [-6.0, 1.7], [-0.7, -9.6], [4.7, -10.1], [7.6, -13.2]]) { jewel(q[0], q[1], 2.86, 4); jw.add((c => { layer(c, 4); return c; })(at(mk(new THREE.TorusGeometry(0.66, 0.14, 8, 24), 'gold', { noEdges: true }), q[0], q[1], 2.96))); } // in gold settings, as the maker fits them
+    jewel(BX, BY, 3.82, 4);
+    /* gold wheels that show under the bridges, each centred on a jewel. What each one is has not been identified, and none of them turns */
+    const gw = part('visible-wheels', mv);
+    for (const q of [[5.4, 5.0, 3.8, 84, 5], [-0.6, 0.4, 3.3, 72, 5], [4.7, -10.1, 2.8, 64, 4]]) mobile(null, q[0], q[1], { R: q[2], n: q[3], tooth: 0.12, z: 1.2, th: 0.2, spokes: q[4], arbor: 2.3 }, gw);
+    gw.userData.anchor = [5.4, 5.0, 1.6]; layer(gw, 2);
     const cws = part('column-wheel', mv);
     for (const c of [[-13.1, 0], [12.9, 4.7]]) { const g = at(new THREE.Group(), c[0], c[1], 0); g.add(at(mk(extr(gearShape(2.1, 18, 0.3, 0), 0.25), 'steelDark', { edgeAngle: 40 }), 0, 0, 2.4), at(mk(cyl(1.0, 0.5, 20), 'steel'), 0, 0, 3.3));
       for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3, pl = mk(new THREE.BoxGeometry(0.5, 0.42, 0.7), 'steelDark'); pl.position.set(1.3 * Math.cos(a), 1.3 * Math.sin(a), 3.0); pl.rotation.z = a; g.add(pl); } cws.add(g); }
     cws.userData.anchor = [-13.1, 0, 3.6]; layer(cws, 8);
-    const rw = at(part('ratchet', mv), -10.0, -9.1, 0); rw.add(at(mk(extr(gearShape(4.6, 60, 0.25, 0), 0.3), 'steel', { edgeAngle: 40 }), 0, 0, 2.4), at(mk(new THREE.BoxGeometry(1.5, 1.5, 0.35), 'steelDark'), 0, 0, 2.85)); rw.userData.anchor = [0, 0, 3.0]; layer(rw, 6);
-    layer(multi('levers', [[[-16.4, 7.5, 0.6], [-13.5, 2.9, 0.45]], [[-7.2, 12.4, 0.6], [-11.9, 2.2, 0.45]]], 3.5, 0.2, 'steel'), 9);
+    const rw = at(part('ratchet', mv), -9.3, -9.7, 0); rw.add(at(mk(extr(gearShape(4.3, 56, 0.25, 0), 0.3), 'steel', { edgeAngle: 40 }), 0, 0, 2.4), at(mk(new THREE.BoxGeometry(1.5, 1.5, 0.35), 'steelDark'), 0, 0, 2.85)); rw.userData.anchor = [0, 0, 3.0]; layer(rw, 6);
+    layer(multi('levers', [[[-17.0, 7.6, 0.7], [-17.5, 1.3, 0.6]], [[-17.5, 1.3, 0.6], [-14.9, -5.5, 0.6]], [[-10.4, 5.0, 0.6], [-4.7, 9.1, 0.45]], [[-8.1, -5.0, 0.6], [-4.8, -3.4, 0.45]], [[14.5, 12.5, 0.6], [18.6, 2.9, 0.45]]], 3.5, 0.2, 'steel'), 9);
+    const scr = part('screws', mv), head = (q, z, kind) => scr.add(at(mk(cyl(0.5, 0.2, 14), kind), q[0], q[1], z), at(mk(new THREE.BoxGeometry(0.78, 0.11, 0.04), 'ink', { noEdges: true }), q[0], q[1], z + 0.11));
+    for (const q of [[8.2, 10.1], [6.4, -16.2], [1.5, -16.6]]) head(q, 2.9, 'blue'); head([18.0, 0.4], 3.85, 'blue'); // blued, on the bridges
+    for (const q of [[-10.4, 5.0], [-8.1, -5.0], [14.5, 12.5], [-17.0, 7.6], [-14.9, -5.5]]) head(q, 3.8, 'steel'); // at the pivots of the levers
+    for (const q of [[-12.6, 13.9], [-8.0, 14.6], [-14.6, 11.7], [-15.2, 3.4], [7.5, 3.1], [12.3, 11.0], [9.2, 13.1], [-13.2, -7.3], [-9.8, -15.9], [-4.8, -17.2], [0.7, -14.4]]) head(q, 0.12, 'steel'); // others, seen at these places; their heights are not known and they are set on the plate
+    scr.userData.anchor = [8.2, 10.1, 3.2]; layer(scr, 4);
     Object.assign(M, { balSpin, palRock: new THREE.Group(), hsPos, hsGeo, HN, interRatio: 1 });
   } else if (P.calibre === '176') {
     /* Jaeger-LeCoultre calibre 176 (Gyrotourbillon 3). No maker's drawing is published. The tourbillon stands in the opening where a front photograph of the watch shows it.
